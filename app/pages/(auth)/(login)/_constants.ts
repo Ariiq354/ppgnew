@@ -1,11 +1,15 @@
-import { z } from "zod/v4-mini";
+import { z } from "zod/mini";
 
-export const loginSchema = z.object({
-  daerah: z.string().check(z.minLength(1, "Required")),
+export const schema = z.object({
+  username: z.string().check(z.minLength(1, "Required")),
+  password: z.string().check(z.minLength(1, "Required")),
+  rememberMe: z.boolean(),
 });
 
 export const getInitialFormData = (): Schema => ({
-  daerah: "",
+  username: "",
+  password: "",
+  rememberMe: false,
 });
 
-export type Schema = z.infer<typeof loginSchema>;
+export type Schema = z.infer<typeof schema>;

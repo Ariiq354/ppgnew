@@ -7,29 +7,35 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "check": "nuxt typecheck",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "cleanup": "nuxt cleanup",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@libsql/client": "^0.15.9",
+    "@libsql/client": "^0.15.10",
     "@nuxt/fonts": "0.11.4",
     "@nuxt/image": "1.10.0",
     "@nuxt/ui": "3.2.0",
     "@pinia/nuxt": "0.11.1",
     "better-auth": "^1.2.12",
-    "drizzle-orm": "^0.44.2",
-    "nuxt": "^3.17.6",
+    "drizzle-orm": "^0.44.3",
+    "nuxt": "^4.0.0",
     "pinia": "^3.0.3",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1",
-    "zod": "^3.25.75"
+    "zod": "^4.0.5"
   },
   "devDependencies": {
     "@iconify-json/heroicons": "^1.2.2",
     "@nuxt/eslint": "1.5.2",
     "drizzle-kit": "^0.31.4",
-    "eslint": "^9.30.1",
+    "eslint": "^9.31.0",
     "prettier": "^3.6.2",
-    "prettier-plugin-tailwindcss": "^0.6.13",
+    "prettier-plugin-tailwindcss": "^0.6.14",
     "typescript": "^5.8.3"
   }
 }

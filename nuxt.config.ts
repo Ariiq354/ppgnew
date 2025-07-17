@@ -13,4 +13,15 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@pinia/nuxt",
   ],
+
+  css: ["~/assets/css/main.css"],
+
+  runtimeConfig: {
+    databaseUrl: process.env.DATABASE_URL,
+    databaseAuthToken: process.env.DATABASE_AUTH_TOKEN,
+  },
+
+  pages: {
+    pattern: ["**/*.vue", "!**/*.ts"],
+  },
 });
