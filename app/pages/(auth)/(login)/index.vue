@@ -1,8 +1,7 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "@nuxt/ui";
-  import { getInitialFormData } from "../register/_constants";
-  import { schema } from "./_constants";
-  import type { Schema } from "zod/v3";
+  import { getInitialFormData, schema } from "./_constants";
+  import type { Schema } from "./_constants";
 
   definePageMeta({
     layout: "auth",
@@ -60,7 +59,7 @@
           <UButton
             class="flex w-full justify-center"
             type="submit"
-            :loading="isLoading"
+            :loading="authStore.loading"
           >
             Lanjut
           </UButton>

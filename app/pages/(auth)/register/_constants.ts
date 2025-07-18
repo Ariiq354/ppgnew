@@ -1,22 +1,13 @@
 import { z } from "zod/mini";
 
-export const loginSchema = z.object({
-  name: z.string().check(z.minLength(1, "Required")),
-  noTelepon: z.string().check(z.minLength(1, "Required")),
-  email: z.string().check(z.minLength(1, "Required"), z.email()),
-  password: z
+export const schema = z.object({
+  daerah: z
     .string()
-    .check(
-      z.minLength(1, "Required"),
-      z.minLength(8, "Password must be 8 character or more")
-    ),
+    .check(z.minLength(1, "Required"), z.minLength(8, "Nama terlalu pendek")),
 });
+
+export type Schema = z.infer<typeof schema>;
 
 export const getInitialFormData = (): Schema => ({
-  email: "",
-  password: "",
-  noTelepon: "",
-  name: "",
+  daerah: "",
 });
-
-export type Schema = z.infer<typeof loginSchema>;

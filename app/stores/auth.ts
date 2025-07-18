@@ -30,10 +30,7 @@ type TSignIn = {
 };
 
 type TSignUp = {
-  email: string;
-  name: string;
-  password: string;
-  username: string;
+  daerah: string;
 };
 
 export const useAuthStore = defineStore("useAuthStore", () => {
@@ -72,19 +69,19 @@ export const useAuthStore = defineStore("useAuthStore", () => {
 
   async function signUp(body: TSignUp) {
     loading.value = true;
-    await authClient.signUp.email({
-      ...body,
-      fetchOptions: {
-        onError: (body) => {
-          useToastError("Register Failed", body.error.message);
-        },
-        onSuccess: async () => {
-          useToastSuccess("Register Success", "Silahkan login untuk masuk");
-          await navigateTo("/login");
-        },
-      },
-    });
-    loading.value = false;
+    try {
+      const res = await $fetch("/api/v1/register", {
+        method: "POST",
+        body,
+      });
+
+      useToastSuccess("Register Success", "Silahkan login untuk masuk");
+      return res;
+    } catch (error: any) {
+      useToastError("Register Failed", error.data.message);
+    } finally {
+      loading.value = false;
+    }
   }
 
   async function signOut() {

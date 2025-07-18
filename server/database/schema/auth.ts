@@ -6,6 +6,7 @@ import {
   index,
 } from "drizzle-orm/sqlite-core";
 import { timestamp } from "./common";
+import { daerahTable, desaTable, kelompokTable } from "./wilayah";
 
 export const user = sqliteTable(
   "user",
@@ -18,6 +19,11 @@ export const user = sqliteTable(
     emailVerified: int({ mode: "boolean" }).notNull(),
     image: text(),
     role: text(),
+    daerahId: int().references(() => daerahTable.id, { onDelete: "cascade" }),
+    desaId: int().references(() => desaTable.id, { onDelete: "set null" }),
+    kelompokId: int().references(() => kelompokTable.id, {
+      onDelete: "set null",
+    }),
     banned: int({ mode: "boolean" }),
     banReason: text(),
     banExpires: int({ mode: "timestamp" }),

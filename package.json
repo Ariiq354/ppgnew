@@ -31,11 +31,16 @@
   },
   "devDependencies": {
     "@iconify-json/heroicons": "^1.2.2",
-    "@nuxt/eslint": "1.5.2",
+    "@nuxt/eslint": "1.6.0",
     "drizzle-kit": "^0.31.4",
     "eslint": "^9.31.0",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "typescript": "^5.8.3"
-  }
+  },
+  "trustedDependencies": [
+    "@parcel/watcher",
+    "@tailwindcss/oxide",
+    "unrs-resolver"
+  ]
 }

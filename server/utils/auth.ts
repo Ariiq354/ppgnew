@@ -8,15 +8,39 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "sqlite",
   }),
+  emailAndPassword: {
+    enabled: true,
+    autoSignIn: false,
+  },
   advanced: {
     database: {
       generateId: false,
       useNumberId: true,
     },
   },
+  user: {
+    additionalFields: {
+      daerahId: {
+        type: "number",
+        required: false,
+        fieldName: "daerahId",
+      },
+      desaId: {
+        type: "number",
+        required: false,
+        fieldName: "desaId",
+      },
+      kelompokId: {
+        type: "number",
+        required: false,
+        fieldName: "kelompokId",
+      },
+    },
+  },
   plugins: [
     username(),
     adminPlugins({
+      defaultRole: "user, daerah",
       ac,
       roles: {
         admin,

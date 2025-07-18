@@ -24,3 +24,19 @@ export const admin = ac.newRole({
 export const user = ac.newRole({
   sidebar: ["user"],
 });
+
+export const roles = [
+  "sekretariat",
+  "kurikulum",
+  "tenaga_pendidik",
+  "penggalang_dana",
+  "sarana_prasarana",
+  "kemandirian",
+  "keputrian",
+  "bimbingan_konseling",
+  "olahraga_seni",
+  "kegiatan_muda_mudi",
+  "tahfidz",
+  "media_publikasi",
+  "karakter",
+] as const;
