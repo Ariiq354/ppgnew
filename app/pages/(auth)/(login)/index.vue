@@ -43,18 +43,23 @@
             <UInput
               v-model="state.username"
               placeholder="Masukkan username anda"
+              :disabled="authStore.loading"
             />
           </UFormField>
 
           <UFormField label="Password" name="password">
-            <UInput
+            <InputPassword
               v-model="state.password"
-              type="password"
-              placeholder="Masukkan kata sandi anda"
+              :disabled="authStore.loading"
+              placeholder="Masukkan password anda"
             />
           </UFormField>
 
-          <UCheckbox v-model="state.rememberMe" label="Ingat saya" />
+          <UCheckbox
+            v-model="state.rememberMe"
+            label="Ingat saya"
+            :disabled="authStore.loading"
+          />
 
           <UButton
             class="flex w-full justify-center"

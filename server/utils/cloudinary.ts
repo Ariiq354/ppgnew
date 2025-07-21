@@ -1,7 +1,7 @@
 import cloudinary from "cloudinary";
 import type { UploadApiResponse, DeleteApiResponse } from "cloudinary";
 
-export async function uploadCloudinary(preset: string, file: Buffer) {
+export async function uploadCloudinaryImage(preset: string, file: Buffer) {
   try {
     const uploadResult = await new Promise<UploadApiResponse>(
       (resolve, reject) => {
@@ -10,6 +10,32 @@ export async function uploadCloudinary(preset: string, file: Buffer) {
             if (err) return reject(err);
             resolve(result as UploadApiResponse);
           })
+          .end(file);
+      }
+    );
+
+    return uploadResult;
+  } catch (err: any) {
+    throw createError({
+      statusCode: 500,
+      message: "Failed to upload",
+      data: err.message || err,
+    });
+  }
+}
+
+export async function uploadCloudinaryFile(preset: string, file: Buffer) {
+  try {
+    const uploadResult = await new Promise<UploadApiResponse>(
+      (resolve, reject) => {
+        cloudinary.v2.uploader
+          .upload_stream(
+            { upload_preset: preset, resource_type: "raw" },
+            (err, result) => {
+              if (err) return reject(err);
+              resolve(result as UploadApiResponse);
+            }
+          )
           .end(file);
       }
     );

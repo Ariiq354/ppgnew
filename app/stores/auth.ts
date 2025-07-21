@@ -67,7 +67,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   async function signUp(body: TSignUp) {
     loading.value = true;
     try {
-      const res = await $fetch("/api/v1/register", {
+      const res = await $fetch(`${APIBASE}/user/register`, {
         method: "POST",
         body,
       });
@@ -88,9 +88,12 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         onError: (body) => {
           useToastError("Logout Failed", body.error.message);
         },
+        onSuccess: () => {
+          window.location.href = "/dashboard";
+        },
       },
     });
-    navigateTo("/");
+
     loading.value = false;
   }
 
@@ -102,6 +105,26 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     return result.data?.success;
   }
 
+  async function updatePassword(newPassword: string, currentPassword: string) {
+    loading.value = true;
+    await authClient.changePassword({
+      newPassword,
+      currentPassword,
+      fetchOptions: {
+        onError: (body) => {
+          useToastError("Change Password Failed", body.error.message);
+        },
+        onSuccess: () => {
+          useToastSuccess(
+            "Change Password Success",
+            "Your password has changed"
+          );
+        },
+      },
+    });
+    loading.value = false;
+  }
+
   return {
     init,
     loading,
@@ -110,7 +133,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     user,
     signOut,
     hasPermission,
-    updateUser,
+    updatePassword,
     session,
   };
 });

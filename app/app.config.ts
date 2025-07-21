@@ -43,5 +43,10 @@ export default defineAppConfig({
         td: "text-base",
       },
     },
+    modal: {
+      slots: {
+        footer: "justify-end",
+      },
+    },
   },
 });

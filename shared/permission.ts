@@ -1,9 +1,14 @@
 import { createAccessControl } from "better-auth/plugins/access";
-import { defaultStatements, adminAc } from "better-auth/plugins/admin/access";
+import {
+  defaultStatements,
+  adminAc,
+  userAc,
+} from "better-auth/plugins/admin/access";
 
 const statement = {
   ...defaultStatements,
-  sidebar: ["admin", "user"],
+  menu: ["user"],
+  dokumen: ["upload", "download"],
 } as const;
 
 export type TStatement = {
@@ -17,12 +22,13 @@ export type TStatement = {
 export const ac = createAccessControl(statement);
 
 export const admin = ac.newRole({
-  sidebar: ["user", "admin"],
+  menu: [...statement.menu],
+  dokumen: [...statement.dokumen],
   ...adminAc.statements,
 });
 
 export const user = ac.newRole({
-  sidebar: ["user"],
+  ...userAc.statements,
 });
 
 export const roles = [

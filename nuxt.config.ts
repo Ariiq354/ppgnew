@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "@nuxt/image",
     "@pinia/nuxt",
+    "@vueuse/nuxt",
   ],
 
   css: ["~/assets/css/main.css"],
@@ -24,4 +25,11 @@ export default defineNuxtConfig({
   pages: {
     pattern: ["**/*.vue", "!**/*.ts"],
   },
+
+  components: [
+    {
+      path: "~/components",
+      pathPrefix: false,
+    },
+  ],
 });
