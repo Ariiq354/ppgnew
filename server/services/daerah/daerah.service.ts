@@ -6,60 +6,101 @@ import {
   desaTable,
   kelompokTable,
 } from "~~/server/database/schema/wilayah";
+import type { TPagination } from "~~/server/utils/dto";
+import { getTotalQuery } from "~~/server/utils/query";
 
-export async function getAllDaerah() {
-  return await db.query.daerahTable.findMany();
-}
+export async function getAllDaerah({ limit, page }: TPagination) {
+  const offset = (page - 1) * limit;
+  const query = db
+    .select({
+      id: daerahTable.id,
+      name: daerahTable.name,
+    })
+    .from(daerahTable)
+    .$dynamic();
 
-export async function getDaerahById(id: number) {
-  return await db.query.daerahTable.findFirst({
-    where: eq(daerahTable.id, id),
-  });
+  try {
+    const total = await getTotalQuery(query);
+    const data = await query.limit(limit).offset(offset);
+
+    return {
+      data,
+      total,
+    };
+  } catch (error) {
+    console.error("Failed to get List Daerah", error);
+    throw InternalError;
+  }
 }
 
 export async function createDaerah(data: TDaerahCreate) {
-  return await db
-    .insert(daerahTable)
-    .values(data)
-    .returning({ insertedId: daerahTable.id });
+  try {
+    return await db
+      .insert(daerahTable)
+      .values(data)
+      .returning({ insertedId: daerahTable.id });
+  } catch (error) {
+    console.error("Failed to create Daerah", error);
+    throw InternalError;
+  }
 }
 
 export async function updateDaerah(id: number, data: TDaerahCreate) {
-  return await db.update(daerahTable).set(data).where(eq(daerahTable.id, id));
+  try {
+    return await db.update(daerahTable).set(data).where(eq(daerahTable.id, id));
+  } catch (error) {
+    console.error("Failed to Update Daerah", error);
+    throw InternalError;
+  }
 }
 
 export async function deleteDaerah(id: number[]) {
-  return await db.delete(daerahTable).where(inArray(daerahTable.id, id));
+  try {
+    return await db.delete(daerahTable).where(inArray(daerahTable.id, id));
+  } catch (error) {
+    console.error("Failed to delete Daerah", error);
+    throw InternalError;
+  }
 }
 
 export async function getCountDaerah() {
-  const [data] = await db
-    .select({
-      count: count(),
-    })
-    .from(daerahTable);
-  return data?.count;
+  try {
+    const [data] = await db
+      .select({
+        count: count(),
+      })
+      .from(daerahTable);
+    return data?.count;
+  } catch (error) {
+    console.error("Failed to get Count Daerah", error);
+    throw InternalError;
+  }
 }
 
 export async function checkWilayahNameExist(name: string) {
-  const daerahQuery = await db
-    .select({ name: daerahTable.name })
-    .from(daerahTable)
-    .where(eq(daerahTable.name, name));
-  const desaQuery = await db
-    .select({ name: desaTable.name })
-    .from(desaTable)
-    .where(eq(desaTable.name, name));
-  const kelompokQuery = await db
-    .select({ name: kelompokTable.name })
-    .from(kelompokTable)
-    .where(eq(kelompokTable.name, name));
+  try {
+    const daerahQuery = await db
+      .select({ name: daerahTable.name })
+      .from(daerahTable)
+      .where(eq(daerahTable.name, name));
+    const desaQuery = await db
+      .select({ name: desaTable.name })
+      .from(desaTable)
+      .where(eq(desaTable.name, name));
+    const kelompokQuery = await db
+      .select({ name: kelompokTable.name })
+      .from(kelompokTable)
+      .where(eq(kelompokTable.name, name));
 
-  const itemArr = [...daerahQuery, ...desaQuery, ...kelompokQuery];
+    const itemArr = [...daerahQuery, ...desaQuery, ...kelompokQuery];
 
-  if (itemArr.length > 0) {
-    return true;
+    if (itemArr.length > 0) {
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    console.error("Failed to check Wilayah Name", error);
+    throw InternalError;
   }
-
-  return false;
 }

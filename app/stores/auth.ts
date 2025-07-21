@@ -34,19 +34,19 @@ type TSignUp = {
 };
 
 export const useAuthStore = defineStore("useAuthStore", () => {
-  const session = ref<Awaited<ReturnType<typeof authClient.getSession>> | null>(
+  const session = ref<Awaited<ReturnType<typeof authClient.useSession>> | null>(
     null
   );
 
+  const user = computed(() => session.value?.data?.user);
+  const loading = ref(false);
+
   async function init() {
     loading.value = true;
-    const { data } = await authClient.getSession();
+    const data = await authClient.useSession(useFetch);
     session.value = data;
     loading.value = false;
   }
-
-  const user = computed(() => session.value?.data?.user);
-  const loading = ref(false);
 
   async function signIn(body: TSignIn) {
     loading.value = true;
@@ -56,10 +56,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         onError: (body) => {
           useToastError("Login Failed", body.error.message);
         },
-        onSuccess: async () => {
-          useToastSuccess("Login Success", "Selamat datang di Berkah Amanah");
-          await init();
-
+        onSuccess: () => {
           window.location.href = "/dashboard";
         },
       },
@@ -91,12 +88,9 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         onError: (body) => {
           useToastError("Logout Failed", body.error.message);
         },
-        onSuccess: async () => {
-          await init();
-          await navigateTo("/");
-        },
       },
     });
+    navigateTo("/");
     loading.value = false;
   }
 
@@ -106,22 +100,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     });
 
     return result.data?.success;
-  }
-
-  async function updateUser(body: { name?: string; noTelepon?: string }) {
-    loading.value = true;
-    await authClient.updateUser({
-      ...body,
-      fetchOptions: {
-        onError: (body) => {
-          useToastError("Update Failed", body.error.message);
-        },
-        onSuccess: () => {
-          useToastSuccess("Update Success", "Your profile has been updated");
-        },
-      },
-    });
-    loading.value = false;
   }
 
   return {
