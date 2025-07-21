@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     OUserList.parse(query)
   );
 
-  const data = await getAllUser(user.daerahId, query);
+  const data = await getAllUser(user!.daerahId, query);
 
   const metadata = {
     page: query.page,

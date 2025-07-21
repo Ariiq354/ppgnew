@@ -2,9 +2,7 @@ import { getAllDokumen } from "~~/server/services/dokumen/dokumen.service";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);
-  const query = await getValidatedQuery(event, (query) =>
-    OPagination.parse(query)
-  );
+  const query = await getValidatedQuery(event, (q) => OPagination.parse(q));
 
   const data = await getAllDokumen(user.daerahId, query);
 

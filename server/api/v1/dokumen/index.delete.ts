@@ -5,11 +5,9 @@ import {
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
-  const query = await readValidatedBody(event, (query) =>
-    ODeleteSchema.parse(query)
-  );
+  const body = await readValidatedBody(event, (b) => ODeleteSchema.parse(b));
 
-  for (const id of query.id) {
+  for (const id of body.id) {
     const data = await getDokumenById(id);
     if (!data) {
       throw createError({
@@ -22,6 +20,6 @@ export default defineEventHandler(async (event) => {
     await deleteCloudinary(publicId, "raw");
   }
 
-  await deleteDokumen(query.id);
+  await deleteDokumen(body.id);
   return HttpResponse();
 });

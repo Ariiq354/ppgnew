@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  if (!result[0].filename) {
+  if (!result[0]!.filename) {
     throw createError({
       statusCode: 400,
       message: "Only file is allowed",
@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
 
   const fields: Record<string, string> = {};
 
-  const part = result[0];
+  const part = result[0]!;
 
   if (part.data.length > MAX_FILE_SIZE) {
     throw createError({

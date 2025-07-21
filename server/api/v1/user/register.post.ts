@@ -11,9 +11,7 @@ const bodySchema = z.object({
 });
 
 export default eventHandler(async (event) => {
-  const formData = await readValidatedBody(event, (body) =>
-    bodySchema.parse(body)
-  );
+  const formData = await readValidatedBody(event, (b) => bodySchema.parse(b));
 
   formData.daerah = formData.daerah
     .split(" ")
@@ -41,7 +39,7 @@ export default eventHandler(async (event) => {
         name: nama,
         password: nama,
         username: nama,
-        daerahId: result.insertedId,
+        daerahId: result!.insertedId,
         displayUsername: nama,
       },
     });
@@ -69,7 +67,7 @@ export default eventHandler(async (event) => {
         name: namaPengurus,
         password: namaPengurus,
         username: namaPengurus,
-        daerahId: result.insertedId,
+        daerahId: result!.insertedId!,
         displayUsername: namaPengurus,
       },
     });

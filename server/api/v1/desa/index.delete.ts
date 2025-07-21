@@ -2,10 +2,8 @@ import { deleteDesa } from "~~/server/services/desa/desa.service";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
-  const query = await readValidatedBody(event, (query) =>
-    ODeleteSchema.parse(query)
-  );
+  const body = await readValidatedBody(event, (b) => ODeleteSchema.parse(b));
 
-  await deleteDesa(query.id);
+  await deleteDesa(body.id);
   return HttpResponse();
 });

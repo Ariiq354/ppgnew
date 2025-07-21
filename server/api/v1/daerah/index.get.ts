@@ -4,9 +4,7 @@ import { OPagination } from "~~/server/utils/dto";
 export default defineEventHandler(async (event) => {
   authGuard(event);
 
-  const query = await getValidatedQuery(event, (query) =>
-    OPagination.parse(query)
-  );
+  const query = await getValidatedQuery(event, (q) => OPagination.parse(q));
 
   const data = await getAllDaerah(query);
   const metadata = {

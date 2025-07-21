@@ -4,9 +4,7 @@ import { OKelompokList } from "~~/server/services/kelompok/dto/kelompok.dto";
 export default defineEventHandler(async (event) => {
   authGuard(event);
 
-  const query = await getValidatedQuery(event, (query) =>
-    OKelompokList.parse(query)
-  );
+  const query = await getValidatedQuery(event, (q) => OKelompokList.parse(q));
 
   const data = await getAllKelompok(query);
   const metadata = {

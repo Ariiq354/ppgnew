@@ -4,9 +4,7 @@ import { ODesaList } from "~~/server/services/desa/dto/desa.dto";
 export default defineEventHandler(async (event) => {
   authGuard(event);
 
-  const query = await getValidatedQuery(event, (query) =>
-    ODesaList.parse(query)
-  );
+  const query = await getValidatedQuery(event, (q) => ODesaList.parse(q));
 
   const data = await getAllDesa(query);
   const metadata = {

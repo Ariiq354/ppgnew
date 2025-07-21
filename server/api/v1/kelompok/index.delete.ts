@@ -2,10 +2,8 @@ import { deleteKelompok } from "~~/server/services/kelompok/kelompok.service";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
-  const query = await readValidatedBody(event, (query) =>
-    ODeleteSchema.parse(query)
-  );
+  const body = await readValidatedBody(event, (b) => ODeleteSchema.parse(b));
 
-  await deleteKelompok(query.id);
+  await deleteKelompok(body.id);
   return HttpResponse();
 });
