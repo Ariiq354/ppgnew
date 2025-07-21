@@ -19,7 +19,9 @@ export const user = sqliteTable(
     emailVerified: int({ mode: "boolean" }).notNull(),
     image: text(),
     role: text(),
-    daerahId: int().references(() => daerahTable.id, { onDelete: "cascade" }),
+    daerahId: int()
+      .notNull()
+      .references(() => daerahTable.id, { onDelete: "cascade" }),
     desaId: int().references(() => desaTable.id, { onDelete: "set null" }),
     kelompokId: int().references(() => kelompokTable.id, {
       onDelete: "set null",

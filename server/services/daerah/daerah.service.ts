@@ -1,6 +1,5 @@
-import { count, eq, inArray } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "~~/server/database";
-import type { TDaerahCreate } from "./dto/daerah.dto";
 import {
   daerahTable,
   desaTable,
@@ -8,6 +7,7 @@ import {
 } from "~~/server/database/schema/wilayah";
 import type { TPagination } from "~~/server/utils/dto";
 import { getTotalQuery } from "~~/server/utils/query";
+import type { TDaerahCreate } from "./dto/daerah.dto";
 
 export async function getAllDaerah({ limit, page }: TPagination) {
   const offset = (page - 1) * limit;
@@ -59,20 +59,6 @@ export async function deleteDaerah(id: number[]) {
     return await db.delete(daerahTable).where(inArray(daerahTable.id, id));
   } catch (error) {
     console.error("Failed to delete Daerah", error);
-    throw InternalError;
-  }
-}
-
-export async function getCountDaerah() {
-  try {
-    const [data] = await db
-      .select({
-        count: count(),
-      })
-      .from(daerahTable);
-    return data?.count;
-  } catch (error) {
-    console.error("Failed to get Count Daerah", error);
     throw InternalError;
   }
 }

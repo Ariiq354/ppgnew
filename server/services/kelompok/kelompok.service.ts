@@ -30,17 +30,6 @@ export async function getAllKelompok({ limit, page, desaId }: TKelompokList) {
   }
 }
 
-export async function getKelompokById(id: number) {
-  try {
-    return await db.query.kelompokTable.findFirst({
-      where: eq(kelompokTable.id, id),
-    });
-  } catch (error) {
-    console.error("Failed to get Kelompok By Id", error);
-    throw InternalError;
-  }
-}
-
 export async function createKelompok(data: TKelompokCreate) {
   try {
     return await db

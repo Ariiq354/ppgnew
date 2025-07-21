@@ -22,7 +22,7 @@ export const auth = betterAuth({
     additionalFields: {
       daerahId: {
         type: "number",
-        required: false,
+        required: true,
         fieldName: "daerahId",
       },
       desaId: {

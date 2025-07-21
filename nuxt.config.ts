@@ -20,6 +20,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     databaseUrl: process.env.DATABASE_URL,
     databaseAuthToken: process.env.DATABASE_AUTH_TOKEN,
+    dokumenPreset: process.env.DOKUMEN_PRESET,
   },
 
   pages: {

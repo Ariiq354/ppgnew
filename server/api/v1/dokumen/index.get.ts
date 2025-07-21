@@ -1,13 +1,12 @@
-import { getAllUser } from "~~/server/services/user/user.service";
-import { OUserList } from "~~/server/services/user/dto/user.dto";
+import { getAllDokumen } from "~~/server/services/dokumen/dokumen.service";
 
 export default defineEventHandler(async (event) => {
-  const user = adminGuard(event);
+  const user = authGuard(event);
   const query = await getValidatedQuery(event, (query) =>
-    OUserList.parse(query)
+    OPagination.parse(query)
   );
 
-  const data = await getAllUser(user.daerahId, query);
+  const data = await getAllDokumen(user.daerahId, query);
 
   const metadata = {
     page: query.page,

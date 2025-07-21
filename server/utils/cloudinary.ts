@@ -1,36 +1,17 @@
 import cloudinary from "cloudinary";
 import type { UploadApiResponse, DeleteApiResponse } from "cloudinary";
 
-export async function uploadCloudinaryImage(preset: string, file: Buffer) {
-  try {
-    const uploadResult = await new Promise<UploadApiResponse>(
-      (resolve, reject) => {
-        cloudinary.v2.uploader
-          .upload_stream({ upload_preset: preset }, (err, result) => {
-            if (err) return reject(err);
-            resolve(result as UploadApiResponse);
-          })
-          .end(file);
-      }
-    );
-
-    return uploadResult;
-  } catch (err: any) {
-    throw createError({
-      statusCode: 500,
-      message: "Failed to upload",
-      data: err.message || err,
-    });
-  }
-}
-
-export async function uploadCloudinaryFile(preset: string, file: Buffer) {
+export async function uploadCloudinary(
+  preset: string,
+  file: Buffer,
+  type: "raw" | "image"
+) {
   try {
     const uploadResult = await new Promise<UploadApiResponse>(
       (resolve, reject) => {
         cloudinary.v2.uploader
           .upload_stream(
-            { upload_preset: preset, resource_type: "raw" },
+            { upload_preset: preset, resource_type: type },
             (err, result) => {
               if (err) return reject(err);
               resolve(result as UploadApiResponse);
@@ -51,14 +32,15 @@ export async function uploadCloudinaryFile(preset: string, file: Buffer) {
 }
 
 export async function deleteCloudinary(
-  public_id: string
+  public_id: string,
+  type: "raw" | "image"
 ): Promise<DeleteApiResponse> {
   try {
     const deleteResult = await new Promise<DeleteApiResponse>(
       (resolve, reject) => {
         cloudinary.v2.uploader.destroy(
           public_id,
-          { invalidate: true },
+          { invalidate: true, resource_type: type },
           (err, result) => {
             if (err) return reject(err);
 
