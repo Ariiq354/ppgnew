@@ -10,7 +10,7 @@ export type TKelompokCreate = z.infer<typeof OKelompokCreate>;
 
 export const OKelompokList = z.object({
   ...OPagination.def.shape,
-  desaId: z.number(),
+  desaId: z.coerce.number(),
 });
 
 export type TKelompokList = z.infer<typeof OKelompokList>;

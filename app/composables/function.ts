@@ -1,3 +1,5 @@
+import type { FormSubmitEvent } from "@nuxt/ui";
+
 type FetchOptions<TBody = any> = {
   path: string;
   body?: TBody;

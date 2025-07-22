@@ -10,7 +10,7 @@ export type TDesaCreate = z.infer<typeof ODesaCreate>;
 
 export const ODesaList = z.object({
   ...OPagination.def.shape,
-  daerahId: z.number(),
+  daerahId: z.coerce.number(),
 });
 
 export type TDesaList = z.infer<typeof ODesaList>;
