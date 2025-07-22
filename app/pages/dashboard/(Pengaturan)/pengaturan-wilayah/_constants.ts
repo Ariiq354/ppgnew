@@ -18,7 +18,7 @@ export const schema = z.object({
 
 export type Schema = z.infer<typeof schema>;
 
-export const initialFormData = (): Schema => ({
+export const getInitialFormData = (): Schema => ({
   id: undefined,
   name: "",
 });
