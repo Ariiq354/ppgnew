@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { admin as adminPlugins, username } from "better-auth/plugins";
-import { ac, admin, user } from "~~/shared/permission";
+import { ac, rolesDeclaration } from "~~/shared/permission";
 import { db } from "../database";
 
 export const auth = betterAuth({
@@ -11,6 +11,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     autoSignIn: false,
+    minPasswordLength: 1,
   },
   advanced: {
     database: {
@@ -40,12 +41,9 @@ export const auth = betterAuth({
   plugins: [
     username(),
     adminPlugins({
-      defaultRole: "user, daerah",
+      defaultRole: "user,daerah",
       ac,
-      roles: {
-        admin,
-        user,
-      },
+      roles: rolesDeclaration,
     }),
   ],
 });

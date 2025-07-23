@@ -9,6 +9,9 @@ const statement = {
   ...defaultStatements,
   menu: ["user"],
   dokumen: ["upload", "download"],
+  daerah: ["create", "update", "delete"],
+  desa: ["create", "update", "delete"],
+  kelompok: ["create", "update", "delete"],
 } as const;
 
 export type TStatement = {
@@ -21,15 +24,28 @@ export type TStatement = {
 
 export const ac = createAccessControl(statement);
 
-export const admin = ac.newRole({
-  menu: [...statement.menu],
-  dokumen: [...statement.dokumen],
-  ...adminAc.statements,
-});
+export const rolesDeclaration = {
+  admin: ac.newRole({
+    ...Object.fromEntries(
+      Object.entries(statement).map(([key, value]) => [key, [...value]])
+    ),
+    ...adminAc.statements,
+  }),
 
-export const user = ac.newRole({
-  ...userAc.statements,
-});
+  user: ac.newRole({
+    ...userAc.statements,
+  }),
+
+  daerah: ac.newRole({
+    daerah: ["delete"],
+    desa: ["create", "update", "delete"],
+    kelompok: ["create", "update", "delete"],
+  }),
+
+  desa: ac.newRole({
+    kelompok: ["create", "update", "delete"],
+  }),
+};
 
 export const roles = [
   "sekretariat",

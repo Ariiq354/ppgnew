@@ -4,8 +4,10 @@
   defineSlots<{
     [key: string]: (props: any) => any;
   }>();
-  const page = defineModel<number>("page");
-  const selected = defineModel<Record<string, boolean>>("select");
+  const page = defineModel<number>("page", { default: 1 });
+  const selected = defineModel<Record<string, boolean>>("select", {
+    default: {},
+  });
   const UCheckbox = resolveComponent("UCheckbox");
 
   const emit = defineEmits(["editClick"]);
@@ -77,6 +79,7 @@
   <div class="w-full space-y-4 pb-4">
     <UTable
       v-model:row-selection="selected"
+      class="rounded-lg border border-(--ui-border-accented)"
       :data="data"
       :columns="newColumns"
       :loading="loading"
@@ -102,8 +105,14 @@
       </template>
     </UTable>
 
-    <div v-if="pagination" class="flex justify-center pt-4">
-      <UPagination v-model:page="page" :total="total" />
+    <div class="mt-2 flex items-center justify-between">
+      <p class="px-2 text-sm text-(--ui-text-muted)">
+        Showing {{ (page - 1) * 10 + 1 }} to
+        {{ Math.min((page - 1) * 10 + 10, total) }} of {{ total }} documents
+      </p>
+      <div v-if="pagination" class="flex justify-center">
+        <UPagination v-model:page="page" :total="total" />
+      </div>
     </div>
   </div>
 </template>

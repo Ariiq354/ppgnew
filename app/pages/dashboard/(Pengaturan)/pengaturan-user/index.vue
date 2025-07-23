@@ -13,7 +13,7 @@
   });
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
-  }, 300);
+  }, 500);
   const { data, status } = await useFetch(`${APIBASE}/user`, {
     query,
   });
@@ -23,14 +23,15 @@
   <Title>Pengaturan | Daftar User</Title>
   <main>
     <UCard>
-      <div class="mb-4 flex justify-end">
-        <UInput
-          class="max-w-xs"
-          size="xl"
-          leading-icon="i-heroicons-magnifying-glass"
-          placeholder="Search..."
-          @update:model-value="searchDebounced"
-        />
+      <div class="mb-6 flex flex-col gap-4 lg:flex-row">
+        <div class="flex-1">
+          <UInput
+            size="xl"
+            leading-icon="i-heroicons-magnifying-glass"
+            placeholder="Search..."
+            @update:model-value="searchDebounced"
+          />
+        </div>
       </div>
       <AppTable
         v-model:page="query.page"

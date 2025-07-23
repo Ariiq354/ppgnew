@@ -1,4 +1,3 @@
-import { APIError } from "better-auth/api";
 import { z } from "zod/mini";
 import {
   checkWilayahNameExist,
@@ -44,16 +43,8 @@ export default eventHandler(async (event) => {
       },
     });
   } catch (error) {
-    if (error instanceof APIError) {
-      return createError({
-        statusCode: error.statusCode,
-        message: "Nama Daerah sudah ada",
-      });
-    } else {
-      throw createError({
-        statusCode: 500,
-      });
-    }
+    console.error(error);
+    throw InternalError;
   }
 
   for (const [index, item] of roles.entries()) {
@@ -72,7 +63,7 @@ export default eventHandler(async (event) => {
       },
     });
     (await auth.$context).internalAdapter.updateUser(user.id, {
-      role: `user, ${item}`,
+      role: `user,${item}`,
     });
   }
 

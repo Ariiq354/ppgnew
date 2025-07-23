@@ -5,7 +5,7 @@ import { ODaerahCreate } from "~~/server/services/daerah/dto/daerah.dto";
 const paramsSchema = z.coerce.number();
 
 export default defineEventHandler(async (event) => {
-  adminGuard(event);
+  permissionGuard(event, { daerah: ["update"] });
   const result = await readValidatedBody(event, (b) => ODaerahCreate.parse(b));
   const id = paramsSchema.parse(getRouterParam(event, "id"));
 

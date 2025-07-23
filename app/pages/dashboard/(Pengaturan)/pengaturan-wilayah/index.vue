@@ -10,6 +10,7 @@
   type WilayahType = "daerah" | "desa" | "kelompok";
 
   const constantStore = useConstantStore();
+  const authStore = useAuthStore();
 
   onMounted(() => {
     constantStore.setTitle("Pengaturan / Daftar Wilayah");
@@ -166,10 +167,31 @@
     if (type === "daerah") {
       queries.desa.daerahId = selectedId;
       queries.kelompok.desaId = 0;
+      selectedRows["desa"] = {};
+      selectedRows["kelompok"] = {};
     } else if (type === "desa") {
+      selectedRows["kelompok"] = {};
       queries.kelompok.desaId = selectedId;
     }
   }
+
+  const permissions = ref({
+    daerah: {
+      create: await authStore.hasPermission({ daerah: ["create"] }),
+      update: await authStore.hasPermission({ daerah: ["update"] }),
+      delete: await authStore.hasPermission({ daerah: ["delete"] }),
+    },
+    desa: {
+      create: await authStore.hasPermission({ desa: ["create"] }),
+      update: await authStore.hasPermission({ desa: ["update"] }),
+      delete: await authStore.hasPermission({ desa: ["delete"] }),
+    },
+    kelompok: {
+      create: await authStore.hasPermission({ kelompok: ["create"] }),
+      update: await authStore.hasPermission({ kelompok: ["update"] }),
+      delete: await authStore.hasPermission({ kelompok: ["delete"] }),
+    },
+  });
 
   const cardConfigs = [
     {
@@ -252,7 +274,7 @@
         <UButton
           size="xl"
           class="flex items-center gap-2"
-          :disabled="config.disabled.value"
+          :disabled="config.disabled.value || !permissions[config.type].create"
           @click="clickAdd(config.type)"
         >
           <UIcon name="i-heroicons-plus" />
@@ -283,6 +305,7 @@
                   icon="i-heroicons-pencil"
                   variant="ghost"
                   class="rounded-full"
+                  :disabled="!permissions[config.type].update"
                   @click="
                     openEditModal(
                       config.type,
@@ -298,8 +321,8 @@
                   icon="i-heroicons-trash"
                   variant="ghost"
                   color="error"
-                  size="sm"
                   class="rounded-full"
+                  :disabled="!permissions[config.type].delete"
                   @click="handleDelete(config.type, row.original.id)"
                 />
               </UTooltip>

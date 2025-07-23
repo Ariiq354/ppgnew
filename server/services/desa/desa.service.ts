@@ -30,6 +30,10 @@ export async function getAllDesa({ limit, page, daerahId }: TDesaList) {
   }
 }
 
+export async function getDesaById(id: number) {
+  return await db.query.desaTable.findFirst({ where: eq(desaTable.id, id) });
+}
+
 export async function createDesa(data: TDesaCreate) {
   try {
     return await db

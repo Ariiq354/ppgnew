@@ -22,9 +22,9 @@ export const user = sqliteTable(
     daerahId: int()
       .notNull()
       .references(() => daerahTable.id, { onDelete: "cascade" }),
-    desaId: int().references(() => desaTable.id, { onDelete: "set null" }),
+    desaId: int().references(() => desaTable.id, { onDelete: "cascade" }),
     kelompokId: int().references(() => kelompokTable.id, {
-      onDelete: "set null",
+      onDelete: "cascade",
     }),
     banned: int({ mode: "boolean" }),
     banReason: text(),

@@ -6,7 +6,7 @@ import {
 import { createAuthClient } from "better-auth/vue";
 import { useToastError, useToastSuccess } from "~/composables/toast";
 import type { auth } from "~~/server/utils/auth";
-import { ac, admin, user } from "~~/shared/permission";
+import { ac, rolesDeclaration } from "~~/shared/permission";
 import type { TStatement } from "~~/shared/permission";
 
 const authClient = createAuthClient({
@@ -15,10 +15,7 @@ const authClient = createAuthClient({
     usernameClient(),
     adminClient({
       ac,
-      roles: {
-        admin,
-        user,
-      },
+      roles: rolesDeclaration,
     }),
   ],
 });

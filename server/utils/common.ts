@@ -14,7 +14,7 @@ export function convertToNameFormat(input: string) {
 
   return input
     .replace(/\d/g, (digit) => numberWords[parseInt(digit)]!)
-    .replace(/\s+/g, "")
+    .replace(/[^a-zA-Z0-9]/g, "")
     .toLowerCase();
 }
 
