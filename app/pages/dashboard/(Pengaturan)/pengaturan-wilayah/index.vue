@@ -263,11 +263,7 @@
     </template>
   </LazyUModal>
   <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-    <UCard
-      v-for="config in cardConfigs"
-      :key="config.type"
-      class="flex flex-col"
-    >
+    <UCard v-for="config in cardConfigs" :key="config.type">
       <!-- Card Header -->
       <div class="mb-4 flex items-center justify-between">
         <h2 class="text-2xl font-bold">{{ config.title }}</h2>
