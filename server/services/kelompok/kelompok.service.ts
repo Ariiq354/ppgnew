@@ -1,7 +1,7 @@
 import { count, eq, inArray } from "drizzle-orm";
 import { db } from "~~/server/database";
 import type { TKelompokCreate, TKelompokList } from "./dto/kelompok.dto";
-import { kelompokTable } from "~~/server/database/schema/wilayah";
+import { desaTable, kelompokTable } from "~~/server/database/schema/wilayah";
 import { getTotalQuery } from "~~/server/utils/query";
 
 export async function getAllKelompok({ limit, page, desaId }: TKelompokList) {
@@ -26,6 +26,23 @@ export async function getAllKelompok({ limit, page, desaId }: TKelompokList) {
     };
   } catch (error) {
     console.error("Failed to get List Kelompok", error);
+    throw InternalError;
+  }
+}
+
+export async function getKelompokByDaerahId(daerahId: number) {
+  try {
+    return await db
+      .select({
+        id: kelompokTable.id,
+        name: kelompokTable.name,
+        desaId: kelompokTable.desaId,
+      })
+      .from(kelompokTable)
+      .leftJoin(desaTable, eq(kelompokTable.desaId, desaTable.id))
+      .where(eq(desaTable.daerahId, daerahId));
+  } catch (error) {
+    console.error("Failed to get List Kelompok By Daerah Id", error);
     throw InternalError;
   }
 }

@@ -24,7 +24,7 @@
       {
         label: "Tenaga Pengajar",
         icon: "i-heroicons-users",
-        to: "/dashboard/data-pengajar",
+        to: "/dashboard/pengajar",
         onSelect: () => {
           if (!isDesktop.value) {
             constantStore.toggleSidebar();
@@ -37,7 +37,7 @@
         children: [
           {
             label: "Generus",
-            to: "/dashboard/data-generus",
+            to: "/dashboard/generus",
             onSelect: () => {
               if (!isDesktop.value) {
                 constantStore.toggleSidebar();
@@ -46,7 +46,7 @@
           },
           {
             label: "Kelas 6 & 9",
-            to: "/dashboard/data-sd-smp",
+            to: "/dashboard/kelas69",
             onSelect: () => {
               if (!isDesktop.value) {
                 constantStore.toggleSidebar();
@@ -58,7 +58,7 @@
       {
         label: "Program Kerja",
         icon: "i-heroicons-clipboard-document-check",
-        to: "/dashboard/data-proker",
+        to: "/dashboard/proker",
         onSelect: () => {
           if (!isDesktop.value) {
             constantStore.toggleSidebar();

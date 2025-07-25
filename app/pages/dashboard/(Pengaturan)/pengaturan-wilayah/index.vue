@@ -175,23 +175,36 @@
     }
   }
 
-  const permissions = ref({
-    daerah: {
-      create: await authStore.hasPermission({ daerah: ["create"] }),
-      update: await authStore.hasPermission({ daerah: ["update"] }),
-      delete: await authStore.hasPermission({ daerah: ["delete"] }),
-    },
-    desa: {
-      create: await authStore.hasPermission({ desa: ["create"] }),
-      update: await authStore.hasPermission({ desa: ["update"] }),
-      delete: await authStore.hasPermission({ desa: ["delete"] }),
-    },
-    kelompok: {
-      create: await authStore.hasPermission({ kelompok: ["create"] }),
-      update: await authStore.hasPermission({ kelompok: ["update"] }),
-      delete: await authStore.hasPermission({ kelompok: ["delete"] }),
-    },
-  });
+  const permissions = computedAsync(
+    async () => ({
+      daerah: {
+        create:
+          (await authStore.hasPermission({ daerah: ["create"] })) ?? false,
+        update:
+          (await authStore.hasPermission({ daerah: ["update"] })) ?? false,
+        delete:
+          (await authStore.hasPermission({ daerah: ["delete"] })) ?? false,
+      },
+      desa: {
+        create: (await authStore.hasPermission({ desa: ["create"] })) ?? false,
+        update: (await authStore.hasPermission({ desa: ["update"] })) ?? false,
+        delete: (await authStore.hasPermission({ desa: ["delete"] })) ?? false,
+      },
+      kelompok: {
+        create:
+          (await authStore.hasPermission({ kelompok: ["create"] })) ?? false,
+        update:
+          (await authStore.hasPermission({ kelompok: ["update"] })) ?? false,
+        delete:
+          (await authStore.hasPermission({ kelompok: ["delete"] })) ?? false,
+      },
+    }),
+    {
+      daerah: { create: false, update: false, delete: false },
+      desa: { create: false, update: false, delete: false },
+      kelompok: { create: false, update: false, delete: false },
+    }
+  );
 
   const cardConfigs = [
     {
@@ -332,7 +345,6 @@
         <WilayahPagination
           v-model:page="config.query.page"
           :total="config.data.value?.metadata?.total || 0"
-          :per-page="config.query.limit"
         />
       </div>
     </UCard>

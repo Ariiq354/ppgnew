@@ -1,6 +1,7 @@
 import { createDokumen } from "~~/server/services/dokumen/dokumen.service";
 import { ODokumenCreate } from "~~/server/services/dokumen/dto/dokumen.dto";
 import { uploadCloudinary } from "~~/server/utils/cloudinary";
+import Env from "~~/shared/env";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -8,7 +9,6 @@ export default defineEventHandler(async (event) => {
   const user = authGuard(event);
 
   const result = await readMultipartFormData(event);
-  const { dokumenPreset } = useRuntimeConfig();
 
   if (!result) {
     throw createError({
@@ -42,7 +42,11 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const uploadResult = await uploadCloudinary(dokumenPreset, part.data, "raw");
+  const uploadResult = await uploadCloudinary(
+    Env.DOKUMEN_PRESET,
+    part.data,
+    "raw"
+  );
 
   fields["url"] = uploadResult.secure_url;
   fields["name"] = part.filename!;

@@ -108,7 +108,7 @@
     <div class="mt-2 flex items-center justify-between">
       <p class="px-2 text-sm text-(--ui-text-muted)">
         Showing {{ (page - 1) * 10 + 1 }} to
-        {{ Math.min((page - 1) * 10 + 10, total) }} of {{ total }} documents
+        {{ Math.min((page - 1) * 10 + 10, total) }} of {{ total }} items
       </p>
       <div v-if="pagination" class="flex justify-center">
         <UPagination v-model:page="page" :total="total" />

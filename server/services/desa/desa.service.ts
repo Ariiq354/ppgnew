@@ -34,6 +34,22 @@ export async function getDesaById(id: number) {
   return await db.query.desaTable.findFirst({ where: eq(desaTable.id, id) });
 }
 
+export async function getDesaByDaerahId(daerahId: number) {
+  try {
+    return await db
+      .select({
+        id: desaTable.id,
+        name: desaTable.name,
+        daerahId: desaTable.daerahId,
+      })
+      .from(desaTable)
+      .where(eq(desaTable.daerahId, daerahId));
+  } catch (error) {
+    console.error("Failed to get List Desa By Daerah Id", error);
+    throw InternalError;
+  }
+}
+
 export async function createDesa(data: TDesaCreate) {
   try {
     return await db

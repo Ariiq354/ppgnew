@@ -4,10 +4,12 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   // Base Protection
   if (to.path.startsWith("/dashboard") && !authStore.user) {
+    console.log("check");
     return navigateTo("/");
   }
 
   if (authStore.user && (to.path === "/" || to.path === "/register")) {
+    console.log("check2");
     return navigateTo("/dashboard");
   }
 

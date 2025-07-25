@@ -1,8 +1,11 @@
 <script setup lang="ts">
-  import { schema, getInitialFormData } from "./_constants";
+  import type { FormSubmitEvent } from "@nuxt/ui";
+  import { schema, getInitialFormData, type Schema } from "./_constants";
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
-  const canUpload = await authStore.hasPermission({ dokumen: ["upload"] });
+  const canUpload = computedAsync(
+    async () => await authStore.hasPermission({ dokumen: ["upload"] })
+  );
 
   onMounted(() => {
     constantStore.setTitle("Pengaturan / Dokumen");
@@ -14,12 +17,9 @@
   const state = ref(getInitialFormData());
 
   const { isLoading, execute } = useSubmit();
-  async function onSubmit() {
+  async function onSubmit(event: FormSubmitEvent<Schema>) {
     const formData = new FormData();
-
-    if (file.value) {
-      formData.append("file", file.value);
-    }
+    formData.append("file", event.data.file);
 
     await execute({
       path: `${APIBASE}/dokumen`,
@@ -54,14 +54,6 @@
     modalOpen.value = true;
   }
 
-  const file = ref<File>();
-  function onFileChange(e: Event) {
-    const target = e.target as HTMLInputElement;
-    if (target.files && target.files.length > 0) {
-      file.value = target.files[0];
-    }
-  }
-
   function handleDownload(url: string) {
     const a = document.createElement("a");
     a.href = url;
@@ -86,12 +78,12 @@
         class="space-y-4"
         @submit="onSubmit"
       >
-        <UFormField label="Choose File" name="file">
-          <UInput
+        <UFormField name="file">
+          <UFileUpload
             v-model="state.file"
-            type="file"
-            :disabled="isLoading"
-            @change="onFileChange"
+            label="Drop your file here"
+            description="max. 5MB"
+            class="min-h-48"
           />
         </UFormField>
       </UForm>
