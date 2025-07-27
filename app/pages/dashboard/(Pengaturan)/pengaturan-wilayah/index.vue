@@ -175,36 +175,47 @@
     }
   }
 
-  const permissions = computedAsync(
-    async () => ({
-      daerah: {
-        create:
-          (await authStore.hasPermission({ daerah: ["create"] })) ?? false,
-        update:
-          (await authStore.hasPermission({ daerah: ["update"] })) ?? false,
-        delete:
-          (await authStore.hasPermission({ daerah: ["delete"] })) ?? false,
-      },
-      desa: {
-        create: (await authStore.hasPermission({ desa: ["create"] })) ?? false,
-        update: (await authStore.hasPermission({ desa: ["update"] })) ?? false,
-        delete: (await authStore.hasPermission({ desa: ["delete"] })) ?? false,
-      },
-      kelompok: {
-        create:
-          (await authStore.hasPermission({ kelompok: ["create"] })) ?? false,
-        update:
-          (await authStore.hasPermission({ kelompok: ["update"] })) ?? false,
-        delete:
-          (await authStore.hasPermission({ kelompok: ["delete"] })) ?? false,
-      },
-    }),
-    {
-      daerah: { create: false, update: false, delete: false },
-      desa: { create: false, update: false, delete: false },
-      kelompok: { create: false, update: false, delete: false },
-    }
-  );
+  const [
+    daerahCreate,
+    daerahUpdate,
+    daerahDelete,
+    desaCreate,
+    desaUpdate,
+    desaDelete,
+    kelompokCreate,
+    kelompokUpdate,
+    kelompokDelete,
+  ] = await Promise.all([
+    authStore.hasPermission({ daerah: ["create"] }),
+    authStore.hasPermission({ daerah: ["update"] }),
+    authStore.hasPermission({ daerah: ["delete"] }),
+
+    authStore.hasPermission({ desa: ["create"] }),
+    authStore.hasPermission({ desa: ["update"] }),
+    authStore.hasPermission({ desa: ["delete"] }),
+
+    authStore.hasPermission({ kelompok: ["create"] }),
+    authStore.hasPermission({ kelompok: ["update"] }),
+    authStore.hasPermission({ kelompok: ["delete"] }),
+  ]);
+
+  const permissions = {
+    daerah: {
+      create: daerahCreate,
+      update: daerahUpdate,
+      delete: daerahDelete,
+    },
+    desa: {
+      create: desaCreate,
+      update: desaUpdate,
+      delete: desaDelete,
+    },
+    kelompok: {
+      create: kelompokCreate,
+      update: kelompokUpdate,
+      delete: kelompokDelete,
+    },
+  };
 
   const cardConfigs = [
     {

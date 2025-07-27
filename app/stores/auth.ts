@@ -95,8 +95,13 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   }
 
   async function hasPermission(body: TStatement) {
+    const headers = useRequestHeaders();
+
     const result = await authClient.admin.hasPermission({
       permissions: body,
+      fetchOptions: {
+        headers,
+      },
     });
 
     return result.data?.success;
