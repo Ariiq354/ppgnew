@@ -9,6 +9,6 @@ const EnvSchema = z.object({
   CLOUDINARY_URL: z.string().check(z.minLength(1)),
 });
 
-export type EnvSchema = z.infer<typeof EnvSchema>;
+type EnvSchema = z.infer<typeof EnvSchema>;
 
 export default EnvSchema.parse(process.env);

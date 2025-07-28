@@ -33,23 +33,29 @@
     kelompok: { page: 1, limit: 5, desaId: 0 },
   });
 
-  const { data: dDaerah, refresh: rDaerah } = await useFetch(
-    `${APIBASE}/daerah`,
-    {
-      query: computed(() => queries.daerah),
-    }
-  );
-  const { data: dDesa, refresh: rDesa } = await useFetch(`${APIBASE}/desa`, {
+  const {
+    data: dDaerah,
+    refresh: rDaerah,
+    status: sDaerah,
+  } = await useFetch(`${APIBASE}/daerah`, {
+    query: computed(() => queries.daerah),
+  });
+  const {
+    data: dDesa,
+    refresh: rDesa,
+    status: sDesa,
+  } = await useFetch(`${APIBASE}/desa`, {
     immediate: false,
     query: computed(() => queries.desa),
   });
-  const { data: dKelompok, refresh: rKelompok } = await useFetch(
-    `${APIBASE}/kelompok`,
-    {
-      immediate: false,
-      query: computed(() => queries.kelompok),
-    }
-  );
+  const {
+    data: dKelompok,
+    refresh: rKelompok,
+    status: sKelompok,
+  } = await useFetch(`${APIBASE}/kelompok`, {
+    immediate: false,
+    query: computed(() => queries.kelompok),
+  });
   watch(queries.desa, () => {
     if (queries.desa.daerahId > 0) {
       rDesa();
@@ -224,6 +230,7 @@
       data: dDaerah,
       query: queries.daerah,
       disabled: isDaerahDisabled,
+      loading: computed(() => sDaerah.value),
     },
     {
       type: "desa" as WilayahType,
@@ -231,6 +238,7 @@
       data: dDesa,
       query: queries.desa,
       disabled: isDesaDisabled,
+      loading: computed(() => sDesa.value),
     },
     {
       type: "kelompok" as WilayahType,
@@ -238,6 +246,7 @@
       data: dKelompok,
       query: queries.kelompok,
       disabled: isKelompokDisabled,
+      loading: computed(() => sKelompok.value),
     },
   ];
 </script>
@@ -312,6 +321,7 @@
             tr: 'hover:bg-elevated/50',
           }"
           :data="config.data.value?.data || []"
+          :loading="config.loading.value === 'pending'"
           @select="(row) => onSelect(config.type, row)"
         >
           <template #actions-header="{ column }">
