@@ -3,12 +3,27 @@ import { roles } from "../../../shared/permission";
 import { timestamp } from "./common";
 import { daerahTable } from "./wilayah";
 
+const bulanOptions = [
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
+] as const;
+
 export const prokerTable = sqliteTable("proker", {
   id: int().primaryKey({ autoIncrement: true }),
   kegiatan: text().notNull(),
   peserta: text().notNull(),
-  bulan: text().notNull(),
-  tahun: text().notNull(),
+  bulan: text({ enum: bulanOptions }).notNull(),
+  tahun: int().notNull(),
   biaya: int().notNull(),
   keterangan: text().notNull(),
   mingguKe: int().notNull(),

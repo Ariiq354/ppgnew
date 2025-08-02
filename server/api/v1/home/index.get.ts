@@ -1,5 +1,15 @@
+import { getCountDesa } from "~~/server/services/desa/desa.service";
+import { getCountGenerus } from "~~/server/services/generus/generus.service";
+import { getCountKelompok } from "~~/server/services/kelompok/kelompok.service";
+import { getCountPengajar } from "~~/server/services/pengajar/pengajar.service";
+
 export default defineEventHandler(async (event) => {
   authGuard(event);
+
+  const countKelompok = await getCountKelompok();
+  const countDesa = await getCountDesa();
+  const countGenerus = await getCountGenerus();
+  const countPengajar = await getCountPengajar();
 
   function createDatasets(maleData: number[], femaleData: number[]) {
     return [
@@ -48,6 +58,10 @@ export default defineEventHandler(async (event) => {
   const pengajarDatasets = createDatasets([1, 5, 8], [2, 8, 5]);
   const pengajarGroupDatasets = createGroupDataset([1, 5, 8], "Pengajar Group");
   const data = {
+    countKelompok,
+    countDesa,
+    countGenerus,
+    countPengajar,
     generusDatasets,
     generusGroupDatasets,
     pengajarDatasets,

@@ -205,23 +205,53 @@
     authStore.hasPermission({ kelompok: ["delete"] }),
   ]);
 
-  const permissions = {
+  const permissions = computed(() => ({
     daerah: {
       create: daerahCreate,
       update: daerahUpdate,
       delete: daerahDelete,
     },
     desa: {
-      create: desaCreate,
-      update: desaUpdate,
-      delete: desaDelete,
+      create:
+        desaCreate &&
+        (authStore.user?.role === "admin" ||
+          (authStore.user?.role === "user,daerah" &&
+            authStore.user?.daerahId === queries.desa.daerahId)),
+      update:
+        desaUpdate &&
+        (authStore.user?.role === "admin" ||
+          (authStore.user?.role === "user,daerah" &&
+            authStore.user?.daerahId === queries.desa.daerahId)),
+      delete:
+        desaDelete &&
+        (authStore.user?.role === "admin" ||
+          (authStore.user?.role === "user,daerah" &&
+            authStore.user?.daerahId === queries.desa.daerahId)),
     },
     kelompok: {
-      create: kelompokCreate,
-      update: kelompokUpdate,
-      delete: kelompokDelete,
+      create:
+        kelompokCreate &&
+        (authStore.user?.role === "admin" ||
+          (authStore.user?.role === "user,daerah" &&
+            authStore.user?.daerahId === queries.desa.daerahId) ||
+          (authStore.user?.role === "user,desa" &&
+            authStore.user?.desaId === queries.kelompok.desaId)),
+      update:
+        kelompokUpdate &&
+        (authStore.user?.role === "admin" ||
+          (authStore.user?.role === "user,daerah" &&
+            authStore.user?.daerahId === queries.desa.daerahId) ||
+          (authStore.user?.role === "user,desa" &&
+            authStore.user?.desaId === queries.kelompok.desaId)),
+      delete:
+        kelompokDelete &&
+        (authStore.user?.role === "admin" ||
+          (authStore.user?.role === "user,daerah" &&
+            authStore.user?.daerahId === queries.desa.daerahId) ||
+          (authStore.user?.role === "user,desa" &&
+            authStore.user?.desaId === queries.kelompok.desaId)),
     },
-  };
+  }));
 
   const cardConfigs = [
     {
@@ -296,6 +326,7 @@
     </template>
   </LazyUModal>
   <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+    {{ permissions }}
     <UCard v-for="config in cardConfigs" :key="config.type">
       <!-- Card Header -->
       <div class="mb-4 flex items-center justify-between">

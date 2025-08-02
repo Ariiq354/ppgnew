@@ -30,6 +30,25 @@ export async function getAllKelompok({ limit, page, desaId }: TKelompokList) {
   }
 }
 
+export async function getOptionsKelompok(desaId: number) {
+  try {
+    const data = await db
+      .select({
+        id: kelompokTable.id,
+        name: kelompokTable.name,
+      })
+      .from(kelompokTable)
+      .where(eq(kelompokTable.desaId, desaId));
+
+    return {
+      data,
+    };
+  } catch (error) {
+    console.error("Failed to get Options Kelompok", error);
+    throw InternalError;
+  }
+}
+
 export async function getKelompokByDaerahId(daerahId: number) {
   try {
     return await db

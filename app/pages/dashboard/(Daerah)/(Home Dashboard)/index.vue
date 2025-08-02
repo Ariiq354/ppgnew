@@ -32,7 +32,7 @@
         <div
           class="flex w-full flex-col items-end justify-center gap-2 text-right"
         >
-          <p class="text-2xl font-bold">{{ 78 }}</p>
+          <p class="text-2xl font-bold">{{ data?.data.countDesa }}</p>
           <p class="text-lg">Desa</p>
         </div>
       </div>
@@ -43,7 +43,7 @@
         <div
           class="flex w-full flex-col items-end justify-center gap-2 text-right"
         >
-          <p class="text-2xl font-bold">{{ 34 }}</p>
+          <p class="text-2xl font-bold">{{ data?.data.countKelompok }}</p>
           <p class="text-lg">Kelompok</p>
         </div>
       </div>
@@ -55,7 +55,7 @@
           <div
             class="flex w-full flex-col items-end justify-center gap-2 text-right"
           >
-            <p class="text-2xl font-bold">{{ 45 }}</p>
+            <p class="text-2xl font-bold">{{ data?.data.countGenerus }}</p>
             <p class="text-lg">Generus</p>
           </div>
         </div>
@@ -68,7 +68,7 @@
           <div
             class="flex w-full flex-col items-end justify-center gap-2 text-right"
           >
-            <p class="text-2xl font-bold">{{ 98 }}</p>
+            <p class="text-2xl font-bold">{{ data?.data.countPengajar }}</p>
             <p class="text-lg">Pengajar</p>
           </div>
         </div>

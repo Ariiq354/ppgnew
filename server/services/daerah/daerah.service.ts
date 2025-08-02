@@ -33,6 +33,24 @@ export async function getAllDaerah({ limit, page }: TPagination) {
   }
 }
 
+export async function getOptionsDaerah() {
+  try {
+    const data = await db
+      .select({
+        id: daerahTable.id,
+        name: daerahTable.name,
+      })
+      .from(daerahTable);
+
+    return {
+      data,
+    };
+  } catch (error) {
+    console.error("Failed to get Options Daerah", error);
+    throw InternalError;
+  }
+}
+
 export async function createDaerah(data: TDaerahCreate) {
   try {
     return await db

@@ -30,6 +30,25 @@ export async function getAllDesa({ limit, page, daerahId }: TDesaList) {
   }
 }
 
+export async function getOptionsDesa(daerahId: number) {
+  try {
+    const data = await db
+      .select({
+        id: desaTable.id,
+        name: desaTable.name,
+      })
+      .from(desaTable)
+      .where(eq(desaTable.daerahId, daerahId));
+
+    return {
+      data,
+    };
+  } catch (error) {
+    console.error("Failed to get Options Desa", error);
+    throw InternalError;
+  }
+}
+
 export async function getDesaById(id: number) {
   return await db.query.desaTable.findFirst({ where: eq(desaTable.id, id) });
 }
