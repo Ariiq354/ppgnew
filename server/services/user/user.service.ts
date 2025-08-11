@@ -1,6 +1,6 @@
 import { and, eq, like, ne, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
-import { user } from "~~/server/database/schema/auth";
+import { userTable } from "~~/server/database/schema/auth";
 import { getTotalQuery } from "~~/server/utils/query";
 import type { TUserList } from "./dto/user.dto";
 
@@ -10,8 +10,8 @@ export async function getAllUser(
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
-    ne(user.username, "admin"),
-    eq(user.daerahId, daerahId),
+    ne(userTable.username, "admin"),
+    eq(userTable.daerahId, daerahId),
   ];
 
   if (search) {
@@ -19,21 +19,21 @@ export async function getAllUser(
 
     conditions.push(
       or(
-        like(user.name, searchCondition),
-        like(user.email, searchCondition),
-        like(user.username, searchCondition),
-        like(user.displayUsername, searchCondition),
-        like(user.role, searchCondition)
+        like(userTable.name, searchCondition),
+        like(userTable.email, searchCondition),
+        like(userTable.username, searchCondition),
+        like(userTable.displayUsername, searchCondition),
+        like(userTable.role, searchCondition)
       )
     );
   }
 
   const query = db
     .select({
-      username: user.username,
-      role: user.role,
+      username: userTable.username,
+      role: userTable.role,
     })
-    .from(user)
+    .from(userTable)
     .where(and(...conditions))
     .$dynamic();
 

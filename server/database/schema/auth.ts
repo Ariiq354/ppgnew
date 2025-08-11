@@ -8,7 +8,7 @@ import {
 import { timestamp } from "./common";
 import { daerahTable, desaTable, kelompokTable } from "./wilayah";
 
-export const user = sqliteTable(
+export const userTable = sqliteTable(
   "user",
   {
     id: int().primaryKey({ autoIncrement: true }),
@@ -44,7 +44,7 @@ export const session = sqliteTable(
     userAgent: text(),
     userId: int()
       .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
+      .references(() => userTable.id, { onDelete: "cascade" }),
     impersonatedBy: text(),
     ...timestamp,
   },
@@ -62,7 +62,7 @@ export const account = sqliteTable(
     providerId: text().notNull(),
     userId: int()
       .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
+      .references(() => userTable.id, { onDelete: "cascade" }),
     accessToken: text(),
     refreshToken: text(),
     idToken: text(),

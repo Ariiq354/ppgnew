@@ -28,3 +28,27 @@ export const generusTable = sqliteTable("generus", {
   status: text().notNull().default(""),
   ...timestamp,
 });
+
+export const kelasTable = sqliteTable("kelas", {
+  id: int().primaryKey({ autoIncrement: true }),
+  nama: text().notNull(),
+  tanggal: text().notNull(),
+  kelompokId: int()
+    .notNull()
+    .references(() => kelompokTable.id, { onDelete: "cascade" }),
+  absensi: int({ mode: "boolean" }).notNull().default(false),
+  ...timestamp,
+});
+
+export const absensiGenerusTable = sqliteTable("absensi_generus", {
+  id: int().primaryKey({ autoIncrement: true }),
+  kelasId: int()
+    .notNull()
+    .references(() => kelasTable.id, { onDelete: "cascade" }),
+  generusId: int()
+    .notNull()
+    .references(() => generusTable.id, { onDelete: "cascade" }),
+  keterangan: text().notNull(),
+  detail: text().notNull().default(""),
+  ...timestamp,
+});

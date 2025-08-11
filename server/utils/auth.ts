@@ -20,6 +20,7 @@ export const auth = betterAuth({
     },
   },
   user: {
+    modelName: "userTable",
     additionalFields: {
       daerahId: {
         type: "number",
