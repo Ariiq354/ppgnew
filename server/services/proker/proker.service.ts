@@ -99,12 +99,20 @@ export async function updateProker(
   }
 }
 
-export async function deleteProker(daerahId: number, id: number[]) {
+export async function deleteProker(
+  daerahId: number,
+  bidang: (typeof roles)[number],
+  id: number[]
+) {
   try {
     return await db
       .delete(prokerTable)
       .where(
-        and(inArray(prokerTable.id, id), eq(prokerTable.daerahId, daerahId))
+        and(
+          inArray(prokerTable.id, id),
+          eq(prokerTable.daerahId, daerahId),
+          eq(prokerTable.bidang, bidang)
+        )
       );
   } catch (error) {
     console.error("Failed to delete Proker", error);

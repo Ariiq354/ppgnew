@@ -7,10 +7,7 @@
   } from "./_constants";
 
   const constantStore = useConstantStore();
-
-  onMounted(() => {
-    constantStore.setTitle("Dashboard / Program Kerja");
-  });
+  constantStore.setTitle("Dashboard / Program Kerja");
 
   const query = reactive({
     search: "",

@@ -12,21 +12,24 @@ const statement = {
   daerah: ["create", "update", "delete"],
   desa: ["create", "update", "delete"],
   kelompok: ["create", "update", "delete"],
-  sekretariat: ["view", "create", "update", "delete"],
-  kurikulum: ["view", "create", "update", "delete"],
-  tenaga_pendidik: ["view", "create", "update", "delete"],
-  penggalang_dana: ["view", "create", "update", "delete"],
-  sarana_prasarana: ["view", "create", "update", "delete"],
-  kemandirian: ["view", "create", "update", "delete"],
-  keputrian: ["view", "create", "update", "delete"],
-  bimbingan_konseling: ["view", "create", "update", "delete"],
-  olahraga_seni: ["view", "create", "update", "delete"],
-  kegiatan_muda_mudi: ["view", "create", "update", "delete"],
-  tahfidz: ["view", "create", "update", "delete"],
-  media_publikasi: ["view", "create", "update", "delete"],
-  karakter: ["view", "create", "update", "delete"],
+  proker: ["create", "view", "update", "delete"],
   desa_menu: ["view", "create", "update", "delete"],
   kelompok_menu: ["view", "create", "update", "delete"],
+  bidang_menu_view: [
+    "sekretariat",
+    "kurikulum",
+    "tenaga_pendidik",
+    "penggalang_dana",
+    "sarana_prasarana",
+    "kemandirian",
+    "keputrian",
+    "bimbingan_konseling",
+    "olahraga_seni",
+    "kegiatan_muda_mudi",
+    "tahfidz",
+    "media_publikasi",
+    "karakter",
+  ],
 } as const;
 
 export type TStatement = {
@@ -61,43 +64,56 @@ export const rolesDeclaration = {
     kelompok: ["create", "update", "delete"],
   }),
   sekretariat: ac.newRole({
-    sekretariat: ["view", "create", "update", "delete"],
+    proker: ["create", "update", "delete"],
+    bidang_menu_view: ["sekretariat"],
   }),
   kurikulum: ac.newRole({
-    kurikulum: ["view", "create", "update", "delete"],
+    proker: ["view", "create", "update", "delete"],
+    bidang_menu_view: ["kurikulum"],
   }),
   tenaga_pendidik: ac.newRole({
-    tenaga_pendidik: ["view", "create", "update", "delete"],
+    proker: ["view", "create", "update", "delete"],
+    bidang_menu_view: ["tenaga_pendidik"],
   }),
   penggalang_dana: ac.newRole({
-    penggalang_dana: ["view", "create", "update", "delete"],
+    proker: ["view", "create", "update", "delete"],
+    bidang_menu_view: ["penggalang_dana"],
   }),
   sarana_prasarana: ac.newRole({
-    sarana_prasarana: ["view", "create", "update", "delete"],
+    proker: ["view", "create", "update", "delete"],
+    bidang_menu_view: ["sarana_prasarana"],
   }),
   kemandirian: ac.newRole({
-    kemandirian: ["view", "create", "update", "delete"],
+    proker: ["view", "create", "update", "delete"],
+    bidang_menu_view: ["kemandirian"],
   }),
   keputrian: ac.newRole({
-    keputrian: ["view", "create", "update", "delete"],
+    proker: ["view", "create", "update", "delete"],
+    bidang_menu_view: ["keputrian"],
   }),
   bimbingan_konseling: ac.newRole({
-    bimbingan_konseling: ["view", "create", "update", "delete"],
+    proker: ["view", "create", "update", "delete"],
+    bidang_menu_view: ["bimbingan_konseling"],
   }),
   olahraga_seni: ac.newRole({
-    olahraga_seni: ["view", "create", "update", "delete"],
+    proker: ["view", "create", "update", "delete"],
+    bidang_menu_view: ["olahraga_seni"],
   }),
   kegiatan_muda_mudi: ac.newRole({
-    kegiatan_muda_mudi: ["view", "create", "update", "delete"],
+    proker: ["view", "create", "update", "delete"],
+    bidang_menu_view: ["kegiatan_muda_mudi"],
   }),
   tahfidz: ac.newRole({
-    tahfidz: ["view", "create", "update", "delete"],
+    proker: ["view", "create", "update", "delete"],
+    bidang_menu_view: ["tahfidz"],
   }),
   media_publikasi: ac.newRole({
-    media_publikasi: ["view", "create", "update", "delete"],
+    proker: ["view", "create", "update", "delete"],
+    bidang_menu_view: ["media_publikasi"],
   }),
   karakter: ac.newRole({
-    karakter: ["view", "create", "update", "delete"],
+    proker: ["view", "create", "update", "delete"],
+    bidang_menu_view: ["karakter"],
   }),
 };
 

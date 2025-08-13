@@ -1,8 +1,6 @@
 <script setup lang="ts">
   const constantStore = useConstantStore();
-  onMounted(() => {
-    constantStore.setTitle("Home Dashboard");
-  });
+  constantStore.setTitle("Home Dashboard");
 
   const GENERUS_LABELS = [
     "PAUD",

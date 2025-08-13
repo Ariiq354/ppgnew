@@ -1,12 +1,12 @@
-import { getAllKelompok } from "~~/server/services/kelompok/kelompok.service";
-import { OKelompokList } from "~~/server/services/kelompok/dto/kelompok.dto";
+import { OProkerList } from "~~/server/services/proker/dto/proker.dto";
+import { getAllProker } from "~~/server/services/proker/proker.service";
 
 export default defineEventHandler(async (event) => {
-  authGuard(event);
+  const user = authGuard(event);
 
-  const query = await getValidatedQuery(event, (q) => OKelompokList.parse(q));
+  const query = await getValidatedQuery(event, (q) => OProkerList.parse(q));
 
-  const data = await getAllKelompok(query);
+  const data = await getAllProker(user.daerahId, query);
   const metadata = {
     page: query.page,
     itemPerPage: query.limit,

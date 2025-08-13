@@ -6,6 +6,6 @@ export const schema = z.object({
 
 export type Schema = z.infer<typeof schema>;
 
-export const getInitialFormData = (): Schema => ({
+export const initFormData: Schema = {
   daerah: "",
-});
+};

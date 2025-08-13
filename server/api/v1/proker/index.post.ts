@@ -1,57 +1,18 @@
-import { createKelompok } from "~~/server/services/kelompok/kelompok.service";
-import { OKelompokCreate } from "~~/server/services/kelompok/dto/kelompok.dto";
-import { checkWilayahNameExist } from "~~/server/services/daerah/daerah.service";
-import { getDesaById } from "~~/server/services/desa/desa.service";
+import { OProkerCreate } from "~~/server/services/proker/dto/proker.dto";
+import { createProker } from "~~/server/services/proker/proker.service";
 
 export default defineEventHandler(async (event) => {
-  permissionGuard(event, { kelompok: ["create"] });
+  const user = await permissionGuard(event, { proker: ["create"] });
 
-  const body = await readValidatedBody(event, (b) => OKelompokCreate.parse(b));
-
-  body.name = body.name
-    .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-
-  const nama = convertToNameFormat(body.name);
-
-  const exist = await checkWilayahNameExist(body.name);
-  if (exist) {
+  const body = await readValidatedBody(event, (b) => OProkerCreate.parse(b));
+  if (user.role !== "admin" && user.role!.split(",")[1] !== body.bidang) {
     throw createError({
-      statusCode: 400,
-      message: "Nama sudah ada",
+      statusCode: 403,
+      statusMessage: "Unauthorized",
     });
   }
 
-  const [result] = await createKelompok({
-    name: body.name,
-    desaId: body.desaId,
-  });
-
-  const desa = await getDesaById(body.desaId);
-  if (!desa) {
-    throw createError({
-      statusCode: 400,
-      message: "Desa tidak ada",
-    });
-  }
-
-  const { user } = await auth.api.signUpEmail({
-    body: {
-      email: `${nama}@gmail.com`,
-      name: nama,
-      password: nama,
-      username: nama,
-      daerahId: desa.daerahId,
-      desaId: body.desaId,
-      kelompokId: result!.insertedId,
-      displayUsername: nama,
-    },
-  });
-
-  (await auth.$context).internalAdapter.updateUser(user.id, {
-    role: "user,kelompok",
-  });
+  await createProker(user.daerahId, body);
 
   return HttpResponse();
 });

@@ -1,9 +1,17 @@
-import { deleteKelompok } from "~~/server/services/kelompok/kelompok.service";
+import { OProkerDelete } from "~~/server/services/proker/dto/proker.dto";
+import { deleteProker } from "~~/server/services/proker/proker.service";
 
 export default defineEventHandler(async (event) => {
-  permissionGuard(event, { kelompok: ["delete"] });
-  const body = await readValidatedBody(event, (b) => ODeleteSchema.parse(b));
+  const user = await permissionGuard(event, { proker: ["delete"] });
+  const body = await readValidatedBody(event, (b) => OProkerDelete.parse(b));
 
-  await deleteKelompok(body.id);
+  if (user.role !== "admin" && user.role!.split(",")[1] !== body.bidang) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Unauthorized",
+    });
+  }
+
+  await deleteProker(user.daerahId, body.bidang, body.id);
   return HttpResponse();
 });

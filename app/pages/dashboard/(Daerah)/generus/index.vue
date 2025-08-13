@@ -2,10 +2,7 @@
   import { columns, kelasOptions, pengajianOptions } from "./_constants";
 
   const constantStore = useConstantStore();
-
-  onMounted(() => {
-    constantStore.setTitle("Dashboard / Generus");
-  });
+  constantStore.setTitle("Dashboard / Generus");
 
   const query = reactive({
     search: "",

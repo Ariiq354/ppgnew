@@ -6,10 +6,10 @@ export const schema = z.object({
   rememberMe: z.boolean(),
 });
 
-export const getInitialFormData = (): Schema => ({
+export const initFormData: Schema = {
   username: "",
   password: "",
   rememberMe: false,
-});
+};
 
 export type Schema = z.infer<typeof schema>;

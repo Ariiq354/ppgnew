@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "#ui/types";
   import type { Schema } from "./_constants";
-  import { getInitialFormData, schema } from "./_constants";
+  import { initFormData, schema } from "./_constants";
 
   definePageMeta({
     layout: "auth",
@@ -11,7 +11,7 @@
 
   const modalOpen = ref(false);
 
-  const state = ref(getInitialFormData());
+  const state = ref(initFormData);
 
   const result = ref();
 

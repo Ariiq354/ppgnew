@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "@nuxt/ui";
-  import { getInitialFormData, schema } from "./_constants";
+  import { initFormData, schema } from "./_constants";
   import type { Schema } from "./_constants";
 
   definePageMeta({
@@ -9,7 +9,7 @@
 
   const authStore = useAuthStore();
 
-  const state = ref(getInitialFormData());
+  const state = reactive(initFormData);
 
   async function onSubmit(event: FormSubmitEvent<Schema>) {
     await authStore.signIn(event.data);

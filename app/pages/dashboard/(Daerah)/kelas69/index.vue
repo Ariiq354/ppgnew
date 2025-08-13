@@ -1,9 +1,6 @@
 <script setup lang="ts">
   const constantStore = useConstantStore();
-
-  onMounted(() => {
-    constantStore.setTitle("Dashboard / Preview Kelas 6 & 9");
-  });
+  constantStore.setTitle("Dashboard / Preview Kelas 6 & 9");
 
   const { data } = await useFetch(`${APIBASE}/home/kelas69`);
 
