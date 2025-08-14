@@ -5,8 +5,12 @@ export default defineEventHandler(async (event) => {
   authGuard(event);
 
   const query = await getValidatedQuery(event, (q) =>
-    z.object({ desaId: z.number() }).parse(q)
+    z.object({ desaId: z.optional(z.coerce.number()) }).parse(q)
   );
+
+  if (!query.desaId) {
+    return HttpResponse([]);
+  }
 
   const data = await getOptionsKelompok(query.desaId);
 

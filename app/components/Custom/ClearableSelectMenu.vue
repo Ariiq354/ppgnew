@@ -1,9 +1,10 @@
 <script setup lang="ts">
   defineProps<{
-    items: any[];
+    items: any[] | undefined;
     placeholder?: string;
     labelKey?: string;
     valueKey?: string;
+    loading?: boolean;
   }>();
 
   const model = defineModel<string>();
@@ -16,6 +17,7 @@
     :placeholder="placeholder"
     :label-key="labelKey"
     :value-key="valueKey"
+    :loading="loading"
   >
     <template #trailing="{ modelValue }">
       <UIcon

@@ -4,14 +4,20 @@
     columns,
     mingguOptions,
     tahunOptions,
+    bidangOptions,
   } from "./_constants";
 
   const constantStore = useConstantStore();
   constantStore.setTitle("Dashboard / Program Kerja");
 
+  const filterModal = ref(false);
   const query = reactive({
     search: "",
     page: 1,
+    bulan: "",
+    tahun: "",
+    minggu: "",
+    bidang: "",
   });
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
@@ -23,35 +29,74 @@
 
 <template>
   <Title>Dashboard | Program Kerja</Title>
-  <main>
-    <UCard>
-      <div class="mb-6 flex flex-col gap-4 lg:flex-row">
+  <LazyUModal v-model:open="filterModal" title="Filter">
+    <template #body>
+      <div class="flex flex-col gap-4">
         <ClearableSelectMenu
+          v-model="query.bidang"
           placeholder="Bidang"
-          class="flex-1"
-          :items="['asd', 'dsa', 'sad']"
+          :items="bidangOptions"
+          value-key="value"
+          label-key="name"
         />
         <ClearableSelectMenu
+          v-model="query.tahun"
           placeholder="Tahun"
-          class="flex-1"
           :items="tahunOptions"
         />
         <ClearableSelectMenu
+          v-model="query.bulan"
           placeholder="Bulan"
-          class="flex-1"
           :items="bulanOptions"
         />
         <ClearableSelectMenu
+          v-model="query.minggu"
           placeholder="Minggu"
-          class="flex-1"
           :items="mingguOptions"
         />
+      </div>
+    </template>
+  </LazyUModal>
+  <main>
+    <UCard>
+      <div class="mb-6 flex gap-2 md:gap-4">
         <UInput
-          size="xl"
           class="flex-5"
           leading-icon="i-heroicons-magnifying-glass"
           placeholder="Search..."
           @update:model-value="searchDebounced"
+        />
+        <ClearableSelectMenu
+          v-model="query.bidang"
+          placeholder="Bidang"
+          class="hidden flex-1 md:flex"
+          :items="bidangOptions"
+          value-key="value"
+          label-key="name"
+        />
+        <ClearableSelectMenu
+          v-model="query.tahun"
+          placeholder="Tahun"
+          class="hidden flex-1 md:flex"
+          :items="tahunOptions"
+        />
+        <ClearableSelectMenu
+          v-model="query.bulan"
+          placeholder="Bulan"
+          class="hidden flex-1 md:flex"
+          :items="bulanOptions"
+        />
+        <ClearableSelectMenu
+          v-model="query.minggu"
+          placeholder="Minggu"
+          class="hidden flex-1 md:flex"
+          :items="mingguOptions"
+        />
+        <UButton
+          variant="subtle"
+          icon="i-heroicons-funnel"
+          class="md:hidden"
+          @click="filterModal = true"
         />
       </div>
       <AppTable

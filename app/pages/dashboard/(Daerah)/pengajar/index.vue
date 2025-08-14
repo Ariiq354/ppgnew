@@ -9,6 +9,9 @@
     search: "",
     page: 1,
     status: "",
+    daerahId: "",
+    desaId: "",
+    kelompokId: "",
   });
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
@@ -16,24 +19,80 @@
   const { status } = await useFetch(`${APIBASE}/home/pengajar`, {
     query,
   });
+
+  const { data: dataDaerah, status: statusDaerah } = await useFetch(
+    `${APIBASE}/options/daerah`
+  );
+  const { data: dataDesa, status: statusDesa } = await useFetch(
+    `${APIBASE}/options/desa`,
+    {
+      query: {
+        daerahId: computed(() => query.daerahId),
+      },
+    }
+  );
+  const { data: datakelompok, status: statusKelompok } = await useFetch(
+    `${APIBASE}/options/kelompok`,
+    {
+      query: {
+        desaId: computed(() => query.desaId),
+      },
+    }
+  );
+
+  watch(
+    () => query.daerahId,
+    () => {
+      query.desaId = "";
+      query.kelompokId = "";
+      query.page = 1;
+    }
+  );
+
+  watch(
+    () => query.desaId,
+    () => {
+      query.kelompokId = "";
+      query.page = 1;
+    }
+  );
+
+  watch(
+    () => [query.status, query.kelompokId],
+    () => {
+      query.page = 1;
+    }
+  );
 </script>
 
 <template>
   <Title>Dashboard | Tenaga Pengajar</Title>
-  <LazyUModal v-model:open="filterModal" title="Filter" class="">
+  <LazyUModal v-model:open="filterModal" title="Filter">
     <template #body>
       <div class="flex flex-col gap-4">
         <ClearableSelectMenu
+          v-model="query.daerahId"
           placeholder="Daerah"
-          :items="['asd', 'dsa', 'sad']"
+          :items="dataDaerah?.data"
+          value-key="id"
+          label-key="name"
+          :loading="statusDaerah === 'pending'"
         />
         <ClearableSelectMenu
+          v-model="query.desaId"
           placeholder="Desa"
-          :items="['asd', 'dsa', 'sad']"
+          :items="dataDesa?.data"
+          value-key="id"
+          label-key="name"
+          :loading="statusDesa === 'pending'"
         />
         <ClearableSelectMenu
+          v-model="query.kelompokId"
           placeholder="Kelompok"
-          :items="['asd', 'dsa', 'sad']"
+          :items="datakelompok?.data"
+          value-key="id"
+          label-key="name"
+          :loading="statusKelompok === 'pending'"
         />
         <ClearableSelectMenu
           v-model="query.status"
@@ -49,26 +108,37 @@
     <UCard>
       <div class="mb-6 flex gap-2 md:gap-4">
         <UInput
-          size="xl"
           class="flex-5"
           leading-icon="i-heroicons-magnifying-glass"
           placeholder="Search..."
           @update:model-value="searchDebounced"
         />
         <ClearableSelectMenu
+          v-model="query.daerahId"
           placeholder="Daerah"
           class="hidden flex-1 md:flex"
-          :items="['asd', 'dsa', 'sad']"
+          :items="dataDaerah?.data"
+          value-key="id"
+          label-key="name"
+          :loading="statusDaerah === 'pending'"
         />
         <ClearableSelectMenu
+          v-model="query.desaId"
           placeholder="Desa"
           class="hidden flex-1 md:flex"
-          :items="['asd', 'dsa', 'sad']"
+          :items="dataDesa?.data"
+          value-key="id"
+          label-key="name"
+          :loading="statusDesa === 'pending'"
         />
         <ClearableSelectMenu
+          v-model="query.kelompokId"
           placeholder="Kelompok"
           class="hidden flex-1 md:flex"
-          :items="['asd', 'dsa', 'sad']"
+          :items="datakelompok?.data"
+          value-key="id"
+          label-key="name"
+          :loading="statusKelompok === 'pending'"
         />
         <ClearableSelectMenu
           v-model="query.status"
@@ -81,27 +151,19 @@
         <UButton
           variant="subtle"
           icon="i-heroicons-funnel"
-          class="flex md:hidden"
+          class="md:hidden"
           @click="filterModal = true"
         />
       </div>
       <AppTable
         v-model:page="query.page"
         :columns="columns"
-        :data="[
-          { id: 1, nama: 'asd' },
-          { id: 2, nama: 'dsa' },
-        ]"
+        :data="[]"
         :loading="status === 'pending'"
-        :total="2"
-        selectable
-        editable
+        :total="0"
         viewable
-        deletable
         enumerate
         pagination
-        action
-        @delete="(id) => console.log(id)"
       />
     </UCard>
   </main>

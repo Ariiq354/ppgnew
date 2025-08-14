@@ -1,3 +1,5 @@
+import { roles } from "~~/shared/permission";
+
 export const columns = [
   {
     accessorKey: "bidang",
@@ -32,6 +34,14 @@ export const columns = [
     header: "Status",
   },
 ];
+
+export const bidangOptions = roles.map((value) => ({
+  value,
+  name: value
+    .split("_")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" "),
+}));
 
 const currentYear = new Date().getFullYear();
 export const tahunOptions = [

@@ -11,7 +11,7 @@
       isLoading.value = true;
 
       const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
-        import("html2canvas"),
+        import("html2canvas-oklch"),
         import("jspdf"),
       ]);
 
@@ -47,7 +47,7 @@
     </UCard>
     <UCard>
       <div class="flex justify-center">
-        <div ref="content" class="w-fit px-38 py-12 text-black">
+        <div ref="content" class="content w-fit px-38 py-12">
           <div
             class="mx-auto mb-4 w-full max-w-[30rem] text-center text-xl font-bold"
           >

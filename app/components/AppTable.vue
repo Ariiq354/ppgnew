@@ -9,7 +9,10 @@
   const UCheckbox = resolveComponent("UCheckbox");
   const UDropdownMenu = resolveComponent("UDropdownMenu");
 
-  const emit = defineEmits(["edit", "view", "delete"]);
+  const emit = defineEmits<{
+    (e: "edit" | "view", row: any): void;
+    (e: "delete", payload: any | any[]): void;
+  }>();
   const {
     data,
     viewable,
@@ -32,7 +35,7 @@
     pagination?: boolean;
   }>();
 
-  const newColumns = [
+  const newColumns = computed<TableColumn<any>[]>(() => [
     ...(selectable
       ? [
           {
@@ -134,11 +137,18 @@
           } as TableColumn<any>,
         ]
       : []),
-  ];
+  ]);
+
+  watch(
+    () => data,
+    () => {
+      rowSelection.value = {};
+    }
+  );
 </script>
 
 <template>
-  <div class="w-full space-y-4 pb-4">
+  <div class="w-full space-y-4">
     <div
       v-if="Object.keys(rowSelection).length > 0"
       class="bg-error-50 dark:bg-error-950 mb-4 flex items-center gap-4 rounded-lg px-4 py-3"
@@ -150,7 +160,14 @@
         icon="i-lucide-trash-2"
         variant="outline"
         color="error"
-        @click="emit('delete')"
+        @click="
+          emit(
+            'delete',
+            Object.keys(rowSelection)
+              .map((k) => data?.[Number(k)]?.id)
+              .filter((id) => id != null)
+          )
+        "
       >
         Delete Selected
       </UButton>
@@ -162,16 +179,17 @@
       :columns="newColumns"
       :loading="loading"
     >
-      <template v-for="(_, name) in slots" :key="name" #[name]="slotData">
-        <slot :name="name" v-bind="slotData ?? {}" />
+      <template
+        v-for="(_, slotName) in slots"
+        :key="slotName"
+        #[slotName]="slotData"
+      >
+        <slot :name="slotName" v-bind="slotData ?? {}" />
       </template>
     </UTable>
 
     <div class="mt-2 flex items-center justify-between">
-      <p
-        v-if="data && data.length > 0"
-        class="px-2 text-sm text-(--ui-text-muted)"
-      >
+      <p class="px-2 text-sm text-(--ui-text-muted)">
         Showing {{ (page - 1) * 10 + 1 }} to
         {{ Math.min((page - 1) * 10 + 10, total) }} of {{ total }} items
       </p>
