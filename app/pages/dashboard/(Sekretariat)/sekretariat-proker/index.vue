@@ -6,6 +6,7 @@
     columns,
     getInitialFormData,
     schema,
+    statusOptions,
   } from "./_constants";
   import type { Schema } from "./_constants";
 
@@ -27,10 +28,11 @@
     query,
   });
 
+  const viewStatus = ref(false);
   const modalOpen = ref(false);
   const { isLoading, execute } = useSubmit();
   async function onSubmit(event: FormSubmitEvent<Schema>) {
-    const basePath = `${APIBASE}/diskon`;
+    const basePath = `${APIBASE}/proker`;
     await execute({
       path: state.value.id ? `${basePath}/${state.value.id}` : basePath,
       body: event.data,
@@ -48,29 +50,17 @@
   function clickAdd() {
     state.value = getInitialFormData();
     modalOpen.value = true;
+    viewStatus.value = false;
   }
 
-  const selected = ref<Record<string, boolean>>({});
-  async function clickDelete() {
-    const selectedId = Object.keys(selected.value)
-      .map(Number)
-      .map((index) => data.value?.data[index]?.id);
-    async function onDelete() {
-      await $fetch(`${APIBASE}/proker`, {
-        method: "DELETE",
-        body: {
-          id: selectedId,
-        },
-      });
-      selected.value = {};
-      await refresh();
-    }
-    openConfirmModal(onDelete);
+  async function clickDelete(ids: number[]) {
+    openConfirmModal("/proker/sekretariat", ids, refresh);
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
     modalOpen.value = true;
     state.value = itemData;
+    viewStatus.value = false;
   }
 </script>
 
@@ -79,7 +69,9 @@
   <main>
     <LazyUModal
       v-model:open="modalOpen"
-      :title="(state.id ? 'Edit' : 'Tambah') + ' Proker'"
+      :title="
+        (state.id ? (viewStatus ? 'Detail' : 'Edit') : 'Tambah') + ' Proker'
+      "
       class="min-w-4xl"
     >
       <template #body>
@@ -90,14 +82,11 @@
           class="space-y-4"
           @submit="onSubmit"
         >
-          <UFormField label="Bidang" name="bidang">
-            <UInput :model-value="state.bidang" disabled />
-          </UFormField>
           <UFormField label="Minggu Ke" name="mingguKe">
             <UInput
               v-model="state.mingguKe"
               type="number"
-              :disabled="isLoading || !prokerEdit"
+              :disabled="isLoading || !prokerEdit || viewStatus"
             />
           </UFormField>
           <UFormField label="Bulan" name="bulan">
@@ -105,38 +94,47 @@
               v-model="state.bulan"
               placeholder="Pilih bulan"
               :items="bulanOptions"
-              :disabled="isLoading || !prokerEdit"
+              :disabled="isLoading || !prokerEdit || viewStatus"
             />
           </UFormField>
           <UFormField label="Tahun" name="tahun">
             <UInput
               v-model="state.tahun"
-              :disabled="isLoading || !prokerEdit"
+              :disabled="isLoading || !prokerEdit || viewStatus"
+              type="number"
             />
           </UFormField>
           <UFormField label="Peserta" name="peserta">
             <UInput
               v-model="state.peserta"
-              :disabled="isLoading || !prokerEdit"
+              :disabled="isLoading || !prokerEdit || viewStatus"
             />
           </UFormField>
           <UFormField label="Biaya" name="biaya">
             <UInput
               v-model="state.biaya"
               type="number"
-              :disabled="isLoading || !prokerEdit"
+              :disabled="isLoading || !prokerEdit || viewStatus"
             />
           </UFormField>
           <UFormField label="Kegiatan" name="kegiatan">
             <UTextarea
               v-model="state.kegiatan"
-              :disabled="isLoading || !prokerEdit"
+              :disabled="isLoading || !prokerEdit || viewStatus"
             />
           </UFormField>
           <UFormField label="Keterangan" name="keterangan">
             <UTextarea
               v-model="state.keterangan"
-              :disabled="isLoading || !prokerEdit"
+              :disabled="isLoading || !prokerEdit || viewStatus"
+            />
+          </UFormField>
+          <UFormField label="Status" name="status">
+            <USelectMenu
+              v-model="state.status"
+              placeholder="Pilih status"
+              :items="statusOptions"
+              :disabled="isLoading || !prokerEdit || viewStatus"
             />
           </UFormField>
         </UForm>
@@ -148,69 +146,54 @@
           :disabled="isLoading"
           @click="modalOpen = false"
         >
-          Batal
+          {{ viewStatus ? "Tutup" : "Batal" }}
         </UButton>
         <UButton
+          v-if="!viewStatus"
           type="submit"
           icon="i-heroicons-check-16-solid"
           :loading="isLoading"
-          form="bootcamp-form"
+          form="proker-form"
         >
           Simpan
         </UButton>
       </template>
     </LazyUModal>
     <UCard>
-      <div class="mb-6 flex flex-col gap-4 lg:flex-row">
-        <div class="flex gap-2">
-          <UInput
-            size="xl"
-            class="flex-5"
-            leading-icon="i-heroicons-magnifying-glass"
-            placeholder="Search..."
-            @update:model-value="searchDebounced"
-          />
-          <UButton
-            icon="i-heroicons-plus"
-            :disabled="isLoading"
-            class="flex justify-center gap-2 text-xs text-white md:text-base dark:bg-blue-600"
-            @click="clickAdd"
-          >
-            <p class="hidden md:block">Tambah</p>
-          </UButton>
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <UButton
-            icon="i-heroicons-trash"
-            color="error"
-            class="gap-2 text-xs text-white disabled:opacity-50 md:text-base dark:bg-red-600"
-            :disabled="isLoading"
-            @click="clickDelete"
-          >
-            Hapus
-          </UButton>
-          <UButton
-            icon="i-heroicons-arrow-up-tray"
-            variant="subtle"
-            class="gap-2 bg-green-700 text-xs text-white disabled:opacity-50 md:text-base"
-            @click="json2Csv(data!.data)"
-          >
-            Ekspor
-          </UButton>
-        </div>
+      <div class="mb-6 flex gap-2 md:gap-4">
+        <UInput
+          size="xl"
+          class="flex-5"
+          leading-icon="i-heroicons-magnifying-glass"
+          placeholder="Search..."
+          @update:model-value="searchDebounced"
+        />
+        <AppTambahExport
+          :add-permission="prokerEdit"
+          :add-function="clickAdd"
+          path="proker"
+        />
       </div>
       <AppTable
         v-model:page="query.page"
-        v-model:select="selected"
         :columns="columns"
         :data="data?.data"
         :loading="status === 'pending'"
         :total="data?.metadata.total"
         enumerate
-        action
+        :deletable="prokerEdit"
+        :editable="prokerEdit"
+        viewable
         selectable
         pagination
-        @edit-click="clickUpdate"
+        @edit="clickUpdate"
+        @view="
+          (i) => {
+            clickUpdate(i);
+            viewStatus = true;
+          }
+        "
+        @delete="clickDelete"
       />
     </UCard>
   </main>

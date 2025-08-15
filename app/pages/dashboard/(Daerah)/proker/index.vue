@@ -25,6 +25,13 @@
   const { status } = await useFetch(`${APIBASE}/home/pengajar`, {
     query,
   });
+
+  watch(
+    () => [query.bulan, query.tahun, query.minggu, query.bidang],
+    () => {
+      query.page = 1;
+    }
+  );
 </script>
 
 <template>

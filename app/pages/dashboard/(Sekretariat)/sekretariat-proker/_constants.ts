@@ -43,6 +43,8 @@ export const bulanOptions = [
   "Desember",
 ];
 
+export const statusOptions = ["Pending", "Aktif", "Terlaksana"];
+
 export const schema = z.object({
   id: z.optional(z.number()),
   kegiatan: z.string().check(z.minLength(1, "Required")),

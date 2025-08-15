@@ -37,9 +37,4 @@ export const OProkerList = z.object({
   search: z.string(),
 });
 
-export const OProkerDelete = z.object({
-  ...ODeleteSchema.def.shape,
-  bidang: z.enum(roles),
-});
-
 export type TProkerList = z.infer<typeof OProkerList>;

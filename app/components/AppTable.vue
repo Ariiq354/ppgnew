@@ -107,7 +107,7 @@
                         icon: "i-lucide-trash-2",
                         color: "error",
                         onSelect() {
-                          emit("delete", row.original.id);
+                          emit("delete", [row.original.id]);
                         },
                       } as DropdownMenuItem,
                     ]

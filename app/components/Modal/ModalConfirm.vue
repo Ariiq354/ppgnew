@@ -1,6 +1,8 @@
 <script lang="ts" setup>
   const props = defineProps<{
-    function: () => Promise<void>;
+    path: string;
+    ids: number[];
+    refresh: () => void;
   }>();
 
   const emit = defineEmits(["close"]);
@@ -9,7 +11,13 @@
   async function onClick() {
     loading.value = true;
     try {
-      await props.function();
+      await $fetch(`${APIBASE}${props.path}`, {
+        method: "DELETE",
+        body: {
+          id: props.ids,
+        },
+      });
+      props.refresh();
       emit("close", false);
     } catch (error: any) {
       useToastError("Delete Failed", error.message);
