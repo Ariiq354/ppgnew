@@ -15,6 +15,7 @@ const statement = {
   proker: ["create", "view", "update", "delete"],
   desa_menu: ["view", "create", "update", "delete"],
   kelompok_menu: ["view", "create", "update", "delete"],
+  sekretariat: ["view", "create", "update", "delete"],
   bidang_menu_view: [
     "sekretariat",
     "kurikulum",
@@ -65,6 +66,7 @@ export const rolesDeclaration = {
   }),
   sekretariat: ac.newRole({
     proker: ["create", "update", "delete"],
+    sekretariat: ["create", "update", "delete", "view"],
     bidang_menu_view: ["sekretariat"],
   }),
   kurikulum: ac.newRole({
