@@ -36,14 +36,14 @@
     <template #body>
       <div class="space-y-5">
         <div class="flex items-center gap-4">
-          <UIcon name="i-heroicons-exclamation-triangle" size="36" />
+          <UIcon name="i-lucide-triangle-alert" size="36" />
           Are you sure you want to delete the selected products?
         </div>
       </div>
     </template>
     <template #footer>
       <UButton
-        icon="i-heroicons-x-mark-16-solid"
+        icon="i-lucide-x"
         :disabled="loading"
         class="text-base"
         variant="ghost"
@@ -53,7 +53,7 @@
         No
       </UButton>
       <UButton
-        icon="i-heroicons-check-16-solid"
+        icon="i-lucide-check"
         :loading="loading"
         color="error"
         class="text-base"

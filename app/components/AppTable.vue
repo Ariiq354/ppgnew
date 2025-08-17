@@ -127,7 +127,8 @@
                   },
                   () =>
                     h(UButton, {
-                      icon: "i-lucide-ellipsis-vertical",
+                      icon: "i-lucide-ellipsis",
+                      color: "neutral",
                       variant: "ghost",
                       "aria-label": "Actions dropdown",
                     })
@@ -178,6 +179,10 @@
       :data="data"
       :columns="newColumns"
       :loading="loading"
+      :ui="{
+        th: 'text-muted font-medium',
+        td: 'text-highlighted',
+      }"
     >
       <template
         v-for="(_, slotName) in slots"

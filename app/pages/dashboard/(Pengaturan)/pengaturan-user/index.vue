@@ -27,7 +27,7 @@
         <div class="flex-1">
           <UInput
             size="xl"
-            leading-icon="i-heroicons-magnifying-glass"
+            leading-icon="i-lucide-search"
             placeholder="Search..."
             @update:model-value="searchDebounced"
           />

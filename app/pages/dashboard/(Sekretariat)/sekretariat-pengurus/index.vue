@@ -117,7 +117,7 @@
       </template>
       <template #footer>
         <UButton
-          icon="i-heroicons-x-mark-16-solid"
+          icon="i-lucide-x"
           variant="ghost"
           :disabled="isLoading"
           @click="modalOpen = false"
@@ -127,7 +127,7 @@
         <UButton
           v-if="!viewStatus"
           type="submit"
-          icon="i-heroicons-check-16-solid"
+          icon="i-lucide-check"
           :loading="isLoading"
           form="pengurus-form"
         >
@@ -140,7 +140,7 @@
         <UInput
           size="xl"
           class="flex-5"
-          leading-icon="i-heroicons-magnifying-glass"
+          leading-icon="i-lucide-search"
           placeholder="Search..."
           @update:model-value="searchDebounced"
         />

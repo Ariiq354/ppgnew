@@ -48,7 +48,7 @@
       {
         label: "Home Dashboard",
         to: "/dashboard",
-        icon: "i-heroicons-home",
+        icon: "i-lucide-home",
         onSelect: () => {
           if (!isDesktop.value) {
             constantStore.toggleSidebar();
@@ -57,7 +57,7 @@
       },
       {
         label: "Tenaga Pengajar",
-        icon: "i-heroicons-users",
+        icon: "i-lucide-users",
         to: "/dashboard/pengajar",
         onSelect: () => {
           if (!isDesktop.value) {
@@ -67,7 +67,7 @@
       },
       {
         label: "Generus",
-        icon: "i-heroicons-user-group",
+        icon: "i-lucide-users",
         children: [
           {
             label: "Generus",
@@ -91,7 +91,7 @@
       },
       {
         label: "Program Kerja",
-        icon: "i-heroicons-clipboard-document-check",
+        icon: "i-lucide-clipboard-check",
         to: "/dashboard/proker",
         onSelect: () => {
           if (!isDesktop.value) {
@@ -110,7 +110,7 @@
         ? [
             {
               label: "Sekretariat",
-              icon: "i-heroicons-envelope",
+              icon: "i-lucide-mail",
               children: [
                 {
                   label: "Tupoksi",
@@ -216,11 +216,12 @@
             },
           ]
         : []),
+
       ...(kurikulum
         ? [
             {
               label: "Kurikulum",
-              icon: "i-heroicons-book-open",
+              icon: "i-lucide-book-open",
               children: [
                 {
                   label: "Tupoksi",
@@ -308,11 +309,12 @@
             },
           ]
         : []),
+
       ...(tenaga_pendidik
         ? [
             {
               label: "Tenaga Pendidik",
-              icon: "i-heroicons-academic-cap",
+              icon: "i-lucide-graduation-cap",
               children: [
                 {
                   label: "Tupoksi",
@@ -368,11 +370,12 @@
             },
           ]
         : []),
+
       ...(penggalang_dana
         ? [
             {
               label: "Penggalang Dana",
-              icon: "i-heroicons-banknotes",
+              icon: "i-lucide-banknote",
               children: [
                 {
                   label: "Tupoksi",
@@ -428,11 +431,12 @@
             },
           ]
         : []),
+
       ...(sarana_prasarana
         ? [
             {
               label: "Sarana Prasarana",
-              icon: "i-heroicons-building-office",
+              icon: "i-lucide-building-2",
               children: [
                 {
                   label: "Tupoksi",
@@ -488,11 +492,12 @@
             },
           ]
         : []),
+
       ...(kemandirian
         ? [
             {
               label: "Kemandirian",
-              icon: "i-heroicons-light-bulb",
+              icon: "i-lucide-lightbulb",
               children: [
                 {
                   label: "Tupoksi",
@@ -557,11 +562,12 @@
             },
           ]
         : []),
+
       ...(keputrian
         ? [
             {
               label: "Keputrian",
-              icon: "i-heroicons-sparkles",
+              icon: "i-lucide-sparkles",
               children: [
                 {
                   label: "Dashboard",
@@ -662,11 +668,12 @@
             },
           ]
         : []),
+
       ...(bimbingan_konseling
         ? [
             {
               label: "Bimbingan & Konseling",
-              icon: "i-heroicons-chat-bubble-bottom-center-text",
+              icon: "i-lucide-message-square-text",
               children: [
                 {
                   label: "Tupoksi",
@@ -731,11 +738,12 @@
             },
           ]
         : []),
+
       ...(olahraga_seni
         ? [
             {
               label: "Olahraga & Seni",
-              icon: "i-heroicons-fire",
+              icon: "i-lucide-flame",
               children: [
                 {
                   label: "Tupoksi",
@@ -791,11 +799,12 @@
             },
           ]
         : []),
+
       ...(kegiatan_muda_mudi
         ? [
             {
               label: "Kegiatan Muda-Mudi",
-              icon: "i-heroicons-users",
+              icon: "i-lucide-users",
               children: [
                 {
                   label: "Dashboard",
@@ -919,11 +928,12 @@
             },
           ]
         : []),
+
       ...(tahfidz
         ? [
             {
               label: "Tahfidz",
-              icon: "i-heroicons-book-open",
+              icon: "i-lucide-book-open",
               children: [
                 {
                   label: "Dashboard",
@@ -1024,11 +1034,12 @@
             },
           ]
         : []),
+
       ...(media_publikasi
         ? [
             {
               label: "Media & Publikasi",
-              icon: "i-heroicons-camera",
+              icon: "i-lucide-camera",
               children: [
                 {
                   label: "Proker",
@@ -1075,11 +1086,12 @@
             },
           ]
         : []),
+
       ...(karakter
         ? [
             {
               label: "Karakter",
-              icon: "i-heroicons-star",
+              icon: "i-lucide-star",
               children: [
                 {
                   label: "Proker",
@@ -1126,11 +1138,12 @@
             },
           ]
         : []),
+
       ...(desa_menu
         ? [
             {
               label: "PJP Desa",
-              icon: "i-heroicons-user-circle",
+              icon: "i-lucide-user-circle",
               children: [
                 {
                   label: "Tupoksi",
@@ -1222,11 +1235,12 @@
             },
           ]
         : []),
+
       ...(kelompok_menu
         ? [
             {
               label: "PJP Kelompok",
-              icon: "i-heroicons-user-circle",
+              icon: "i-lucide-user-circle",
               children: [
                 {
                   label: "Tupoksi",
@@ -1376,7 +1390,7 @@
       },
       {
         label: "Daftar Wilayah",
-        icon: "i-heroicons-map",
+        icon: "i-lucide-map",
         to: "/dashboard/pengaturan-wilayah",
         onSelect: () => {
           if (!isDesktop.value) {
@@ -1386,7 +1400,7 @@
       },
       {
         label: "Dokumen",
-        icon: "i-heroicons-document-text",
+        icon: "i-lucide-file-text",
         to: "/dashboard/pengaturan-dokumen",
         onSelect: () => {
           if (!isDesktop.value) {
@@ -1398,7 +1412,7 @@
         ? [
             {
               label: "Daftar User",
-              icon: "i-heroicons-user",
+              icon: "i-lucide-user",
               to: "/dashboard/pengaturan-user",
               onSelect: () => {
                 if (!isDesktop.value) {

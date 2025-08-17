@@ -6,7 +6,7 @@ export function useToastSuccess(
   toast.add({
     title: title,
     description: description,
-    icon: "i-heroicons-check-circle",
+    icon: "i-lucide-circle-check",
     color: "success",
     duration: 3000,
   });
@@ -17,7 +17,7 @@ export function useToastError(title: string, description: string | undefined) {
   toast.add({
     title: title,
     description: description,
-    icon: "i-heroicons-x-circle",
+    icon: "i-lucide-circle-x",
     color: "error",
     duration: 3000,
   });

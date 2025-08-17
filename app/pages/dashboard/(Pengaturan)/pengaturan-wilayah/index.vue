@@ -142,21 +142,7 @@
   async function handleDelete(type: WilayahType, id: number) {
     wilayah.value = type;
 
-    const onConfirm = async () => {
-      try {
-        await $fetch(`${APIBASE}/${type}`, {
-          method: "DELETE",
-          body: { id: [id] },
-        });
-
-        useToastSuccess("Berhasil", "Data berhasil dihapus");
-        await refreshData(type);
-      } catch (error: any) {
-        useToastError("Gagal", error.data?.message || "Gagal menghapus data");
-      }
-    };
-
-    openConfirmModal(onConfirm);
+    openConfirmModal(type, [id], () => refreshData(type));
   }
 
   function openEditModal(type: WilayahType, id: number, name: string) {
@@ -308,7 +294,7 @@
 
     <template #footer>
       <UButton
-        icon="i-heroicons-x-mark-16-solid"
+        icon="i-lucide-x"
         variant="ghost"
         :disabled="isLoading"
         @click="modalOpen = false"
@@ -317,7 +303,7 @@
       </UButton>
       <UButton
         type="submit"
-        icon="i-heroicons-check-16-solid"
+        icon="i-lucide-check"
         :loading="isLoading"
         form="wilayah-form"
       >
@@ -326,18 +312,16 @@
     </template>
   </LazyUModal>
   <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-    {{ permissions }}
     <UCard v-for="config in cardConfigs" :key="config.type">
       <!-- Card Header -->
       <div class="mb-4 flex items-center justify-between">
         <h2 class="text-2xl font-bold">{{ config.title }}</h2>
         <UButton
+          icon="i-lucide-plus"
           size="xl"
-          class="flex items-center gap-2"
           :disabled="config.disabled.value || !permissions[config.type].create"
           @click="clickAdd(config.type)"
         >
-          <UIcon name="i-heroicons-plus" />
           Tambah
         </UButton>
       </div>
@@ -363,7 +347,7 @@
             <div class="flex justify-center gap-2">
               <UTooltip text="Edit">
                 <UButton
-                  icon="i-heroicons-pencil"
+                  icon="i-lucide-pencil"
                   variant="ghost"
                   class="rounded-full"
                   :disabled="!permissions[config.type].update"
@@ -379,7 +363,7 @@
 
               <UTooltip text="Hapus">
                 <UButton
-                  icon="i-heroicons-trash"
+                  icon="i-lucide-trash-2"
                   variant="ghost"
                   color="error"
                   class="rounded-full"

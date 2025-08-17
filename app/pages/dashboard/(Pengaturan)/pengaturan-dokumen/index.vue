@@ -35,16 +35,7 @@
   }
 
   async function handleDelete(id: number) {
-    async function onDelete() {
-      await $fetch(`${APIBASE}/dokumen`, {
-        method: "DELETE",
-        body: {
-          id: [id],
-        },
-      });
-      await refresh();
-    }
-    openConfirmModal(onDelete);
+    openConfirmModal("/dokumen", [id], refresh);
   }
 
   function clickAdd() {
@@ -88,7 +79,7 @@
     </template>
     <template #footer>
       <UButton
-        icon="i-heroicons-x-mark-16-solid"
+        icon="i-lucide-x"
         variant="ghost"
         :disabled="isLoading"
         @click="modalOpen = false"
@@ -97,7 +88,7 @@
       </UButton>
       <UButton
         type="submit"
-        icon="i-heroicons-check-16-solid"
+        icon="i-lucide-check"
         :loading="isLoading"
         form="dokumen-form"
       >
@@ -107,13 +98,13 @@
   </LazyUModal>
   <div>
     <UCard v-if="canUpload" class="mb-12">
-      <UButton size="xl" icon="i-heroicons-document-plus" @click="clickAdd">
+      <UButton size="xl" icon="i-lucide-file-plus-2" @click="clickAdd">
         Upload Dokumen
       </UButton>
     </UCard>
     <UCard v-if="data?.data.length === 0" class="py-12">
       <div class="flex w-full flex-col items-center">
-        <UIcon name="i-heroicons-document-text" class="mb-4 h-12 w-12" />
+        <UIcon name="i-lucide-file-text" class="mb-4 h-12 w-12" />
         <h3 class="mb-2 text-lg font-semibold">No documents yet</h3>
         <p class="text-muted-foreground mb-4">
           Upload your first document to get started
@@ -137,20 +128,19 @@
         <hr class="border-t-gray-300" />
         <div class="mt-4 flex items-center gap-2">
           <UButton
+            icon="i-lucide-download"
             variant="subtle"
             class="flex w-full items-center justify-center"
             @click="handleDownload(item.url)"
           >
-            <UIcon name="i-heroicons-arrow-down-tray" size="18" />
             Download
           </UButton>
           <UButton
+            icon="i-lucide-trash-2"
             variant="subtle"
             color="error"
             @click="handleDelete(item.id)"
-          >
-            <UIcon name="i-heroicons-trash" size="18" />
-          </UButton>
+          />
         </div>
       </UCard>
     </div>

@@ -109,7 +109,7 @@
       <div class="mb-6 flex gap-2 md:gap-4">
         <UInput
           class="flex-5"
-          leading-icon="i-heroicons-magnifying-glass"
+          leading-icon="i-lucide-search"
           placeholder="Search..."
           @update:model-value="searchDebounced"
         />
@@ -150,7 +150,7 @@
         />
         <UButton
           variant="subtle"
-          icon="i-heroicons-funnel"
+          icon="i-lucide-filter"
           class="md:hidden"
           @click="filterModal = true"
         />

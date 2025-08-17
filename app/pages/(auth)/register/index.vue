@@ -31,7 +31,7 @@
     <template #content>
       <div class="flex flex-col items-center px-4 py-5">
         <UIcon
-          name="i-heroicons-check-circle"
+          name="i-lucide-circle-check"
           size="200"
           class="text-primary-500 dark:text-primary-400"
         />

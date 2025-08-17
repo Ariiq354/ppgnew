@@ -26,7 +26,7 @@
   <main class="grid grid-cols-1 gap-8 md:grid-cols-4">
     <UCard>
       <div class="flex items-center gap-4">
-        <UIcon name="i-heroicons-building-office-2" size="100" />
+        <UIcon name="i-lucide-landmark" size="100" />
         <div
           class="flex w-full flex-col items-end justify-center gap-2 text-right"
         >
@@ -37,7 +37,7 @@
     </UCard>
     <UCard>
       <div class="flex items-center gap-4">
-        <UIcon name="i-heroicons-map-pin" size="100" />
+        <UIcon name="i-lucide-layers" size="100" />
         <div
           class="flex w-full flex-col items-end justify-center gap-2 text-right"
         >
@@ -49,7 +49,7 @@
     <NuxtLink to="/dashboard/generus">
       <UCard>
         <div class="flex items-center gap-4">
-          <UIcon name="i-heroicons-user-20-solid" size="100" />
+          <UIcon name="i-lucide-user" size="100" />
           <div
             class="flex w-full flex-col items-end justify-center gap-2 text-right"
           >
@@ -62,7 +62,7 @@
     <NuxtLink to="/dashboard/pengajar">
       <UCard>
         <div class="flex items-center gap-4">
-          <UIcon name="i-heroicons-user-group-20-solid" size="100" />
+          <UIcon name="i-lucide-graduation-cap" size="100" />
           <div
             class="flex w-full flex-col items-end justify-center gap-2 text-right"
           >

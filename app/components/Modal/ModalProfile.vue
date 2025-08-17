@@ -67,7 +67,7 @@
     </template>
     <template #footer>
       <UButton
-        icon="i-heroicons-x-mark-16-solid"
+        icon="i-lucide-x"
         variant="ghost"
         :disabled="authStore.loading"
         @click="modalOpen = false"
@@ -77,7 +77,7 @@
       <UButton
         type="submit"
         form="modal-profile"
-        icon="i-heroicons-check-16-solid"
+        icon="i-lucide-check"
         :loading="authStore.loading"
       >
         Simpan

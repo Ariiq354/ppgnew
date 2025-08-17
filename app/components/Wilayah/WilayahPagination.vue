@@ -9,22 +9,18 @@
 
 <template>
   <UButton
+    icon="i-lucide-chevron-left"
     variant="outline"
     size="xl"
-    class="p-2"
     :disabled="page === 1"
     @click="page--"
-  >
-    <UIcon name="i-heroicons-chevron-left" class="h-5 w-5" />
-  </UButton>
+  />
   <div>Page {{ page }} of {{ totalPages }}</div>
   <UButton
+    icon="i-lucide-chevron-right"
     variant="outline"
     size="xl"
-    class="p-2"
-    :disabled="page === totalPages"
+    :disabled="page >= totalPages"
     @click="page++"
-  >
-    <UIcon name="i-heroicons-chevron-right" class="h-5 w-5" />
-  </UButton>
+  />
 </template>
