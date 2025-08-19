@@ -33,10 +33,18 @@
   const modalOpen = ref(false);
   const { isLoading, execute } = useSubmit();
   async function onSubmit(event: FormSubmitEvent<Schema>) {
+    const formData = new FormData();
+
+    for (const [key, value] of Object.entries(
+      event.data as Record<string, any>
+    )) {
+      formData.append(key, value);
+    }
+
     const basePath = `${APIBASE}/pengurus`;
     await execute({
       path: state.value.id ? `${basePath}/${state.value.id}` : basePath,
-      body: event.data,
+      body: formData,
       method: state.value.id ? "PUT" : "POST",
       onSuccess() {
         modalOpen.value = false;
@@ -60,7 +68,7 @@
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
     modalOpen.value = true;
-    state.value = itemData;
+    state.value = { ...itemData };
     viewStatus.value = false;
   }
 </script>
@@ -73,7 +81,7 @@
       :title="
         (state.id ? (viewStatus ? 'Detail' : 'Edit') : 'Tambah') + ' Pengurus'
       "
-      class="min-w-4xl"
+      class="max-w-4xl"
     >
       <template #body>
         <UForm
@@ -81,12 +89,19 @@
           :schema="schema"
           :state="state"
           class="space-y-4"
+          accept="image/png,image/jpeg,image/webp"
           @submit="onSubmit"
         >
+          <UFormField label="Foto Diri" name="foto">
+            <AppUploadImage
+              v-model:file="state.file"
+              v-model:foto="state.foto"
+              :disabled="isLoading || !pengurusEdit || viewStatus"
+            />
+          </UFormField>
           <UFormField label="Nama" name="nama">
             <UInput
               v-model="state.nama"
-              type="number"
               :disabled="isLoading || !pengurusEdit || viewStatus"
             />
           </UFormField>
@@ -97,6 +112,12 @@
               :items="bidangOptions"
               value-key="value"
               label-key="name"
+              :disabled="isLoading || !pengurusEdit || viewStatus"
+            />
+          </UFormField>
+          <UFormField label="Pendidikan Terakhir" name="pendidikan">
+            <UInput
+              v-model="state.pendidikan"
               :disabled="isLoading || !pengurusEdit || viewStatus"
             />
           </UFormField>

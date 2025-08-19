@@ -9,7 +9,6 @@ export const OPengurusCreate = z.object({
   pendidikan: z.string(),
   bidang: z.enum(roles),
   foto: z.string(),
-  daerahId: z.number(),
 });
 
 export type TPengurusCreate = z.infer<typeof OPengurusCreate>;

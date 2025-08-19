@@ -27,6 +27,14 @@ export const bidangOptions = roles.map((value) => ({
 export const schema = z.object({
   id: z.optional(z.number()),
   foto: z.string(),
+  file: z.optional(
+    z
+      .file()
+      .check(
+        z.maxSize(5_000_000),
+        z.mime(["image/png", "image/jpeg", "image/webp"])
+      )
+  ),
   bidang: z.enum(roles),
   nama: z.string().check(z.minLength(1, "Required")),
   pendidikan: z.string().check(z.minLength(1, "Required")),
@@ -37,6 +45,7 @@ export const schema = z.object({
 export const getInitialFormData = (): Schema => ({
   id: undefined,
   foto: "",
+  file: undefined,
   bidang: "sekretariat",
   nama: "",
   pendidikan: "",

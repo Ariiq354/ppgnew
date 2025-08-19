@@ -72,7 +72,7 @@
       :title="
         (state.id ? (viewStatus ? 'Detail' : 'Edit') : 'Tambah') + ' Proker'
       "
-      class="min-w-4xl"
+      class="max-w-4xl"
     >
       <template #body>
         <UForm

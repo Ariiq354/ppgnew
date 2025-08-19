@@ -36,7 +36,7 @@
   <div class="flex gap-2 md:gap-4">
     <UButton
       v-if="addPermission"
-      icon="ii-lucide-search-plus"
+      icon="i-lucide-plus"
       class="text-white dark:bg-blue-600 hover:dark:bg-blue-600/75"
       @click="addFunction"
     >

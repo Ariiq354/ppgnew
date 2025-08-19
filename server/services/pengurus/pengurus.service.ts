@@ -51,6 +51,24 @@ export async function getAllPengurus(
   }
 }
 
+export async function getPengurusById(daerahId: number, id: number) {
+  try {
+    return await db.query.pengurusTable.findFirst({
+      where: and(
+        eq(pengurusTable.daerahId, daerahId),
+        eq(pengurusTable.id, id)
+      ),
+      columns: {
+        id: true,
+        foto: true,
+      },
+    });
+  } catch (error) {
+    console.error("Failed to get Pengurus By Id", error);
+    throw InternalError;
+  }
+}
+
 export async function createPengurus(daerahId: number, data: TPengurusCreate) {
   try {
     return await db
