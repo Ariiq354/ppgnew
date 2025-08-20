@@ -17,7 +17,6 @@
     kegiatan_muda_mudi,
     tahfidz,
     media_publikasi,
-    karakter,
     desa_menu,
     kelompok_menu,
   ] = await Promise.all([
@@ -34,7 +33,6 @@
     authStore.hasPermission({ bidang_menu_view: ["kegiatan_muda_mudi"] }),
     authStore.hasPermission({ bidang_menu_view: ["tahfidz"] }),
     authStore.hasPermission({ bidang_menu_view: ["media_publikasi"] }),
-    authStore.hasPermission({ bidang_menu_view: ["karakter"] }),
     authStore.hasPermission({ desa_menu: ["view"] }),
     authStore.hasPermission({ kelompok_menu: ["view"] }),
   ]);
@@ -1086,59 +1084,6 @@
             },
           ]
         : []),
-
-      ...(karakter
-        ? [
-            {
-              label: "Karakter",
-              icon: "i-lucide-star",
-              children: [
-                {
-                  label: "Proker",
-                  to: "/dashboard/karakter-proker",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
-                },
-                {
-                  label: "Laporan Musyawarah PPG",
-                  to: "/dashboard/karakter-laporan",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
-                },
-                {
-                  label: "Musyawarah Bidang",
-                  children: [
-                    {
-                      label: "Musyawarah",
-                      to: "/dashboard/karakter-musyawarah-bidang",
-                      onSelect: () => {
-                        if (!isDesktop.value) {
-                          constantStore.toggleSidebar();
-                        }
-                      },
-                    },
-                    {
-                      label: "Laporan",
-                      to: "/dashboard/karakter-laporan-bidang",
-                      onSelect: () => {
-                        if (!isDesktop.value) {
-                          constantStore.toggleSidebar();
-                        }
-                      },
-                    },
-                  ],
-                },
-              ],
-            },
-          ]
-        : []),
-
       ...(desa_menu
         ? [
             {

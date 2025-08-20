@@ -48,9 +48,6 @@ export default eventHandler(async (event) => {
   }
 
   for (const [index, item] of roles.entries()) {
-    if (item === "media_publikasi" || item === "karakter") {
-      continue;
-    }
     const namaPengurus = convertToNameFormat(formData.daerah) + (index + 1);
     const { user } = await auth.api.signUpEmail({
       body: {

@@ -27,7 +27,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
       bidang: (typeof roles)[number];
     }[] = [
       { route: "/dashboard/bimbingan", bidang: "bimbingan_konseling" },
-      { route: "/dashboard/karakter", bidang: "karakter" },
       { route: "/dashboard/kegiatan", bidang: "kegiatan_muda_mudi" },
       { route: "/dashboard/kemandirian", bidang: "kemandirian" },
       { route: "/dashboard/keputrian", bidang: "keputrian" },
