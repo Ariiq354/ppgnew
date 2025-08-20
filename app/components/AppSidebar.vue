@@ -152,6 +152,15 @@
                       },
                     },
                     {
+                      label: "Absensi",
+                      to: "/dashboard/sekretariat-absensi",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                    {
                       label: "Laporan Musyawarah",
                       to: "/dashboard/sekretariat-laporan",
                       onSelect: () => {
@@ -170,15 +179,6 @@
                       },
                     },
                   ],
-                },
-                {
-                  label: "Absensi",
-                  to: "/dashboard/sekretariat-absensi",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
                 },
                 {
                   label: "Monitoring Kehadiran",

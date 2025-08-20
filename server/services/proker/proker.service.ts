@@ -79,20 +79,13 @@ export async function createProker(daerahId: number, data: TProkerCreate) {
 export async function updateProker(
   id: number,
   daerahId: number,
-  bidang: (typeof roles)[number],
   data: TProkerCreate
 ) {
   try {
     return await db
       .update(prokerTable)
       .set(data)
-      .where(
-        and(
-          eq(prokerTable.id, id),
-          eq(prokerTable.daerahId, daerahId),
-          eq(prokerTable.bidang, bidang)
-        )
-      );
+      .where(and(eq(prokerTable.id, id), eq(prokerTable.daerahId, daerahId)));
   } catch (error) {
     console.error("Failed to Update Proker", error);
     throw InternalError;

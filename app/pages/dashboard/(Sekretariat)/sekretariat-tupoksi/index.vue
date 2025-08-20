@@ -9,7 +9,7 @@
 <template>
   <Title>Sekretariat | Tupoksi</Title>
   <main>
-    <UCard>
+    <UCard class="p-4">
       <div>
         <h1 class="mb-4 text-center text-2xl font-bold uppercase">
           Bertanggung jawab atas administrasi PPG di daerah
