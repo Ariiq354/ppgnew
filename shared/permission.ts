@@ -1,9 +1,5 @@
 import { createAccessControl } from "better-auth/plugins/access";
-import {
-  defaultStatements,
-  adminAc,
-  userAc,
-} from "better-auth/plugins/admin/access";
+import { adminAc, defaultStatements } from "better-auth/plugins/admin/access";
 
 const statement = {
   ...defaultStatements,
@@ -61,19 +57,18 @@ export const rolesDeclaration = {
     ...adminAc.statements,
   }),
 
-  user: ac.newRole({
-    ...userAc.statements,
-  }),
-
   daerah: ac.newRole({
     daerah: ["delete"],
     desa: ["create", "update", "delete"],
     kelompok: ["create", "update", "delete"],
   }),
-
   desa: ac.newRole({
     kelompok: ["create", "update", "delete"],
   }),
+  kelompok: ac.newRole({
+    kelompok: ["delete"],
+  }),
+
   sekretariat: ac.newRole({
     proker: ["create", "update", "delete"],
     sekretariat: ["create", "update", "delete", "view"],

@@ -7,7 +7,7 @@ import { createAuthClient } from "better-auth/vue";
 import { useToastError, useToastSuccess } from "~/composables/toast";
 import type { auth } from "~~/server/utils/auth";
 import { ac, rolesDeclaration } from "~~/shared/permission";
-import type { TStatement } from "~~/shared/permission";
+import type { roles, TStatement } from "~~/shared/permission";
 
 const authClient = createAuthClient({
   plugins: [
@@ -95,16 +95,12 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   }
 
   async function hasPermission(body: TStatement) {
-    const headers = useRequestHeaders();
-
-    const result = await authClient.admin.hasPermission({
-      permissions: body,
-      fetchOptions: {
-        headers,
-      },
+    const result = authClient.admin.checkRolePermission({
+      permission: body,
+      role: user.value?.role as (typeof roles)[number],
     });
 
-    return result.data?.success;
+    return result;
   }
 
   async function updatePassword(newPassword: string, currentPassword: string) {

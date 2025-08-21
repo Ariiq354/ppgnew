@@ -50,7 +50,7 @@ export default defineEventHandler(async (event) => {
   });
 
   (await auth.$context).internalAdapter.updateUser(user.id, {
-    role: "user,kelompok",
+    role: "kelompok",
   });
 
   return HttpResponse();

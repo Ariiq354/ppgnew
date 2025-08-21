@@ -42,7 +42,7 @@ export const auth = betterAuth({
   plugins: [
     username(),
     adminPlugins({
-      defaultRole: "user,daerah",
+      defaultRole: "daerah",
       ac,
       roles: rolesDeclaration,
     }),
