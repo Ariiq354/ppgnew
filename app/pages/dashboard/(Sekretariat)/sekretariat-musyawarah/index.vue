@@ -7,7 +7,7 @@
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
   const sekretariatEdit = await authStore.hasPermission({
-    sekretariat: ["create"],
+    sekretariat: ["manage"],
   });
   constantStore.setTitle("Sekretariat / Daftar Musyawarah");
 

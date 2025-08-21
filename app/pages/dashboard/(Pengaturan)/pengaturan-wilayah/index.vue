@@ -167,77 +167,9 @@
     }
   }
 
-  const [
-    daerahCreate,
-    daerahUpdate,
-    daerahDelete,
-    desaCreate,
-    desaUpdate,
-    desaDelete,
-    kelompokCreate,
-    kelompokUpdate,
-    kelompokDelete,
-  ] = await Promise.all([
-    authStore.hasPermission({ daerah: ["create"] }),
-    authStore.hasPermission({ daerah: ["update"] }),
-    authStore.hasPermission({ daerah: ["delete"] }),
-
-    authStore.hasPermission({ desa: ["create"] }),
-    authStore.hasPermission({ desa: ["update"] }),
-    authStore.hasPermission({ desa: ["delete"] }),
-
-    authStore.hasPermission({ kelompok: ["create"] }),
-    authStore.hasPermission({ kelompok: ["update"] }),
-    authStore.hasPermission({ kelompok: ["delete"] }),
-  ]);
-
-  const permissions = computed(() => ({
-    daerah: {
-      create: daerahCreate,
-      update: daerahUpdate,
-      delete: daerahDelete,
-    },
-    desa: {
-      create:
-        desaCreate &&
-        (authStore.user?.role === "admin" ||
-          (authStore.user?.role === "user,daerah" &&
-            authStore.user?.daerahId === queries.desa.daerahId)),
-      update:
-        desaUpdate &&
-        (authStore.user?.role === "admin" ||
-          (authStore.user?.role === "user,daerah" &&
-            authStore.user?.daerahId === queries.desa.daerahId)),
-      delete:
-        desaDelete &&
-        (authStore.user?.role === "admin" ||
-          (authStore.user?.role === "user,daerah" &&
-            authStore.user?.daerahId === queries.desa.daerahId)),
-    },
-    kelompok: {
-      create:
-        kelompokCreate &&
-        (authStore.user?.role === "admin" ||
-          (authStore.user?.role === "user,daerah" &&
-            authStore.user?.daerahId === queries.desa.daerahId) ||
-          (authStore.user?.role === "user,desa" &&
-            authStore.user?.desaId === queries.kelompok.desaId)),
-      update:
-        kelompokUpdate &&
-        (authStore.user?.role === "admin" ||
-          (authStore.user?.role === "user,daerah" &&
-            authStore.user?.daerahId === queries.desa.daerahId) ||
-          (authStore.user?.role === "user,desa" &&
-            authStore.user?.desaId === queries.kelompok.desaId)),
-      delete:
-        kelompokDelete &&
-        (authStore.user?.role === "admin" ||
-          (authStore.user?.role === "user,daerah" &&
-            authStore.user?.daerahId === queries.desa.daerahId) ||
-          (authStore.user?.role === "user,desa" &&
-            authStore.user?.desaId === queries.kelompok.desaId)),
-    },
-  }));
+  const daerahManage = authStore.hasPermission({ daerah: ["manage"] });
+  const desaManage = authStore.hasPermission({ desa: ["manage"] });
+  const kelompokManage = authStore.hasPermission({ kelompok: ["manage"] });
 
   const cardConfigs = [
     {
@@ -246,6 +178,7 @@
       data: dDaerah,
       query: queries.daerah,
       disabled: isDaerahDisabled,
+      permission: daerahManage,
       loading: computed(() => sDaerah.value),
     },
     {
@@ -254,6 +187,7 @@
       data: dDesa,
       query: queries.desa,
       disabled: isDesaDisabled,
+      permission: desaManage,
       loading: computed(() => sDesa.value),
     },
     {
@@ -262,6 +196,7 @@
       data: dKelompok,
       query: queries.kelompok,
       disabled: isKelompokDisabled,
+      permission: kelompokManage,
       loading: computed(() => sKelompok.value),
     },
   ];
@@ -319,7 +254,7 @@
         <UButton
           icon="i-lucide-plus"
           size="xl"
-          :disabled="config.disabled.value || !permissions[config.type].create"
+          :disabled="config.disabled.value || !config.permission"
           @click="clickAdd(config.type)"
         >
           Tambah
@@ -350,7 +285,7 @@
                   icon="i-lucide-pencil"
                   variant="ghost"
                   class="rounded-full"
-                  :disabled="!permissions[config.type].update"
+                  :disabled="!config.permission"
                   @click="
                     openEditModal(
                       config.type,
@@ -367,7 +302,7 @@
                   variant="ghost"
                   color="error"
                   class="rounded-full"
-                  :disabled="!permissions[config.type].delete"
+                  :disabled="!config.permission"
                   @click="handleDelete(config.type, row.original.id)"
                 />
               </UTooltip>

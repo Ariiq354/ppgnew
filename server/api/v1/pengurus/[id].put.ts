@@ -9,7 +9,7 @@ const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const paramsSchema = z.coerce.number();
 
 export default defineEventHandler(async (event) => {
-  const user = await permissionGuard(event, { sekretariat: ["update"] });
+  const user = await permissionGuard(event, { sekretariat: ["manage"] });
 
   const result = await readMultipartFormData(event);
   const id = paramsSchema.parse(getRouterParam(event, "id"));

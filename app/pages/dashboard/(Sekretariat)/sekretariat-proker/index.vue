@@ -12,7 +12,7 @@
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
-  const prokerEdit = await authStore.hasPermission({ proker: ["create"] });
+  const prokerEdit = authStore.hasPermission({ proker: ["manage"] });
   constantStore.setTitle("Sekretariat / Proker");
 
   const state = ref(getInitialFormData());

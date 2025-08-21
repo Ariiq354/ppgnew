@@ -2,7 +2,7 @@ import { OMusyawarahCreate } from "~~/server/services/musyawarah/dto/musyawarah.
 import { createMusyawarah } from "~~/server/services/musyawarah/musyawarah.service";
 
 export default defineEventHandler(async (event) => {
-  const user = await permissionGuard(event, { sekretariat: ["create"] });
+  const user = await permissionGuard(event, { sekretariat: ["manage"] });
 
   const body = await readValidatedBody(event, (b) =>
     OMusyawarahCreate.parse(b)

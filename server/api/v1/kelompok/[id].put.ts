@@ -5,7 +5,7 @@ import { OKelompokCreate } from "~~/server/services/kelompok/dto/kelompok.dto";
 const paramsSchema = z.coerce.number();
 
 export default defineEventHandler(async (event) => {
-  permissionGuard(event, { kelompok: ["update"] });
+  permissionGuard(event, { kelompok: ["manage"] });
   const result = await readValidatedBody(event, (b) =>
     OKelompokCreate.parse(b)
   );

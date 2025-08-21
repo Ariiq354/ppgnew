@@ -12,7 +12,7 @@
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
-  const prokerEdit = await authStore.hasPermission({ proker: ["create"] });
+  const prokerManage = authStore.hasPermission({ proker: ["manage"] });
   constantStore.setTitle("Bimbingan & Konseling / Proker");
 
   const state = ref(getInitialFormData());
@@ -86,7 +86,7 @@
             <UInput
               v-model="state.mingguKe"
               type="number"
-              :disabled="isLoading || !prokerEdit || viewStatus"
+              :disabled="isLoading || !prokerManage || viewStatus"
             />
           </UFormField>
           <UFormField label="Bulan" name="bulan">
@@ -94,39 +94,39 @@
               v-model="state.bulan"
               placeholder="Pilih bulan"
               :items="bulanOptions"
-              :disabled="isLoading || !prokerEdit || viewStatus"
+              :disabled="isLoading || !prokerManage || viewStatus"
             />
           </UFormField>
           <UFormField label="Tahun" name="tahun">
             <UInput
               v-model="state.tahun"
-              :disabled="isLoading || !prokerEdit || viewStatus"
+              :disabled="isLoading || !prokerManage || viewStatus"
               type="number"
             />
           </UFormField>
           <UFormField label="Peserta" name="peserta">
             <UInput
               v-model="state.peserta"
-              :disabled="isLoading || !prokerEdit || viewStatus"
+              :disabled="isLoading || !prokerManage || viewStatus"
             />
           </UFormField>
           <UFormField label="Biaya" name="biaya">
             <UInput
               v-model="state.biaya"
               type="number"
-              :disabled="isLoading || !prokerEdit || viewStatus"
+              :disabled="isLoading || !prokerManage || viewStatus"
             />
           </UFormField>
           <UFormField label="Kegiatan" name="kegiatan">
             <UTextarea
               v-model="state.kegiatan"
-              :disabled="isLoading || !prokerEdit || viewStatus"
+              :disabled="isLoading || !prokerManage || viewStatus"
             />
           </UFormField>
           <UFormField label="Keterangan" name="keterangan">
             <UTextarea
               v-model="state.keterangan"
-              :disabled="isLoading || !prokerEdit || viewStatus"
+              :disabled="isLoading || !prokerManage || viewStatus"
             />
           </UFormField>
           <UFormField label="Status" name="status">
@@ -134,7 +134,7 @@
               v-model="state.status"
               placeholder="Pilih status"
               :items="statusOptions"
-              :disabled="isLoading || !prokerEdit || viewStatus"
+              :disabled="isLoading || !prokerManage || viewStatus"
             />
           </UFormField>
         </UForm>
@@ -169,7 +169,7 @@
           @update:model-value="searchDebounced"
         />
         <AppTambahExport
-          :add-permission="prokerEdit"
+          :add-permission="prokerManage"
           :add-function="clickAdd"
           path="proker"
         />
@@ -181,8 +181,8 @@
         :loading="status === 'pending'"
         :total="data?.metadata.total"
         enumerate
-        :deletable="prokerEdit"
-        :editable="prokerEdit"
+        :deletable="prokerManage"
+        :editable="prokerManage"
         viewable
         selectable
         pagination

@@ -4,7 +4,7 @@ import { checkWilayahNameExist } from "~~/server/services/daerah/daerah.service"
 import { getDesaById } from "~~/server/services/desa/desa.service";
 
 export default defineEventHandler(async (event) => {
-  permissionGuard(event, { kelompok: ["create"] });
+  permissionGuard(event, { kelompok: ["manage"] });
 
   const body = await readValidatedBody(event, (b) => OKelompokCreate.parse(b));
 

@@ -94,7 +94,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     loading.value = false;
   }
 
-  async function hasPermission(body: TStatement) {
+  function hasPermission(body: TStatement) {
     const result = authClient.admin.checkRolePermission({
       permission: body,
       role: user.value?.role as (typeof roles)[number],

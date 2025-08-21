@@ -3,39 +3,33 @@
   const authStore = useAuthStore();
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
-  const [
-    user,
-    sekretariat,
-    kurikulum,
-    tenaga_pendidik,
-    penggalang_dana,
-    sarana_prasarana,
-    kemandirian,
-    keputrian,
-    bimbingan_konseling,
-    olahraga_seni,
-    kegiatan_muda_mudi,
-    tahfidz,
-    media_publikasi,
-    desa_menu,
-    kelompok_menu,
-  ] = await Promise.all([
-    authStore.hasPermission({ menu: ["user"] }),
-    authStore.hasPermission({ bidang_menu_view: ["sekretariat"] }),
-    authStore.hasPermission({ bidang_menu_view: ["kurikulum"] }),
-    authStore.hasPermission({ bidang_menu_view: ["tenaga_pendidik"] }),
-    authStore.hasPermission({ bidang_menu_view: ["penggalang_dana"] }),
-    authStore.hasPermission({ bidang_menu_view: ["sarana_prasarana"] }),
-    authStore.hasPermission({ bidang_menu_view: ["kemandirian"] }),
-    authStore.hasPermission({ bidang_menu_view: ["keputrian"] }),
-    authStore.hasPermission({ bidang_menu_view: ["bimbingan_konseling"] }),
-    authStore.hasPermission({ bidang_menu_view: ["olahraga_seni"] }),
-    authStore.hasPermission({ bidang_menu_view: ["kegiatan_muda_mudi"] }),
-    authStore.hasPermission({ bidang_menu_view: ["tahfidz"] }),
-    authStore.hasPermission({ bidang_menu_view: ["media_publikasi"] }),
-    authStore.hasPermission({ desa_menu: ["view"] }),
-    authStore.hasPermission({ kelompok_menu: ["view"] }),
-  ]);
+  const daftar_user = authStore.hasPermission({ menu: ["daftar-user"] });
+  const sekretariat = authStore.hasPermission({ sekretariat: ["view"] });
+  const kurikulum = authStore.hasPermission({ kurikulum: ["view"] });
+  const tenaga_pendidik = authStore.hasPermission({
+    tenaga_pendidik: ["view"],
+  });
+  const penggalang_dana = authStore.hasPermission({
+    penggalang_dana: ["view"],
+  });
+  const sarana_prasarana = authStore.hasPermission({
+    sarana_prasarana: ["view"],
+  });
+  const kemandirian = authStore.hasPermission({ kemandirian: ["view"] });
+  const keputrian = authStore.hasPermission({ keputrian: ["view"] });
+  const bimbingan_konseling = authStore.hasPermission({
+    bimbingan_konseling: ["view"],
+  });
+  const olahraga_seni = authStore.hasPermission({ olahraga_seni: ["view"] });
+  const kegiatan_muda_mudi = authStore.hasPermission({
+    kegiatan_muda_mudi: ["view"],
+  });
+  const tahfidz = authStore.hasPermission({ tahfidz: ["view"] });
+  const media_publikasi = authStore.hasPermission({
+    media_publikasi: ["view"],
+  });
+  const pjp_desa = authStore.hasPermission({ pjp_desa: ["view"] });
+  const pjp_kelompok = authStore.hasPermission({ pjp_kelompok: ["view"] });
 
   const sidebarItems = computed(() => [
     [
@@ -1084,7 +1078,7 @@
             },
           ]
         : []),
-      ...(desa_menu
+      ...(pjp_desa
         ? [
             {
               label: "PJP Desa",
@@ -1181,7 +1175,7 @@
           ]
         : []),
 
-      ...(kelompok_menu
+      ...(pjp_kelompok
         ? [
             {
               label: "PJP Kelompok",
@@ -1353,7 +1347,7 @@
           }
         },
       },
-      ...(user
+      ...(daftar_user
         ? [
             {
               label: "Daftar User",

@@ -1,7 +1,7 @@
 import { deleteDaerah } from "~~/server/services/daerah/daerah.service";
 
 export default defineEventHandler(async (event) => {
-  permissionGuard(event, { daerah: ["delete"] });
+  permissionGuard(event, { daerah: ["manage"] });
   const body = await readValidatedBody(event, (b) => ODeleteSchema.parse(b));
 
   await deleteDaerah(body.id);

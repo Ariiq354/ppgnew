@@ -1,9 +1,9 @@
 import { z } from "zod/mini";
-import { deleteProker } from "~~/server/services/proker/proker.service";
+import { deleteMusyawarahBidang } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.service";
 import { roles } from "~~/shared/permission";
 
 export default defineEventHandler(async (event) => {
-  const user = await permissionGuard(event, { proker: ["manage"] });
+  const user = await permissionGuard(event, { musyawarah_bidang: ["manage"] });
   const body = await readValidatedBody(event, (b) => ODeleteSchema.parse(b));
   const bidang = getRouterParam(event, "bidang");
   const parsed = z.enum(roles).parse(bidang);
@@ -15,6 +15,6 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  await deleteProker(user.daerahId, parsed, body.id);
+  await deleteMusyawarahBidang(user.daerahId, parsed, body.id);
   return HttpResponse();
 });

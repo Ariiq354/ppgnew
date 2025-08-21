@@ -16,7 +16,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   // Per Route Protection
   if (
     to.path.startsWith("/dashboard/pengaturan-user") &&
-    !(await authStore.hasPermission({ menu: ["user"] }))
+    !authStore.hasPermission({ menu: ["daftar-user"] })
   ) {
     return navigateTo("/dashboard");
   }

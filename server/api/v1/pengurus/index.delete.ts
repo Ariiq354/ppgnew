@@ -4,7 +4,7 @@ import {
 } from "~~/server/services/pengurus/pengurus.service";
 
 export default defineEventHandler(async (event) => {
-  const user = await permissionGuard(event, { sekretariat: ["delete"] });
+  const user = await permissionGuard(event, { sekretariat: ["manage"] });
   const body = await readValidatedBody(event, (b) => ODeleteSchema.parse(b));
 
   for (const id of body.id) {

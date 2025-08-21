@@ -6,7 +6,7 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 export default defineEventHandler(async (event) => {
-  const user = await permissionGuard(event, { sekretariat: ["create"] });
+  const user = await permissionGuard(event, { sekretariat: ["manage"] });
 
   const result = await readMultipartFormData(event);
 

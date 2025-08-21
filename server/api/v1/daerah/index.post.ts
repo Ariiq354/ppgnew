@@ -6,7 +6,7 @@ import { ODaerahCreate } from "~~/server/services/daerah/dto/daerah.dto";
 import { roles } from "~~/shared/permission";
 
 export default defineEventHandler(async (event) => {
-  permissionGuard(event, { daerah: ["create"] });
+  permissionGuard(event, { daerah: ["manage"] });
 
   const body = await readValidatedBody(event, (b) => ODaerahCreate.parse(b));
 

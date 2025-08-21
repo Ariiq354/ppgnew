@@ -3,7 +3,7 @@ import { OProkerCreate } from "~~/server/services/proker/dto/proker.dto";
 import { updateProker } from "~~/server/services/proker/proker.service";
 
 export default defineEventHandler(async (event) => {
-  const user = await permissionGuard(event, { proker: ["create"] });
+  const user = await permissionGuard(event, { proker: ["manage"] });
   const id = getRouterParam(event, "id");
   const parsed = z.coerce.number().parse(id);
 
