@@ -9,11 +9,12 @@ import type { roles } from "~~/shared/permission";
 
 export async function getAllMusyawarahBidang(
   daerahId: number,
-  { limit, page, search }: TMusyawarahBidangList
+  { limit, page, search, bidang }: TMusyawarahBidangList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(musyawarahBidangTable.daerahId, daerahId),
+    eq(musyawarahBidangTable.bidang, bidang),
   ];
 
   if (search) {
@@ -27,6 +28,7 @@ export async function getAllMusyawarahBidang(
       id: musyawarahBidangTable.id,
       nama: musyawarahBidangTable.nama,
       tanggal: musyawarahBidangTable.tanggal,
+      bidang: musyawarahBidangTable.bidang,
     })
     .from(musyawarahBidangTable)
     .where(and(...conditions))
@@ -46,9 +48,13 @@ export async function getAllMusyawarahBidang(
   }
 }
 
-export async function getAllMusyawarahBidangOptions(daerahId: number) {
+export async function getAllMusyawarahBidangOptions(
+  daerahId: number,
+  bidang: (typeof roles)[number]
+) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(musyawarahBidangTable.daerahId, daerahId),
+    eq(musyawarahBidangTable.bidang, bidang),
   ];
 
   const data = await db

@@ -11,7 +11,7 @@
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
-  const pengurusEdit = await authStore.hasPermission({
+  const pengurusEdit = authStore.hasPermission({
     sekretariat: ["manage"],
   });
   constantStore.setTitle("Sekretariat / Pengurus");

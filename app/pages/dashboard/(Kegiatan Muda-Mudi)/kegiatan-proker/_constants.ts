@@ -3,16 +3,16 @@ import { roles } from "~~/shared/permission";
 
 export const columns = [
   {
-    accessorKey: "bidang",
-    header: "Bidang",
-  },
-  {
     accessorKey: "kegiatan",
     header: "Kegiatan",
   },
   {
     accessorKey: "peserta",
     header: "Peserta",
+  },
+  {
+    accessorKey: "biaya",
+    header: "Biaya",
   },
   {
     accessorKey: "mingguKe",
@@ -25,6 +25,10 @@ export const columns = [
   {
     accessorKey: "tahun",
     header: "Tahun",
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
   },
 ];
 

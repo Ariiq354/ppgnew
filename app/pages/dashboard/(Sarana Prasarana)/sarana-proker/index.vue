@@ -54,7 +54,7 @@
   }
 
   async function clickDelete(ids: number[]) {
-    openConfirmModal("/proker/sarana_prasarana", ids, refresh);
+    openConfirmModal("/proker/bidang/sarana_prasarana", ids, refresh);
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {

@@ -1,10 +1,12 @@
-import { OProkerCreate } from "~~/server/services/proker/dto/proker.dto";
-import { createProker } from "~~/server/services/proker/proker.service";
+import { OMusyawarahBidangCreate } from "~~/server/services/musyawarah-bidang/dto/musyawarah-bidang.dto";
+import { createMusyawarahBidang } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.service";
 
 export default defineEventHandler(async (event) => {
-  const user = await permissionGuard(event, { proker: ["manage"] });
+  const user = await permissionGuard(event, { musyawarah_bidang: ["manage"] });
 
-  const body = await readValidatedBody(event, (b) => OProkerCreate.parse(b));
+  const body = await readValidatedBody(event, (b) =>
+    OMusyawarahBidangCreate.parse(b)
+  );
   if (user.role !== "admin" && user.role!.split(",")[1] !== body.bidang) {
     throw createError({
       statusCode: 403,
@@ -12,7 +14,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  await createProker(user.daerahId, body);
+  await createMusyawarahBidang(user.daerahId, body);
 
   return HttpResponse();
 });

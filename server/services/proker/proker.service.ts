@@ -12,6 +12,7 @@ export async function getAllProker(
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(prokerTable.daerahId, daerahId),
+    eq(prokerTable.bidang, bidang),
   ];
 
   if (search) {
@@ -24,10 +25,6 @@ export async function getAllProker(
         like(prokerTable.peserta, searchCondition)
       )
     );
-  }
-
-  if (bidang) {
-    conditions.push(eq(prokerTable.bidang, bidang));
   }
 
   const query = db

@@ -13,6 +13,7 @@ export type TMusyawarahBidangCreate = z.infer<typeof OMusyawarahBidangCreate>;
 export const OMusyawarahBidangList = z.object({
   ...OPagination.def.shape,
   search: z.string(),
+  bidang: z.enum(roles),
 });
 
 export type TMusyawarahBidangList = z.infer<typeof OMusyawarahBidangList>;

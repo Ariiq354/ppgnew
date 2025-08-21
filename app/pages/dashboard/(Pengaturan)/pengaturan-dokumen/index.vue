@@ -3,7 +3,7 @@
   import { schema, getInitialFormData, type Schema } from "./_constants";
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
-  const canUpload = await authStore.hasPermission({ dokumen: ["upload"] });
+  const canUpload = authStore.hasPermission({ dokumen: ["upload"] });
 
   onMounted(() => {
     constantStore.setTitle("Pengaturan / Dokumen");

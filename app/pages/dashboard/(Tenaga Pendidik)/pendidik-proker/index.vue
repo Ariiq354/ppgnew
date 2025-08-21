@@ -54,7 +54,7 @@
   }
 
   async function clickDelete(ids: number[]) {
-    openConfirmModal("/proker/tenaga_pendidik", ids, refresh);
+    openConfirmModal("/proker/bidang/tenaga_pendidik", ids, refresh);
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {

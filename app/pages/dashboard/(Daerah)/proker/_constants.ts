@@ -23,7 +23,7 @@ export const columns = [
   },
   {
     accessorKey: "bulan",
-    header: "Bulan Kegiatan",
+    header: "Bulan",
   },
   {
     accessorKey: "tahun",
