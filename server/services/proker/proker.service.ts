@@ -63,13 +63,10 @@ export async function getAllProker(
 
 export async function createProker(daerahId: number, data: TProkerCreate) {
   try {
-    return await db
-      .insert(prokerTable)
-      .values({
-        ...data,
-        daerahId,
-      })
-      .returning({ insertedId: prokerTable.id });
+    return await db.insert(prokerTable).values({
+      ...data,
+      daerahId,
+    });
   } catch (error) {
     console.error("Failed to create Proker", error);
     throw InternalError;

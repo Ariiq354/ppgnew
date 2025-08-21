@@ -71,13 +71,10 @@ export async function getPengurusById(daerahId: number, id: number) {
 
 export async function createPengurus(daerahId: number, data: TPengurusCreate) {
   try {
-    return await db
-      .insert(pengurusTable)
-      .values({
-        ...data,
-        daerahId,
-      })
-      .returning({ insertedId: pengurusTable.id });
+    return await db.insert(pengurusTable).values({
+      ...data,
+      daerahId,
+    });
   } catch (error) {
     console.error("Failed to create Pengurus", error);
     throw InternalError;

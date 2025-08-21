@@ -42,6 +42,21 @@ export async function getAllMusyawarah(
   }
 }
 
+export async function getMusyawarahById(id: number) {
+  const data = await db.query.musyawarahTable.findFirst({
+    where: eq(musyawarahTable.id, id),
+  });
+
+  try {
+    return {
+      data,
+    };
+  } catch (error) {
+    console.error("Failed to get Musyawarah By Id", error);
+    throw InternalError;
+  }
+}
+
 export async function getAllMusyawarahOptions(daerahId: number) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(musyawarahTable.daerahId, daerahId),
@@ -71,13 +86,10 @@ export async function createMusyawarah(
   data: TMusyawarahCreate
 ) {
   try {
-    return await db
-      .insert(musyawarahTable)
-      .values({
-        ...data,
-        daerahId,
-      })
-      .returning({ insertedId: musyawarahTable.id });
+    return await db.insert(musyawarahTable).values({
+      ...data,
+      daerahId,
+    });
   } catch (error) {
     console.error("Failed to create Musyawarah", error);
     throw InternalError;
