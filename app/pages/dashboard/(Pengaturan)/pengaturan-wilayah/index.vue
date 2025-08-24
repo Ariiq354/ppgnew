@@ -48,6 +48,7 @@
     immediate: false,
     query: computed(() => queries.desa),
   });
+  watchOnce(queries.desa, () => rDesa());
   const {
     data: dKelompok,
     refresh: rKelompok,
@@ -56,16 +57,7 @@
     immediate: false,
     query: computed(() => queries.kelompok),
   });
-  watch(queries.desa, () => {
-    if (queries.desa.daerahId > 0) {
-      rDesa();
-    }
-  });
-  watch(queries.kelompok, () => {
-    if (queries.kelompok.desaId > 0) {
-      rKelompok();
-    }
-  });
+  watchOnce(queries.kelompok, () => rKelompok());
 
   const isDaerahDisabled = ref(false);
   const isDesaDisabled = computed(() => !queries.desa.daerahId);

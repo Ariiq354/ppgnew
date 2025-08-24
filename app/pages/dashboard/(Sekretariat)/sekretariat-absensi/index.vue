@@ -20,7 +20,7 @@
   } = await useFetch(() => `${APIBASE}/absensi-pengurus/${musyId.value}`, {
     immediate: false,
   });
-  watch(musyId, () => refresh);
+  watchOnce(musyId, () => refresh());
   watch(
     absensi,
     () => (state.value = structuredClone(absensi.value?.data) ?? [])
@@ -86,8 +86,9 @@
 </script>
 
 <template>
-  <Title>Sekretariat | Daftar Musyawarah</Title>
+  <Title>Sekretariat | Absensi</Title>
   <main class="flex flex-col gap-4">
+    {{ musyId }}
     <UCard>
       <h1 class="text-2xl font-bold sm:text-3xl">Pilih Musyawarah</h1>
       <p class="text-muted mb-8 text-sm sm:text-base">
@@ -114,7 +115,7 @@
       <div class="flex flex-col items-center justify-center gap-4 py-16">
         <UIcon name="i-lucide-user-check" size="50" />
         <h2 class="text-xl font-bold">Pilih Musyawarah</h2>
-        <p class="text-muted">
+        <p class="text-muted text-center">
           Silahkan pilih musyawarah di menu diatas untuk memulai absensi
         </p>
       </div>

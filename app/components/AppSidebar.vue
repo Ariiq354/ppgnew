@@ -153,6 +153,15 @@
                       },
                     },
                     {
+                      label: "Monitoring Kehadiran",
+                      to: "/dashboard/sekretariat-monitoring-kehadiran",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                    {
                       label: "Laporan Musyawarah",
                       to: "/dashboard/sekretariat-laporan",
                       onSelect: () => {
@@ -171,15 +180,6 @@
                       },
                     },
                   ],
-                },
-                {
-                  label: "Monitoring Kehadiran",
-                  to: "/dashboard/sekretariat-monitoring-kehadiran",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
                 },
                 {
                   label: "Musyawarah Bidang",

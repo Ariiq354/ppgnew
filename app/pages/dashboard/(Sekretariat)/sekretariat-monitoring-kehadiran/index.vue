@@ -1,0 +1,63 @@
+<script setup lang="ts">
+  import { columns } from "./_constants";
+
+  const constantStore = useConstantStore();
+  constantStore.setTitle("Sekretariat / Monitoring Kehadiran");
+
+  const query = reactive({
+    search: "",
+    page: 1,
+  });
+  const searchDebounced = useDebounceFn((v) => {
+    query.search = v;
+  }, 300);
+  const { data, status } = await useFetch(
+    `${APIBASE}/absensi-pengurus/monitoring`,
+    {
+      query,
+    }
+  );
+</script>
+
+<template>
+  <Title>Sekretariat | Monitoring Kehadiran</Title>
+  <main class="flex flex-col gap-4">
+    <div class="grid grid-cols-2 gap-4">
+      <UCard>
+        <p class="flex items-center gap-4 text-4xl font-bold">
+          <UIcon name="i-lucide-users" />
+          {{ data?.metadata.total }}
+        </p>
+        <p class="text-muted">Total Pengurus</p>
+      </UCard>
+      <UCard>
+        <p class="flex items-center gap-4 text-4xl font-bold">
+          <UIcon name="i-lucide-trending-up" />
+          0%
+        </p>
+        <p class="text-muted">Kehadiran</p>
+      </UCard>
+    </div>
+    <UCard>
+      <div class="mb-6 flex gap-2 md:gap-4">
+        <UInput
+          size="xl"
+          class="flex-5"
+          leading-icon="i-lucide-search"
+          placeholder="Search..."
+          @update:model-value="searchDebounced"
+        />
+      </div>
+      <AppTable
+        v-model:page="query.page"
+        :columns="columns"
+        :data="data?.data"
+        :loading="status === 'pending'"
+        :total="data?.metadata.total"
+        enumerate
+        pagination
+      >
+      </AppTable>
+    </UCard>
+  </main>
+</template>

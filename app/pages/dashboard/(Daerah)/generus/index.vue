@@ -2,6 +2,7 @@
   import { columns, kelasOptions, pengajianOptions } from "./_constants";
 
   const constantStore = useConstantStore();
+  const authStore = useAuthStore();
   constantStore.setTitle("Dashboard / Generus");
 
   const filterModal = ref(false);
@@ -10,7 +11,7 @@
     page: 1,
     kelasSekolah: "",
     kelasPengajian: "",
-    daerahId: "",
+    daerahId: authStore.user?.daerahId,
     desaId: "",
     kelompokId: "",
   });
@@ -21,45 +22,40 @@
     query,
   });
 
-  const { data: dataDaerah, status: statusDaerah } = await useFetch(
-    `${APIBASE}/options/daerah`
-  );
   const { data: dataDesa, status: statusDesa } = await useFetch(
     `${APIBASE}/options/desa`,
     {
       query: {
         daerahId: computed(() => query.daerahId),
       },
-    }
-  );
-  const { data: datakelompok, status: statusKelompok } = await useFetch(
-    `${APIBASE}/options/kelompok`,
-    {
-      query: {
-        desaId: computed(() => query.desaId),
+      onResponse() {
+        query.kelompokId = "";
       },
     }
   );
+  const {
+    data: datakelompok,
+    status: statusKelompok,
+    refresh,
+  } = await useFetch(`${APIBASE}/options/kelompok`, {
+    immediate: false,
+    query: {
+      desaId: computed(() => query.desaId),
+    },
+  });
 
-  watch(
-    () => query.daerahId,
-    () => {
-      query.desaId = "";
-      query.kelompokId = "";
-      query.page = 1;
-    }
-  );
-
-  watch(
+  watchOnce(
     () => query.desaId,
-    () => {
-      query.kelompokId = "";
-      query.page = 1;
-    }
+    () => refresh()
   );
 
   watch(
-    () => [query.kelasPengajian, query.kelompokId, query.kelasSekolah],
+    () => [
+      query.kelasPengajian,
+      query.kelompokId,
+      query.kelasSekolah,
+      query.desaId,
+    ],
     () => {
       query.page = 1;
     }
@@ -71,14 +67,6 @@
   <LazyUModal v-model:open="filterModal" title="Filter">
     <template #body>
       <div class="flex flex-col gap-4">
-        <ClearableSelectMenu
-          v-model="query.daerahId"
-          placeholder="Daerah"
-          :items="dataDaerah?.data"
-          value-key="id"
-          label-key="name"
-          :loading="statusDaerah === 'pending'"
-        />
         <ClearableSelectMenu
           v-model="query.desaId"
           placeholder="Desa"
@@ -116,15 +104,6 @@
           leading-icon="i-lucide-search"
           placeholder="Search..."
           @update:model-value="searchDebounced"
-        />
-        <ClearableSelectMenu
-          v-model="query.daerahId"
-          placeholder="Daerah"
-          class="hidden flex-1 md:flex"
-          :items="dataDaerah?.data"
-          value-key="id"
-          label-key="name"
-          :loading="statusDaerah === 'pending'"
         />
         <ClearableSelectMenu
           v-model="query.desaId"

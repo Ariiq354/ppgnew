@@ -1,7 +1,10 @@
+import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
+import {
+  absensiPengurusTable,
+  pengurusTable,
+} from "~~/server/database/schema/pengurus";
 import type { TPengurusCreate, TPengurusList } from "./dto/pengurus.dto";
-import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
-import { pengurusTable } from "~~/server/database/schema/pengurus";
 
 export async function getAllPengurus(
   daerahId: number,
@@ -35,6 +38,57 @@ export async function getAllPengurus(
     })
     .from(pengurusTable)
     .where(and(...conditions))
+    .$dynamic();
+
+  try {
+    const total = await getTotalQuery(query);
+    const data = await query.limit(limit).offset(offset);
+
+    return {
+      data,
+      total,
+    };
+  } catch (error) {
+    console.error("Failed to get List Pengurus", error);
+    throw InternalError;
+  }
+}
+
+export async function getAllPengurusAbsensi(
+  daerahId: number,
+  { limit, page, search }: TPengurusList
+) {
+  const offset = (page - 1) * limit;
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(pengurusTable.daerahId, daerahId),
+  ];
+
+  if (search) {
+    const searchCondition = `%${search}%`;
+
+    conditions.push(
+      or(
+        like(pengurusTable.nama, searchCondition),
+        like(pengurusTable.pendidikan, searchCondition)
+      )
+    );
+  }
+
+  const query = db
+    .select({
+      id: pengurusTable.id,
+      nama: pengurusTable.nama,
+      bidang: pengurusTable.bidang,
+      hadir: sql<number>`SUM(CASE WHEN ${absensiPengurusTable.keterangan} = 'Hadir' THEN 1 ELSE 0 END)`,
+      izin: sql<number>`SUM(CASE WHEN ${absensiPengurusTable.keterangan} = 'Izin' THEN 1 ELSE 0 END)`,
+    })
+    .from(pengurusTable)
+    .where(and(...conditions))
+    .leftJoin(
+      absensiPengurusTable,
+      eq(pengurusTable.id, absensiPengurusTable.pengurusId)
+    )
+    .groupBy(pengurusTable.id, pengurusTable.nama, pengurusTable.bidang)
     .$dynamic();
 
   try {
