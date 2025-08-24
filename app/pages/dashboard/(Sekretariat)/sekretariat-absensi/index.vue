@@ -35,6 +35,10 @@
       return a + (i.keterangan === "Izin" ? 1 : 0);
     }, 0)
   );
+  const pengurusCount = ref(0);
+  watch(musyId, () => {
+    pengurusCount.value = data.value ? data.value.metadata.total : 0;
+  });
 
   const query = reactive({
     search: "",
@@ -132,12 +136,12 @@
         </UCard>
         <UCard>
           <p class="text-error text-4xl font-bold">
-            {{ (data?.metadata.total ?? 0) - hadirCount - izinCount }}
+            {{ (pengurusCount ?? 0) - hadirCount - izinCount }}
           </p>
           <p class="text-muted">Tanpa Keterangan</p>
         </UCard>
         <UCard>
-          <p class="text-4xl font-bold">{{ data?.metadata.total }}</p>
+          <p class="text-4xl font-bold">{{ pengurusCount }}</p>
           <p class="text-muted">Total</p>
         </UCard>
       </div>

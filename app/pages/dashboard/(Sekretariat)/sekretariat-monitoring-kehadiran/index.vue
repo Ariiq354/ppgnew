@@ -4,6 +4,10 @@
   const constantStore = useConstantStore();
   constantStore.setTitle("Sekretariat / Monitoring Kehadiran");
 
+  const { data: summary } = await useFetch(
+    `${APIBASE}/absensi-pengurus/monitoring/summary`
+  );
+
   const query = reactive({
     search: "",
     page: 1,
@@ -26,14 +30,14 @@
       <UCard>
         <p class="flex items-center gap-4 text-4xl font-bold">
           <UIcon name="i-lucide-users" />
-          {{ data?.metadata.total }}
+          {{ summary?.data.countPengurus }}
         </p>
         <p class="text-muted">Total Pengurus</p>
       </UCard>
       <UCard>
         <p class="flex items-center gap-4 text-4xl font-bold">
           <UIcon name="i-lucide-trending-up" />
-          0%
+          {{ summary?.data.kehadiran }}%
         </p>
         <p class="text-muted">Kehadiran</p>
       </UCard>

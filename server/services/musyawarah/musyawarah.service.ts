@@ -1,6 +1,6 @@
 import { db } from "~~/server/database";
 import type { TMusyawarahCreate, TMusyawarahList } from "./dto/musyawarah.dto";
-import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
+import { and, count, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { musyawarahTable } from "~~/server/database/schema/pengurus";
 
 export async function getAllMusyawarah(
@@ -77,6 +77,22 @@ export async function getAllMusyawarahOptions(daerahId: number) {
     };
   } catch (error) {
     console.error("Failed to get List All Musyawarah", error);
+    throw InternalError;
+  }
+}
+
+export async function getCountMusyawarah(daerahId: number) {
+  try {
+    const [data] = await db
+      .select({
+        count: count(),
+      })
+      .from(musyawarahTable)
+      .where(eq(musyawarahTable.daerahId, daerahId));
+
+    return data.count;
+  } catch (error) {
+    console.error("Failed to get Count Musyawarah", error);
     throw InternalError;
   }
 }

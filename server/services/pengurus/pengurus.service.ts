@@ -1,4 +1,4 @@
-import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
+import { and, count, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
   absensiPengurusTable,
@@ -119,6 +119,22 @@ export async function getPengurusById(daerahId: number, id: number) {
     });
   } catch (error) {
     console.error("Failed to get Pengurus By Id", error);
+    throw InternalError;
+  }
+}
+
+export async function getCountPengurus(daerahId: number) {
+  try {
+    const [data] = await db
+      .select({
+        count: count(),
+      })
+      .from(pengurusTable)
+      .where(eq(pengurusTable.daerahId, daerahId));
+
+    return data.count;
+  } catch (error) {
+    console.error("Failed to get Count Pengurus", error);
     throw InternalError;
   }
 }
