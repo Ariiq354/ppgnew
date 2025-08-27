@@ -10,7 +10,6 @@ export const musyawarahMuslimunTable = sqliteTable("musyawarah_muslimun", {
   kelompokId: int()
     .notNull()
     .references(() => kelompokTable.id, { onDelete: "cascade" }),
-  absensi: int({ mode: "boolean" }).notNull().default(false),
   ...timestamp,
 });
 

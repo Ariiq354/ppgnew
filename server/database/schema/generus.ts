@@ -14,6 +14,7 @@ export const generusTable = sqliteTable("generus", {
   kelasSekolah: text().notNull(),
   kelasPengajian: text().notNull(),
   foto: text().notNull(),
+  status: text().notNull().default(""),
   daerahId: int()
     .notNull()
     .references(() => daerahTable.id, { onDelete: "cascade" }),
@@ -25,7 +26,6 @@ export const generusTable = sqliteTable("generus", {
     .references(() => kelompokTable.id, {
       onDelete: "cascade",
     }),
-  status: text().notNull().default(""),
   ...timestamp,
 });
 
@@ -36,7 +36,6 @@ export const kelasTable = sqliteTable("kelas", {
   kelompokId: int()
     .notNull()
     .references(() => kelompokTable.id, { onDelete: "cascade" }),
-  absensi: int({ mode: "boolean" }).notNull().default(false),
   ...timestamp,
 });
 

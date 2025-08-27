@@ -6,7 +6,6 @@ export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { musyawarah_bidang: ["manage"] });
   const id = getRouterParam(event, "id");
   const parsed = z.coerce.number().parse(id);
-  console.log(event.context.params);
 
   const body = await readValidatedBody(event, (b) =>
     OMusyawarahBidangCreate.parse(b)

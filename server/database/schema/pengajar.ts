@@ -24,6 +24,5 @@ export const pengajarTable = sqliteTable("pengajar", {
     .references(() => kelompokTable.id, {
       onDelete: "cascade",
     }),
-  active: int({ mode: "boolean" }).notNull().default(true),
   ...timestamp,
 });
