@@ -132,7 +132,7 @@ export async function getCountPengurus(daerahId: number) {
       .from(pengurusTable)
       .where(eq(pengurusTable.daerahId, daerahId));
 
-    return data.count;
+    return data!.count;
   } catch (error) {
     console.error("Failed to get Count Pengurus", error);
     throw InternalError;

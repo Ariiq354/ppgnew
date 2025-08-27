@@ -95,7 +95,7 @@ export async function getCountMuslimun(kelompokId: number) {
       .from(musyawarahMuslimunTable)
       .where(eq(musyawarahMuslimunTable.kelompokId, kelompokId));
 
-    return data.count;
+    return data!.count;
   } catch (error) {
     console.error("Failed to get Count Muslimun", error);
     throw InternalError;

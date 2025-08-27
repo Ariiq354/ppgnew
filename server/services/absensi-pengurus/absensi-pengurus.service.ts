@@ -52,7 +52,7 @@ export async function getCountAbsensi(daerahId: number) {
       )
       .where(eq(musyawarahTable.daerahId, daerahId));
 
-    return data.count;
+    return data!.count;
   } catch (error) {
     console.error("Failed to get Count Absensi", error);
     throw InternalError;

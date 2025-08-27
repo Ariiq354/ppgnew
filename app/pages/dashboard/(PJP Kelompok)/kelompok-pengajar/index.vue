@@ -6,7 +6,7 @@
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
-  const pengurusEdit = authStore.hasPermission({
+  const pengajarEdit = authStore.hasPermission({
     sekretariat: ["manage"],
   });
   constantStore.setTitle("PJP Kelompok / Pengajar");
@@ -20,7 +20,7 @@
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
   }, 300);
-  const { data, status, refresh } = await useFetch(`${APIBASE}/pengurus`, {
+  const { data, status, refresh } = await useFetch(`${APIBASE}/pengajar`, {
     query,
   });
 
@@ -36,7 +36,7 @@
       formData.append(key, value);
     }
 
-    const basePath = `${APIBASE}/pengurus`;
+    const basePath = `${APIBASE}/pengajar`;
     await execute({
       path: state.value.id ? `${basePath}/${state.value.id}` : basePath,
       body: formData,
@@ -58,7 +58,7 @@
   }
 
   async function clickDelete(ids: number[]) {
-    openConfirmModal("/pengurus", ids, refresh);
+    openConfirmModal("/pengajar", ids, refresh);
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
@@ -80,7 +80,7 @@
     >
       <template #body>
         <UForm
-          id="pengurus-form"
+          id="pengajar-form"
           :schema="schema"
           :state="state"
           class="space-y-4"
@@ -91,42 +91,32 @@
             <AppUploadImage
               v-model:file="state.file"
               v-model:foto="state.foto"
-              :disabled="isLoading || !pengurusEdit || viewStatus"
+              :disabled="isLoading || !pengajarEdit || viewStatus"
             />
           </UFormField>
           <UFormField label="Nama" name="nama">
             <UInput
               v-model="state.nama"
-              :disabled="isLoading || !pengurusEdit || viewStatus"
-            />
-          </UFormField>
-          <UFormField label="Bidang" name="bidang">
-            <USelectMenu
-              v-model="state.bidang"
-              placeholder="Pilih bidang"
-              :items="bidangOptions"
-              value-key="value"
-              label-key="name"
-              :disabled="isLoading || !pengurusEdit || viewStatus"
+              :disabled="isLoading || !pengajarEdit || viewStatus"
             />
           </UFormField>
           <UFormField label="Pendidikan Terakhir" name="pendidikan">
             <UInput
               v-model="state.pendidikan"
-              :disabled="isLoading || !pengurusEdit || viewStatus"
+              :disabled="isLoading || !pengajarEdit || viewStatus"
             />
           </UFormField>
           <UFormField label="Tempat Lahir" name="tempatLahir">
             <UInput
               v-model="state.tempatLahir"
-              :disabled="isLoading || !pengurusEdit || viewStatus"
+              :disabled="isLoading || !pengajarEdit || viewStatus"
             />
           </UFormField>
           <UFormField label="Tanggal Lahir" name="tanggalLahir">
             <UInput
               v-model="state.tanggalLahir"
               type="date"
-              :disabled="isLoading || !pengurusEdit || viewStatus"
+              :disabled="isLoading || !pengajarEdit || viewStatus"
             />
           </UFormField>
         </UForm>
@@ -145,7 +135,7 @@
           type="submit"
           icon="i-lucide-check"
           :loading="isLoading"
-          form="pengurus-form"
+          form="pengajar-form"
         >
           Simpan
         </UButton>
@@ -161,9 +151,9 @@
           @update:model-value="searchDebounced"
         />
         <AppTambahExport
-          :add-permission="pengurusEdit"
+          :add-permission="pengajarEdit"
           :add-function="clickAdd"
-          path="pengurus"
+          path="pengajar"
         />
       </div>
       <AppTable
@@ -173,8 +163,8 @@
         :loading="status === 'pending'"
         :total="data?.metadata.total"
         enumerate
-        :deletable="pengurusEdit"
-        :editable="pengurusEdit"
+        :deletable="pengajarEdit"
+        :editable="pengajarEdit"
         viewable
         selectable
         pagination

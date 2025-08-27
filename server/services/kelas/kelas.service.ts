@@ -94,7 +94,7 @@ export async function getCountKelas(kelompokId: number) {
       .from(kelasTable)
       .where(eq(kelasTable.kelompokId, kelompokId));
 
-    return data.count;
+    return data!.count;
   } catch (error) {
     console.error("Failed to get Count Kelas", error);
     throw InternalError;

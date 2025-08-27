@@ -90,7 +90,7 @@ export async function getCountMusyawarah(daerahId: number) {
       .from(musyawarahTable)
       .where(eq(musyawarahTable.daerahId, daerahId));
 
-    return data.count;
+    return data!.count;
   } catch (error) {
     console.error("Failed to get Count Musyawarah", error);
     throw InternalError;
