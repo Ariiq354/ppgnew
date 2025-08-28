@@ -5,6 +5,7 @@ import {
 } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/vue";
 import { useToastError, useToastSuccess } from "~/composables/toast";
+import { APIBASE } from "~/utils";
 import type { auth } from "~~/server/utils/auth";
 import { ac, rolesDeclaration } from "~~/shared/permission";
 import type { roles, TStatement } from "~~/shared/permission";

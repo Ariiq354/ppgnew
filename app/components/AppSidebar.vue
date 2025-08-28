@@ -1,4 +1,7 @@
 <script setup lang="ts">
+  import { useAuthStore } from "~/stores/auth";
+  import { useConstantStore } from "~/stores/constant";
+
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
   const isDesktop = useMediaQuery("(min-width: 768px)");

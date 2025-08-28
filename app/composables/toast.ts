@@ -1,3 +1,5 @@
+import { useToast } from "@nuxt/ui/runtime/composables/useToast.js";
+
 export function useToastSuccess(
   title: string,
   description: string | undefined

@@ -1,21 +1,33 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "#ui/types";
-  import { APIBASE } from "~/utils";
-  import { columns, getInitialFormData, schema } from "./_constants";
+  import { APIBASE, type ExtractObjectType } from "~/utils";
+  import {
+    columns,
+    genderOptions,
+    getInitialFormData,
+    schema,
+    statusOptions,
+  } from "./_constants";
   import type { Schema } from "./_constants";
+  import { useConstantStore } from "~/stores/constant";
+  import { useAuthStore } from "~/stores/auth";
+  import { useSubmit } from "~/composables/function";
+  import { useToastError } from "~/composables/toast";
+  import { openConfirmModal } from "~/composables/modal";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
   const pengajarEdit = authStore.hasPermission({
-    sekretariat: ["manage"],
+    pjp_kelompok: ["manage"],
   });
   constantStore.setTitle("PJP Kelompok / Pengajar");
 
+  const filterModal = ref(false);
   const state = ref(getInitialFormData());
   const query = reactive({
     search: "",
+    status: "",
     page: 1,
-    bidang: "sekretariat",
   });
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
@@ -100,10 +112,30 @@
               :disabled="isLoading || !pengajarEdit || viewStatus"
             />
           </UFormField>
+          <UFormField label="Jenis Kelamin" name="gender">
+            <USelectMenu
+              v-model="state.gender"
+              :disabled="isLoading || !pengajarEdit || viewStatus"
+              :items="genderOptions"
+            />
+          </UFormField>
+          <UFormField label="No. Telepon" name="noTelepon">
+            <UInput
+              v-model="state.noTelepon"
+              :disabled="isLoading || !pengajarEdit || viewStatus"
+            />
+          </UFormField>
           <UFormField label="Pendidikan Terakhir" name="pendidikan">
             <UInput
               v-model="state.pendidikan"
               :disabled="isLoading || !pengajarEdit || viewStatus"
+            />
+          </UFormField>
+          <UFormField label="Status" name="status">
+            <USelectMenu
+              v-model="state.status"
+              :disabled="isLoading || !pengajarEdit || viewStatus"
+              :items="statusOptions"
             />
           </UFormField>
           <UFormField label="Tempat Lahir" name="tempatLahir">
@@ -115,6 +147,13 @@
           <UFormField label="Tanggal Lahir" name="tanggalLahir">
             <UInput
               v-model="state.tanggalLahir"
+              type="date"
+              :disabled="isLoading || !pengajarEdit || viewStatus"
+            />
+          </UFormField>
+          <UFormField label="Tanggal Mulai Tugas Awal" name="tanggalTugas">
+            <UInput
+              v-model="state.tanggalTugas"
               type="date"
               :disabled="isLoading || !pengajarEdit || viewStatus"
             />
@@ -141,6 +180,17 @@
         </UButton>
       </template>
     </LazyUModal>
+    <LazyUModal v-model:open="filterModal" title="Filter">
+      <template #body>
+        <div class="flex flex-col gap-4">
+          <ClearableSelectMenu
+            v-model="query.status"
+            placeholder="Status"
+            :items="statusOptions"
+          />
+        </div>
+      </template>
+    </LazyUModal>
     <UCard>
       <div class="mb-6 flex gap-2 md:gap-4">
         <UInput
@@ -149,6 +199,18 @@
           leading-icon="i-lucide-search"
           placeholder="Search..."
           @update:model-value="searchDebounced"
+        />
+        <ClearableSelectMenu
+          v-model="query.status"
+          placeholder="Status"
+          class="hidden flex-1 md:flex"
+          :items="statusOptions"
+        />
+        <UButton
+          variant="subtle"
+          icon="i-lucide-filter"
+          class="md:hidden"
+          @click="filterModal = true"
         />
         <AppTambahExport
           :add-permission="pengajarEdit"

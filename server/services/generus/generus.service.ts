@@ -57,6 +57,26 @@ export async function getAllGenerus(
   }
 }
 
+export async function getAllGenerusExport(kelompokId: number) {
+  return await db
+    .select({
+      id: generusTable.id,
+      nama: generusTable.nama,
+      tempatLahir: generusTable.tempatLahir,
+      tanggalLahir: generusTable.tanggalLahir,
+      kelasSekolah: generusTable.kelasSekolah,
+      gender: generusTable.gender,
+      noTelepon: generusTable.noTelepon,
+      status: generusTable.status,
+      kelasPengajian: generusTable.kelasPengajian,
+      namaOrtu: generusTable.namaOrtu,
+      noTeleponOrtu: generusTable.noTeleponOrtu,
+      foto: generusTable.foto,
+    })
+    .from(generusTable)
+    .where(eq(generusTable.kelompokId, kelompokId));
+}
+
 export async function getCountGenerus() {
   try {
     const [data] = await db

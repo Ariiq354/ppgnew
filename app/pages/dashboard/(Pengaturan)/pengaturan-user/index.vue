@@ -1,5 +1,7 @@
 <script setup lang="ts">
+  import { useConstantStore } from "~/stores/constant";
   import { columns } from "./_constants";
+  import { APIBASE } from "~/utils";
 
   const constantStore = useConstantStore();
 

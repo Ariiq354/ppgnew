@@ -61,6 +61,24 @@ export async function getAllPengajar(
   }
 }
 
+export async function getAllPengajarExport(kelompokId: number) {
+  return await db
+    .select({
+      id: pengajarTable.id,
+      nama: pengajarTable.nama,
+      tempatLahir: pengajarTable.tempatLahir,
+      tanggalLahir: pengajarTable.tanggalLahir,
+      pendidikan: pengajarTable.pendidikan,
+      gender: pengajarTable.gender,
+      noTelepon: pengajarTable.noTelepon,
+      status: pengajarTable.status,
+      tanggalTugas: pengajarTable.tanggalTugas,
+      foto: pengajarTable.foto,
+    })
+    .from(pengajarTable)
+    .where(eq(pengajarTable.kelompokId, kelompokId));
+}
+
 export async function getCountPengajar() {
   try {
     const [data] = await db

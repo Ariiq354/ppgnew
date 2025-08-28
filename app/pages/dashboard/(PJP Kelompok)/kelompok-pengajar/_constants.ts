@@ -1,6 +1,8 @@
+import type { TableColumn } from "@nuxt/ui";
 import { z } from "zod/mini";
+import { formatDate } from "~/utils/format";
 
-export const columns = [
+export const columns: TableColumn<any>[] = [
   {
     accessorKey: "nama",
     header: "Nama Pengajar",
@@ -10,8 +12,9 @@ export const columns = [
     header: "Jenis Kelamin",
   },
   {
-    accessorKey: "namaKelompok",
-    header: "Tempat Tugas",
+    accessorKey: "tanggalTugas",
+    header: "Tanggal Tugas",
+    cell: ({ row }) => formatDate(row.original.tanggalTugas),
   },
   {
     accessorKey: "status",

@@ -2,6 +2,7 @@
   import type { FormSubmitEvent } from "@nuxt/ui";
   import { initFormData, schema } from "./_constants";
   import type { Schema } from "./_constants";
+  import { useAuthStore } from "~/stores/auth";
 
   definePageMeta({
     layout: "auth",

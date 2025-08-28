@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+  import { useToastError } from "~/composables/toast";
+  import { APIBASE } from "~/utils";
+
   const props = defineProps<{
     path: string;
     ids: number[];

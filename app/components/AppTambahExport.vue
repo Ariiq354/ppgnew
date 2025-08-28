@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import * as XLSX from "xlsx";
+  import { APIBASE } from "~/utils";
 
   const {
     path,
@@ -10,26 +10,6 @@
     addPermission?: boolean;
     addFunction?: () => void;
   }>();
-
-  async function export2xlsx() {
-    const { data } = await useFetch<{
-      data: object[];
-    }>(path, {
-      query: {
-        page: 1,
-        limit: 99999,
-      },
-    });
-
-    if (data.value) {
-      const worksheet = XLSX.utils.json_to_sheet(data.value.data);
-
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-
-      XLSX.writeFile(workbook, "data.xlsx");
-    }
-  }
 </script>
 
 <template>
@@ -43,10 +23,10 @@
       <p class="hidden md:block">Tambah</p>
     </UButton>
     <UButton
+      :href="`${APIBASE}/${path}/export`"
+      rel="noopener"
       icon="i-lucide-download"
-      variant="subtle"
-      class="bg-green-700 text-white hover:bg-green-700/75"
-      @click="export2xlsx"
+      class="bg-green-700 text-white hover:bg-green-700/75 active:bg-green-700/75"
     >
       <p class="hidden md:block">Export</p>
     </UButton>

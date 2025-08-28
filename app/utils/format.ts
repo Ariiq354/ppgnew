@@ -19,9 +19,7 @@ export function formatFileSize(bytes: number) {
 export function formatDate(dateString: string) {
   return new Date(dateString).toLocaleDateString("id-ID", {
     year: "numeric",
-    month: "short",
+    month: "long",
     day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
   });
 }

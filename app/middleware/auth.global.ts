@@ -1,3 +1,4 @@
+import { useAuthStore } from "~/stores/auth";
 import type { roles } from "~~/shared/permission";
 
 export default defineNuxtRouteMiddleware(async (to) => {
