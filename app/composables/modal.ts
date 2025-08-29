@@ -1,4 +1,4 @@
-import { useOverlay } from "@nuxt/ui/runtime/composables/useOverlay.js";
+import { useOverlay } from "#ui/composables/useOverlay";
 import ModalConfirm from "~/components/Modal/ModalConfirm.vue";
 
 const overlay = useOverlay();

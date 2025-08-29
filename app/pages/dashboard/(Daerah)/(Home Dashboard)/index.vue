@@ -5,50 +5,72 @@
   const constantStore = useConstantStore();
   constantStore.setTitle("Home Dashboard");
 
-  const GENERUS_LABELS = [
-    "PAUD",
-    "Cabe Rawit",
-    "Praremaja",
-    "Remaja",
-    "Pranikah",
-    "Usia Mandiri",
-  ];
-
-  const PENGAJAR_LABELS = [
-    "Mubalig Tugasan",
-    "Mubalig Setempat",
-    "Asisten Pengajar",
-  ];
-
   const { data } = await useFetch(`${APIBASE}/home`);
+
+  const testData = [
+    {
+      name: "PAUD",
+      "Laki-laki": Math.floor(Math.random() * 2000) + 500,
+      Perempuan: Math.floor(Math.random() * 2000) + 500,
+    },
+    {
+      name: "Cabe Rawit",
+      "Laki-laki": Math.floor(Math.random() * 2000) + 500,
+      Perempuan: Math.floor(Math.random() * 2000) + 500,
+    },
+    {
+      name: "Remaja",
+      "Laki-laki": Math.floor(Math.random() * 2000) + 500,
+      Perempuan: Math.floor(Math.random() * 2000) + 500,
+    },
+    {
+      name: "Praremaja",
+      "Laki-laki": Math.floor(Math.random() * 2000) + 500,
+      Perempuan: Math.floor(Math.random() * 2000) + 500,
+    },
+    {
+      name: "Pranikah",
+      "Laki-laki": Math.floor(Math.random() * 2000) + 500,
+      Perempuan: Math.floor(Math.random() * 2000) + 500,
+    },
+    {
+      name: "Usia Mandiri",
+      "Laki-laki": Math.floor(Math.random() * 2000) + 500,
+      Perempuan: Math.floor(Math.random() * 2000) + 500,
+    },
+  ];
 </script>
 
 <template>
   <Title>Home</Title>
 
   <main class="grid grid-cols-1 gap-8 md:grid-cols-4">
-    <UCard>
-      <div class="flex items-center gap-4">
-        <UIcon name="i-lucide-landmark" size="100" />
-        <div
-          class="flex w-full flex-col items-end justify-center gap-2 text-right"
-        >
-          <p class="text-2xl font-bold">{{ data?.data.countDesa }}</p>
-          <p class="text-lg">Desa</p>
+    <NuxtLink to="/dashboard/pengaturan-wilayah">
+      <UCard>
+        <div class="flex items-center gap-4">
+          <UIcon name="i-lucide-landmark" size="100" />
+          <div
+            class="flex w-full flex-col items-end justify-center gap-2 text-right"
+          >
+            <p class="text-2xl font-bold">{{ data?.data.countDesa }}</p>
+            <p class="text-lg">Desa</p>
+          </div>
         </div>
-      </div>
-    </UCard>
-    <UCard>
-      <div class="flex items-center gap-4">
-        <UIcon name="i-lucide-layers" size="100" />
-        <div
-          class="flex w-full flex-col items-end justify-center gap-2 text-right"
-        >
-          <p class="text-2xl font-bold">{{ data?.data.countKelompok }}</p>
-          <p class="text-lg">Kelompok</p>
+      </UCard>
+    </NuxtLink>
+    <NuxtLink to="/dashboard/pengaturan-wilayah">
+      <UCard>
+        <div class="flex items-center gap-4">
+          <UIcon name="i-lucide-layers" size="100" />
+          <div
+            class="flex w-full flex-col items-end justify-center gap-2 text-right"
+          >
+            <p class="text-2xl font-bold">{{ data?.data.countKelompok }}</p>
+            <p class="text-lg">Kelompok</p>
+          </div>
         </div>
-      </div>
-    </UCard>
+      </UCard>
+    </NuxtLink>
     <NuxtLink to="/dashboard/generus">
       <UCard>
         <div class="flex items-center gap-4">
@@ -78,22 +100,20 @@
     <UCard class="md:col-span-3">
       <div class="flex flex-col gap-4 text-center">
         <p class="text-xl font-bold">Daftar Generus</p>
-        <ChartBar
-          :labels="GENERUS_LABELS"
-          :datasets="data?.data.generusDatasets"
+        <UnoChartBar
+          :data="testData"
+          index="name"
+          :categories="['Laki-laki', 'Perempuan']"
         />
       </div>
     </UCard>
     <UCard>
       <div class="flex flex-col gap-12 text-center">
         <p class="text-xl font-bold">Daftar Generus By Grup</p>
-        <ChartPie
-          :labels="GENERUS_LABELS"
-          :datasets="data?.data.generusGroupDatasets"
-        />
+        <UnoChartPie :data="testData" index="name" category="Perempuan" />
       </div>
     </UCard>
-    <UCard>
+    <!-- <UCard>
       <div class="flex flex-col gap-12 text-center">
         <p class="text-xl font-bold">Daftar Pengajar By Grup</p>
         <ChartPie
@@ -110,6 +130,6 @@
           :datasets="data?.data.pengajarDatasets"
         />
       </div>
-    </UCard>
+    </UCard>  -->
   </main>
 </template>

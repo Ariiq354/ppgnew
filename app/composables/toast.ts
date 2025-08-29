@@ -1,4 +1,4 @@
-import { useToast } from "@nuxt/ui/runtime/composables/useToast.js";
+import { useToast } from "#ui/composables/useToast";
 
 export function useToastSuccess(
   title: string,
