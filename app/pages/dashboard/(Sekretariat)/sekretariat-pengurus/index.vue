@@ -173,7 +173,7 @@
         <AppTambahExport
           :add-permission="pengurusEdit"
           :add-function="clickAdd"
-          path="pengurus"
+          path="pengurus/export"
         />
       </div>
       <AppTable

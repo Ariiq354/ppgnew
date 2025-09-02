@@ -54,6 +54,20 @@ export async function getAllPengurus(
   }
 }
 
+export async function getAllPengurusExport(daerahId: number) {
+  return await db
+    .select({
+      nama: pengurusTable.nama,
+      pendidikan: pengurusTable.pendidikan,
+      bidang: pengurusTable.bidang,
+      foto: pengurusTable.foto,
+      tempatLahir: pengurusTable.tempatLahir,
+      tanggalLahir: pengurusTable.tanggalLahir,
+    })
+    .from(pengurusTable)
+    .where(eq(pengurusTable.daerahId, daerahId));
+}
+
 export async function getAllPengurusAbsensi(
   daerahId: number,
   { limit, page, search }: TPengurusList

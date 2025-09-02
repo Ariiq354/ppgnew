@@ -176,7 +176,7 @@
         <AppTambahExport
           :add-permission="prokerEdit"
           :add-function="clickAdd"
-          path="proker"
+          path="proker/export/sekretariat"
         />
       </div>
       <AppTable

@@ -97,7 +97,6 @@
 <template>
   <Title>Sekretariat | Absensi</Title>
   <main class="flex flex-col gap-4">
-    {{ musyId }}
     <UCard>
       <h1 class="text-2xl font-bold sm:text-3xl">Pilih Musyawarah</h1>
       <p class="text-muted mb-8 text-sm sm:text-base">

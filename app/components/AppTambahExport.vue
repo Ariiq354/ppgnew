@@ -23,8 +23,9 @@
       <p class="hidden md:block">Tambah</p>
     </UButton>
     <UButton
-      :href="`${APIBASE}/${path}/export`"
+      :href="`${APIBASE}/${path}`"
       rel="noopener"
+      :external="true"
       icon="i-lucide-download"
       class="bg-green-700 text-white hover:bg-green-700/75 active:bg-green-700/75"
     >

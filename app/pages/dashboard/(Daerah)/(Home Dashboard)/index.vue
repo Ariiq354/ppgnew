@@ -113,23 +113,21 @@
         <UnoChartPie :data="testData" index="name" category="Perempuan" />
       </div>
     </UCard>
-    <!-- <UCard>
+    <UCard>
       <div class="flex flex-col gap-12 text-center">
         <p class="text-xl font-bold">Daftar Pengajar By Grup</p>
-        <ChartPie
-          :labels="PENGAJAR_LABELS"
-          :datasets="data?.data.pengajarGroupDatasets"
-        />
+        <UnoChartPie :data="testData" index="name" category="Perempuan" />
       </div>
     </UCard>
     <UCard class="md:col-span-3">
       <div class="flex flex-col gap-4 text-center">
         <p class="text-xl font-bold">Daftar Pengajar</p>
-        <ChartBar
-          :labels="PENGAJAR_LABELS"
-          :datasets="data?.data.pengajarDatasets"
+        <UnoChartBar
+          :data="testData"
+          index="name"
+          :categories="['Laki-laki', 'Perempuan']"
         />
       </div>
-    </UCard>  -->
+    </UCard>
   </main>
 </template>

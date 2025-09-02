@@ -17,6 +17,8 @@
 
   const props = defineProps<BarChartProps>();
 
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
   const x = (_: BarChartDatum, i: number) => i;
   const tickFormat = (tick: number) => props.data[tick]![props.index];
   const y = props.categories.map((cat) => (d: BarChartDatum) => d[cat]);
@@ -54,11 +56,23 @@
       <USkeleton class="aspect-2/1 w-full" />
     </template>
     <VisBulletLegend :items="items" />
-    <VisXYContainer :data="data" :height="400">
+    <VisXYContainer v-if="isDesktop" :data="data" :height="400">
       <VisGroupedBar :x="x" :y="y" :rounded-corners="10" :bar-padding="0.02" />
       <VisTooltip :triggers="triggers" />
       <VisAxis type="x" :tick-format="tickFormat" :grid-line="false" />
       <VisAxis type="y" />
+    </VisXYContainer>
+    <VisXYContainer v-else :data="data" :height="400">
+      <VisGroupedBar
+        :x="x"
+        :y="y"
+        :rounded-corners="10"
+        orientation="horizontal"
+        :bar-padding="0.02"
+      />
+      <VisTooltip :triggers="triggers" />
+      <VisAxis type="y" :tick-format="tickFormat" :grid-line="false" />
+      <VisAxis type="x" />
     </VisXYContainer>
   </ClientOnly>
 </template>

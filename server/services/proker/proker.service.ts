@@ -29,10 +29,10 @@ export async function getAllProker(
 
   const query = db
     .select({
+      id: prokerTable.id,
       biaya: prokerTable.biaya,
       bidang: prokerTable.bidang,
       bulan: prokerTable.bulan,
-      id: prokerTable.id,
       kegiatan: prokerTable.kegiatan,
       keterangan: prokerTable.keterangan,
       mingguKe: prokerTable.mingguKe,
@@ -56,6 +56,28 @@ export async function getAllProker(
     console.error("Failed to get List Proker", error);
     throw InternalError;
   }
+}
+
+export async function getAllProkerExport(
+  daerahId: number,
+  bidang: (typeof roles)[number]
+) {
+  return await db
+    .select({
+      biaya: prokerTable.biaya,
+      bidang: prokerTable.bidang,
+      bulan: prokerTable.bulan,
+      kegiatan: prokerTable.kegiatan,
+      keterangan: prokerTable.keterangan,
+      mingguKe: prokerTable.mingguKe,
+      peserta: prokerTable.peserta,
+      tahun: prokerTable.tahun,
+      status: prokerTable.status,
+    })
+    .from(prokerTable)
+    .where(
+      and(eq(prokerTable.daerahId, daerahId), eq(prokerTable.bidang, bidang))
+    );
 }
 
 export async function createProker(daerahId: number, data: TProkerCreate) {
