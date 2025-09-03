@@ -53,10 +53,10 @@
 <template>
   <ClientOnly>
     <template #fallback>
-      <USkeleton class="aspect-2/1 w-full" />
+      <USkeleton class="h-[500px] w-full" />
     </template>
     <VisBulletLegend :items="items" />
-    <VisXYContainer v-if="isDesktop" :data="data" :height="400">
+    <VisXYContainer v-if="isDesktop" :data="data" :height="500">
       <VisGroupedBar :x="x" :y="y" :rounded-corners="10" :bar-padding="0.02" />
       <VisTooltip :triggers="triggers" />
       <VisAxis type="x" :tick-format="tickFormat" :grid-line="false" />
