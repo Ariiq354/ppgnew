@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   const bidang = getRouterParam(event, "bidang");
   const parsed = z.enum(roles).parse(bidang);
 
-  if (user.role !== "admin" && user.role!.split(",")[1] !== bidang) {
+  if (user.role !== "admin" && user.role !== bidang) {
     throw createError({
       statusCode: 403,
       statusMessage: "Unauthorized",

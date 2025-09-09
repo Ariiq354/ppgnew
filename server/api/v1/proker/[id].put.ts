@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   const parsed = z.coerce.number().parse(id);
 
   const body = await readValidatedBody(event, (b) => OProkerCreate.parse(b));
-  if (user.role !== "admin" && user.role!.split(",")[1] !== body.bidang) {
+  if (user.role !== "admin" && user.role !== body.bidang) {
     throw createError({
       statusCode: 403,
       statusMessage: "Unauthorized",

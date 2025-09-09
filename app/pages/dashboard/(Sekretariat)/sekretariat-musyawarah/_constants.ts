@@ -7,7 +7,7 @@ export const columns = [
   },
   {
     accessorKey: "tanggal",
-    header: "Kegiatan",
+    header: "Tanggal Kegiatan",
   },
 ];
 

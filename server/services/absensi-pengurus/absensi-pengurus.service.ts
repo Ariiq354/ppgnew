@@ -60,10 +60,25 @@ export async function getCountAbsensi(daerahId: number) {
 }
 
 export async function createAbsensiPengurus(
+  daerahId: number,
   musyawarahId: number,
   data: TAbsensiPengurusCreate
 ) {
   try {
+    const exist = await db.query.musyawarahTable.findFirst({
+      where: and(
+        eq(musyawarahTable.id, musyawarahId),
+        eq(musyawarahTable.daerahId, daerahId)
+      ),
+    });
+
+    if (!exist) {
+      throw createError({
+        status: 403,
+        message: "Musyawarah tidak ada di daerah ini",
+      });
+    }
+
     return await db.insert(absensiPengurusTable).values({
       ...data,
       musyawarahId,
@@ -76,10 +91,25 @@ export async function createAbsensiPengurus(
 
 export async function updateAbsensiPengurus(
   id: number,
+  daerahId: number,
   musyawarahId: number,
   data: TAbsensiPengurusCreate
 ) {
   try {
+    const exist = await db.query.musyawarahTable.findFirst({
+      where: and(
+        eq(musyawarahTable.id, musyawarahId),
+        eq(musyawarahTable.daerahId, daerahId)
+      ),
+    });
+
+    if (!exist) {
+      throw createError({
+        status: 403,
+        message: "Musyawarah tidak ada di daerah ini",
+      });
+    }
+
     return await db
       .update(absensiPengurusTable)
       .set(data)
@@ -94,12 +124,26 @@ export async function updateAbsensiPengurus(
     throw InternalError;
   }
 }
-
 export async function deleteAbsensiPengurus(
   id: number[],
+  daerahId: number,
   musyawarahId: number
 ) {
   try {
+    const exist = await db.query.musyawarahTable.findFirst({
+      where: and(
+        eq(musyawarahTable.id, musyawarahId),
+        eq(musyawarahTable.daerahId, daerahId)
+      ),
+    });
+
+    if (!exist) {
+      throw createError({
+        status: 403,
+        message: "Musyawarah tidak ada di daerah ini",
+      });
+    }
+
     return await db
       .delete(absensiPengurusTable)
       .where(

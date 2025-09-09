@@ -10,7 +10,6 @@ export const kelasDesaTable = sqliteTable("kelas_desa", {
   desaId: int()
     .notNull()
     .references(() => desaTable.id, { onDelete: "cascade" }),
-  absensi: int({ mode: "boolean" }).notNull().default(false),
   ...timestamp,
 });
 

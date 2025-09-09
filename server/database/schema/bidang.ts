@@ -57,8 +57,8 @@ export const laporanMusyawarahBidangTable = sqliteTable(
     musyawarahId: int()
       .notNull()
       .references(() => musyawarahBidangTable.id, { onDelete: "cascade" }),
-    laporan: text({ mode: "json" }).$type<string[]>().notNull(),
-    keterangan: text({ mode: "json" }).$type<string[]>().notNull(),
+    laporan: text().notNull(),
+    keterangan: text().notNull(),
     ...timestamp,
   }
 );

@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
   setHeader(
     event,
     "Content-Disposition",
-    `attachment; filename="generus-${new Date().toISOString().slice(0, 10)}.xlsx"`
+    `attachment; filename="pengurus-${new Date().toISOString().slice(0, 10)}.xlsx"`
   );
 
   return buf;

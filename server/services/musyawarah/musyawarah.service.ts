@@ -42,6 +42,16 @@ export async function getAllMusyawarah(
   }
 }
 
+export async function getAllMusyawarahExport(daerahId: number) {
+  return await db
+    .select({
+      nama: musyawarahTable.nama,
+      tanggal: musyawarahTable.tanggal,
+    })
+    .from(musyawarahTable)
+    .where(eq(musyawarahTable.daerahId, daerahId));
+}
+
 export async function getMusyawarahById(id: number) {
   const data = await db.query.musyawarahTable.findFirst({
     where: eq(musyawarahTable.id, id),

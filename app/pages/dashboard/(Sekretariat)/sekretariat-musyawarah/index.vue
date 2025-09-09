@@ -129,7 +129,7 @@
         <AppTambahExport
           :add-permission="sekretariatEdit"
           :add-function="clickAdd"
-          path="proker"
+          path="musyawarah/export"
         />
       </div>
       <AppTable

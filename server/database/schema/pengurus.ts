@@ -37,8 +37,8 @@ export const laporanMusyawarahTable = sqliteTable("laporan_musyawarah", {
   bidang: text({
     enum: roles,
   }).notNull(),
-  laporan: text({ mode: "json" }).$type<string[]>().notNull(),
-  keterangan: text({ mode: "json" }).$type<string[]>().notNull(),
+  laporan: text().notNull(),
+  keterangan: text().notNull(),
   ...timestamp,
 });
 

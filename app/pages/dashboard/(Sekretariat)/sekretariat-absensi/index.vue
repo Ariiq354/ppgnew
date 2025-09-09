@@ -13,7 +13,7 @@
   });
   constantStore.setTitle("Sekretariat / Absensi");
 
-  const musyId = ref<number>(0);
+  const musyId = ref<number>();
   const { data: musyOption, status: statusMusy } = await useFetch(
     `${APIBASE}/options/musyawarah`
   );

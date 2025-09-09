@@ -20,8 +20,8 @@ export const laporanMusyawarahMuslimunTable = sqliteTable(
     musyawarahId: int()
       .notNull()
       .references(() => musyawarahMuslimunTable.id, { onDelete: "cascade" }),
-    laporan: text({ mode: "json" }).$type<string[]>().notNull(),
-    keterangan: text({ mode: "json" }).$type<string[]>().notNull(),
+    laporan: text().notNull(),
+    keterangan: text().notNull(),
     ...timestamp,
   }
 );
@@ -50,7 +50,6 @@ export const kelasKelompokTable = sqliteTable("kelas_kelompok", {
   kelompokId: int()
     .notNull()
     .references(() => kelompokTable.id, { onDelete: "cascade" }),
-  absensi: int({ mode: "boolean" }).notNull().default(false),
   ...timestamp,
 });
 

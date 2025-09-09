@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const body = await readValidatedBody(event, (b) =>
     OMusyawarahBidangCreate.parse(b)
   );
-  if (user.role !== "admin" && user.role!.split(",")[1] !== body.bidang) {
+  if (user.role !== "admin" && user.role !== body.bidang) {
     throw createError({
       statusCode: 403,
       statusMessage: "Unauthorized",
