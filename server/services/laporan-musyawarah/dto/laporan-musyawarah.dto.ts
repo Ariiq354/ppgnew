@@ -11,8 +11,14 @@ export const OLaporanMusyawarahCreate = z.object({
 export type TLaporanMusyawarahCreate = z.infer<typeof OLaporanMusyawarahCreate>;
 
 export const OLaporanMusyawarahList = z.object({
-  musyawarahId: z.number(),
+  musyawarahId: z.coerce.number(),
   bidang: z.enum(roles),
 });
 
 export type TLaporanMusyawarahList = z.infer<typeof OLaporanMusyawarahList>;
+
+export const OLaporanMusyawarahDelete = z.object({
+  ...ODeleteSchema.def.shape,
+  musyawarahId: z.number(),
+  bidang: z.enum(roles),
+});

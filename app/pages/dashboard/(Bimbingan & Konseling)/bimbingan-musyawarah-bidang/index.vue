@@ -60,7 +60,7 @@
   async function clickDelete(ids: number[]) {
     openConfirmModal(
       "/musyawarah-bidang/bidang/bimbingan_konseling",
-      ids,
+      { id: ids },
       refresh
     );
   }

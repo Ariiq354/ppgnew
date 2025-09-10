@@ -58,7 +58,11 @@
   }
 
   async function clickDelete(ids: number[]) {
-    openConfirmModal("/musyawarah-bidang/bidang/kurikulum", ids, refresh);
+    openConfirmModal(
+      "/musyawarah-bidang/bidang/kurikulum",
+      { id: ids },
+      refresh
+    );
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {

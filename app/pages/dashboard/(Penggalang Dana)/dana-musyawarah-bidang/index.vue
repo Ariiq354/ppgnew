@@ -58,7 +58,11 @@
   }
 
   async function clickDelete(ids: number[]) {
-    openConfirmModal("/musyawarah-bidang/bidang/penggalang_dana", ids, refresh);
+    openConfirmModal(
+      "/musyawarah-bidang/bidang/penggalang_dana",
+      { id: ids },
+      refresh
+    );
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {

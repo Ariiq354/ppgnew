@@ -54,7 +54,7 @@
   }
 
   async function clickDelete(ids: number[]) {
-    openConfirmModal("/musyawarah", ids, refresh);
+    openConfirmModal("/musyawarah", { id: ids }, refresh);
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {

@@ -4,7 +4,7 @@
 
   const props = defineProps<{
     path: string;
-    ids: number[];
+    body: object;
     refresh: () => void;
   }>();
 
@@ -16,9 +16,7 @@
     try {
       await $fetch(`${APIBASE}${props.path}`, {
         method: "DELETE",
-        body: {
-          id: props.ids,
-        },
+        body: props.body,
       });
       props.refresh();
       emit("close", false);

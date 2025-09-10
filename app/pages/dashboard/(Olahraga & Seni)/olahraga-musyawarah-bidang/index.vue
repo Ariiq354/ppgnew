@@ -58,7 +58,11 @@
   }
 
   async function clickDelete(ids: number[]) {
-    openConfirmModal("/musyawarah-bidang/bidang/olahraga_seni", ids, refresh);
+    openConfirmModal(
+      "/musyawarah-bidang/bidang/olahraga_seni",
+      { id: ids },
+      refresh
+    );
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {

@@ -58,7 +58,11 @@
   }
 
   async function clickDelete(ids: number[]) {
-    openConfirmModal("/musyawarah-bidang/bidang/tenaga_pendidik", ids, refresh);
+    openConfirmModal(
+      "/musyawarah-bidang/bidang/tenaga_pendidik",
+      { id: ids },
+      refresh
+    );
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {

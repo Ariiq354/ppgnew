@@ -58,7 +58,11 @@
   }
 
   async function clickDelete(ids: number[]) {
-    openConfirmModal("/musyawarah-bidang/bidang/kemandirian", ids, refresh);
+    openConfirmModal(
+      "/musyawarah-bidang/bidang/kemandirian",
+      { id: ids },
+      refresh
+    );
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {

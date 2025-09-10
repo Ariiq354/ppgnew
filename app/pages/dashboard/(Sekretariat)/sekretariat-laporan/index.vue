@@ -2,6 +2,7 @@
   import { useAuthStore } from "~/stores/auth";
   import { useConstantStore } from "~/stores/constant";
   import { APIBASE } from "~/utils";
+  import { schema, getInitialFormData } from "./_constants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -10,16 +11,120 @@
   });
   constantStore.setTitle("Sekretariat / Laporan");
 
-  const musyId = ref<number>();
+  const musyId = ref<number | undefined>();
   const { data: musyOption, status: statusMusy } = await useFetch(
     `${APIBASE}/options/musyawarah`
   );
+
+  const { data, status, refresh } = await useFetch(
+    `${APIBASE}/musyawarah/laporan`,
+    {
+      query: {
+        musyawarahId: musyId,
+        bidang: "sekretariat",
+      },
+      immediate: false,
+    }
+  );
+  watchOnce(musyId, () => refresh());
+
+  const state = ref(getInitialFormData());
+
+  const { isLoading, execute } = useSubmit();
+  async function onSubmit() {
+    const basePath = `${APIBASE}/musyawarah/laporan`;
+    await execute({
+      path: state.value.id ? `${basePath}/${state.value.id}` : basePath,
+      method: state.value.id ? "PUT" : "POST",
+      body: {
+        musyawarahId: musyId.value,
+        ...state.value,
+      },
+      onSuccess() {
+        state.value.laporan = "";
+        state.value.keterangan = "";
+        state.value.id = undefined;
+        modalOpen.value = false;
+        refresh();
+      },
+      onError(error) {
+        useToastError("Submit Failed", error.data.message);
+      },
+    });
+  }
+
+  async function clickDelete(ids: number[]) {
+    openConfirmModal(
+      "/musyawarah/laporan",
+      { id: ids, musyawarahId: musyId, bidang: "sekretariat" },
+      refresh
+    );
+  }
+
+  const viewStatus = ref(false);
+  const modalOpen = ref(false);
+  function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
+    modalOpen.value = true;
+    state.value = {
+      bidang: itemData.bidang,
+      keterangan: itemData.keterangan,
+      laporan: itemData.laporan,
+      id: itemData.id,
+    };
+    viewStatus.value = false;
+  }
 </script>
 
 <template>
   <Title>Sekretariat | Laporan</Title>
+  <LazyUModal
+    v-model:open="modalOpen"
+    :title="(viewStatus ? 'Detail' : 'Edit') + ' Laporan Musyawarah'"
+    class="max-w-4xl"
+  >
+    <template #body>
+      <UForm
+        id="laporan-form-modal"
+        :schema="schema"
+        :state="state"
+        class="space-y-4"
+        @submit="onSubmit"
+      >
+        <div class="flex flex-col gap-4">
+          <UFormField label="Judul" name="laporan" size="xl">
+            <UInput
+              v-model="state.laporan"
+              placeholder="Masukkan judul untuk laporan ini"
+            />
+          </UFormField>
+          <UFormField label="Keterangan" name="keterangan" size="xl">
+            <TipTapEditor v-model="state.keterangan" />
+          </UFormField>
+        </div>
+      </UForm>
+    </template>
+    <template #footer>
+      <UButton
+        icon="i-lucide-x"
+        variant="ghost"
+        :disabled="isLoading"
+        @click="modalOpen = false"
+      >
+        {{ viewStatus ? "Tutup" : "Batal" }}
+      </UButton>
+      <UButton
+        v-if="!viewStatus"
+        type="submit"
+        icon="i-lucide-check"
+        :loading="isLoading"
+        form="laporan-form-modal"
+      >
+        Simpan
+      </UButton>
+    </template>
+  </LazyUModal>
   <main class="grid grid-cols-1 gap-4 md:grid-cols-3">
-    <UCard class="md:col-span-2">
+    <UCard v-if="sekretariatManage" class="md:col-span-2">
       <h1 class="text-2xl font-bold sm:text-3xl">Hasil Musyawarah</h1>
       <p class="text-muted mb-8 text-sm sm:text-base">
         Pencatatan rangkuman hasil musyawarah
@@ -40,25 +145,125 @@
           </template>
         </USelectMenu>
       </UFormField>
-
-      <div class="mt-8 flex flex-col gap-4">
-        <UFormField label="Judul" size="xl">
-          <UInput placeholder="Masukkan judul untuk laporan ini" />
-        </UFormField>
-        <UFormField label="Judul" size="xl">
-          <UTextarea placeholder="Judul" :rows="20" />
-        </UFormField>
-      </div>
+      <hr class="my-8 border-t-2 border-(--ui-border)" />
+      <UForm
+        id="laporan-form"
+        :schema="schema"
+        :state="state"
+        class="space-y-4"
+        @submit="onSubmit"
+      >
+        <div class="flex flex-col gap-4">
+          <UFormField label="Judul" name="laporan" size="xl">
+            <UInput
+              v-model="state.laporan"
+              placeholder="Masukkan judul untuk laporan ini"
+            />
+          </UFormField>
+          <UFormField label="Keterangan" name="keterangan" size="xl">
+            <TipTapEditor v-model="state.keterangan" />
+          </UFormField>
+        </div>
+      </UForm>
       <div class="mt-8 flex w-full justify-end">
-        <UButton icon="i-lucide-save">Simpan Laporan</UButton>
+        <UButton
+          type="submit"
+          form="laporan-form"
+          icon="i-lucide-save"
+          :disabled="!musyId"
+          :loading="isLoading"
+        >
+          Simpan Laporan
+        </UButton>
       </div>
     </UCard>
-    <UCard class="h-fit">
+    <UCard v-if="!sekretariatManage" class="md:col-span-3">
+      <h1 class="text-2xl font-bold sm:text-3xl">Hasil Musyawarah</h1>
+      <p class="text-muted mb-8 text-sm sm:text-base">
+        Pencatatan rangkuman hasil musyawarah
+      </p>
+      <UFormField label="Musyawarah" size="xl">
+        <USelectMenu
+          v-model="musyId"
+          :items="musyOption?.data"
+          :disabled="statusMusy === 'pending'"
+          value-key="id"
+          label-key="nama"
+          placeholder="Pilih Musyawarah"
+        >
+          <template #item="{ item }">
+            <div>
+              <b class="font-bold">{{ item.nama }}</b> - {{ item.tanggal }}
+            </div>
+          </template>
+        </USelectMenu>
+      </UFormField>
+    </UCard>
+    <UCard class="h-fit" :class="{ 'md:col-span-3': !sekretariatManage }">
       <h1 class="text-2xl font-bold sm:text-3xl">Daftar Laporan</h1>
       <p v-if="!musyId" class="text-muted mb-8 text-sm sm:text-base">
         Pilih musyawarah untuk melihat laporan
       </p>
+      <p v-else class="text-muted mb-8 text-sm sm:text-base">
+        Laporan
+        {{ musyOption?.data.find((i) => i.id === musyId!)?.nama }}
+      </p>
       <div class="flex items-center justify-center"></div>
+      <div v-if="!musyId" class="py-8 text-center">
+        <UIcon
+          name="i-lucide-file-text"
+          class="text-muted mx-auto mb-2 h-8 w-8"
+        />
+        <p class="text-muted">Pilih musyawarah untuk melihat laporan</p>
+      </div>
+      <div v-else-if="status === 'pending'" class="py-8 text-center">
+        <UIcon
+          name="i-lucide-loader-circle"
+          class="text-muted mx-auto mb-2 h-8 w-8 animate-spin"
+        />
+        <p class="text-muted">Loading</p>
+      </div>
+      <div v-else-if="data?.data.length === 0" class="py-8 text-center">
+        <UIcon
+          name="i-lucide-file-text"
+          class="text-muted mx-auto mb-2 h-8 w-8"
+        />
+        <p class="text-muted">Belum ada laporan</p>
+        <p class="text-muted text-sm">
+          Buat laporan pertama untuk musyawarah ini
+        </p>
+      </div>
+      <div v-else class="space-y-4">
+        <div
+          v-for="item in data?.data"
+          :key="item.id"
+          class="border-muted flex items-center justify-between rounded-md border p-2 transition-all duration-300 hover:shadow-md"
+        >
+          <p class="text-lg font-bold">
+            {{ item.laporan }}
+          </p>
+          <div v-if="sekretariatManage">
+            <UTooltip text="Edit">
+              <UButton
+                icon="i-lucide-pencil"
+                variant="ghost"
+                class="rounded-full"
+                @click="clickUpdate(item)"
+              />
+            </UTooltip>
+
+            <UTooltip text="Hapus">
+              <UButton
+                icon="i-lucide-trash-2"
+                variant="ghost"
+                color="error"
+                class="rounded-full"
+                @click="clickDelete([item.id])"
+              />
+            </UTooltip>
+          </div>
+        </div>
+      </div>
     </UCard>
   </main>
 </template>

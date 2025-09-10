@@ -70,7 +70,7 @@
   }
 
   async function clickDelete(ids: number[]) {
-    openConfirmModal("/pengajar", ids, refresh);
+    openConfirmModal("/pengajar", { id: ids }, refresh);
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {

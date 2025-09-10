@@ -68,7 +68,7 @@
   }
 
   async function clickDelete(ids: number[]) {
-    openConfirmModal("/pengurus", ids, refresh);
+    openConfirmModal("/pengurus", { id: ids }, refresh);
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
@@ -80,87 +80,87 @@
 
 <template>
   <Title>Sekretariat | Pengurus</Title>
+  <LazyUModal
+    v-model:open="modalOpen"
+    :title="
+      (state.id ? (viewStatus ? 'Detail' : 'Edit') : 'Tambah') + ' Pengurus'
+    "
+    class="max-w-4xl"
+  >
+    <template #body>
+      <UForm
+        id="pengurus-form"
+        :schema="schema"
+        :state="state"
+        class="space-y-4"
+        accept="image/png,image/jpeg,image/webp"
+        @submit="onSubmit"
+      >
+        <UFormField label="Foto Diri" name="foto">
+          <AppUploadImage
+            v-model:file="state.file"
+            v-model:foto="state.foto"
+            :disabled="isLoading || !pengurusEdit || viewStatus"
+          />
+        </UFormField>
+        <UFormField label="Nama" name="nama">
+          <UInput
+            v-model="state.nama"
+            :disabled="isLoading || !pengurusEdit || viewStatus"
+          />
+        </UFormField>
+        <UFormField label="Bidang" name="bidang">
+          <USelectMenu
+            v-model="state.bidang"
+            placeholder="Pilih bidang"
+            :items="bidangOptions"
+            value-key="value"
+            label-key="name"
+            :disabled="isLoading || !pengurusEdit || viewStatus"
+          />
+        </UFormField>
+        <UFormField label="Pendidikan Terakhir" name="pendidikan">
+          <UInput
+            v-model="state.pendidikan"
+            :disabled="isLoading || !pengurusEdit || viewStatus"
+          />
+        </UFormField>
+        <UFormField label="Tempat Lahir" name="tempatLahir">
+          <UInput
+            v-model="state.tempatLahir"
+            :disabled="isLoading || !pengurusEdit || viewStatus"
+          />
+        </UFormField>
+        <UFormField label="Tanggal Lahir" name="tanggalLahir">
+          <UInput
+            v-model="state.tanggalLahir"
+            type="date"
+            :disabled="isLoading || !pengurusEdit || viewStatus"
+          />
+        </UFormField>
+      </UForm>
+    </template>
+    <template #footer>
+      <UButton
+        icon="i-lucide-x"
+        variant="ghost"
+        :disabled="isLoading"
+        @click="modalOpen = false"
+      >
+        {{ viewStatus ? "Tutup" : "Batal" }}
+      </UButton>
+      <UButton
+        v-if="!viewStatus"
+        type="submit"
+        icon="i-lucide-check"
+        :loading="isLoading"
+        form="pengurus-form"
+      >
+        Simpan
+      </UButton>
+    </template>
+  </LazyUModal>
   <main>
-    <LazyUModal
-      v-model:open="modalOpen"
-      :title="
-        (state.id ? (viewStatus ? 'Detail' : 'Edit') : 'Tambah') + ' Pengurus'
-      "
-      class="max-w-4xl"
-    >
-      <template #body>
-        <UForm
-          id="pengurus-form"
-          :schema="schema"
-          :state="state"
-          class="space-y-4"
-          accept="image/png,image/jpeg,image/webp"
-          @submit="onSubmit"
-        >
-          <UFormField label="Foto Diri" name="foto">
-            <AppUploadImage
-              v-model:file="state.file"
-              v-model:foto="state.foto"
-              :disabled="isLoading || !pengurusEdit || viewStatus"
-            />
-          </UFormField>
-          <UFormField label="Nama" name="nama">
-            <UInput
-              v-model="state.nama"
-              :disabled="isLoading || !pengurusEdit || viewStatus"
-            />
-          </UFormField>
-          <UFormField label="Bidang" name="bidang">
-            <USelectMenu
-              v-model="state.bidang"
-              placeholder="Pilih bidang"
-              :items="bidangOptions"
-              value-key="value"
-              label-key="name"
-              :disabled="isLoading || !pengurusEdit || viewStatus"
-            />
-          </UFormField>
-          <UFormField label="Pendidikan Terakhir" name="pendidikan">
-            <UInput
-              v-model="state.pendidikan"
-              :disabled="isLoading || !pengurusEdit || viewStatus"
-            />
-          </UFormField>
-          <UFormField label="Tempat Lahir" name="tempatLahir">
-            <UInput
-              v-model="state.tempatLahir"
-              :disabled="isLoading || !pengurusEdit || viewStatus"
-            />
-          </UFormField>
-          <UFormField label="Tanggal Lahir" name="tanggalLahir">
-            <UInput
-              v-model="state.tanggalLahir"
-              type="date"
-              :disabled="isLoading || !pengurusEdit || viewStatus"
-            />
-          </UFormField>
-        </UForm>
-      </template>
-      <template #footer>
-        <UButton
-          icon="i-lucide-x"
-          variant="ghost"
-          :disabled="isLoading"
-          @click="modalOpen = false"
-        >
-          {{ viewStatus ? "Tutup" : "Batal" }}
-        </UButton>
-        <UButton
-          v-if="!viewStatus"
-          type="submit"
-          icon="i-lucide-check"
-          :loading="isLoading"
-          form="pengurus-form"
-        >
-          Simpan
-        </UButton>
-      </template>
-    </LazyUModal>
     <UCard>
       <div class="mb-6 flex gap-2 md:gap-4">
         <UInput
