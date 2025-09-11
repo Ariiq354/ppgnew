@@ -61,17 +61,15 @@
     );
   }
 
-  const viewStatus = ref(false);
   const modalOpen = ref(false);
-  function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
+  const stateView = ref(getInitialFormData());
+  function clickView(itemData: ExtractObjectType<typeof data.value>) {
     modalOpen.value = true;
-    state.value = {
+    stateView.value = {
       bidang: itemData.bidang,
       keterangan: itemData.keterangan,
       laporan: itemData.laporan,
-      id: itemData.id,
     };
-    viewStatus.value = false;
   }
 </script>
 
@@ -79,48 +77,15 @@
   <Title>Sekretariat | Laporan</Title>
   <LazyUModal
     v-model:open="modalOpen"
-    :title="(viewStatus ? 'Detail' : 'Edit') + ' Laporan Musyawarah'"
+    title="Detail Laporan Musyawarah"
     class="max-w-4xl"
   >
     <template #body>
-      <UForm
-        id="laporan-form-modal"
-        :schema="schema"
-        :state="state"
-        class="space-y-4"
-        @submit="onSubmit"
-      >
-        <div class="flex flex-col gap-4">
-          <UFormField label="Judul" name="laporan" size="xl">
-            <UInput
-              v-model="state.laporan"
-              placeholder="Masukkan judul untuk laporan ini"
-            />
-          </UFormField>
-          <UFormField label="Keterangan" name="keterangan" size="xl">
-            <TipTapEditor v-model="state.keterangan" />
-          </UFormField>
-        </div>
-      </UForm>
-    </template>
-    <template #footer>
-      <UButton
-        icon="i-lucide-x"
-        variant="ghost"
-        :disabled="isLoading"
-        @click="modalOpen = false"
-      >
-        {{ viewStatus ? "Tutup" : "Batal" }}
-      </UButton>
-      <UButton
-        v-if="!viewStatus"
-        type="submit"
-        icon="i-lucide-check"
-        :loading="isLoading"
-        form="laporan-form-modal"
-      >
-        Simpan
-      </UButton>
+      <div class="flex flex-col gap-4">
+        <h1 class="text-xl font-bold">{{ stateView.laporan }}</h1>
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <p class="prose prose-base" v-html="stateView.keterangan" />
+      </div>
     </template>
   </LazyUModal>
   <main class="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -238,30 +203,20 @@
           v-for="item in data?.data"
           :key="item.id"
           class="border-muted flex items-center justify-between rounded-md border p-2 transition-all duration-300 hover:shadow-md"
+          @click="clickView(item)"
         >
           <p class="text-lg font-bold">
             {{ item.laporan }}
           </p>
-          <div v-if="sekretariatManage">
-            <UTooltip text="Edit">
-              <UButton
-                icon="i-lucide-pencil"
-                variant="ghost"
-                class="rounded-full"
-                @click="clickUpdate(item)"
-              />
-            </UTooltip>
-
-            <UTooltip text="Hapus">
-              <UButton
-                icon="i-lucide-trash-2"
-                variant="ghost"
-                color="error"
-                class="rounded-full"
-                @click="clickDelete([item.id])"
-              />
-            </UTooltip>
-          </div>
+          <UTooltip v-if="sekretariatManage" text="Hapus">
+            <UButton
+              icon="i-lucide-trash-2"
+              variant="ghost"
+              color="error"
+              class="rounded-full"
+              @click.stop="clickDelete([item.id])"
+            />
+          </UTooltip>
         </div>
       </div>
     </UCard>
