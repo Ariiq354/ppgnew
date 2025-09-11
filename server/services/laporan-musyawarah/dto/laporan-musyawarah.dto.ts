@@ -12,7 +12,11 @@ export type TLaporanMusyawarahCreate = z.infer<typeof OLaporanMusyawarahCreate>;
 
 export const OLaporanMusyawarahList = z.object({
   musyawarahId: z.coerce.number(),
-  bidang: z.enum(roles),
+  bidang: z.optional(z.enum(roles)),
+});
+
+export const OSummaryLaporanMusyawarahList = z.object({
+  musyawarahId: z.coerce.number(),
 });
 
 export type TLaporanMusyawarahList = z.infer<typeof OLaporanMusyawarahList>;

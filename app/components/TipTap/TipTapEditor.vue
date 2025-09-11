@@ -8,7 +8,7 @@
     editorProps: {
       attributes: {
         class:
-          "ring ring-inset ring-accented focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary h-48 p-4 overflow-y-auto prose max-w-none prose-base outline-none rounded-md",
+          "ring ring-inset ring-accented focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary min-h-48 p-4 overflow-y-auto prose max-w-none prose-base outline-none rounded-md",
       },
     },
     content: editorData.value,

@@ -1,4 +1,4 @@
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq, inArray, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
   laporanMusyawarahTable,
@@ -14,6 +14,15 @@ export async function getLaporanMusyawarahByMusyawarahId(
   daerahId: number,
   query: TLaporanMusyawarahList
 ) {
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(laporanMusyawarahTable.musyawarahId, query.musyawarahId),
+    eq(musyawarahTable.daerahId, daerahId),
+  ];
+
+  if (query.bidang) {
+    conditions.push(eq(laporanMusyawarahTable.bidang, query.bidang));
+  }
+
   try {
     const data = await db
       .select({
@@ -28,13 +37,7 @@ export async function getLaporanMusyawarahByMusyawarahId(
         musyawarahTable,
         eq(laporanMusyawarahTable.musyawarahId, musyawarahTable.id)
       )
-      .where(
-        and(
-          eq(laporanMusyawarahTable.musyawarahId, query.musyawarahId),
-          eq(laporanMusyawarahTable.bidang, query.bidang),
-          eq(musyawarahTable.daerahId, daerahId)
-        )
-      );
+      .where(and(...conditions));
 
     return {
       data,
@@ -69,36 +72,6 @@ export async function createLaporanMusyawarah(
     });
   } catch (error) {
     console.error("Failed to create Laporan Musyawarah", error);
-    throw InternalError;
-  }
-}
-
-export async function updateLaporanMusyawarah(
-  id: number,
-  daerahId: number,
-  data: TLaporanMusyawarahCreate
-) {
-  try {
-    const exist = await db.query.musyawarahTable.findFirst({
-      where: and(
-        eq(musyawarahTable.id, data.musyawarahId),
-        eq(musyawarahTable.daerahId, daerahId)
-      ),
-    });
-
-    if (!exist) {
-      throw createError({
-        status: 403,
-        message: "Musyawarah tidak ada di daerah ini",
-      });
-    }
-
-    return await db
-      .update(laporanMusyawarahTable)
-      .set(data)
-      .where(and(eq(laporanMusyawarahTable.id, id)));
-  } catch (error) {
-    console.error("Failed to Update Absensi Pengurus", error);
     throw InternalError;
   }
 }

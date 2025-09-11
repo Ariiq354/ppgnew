@@ -144,3 +144,18 @@ export const roles = [
   "tahfidz",
   "media_publikasi",
 ] as const;
+
+export enum BidangDisplay {
+  sekretariat = "Sekretariat",
+  kurikulum = "Kurikulum",
+  tenaga_pendidik = "Tenaga Pendidik",
+  penggalang_dana = "Penggalang Dana",
+  sarana_prasarana = "Sarana Prasarana",
+  kemandirian = "Kemandirian",
+  keputrian = "Keputrian",
+  bimbingan_konseling = "Bimbingan Konseling",
+  olahraga_seni = "Olahraga & Seni",
+  kegiatan_muda_mudi = "Kegiatan Muda Mudi",
+  tahfidz = "Tahfidz",
+  media_publikasi = "Media Publikasi",
+}
