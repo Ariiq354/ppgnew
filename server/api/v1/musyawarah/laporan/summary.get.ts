@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
       if (!acc[item.bidang]) {
         acc[item.bidang] = [];
       }
-      acc[item.bidang].push({
+      acc[item.bidang]!.push({
         laporan: item.laporan,
         keterangan: item.keterangan,
       });

@@ -1,15 +1,21 @@
 import * as XLSX from "xlsx";
-import { z } from "zod/mini";
 import { getAllProkerExport } from "~~/server/services/proker/proker.service";
-import { roles } from "~~/shared/permission";
+import { OBidangSchema } from "~~/server/utils/dto";
+import { viewWhitelist } from "~~/shared/permission";
 
 export default defineEventHandler(async (event) => {
-  const user = await permissionGuard(event, { proker: ["view"] });
+  const user = await permissionGuard(event, { musyawarah_bidang: ["view"] });
 
-  const bidang = getRouterParam(event, "bidang");
-  const parsed = z.enum(roles).parse(bidang);
+  const query = await getValidatedQuery(event, (q) => OBidangSchema.parse(q));
 
-  const data = await getAllProkerExport(user.daerahId, parsed);
+  if (!viewWhitelist.has(user.role!) && user.role !== query.bidang) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Unauthorized",
+    });
+  }
+
+  const data = await getAllProkerExport(user.daerahId, query.bidang);
 
   const worksheet = XLSX.utils.json_to_sheet(data);
   const workbook = XLSX.utils.book_new();
@@ -25,7 +31,7 @@ export default defineEventHandler(async (event) => {
   setHeader(
     event,
     "Content-Disposition",
-    `attachment; filename="proker-${new Date().toISOString().slice(0, 10)}.xlsx"`
+    `attachment; filename="musyawarah-${new Date().toISOString().slice(0, 10)}.xlsx"`
   );
 
   return buf;

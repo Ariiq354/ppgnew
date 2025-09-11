@@ -48,6 +48,24 @@ export async function getAllMusyawarahBidang(
   }
 }
 
+export async function getAllMusyawarahBidangExport(
+  daerahId: number,
+  bidang: (typeof roles)[number]
+) {
+  return await db
+    .select({
+      nama: musyawarahBidangTable.nama,
+      tanggal: musyawarahBidangTable.tanggal,
+    })
+    .from(musyawarahBidangTable)
+    .where(
+      and(
+        eq(musyawarahBidangTable.daerahId, daerahId),
+        eq(musyawarahBidangTable.bidang, bidang)
+      )
+    );
+}
+
 export async function getAllMusyawarahBidangOptions(
   daerahId: number,
   bidang: (typeof roles)[number]

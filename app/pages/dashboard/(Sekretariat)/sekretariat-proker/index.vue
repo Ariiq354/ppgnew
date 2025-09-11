@@ -59,7 +59,7 @@
   }
 
   async function clickDelete(ids: number[]) {
-    openConfirmModal("/proker/bidang/sekretariat", { id: ids }, refresh);
+    openConfirmModal("/proker", { id: ids, bidang: "sekretariat" }, refresh);
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
@@ -176,7 +176,7 @@
         <AppTambahExport
           :add-permission="prokerEdit"
           :add-function="clickAdd"
-          path="proker/export/sekretariat"
+          path="proker/export?bidang=sekretariat"
         />
       </div>
       <AppTable

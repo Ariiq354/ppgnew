@@ -1,10 +1,18 @@
 import { z } from "zod/mini";
+import { roles } from "~~/shared/permission";
 
 export const ODeleteSchema = z.object({
   id: z.array(z.number()),
 });
 
-export type TDeleteDto = z.infer<typeof ODeleteSchema>;
+export const ODeleteBidangSchema = z.object({
+  id: z.array(z.number()),
+  bidang: z.enum(roles),
+});
+
+export const OBidangSchema = z.object({
+  bidang: z.enum(roles),
+});
 
 export const OPagination = z.object({
   page: z._default(z.coerce.number(), 1),

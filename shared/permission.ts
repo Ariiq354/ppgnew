@@ -46,13 +46,32 @@ export const rolesDeclaration = {
   }),
 
   daerah: ac.newRole({
+    proker: ["view"],
+    musyawarah_bidang: ["view"],
+    musyawarah_ppg: ["view"],
+    sekretariat: ["view"],
+    kurikulum: ["view"],
+    tenaga_pendidik: ["view"],
+    penggalang_dana: ["view"],
+    sarana_prasarana: ["view"],
+    kemandirian: ["view"],
+    keputrian: ["view"],
+    bimbingan_konseling: ["view"],
+    olahraga_seni: ["view"],
+    kegiatan_muda_mudi: ["view"],
+    tahfidz: ["view"],
+    media_publikasi: ["view"],
+    pjp_desa: ["view"],
+    pjp_kelompok: ["view"],
     desa: ["manage"],
     kelompok: ["manage"],
   }),
   desa: ac.newRole({
+    pjp_desa: ["manage", "view"],
     kelompok: ["manage"],
   }),
   kelompok: ac.newRole({
+    pjp_kelompok: ["manage", "view"],
     dokumen: ["download"],
   }),
 
@@ -144,6 +163,8 @@ export const roles = [
   "tahfidz",
   "media_publikasi",
 ] as const;
+
+export const viewWhitelist = new Set(["admin", "daerah"]);
 
 export enum BidangDisplay {
   sekretariat = "Sekretariat",
