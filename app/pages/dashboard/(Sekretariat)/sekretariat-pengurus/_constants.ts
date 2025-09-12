@@ -1,10 +1,21 @@
+import { UAvatar } from "#components";
+import type { TableColumn } from "@nuxt/ui";
 import { z } from "zod/mini";
 import { roles } from "~~/shared/permission";
 
-export const columns = [
+export const columns: TableColumn<any>[] = [
   {
     accessorKey: "nama",
     header: "Nama Pengurus",
+    cell: ({ row }) => {
+      return h("div", { class: "flex items-center gap-2" }, [
+        h(UAvatar, {
+          src: row.original.foto,
+          alt: row.original.nama,
+        }),
+        row.original.nama,
+      ]);
+    },
   },
   {
     accessorKey: "bidang",

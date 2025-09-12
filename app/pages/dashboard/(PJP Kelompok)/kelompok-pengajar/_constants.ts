@@ -1,3 +1,4 @@
+import { UAvatar } from "#components";
 import type { TableColumn } from "@nuxt/ui";
 import { z } from "zod/mini";
 import { formatDate } from "~/utils/format";
@@ -6,6 +7,15 @@ export const columns: TableColumn<any>[] = [
   {
     accessorKey: "nama",
     header: "Nama Pengajar",
+    cell: ({ row }) => {
+      return h("div", { class: "flex items-center gap-2" }, [
+        h(UAvatar, {
+          src: row.original.foto,
+          alt: row.original.nama,
+        }),
+        row.original.nama,
+      ]);
+    },
   },
   {
     accessorKey: "gender",
