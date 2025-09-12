@@ -14,7 +14,7 @@ export const columns: TableColumn<any>[] = [
   {
     accessorKey: "tanggalTugas",
     header: "Tanggal Tugas",
-    cell: ({ row }) => formatDate(row.original.tanggalTugas),
+    cell: ({ row }) => formatDate(row.getValue("tanggalTugas")),
   },
   {
     accessorKey: "status",

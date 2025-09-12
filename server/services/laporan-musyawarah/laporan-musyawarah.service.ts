@@ -107,7 +107,7 @@ export async function deleteLaporanMusyawarah(
         )
       );
   } catch (error) {
-    console.error("Failed to delete Absensi Pengurus", error);
+    console.error("Failed to delete Laporan Musyawarah", error);
     throw InternalError;
   }
 }

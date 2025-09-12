@@ -10,7 +10,7 @@ export const schema = z.object({
 
 export const getInitialFormData = (): Schema => ({
   id: undefined,
-  bidang: "sekretariat",
+  bidang: "kurikulum",
   laporan: "",
   keterangan: "",
 });
