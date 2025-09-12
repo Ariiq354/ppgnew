@@ -59,7 +59,11 @@
   }
 
   async function clickDelete(ids: number[]) {
-    openConfirmModal("/proker/bidang/penggalang_dana", { id: ids }, refresh);
+    openConfirmModal(
+      "/proker",
+      { id: ids, bidang: "penggalang_dana" },
+      refresh
+    );
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
@@ -176,7 +180,7 @@
         <AppTambahExport
           :add-permission="prokerEdit"
           :add-function="clickAdd"
-          path="proker"
+          path="proker/export?bidang=penggalang_dana"
         />
       </div>
       <AppTable
