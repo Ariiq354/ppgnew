@@ -59,7 +59,7 @@
   }
 
   async function clickDelete(ids: number[]) {
-    openConfirmModal("/proker/bidang/olahraga_seni", { id: ids }, refresh);
+    openConfirmModal("/proker", { id: ids, bidang: "olahraga_seni" }, refresh);
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
@@ -176,7 +176,7 @@
         <AppTambahExport
           :add-permission="prokerEdit"
           :add-function="clickAdd"
-          path="proker"
+          path="proker/export?bidang=olahraga_seni"
         />
       </div>
       <AppTable
