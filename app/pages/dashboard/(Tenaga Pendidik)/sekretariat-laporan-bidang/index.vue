@@ -7,21 +7,26 @@
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
   const laporanManage = authStore.hasPermission({
-    sekretariat: ["manage"],
+    tenaga_pendidik: ["manage"],
   });
-  constantStore.setTitle("Sekretariat / Laporan");
+  constantStore.setTitle("Tenaga Pendidik / Laporan Bidang");
 
   const musyId = ref<number | undefined>();
   const { data: musyOption, status: statusMusy } = await useFetch(
-    `${APIBASE}/options/musyawarah`
+    `${APIBASE}/options/musyawarah-bidang`,
+    {
+      query: {
+        bidang: "tenaga_pendidik",
+      },
+    }
   );
 
   const { data, status, refresh } = await useFetch(
-    `${APIBASE}/musyawarah/laporan`,
+    `${APIBASE}/musyawarah-bidang/laporan`,
     {
       query: {
         musyawarahId: musyId,
-        bidang: "sekretariat",
+        bidang: "tenaga_pendidik",
       },
       immediate: false,
     }
@@ -32,7 +37,7 @@
 
   const { isLoading, execute } = useSubmit();
   async function onSubmit() {
-    const basePath = `${APIBASE}/musyawarah/laporan`;
+    const basePath = `${APIBASE}/musyawarah-bidang/laporan`;
     await execute({
       path: state.value.id ? `${basePath}/${state.value.id}` : basePath,
       method: state.value.id ? "PUT" : "POST",
@@ -55,8 +60,8 @@
 
   async function clickDelete(ids: number[]) {
     openConfirmModal(
-      "/musyawarah/laporan",
-      { id: ids, musyawarahId: musyId, bidang: "sekretariat" },
+      "/musyawarah-bidang/laporan",
+      { id: ids, musyawarahId: musyId, bidang: "tenaga_pendidik" },
       refresh
     );
   }
@@ -66,7 +71,7 @@
   function clickView(itemData: ExtractObjectType<typeof data.value>) {
     modalOpen.value = true;
     stateView.value = {
-      bidang: itemData.bidang,
+      bidang: "tenaga_pendidik",
       keterangan: itemData.keterangan,
       laporan: itemData.laporan,
     };
@@ -74,10 +79,10 @@
 </script>
 
 <template>
-  <Title>Sekretariat | Laporan</Title>
+  <Title>Tenaga Pendidik | Laporan Bidang</Title>
   <LazyUModal
     v-model:open="modalOpen"
-    title="Detail Laporan Musyawarah"
+    title="Detail Laporan Musyawarah Bidang"
     class="max-w-4xl"
   >
     <template #body>

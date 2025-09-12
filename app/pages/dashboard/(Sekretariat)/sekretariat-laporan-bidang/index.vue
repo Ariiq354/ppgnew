@@ -6,7 +6,7 @@
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
-  const sekretariatManage = authStore.hasPermission({
+  const laporanManage = authStore.hasPermission({
     sekretariat: ["manage"],
   });
   constantStore.setTitle("Sekretariat / Laporan Bidang");
@@ -94,7 +94,7 @@
     </template>
   </LazyUModal>
   <main class="grid grid-cols-1 gap-4 md:grid-cols-3">
-    <UCard v-if="sekretariatManage" class="md:col-span-2">
+    <UCard v-if="laporanManage" class="md:col-span-2">
       <h1 class="text-2xl font-bold sm:text-3xl">Hasil Musyawarah</h1>
       <p class="text-muted mb-8 text-sm sm:text-base">
         Pencatatan rangkuman hasil musyawarah
@@ -147,7 +147,7 @@
         </UButton>
       </div>
     </UCard>
-    <UCard v-if="!sekretariatManage" class="md:col-span-3">
+    <UCard v-if="!laporanManage" class="md:col-span-3">
       <h1 class="text-2xl font-bold sm:text-3xl">Hasil Musyawarah</h1>
       <p class="text-muted mb-8 text-sm sm:text-base">
         Pencatatan rangkuman hasil musyawarah
@@ -169,7 +169,7 @@
         </USelectMenu>
       </UFormField>
     </UCard>
-    <UCard class="h-fit" :class="{ 'md:col-span-3': !sekretariatManage }">
+    <UCard class="h-fit" :class="{ 'md:col-span-3': !laporanManage }">
       <h1 class="text-2xl font-bold sm:text-3xl">Daftar Laporan</h1>
       <p v-if="!musyId" class="text-muted mb-8 text-sm sm:text-base">
         Pilih musyawarah untuk melihat laporan
@@ -213,7 +213,7 @@
           <p class="text-lg font-bold">
             {{ item.laporan }}
           </p>
-          <UTooltip v-if="sekretariatManage" text="Hapus">
+          <UTooltip v-if="laporanManage" text="Hapus">
             <UButton
               icon="i-lucide-trash-2"
               variant="ghost"

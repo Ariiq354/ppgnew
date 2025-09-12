@@ -7,9 +7,9 @@
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
   const laporanManage = authStore.hasPermission({
-    sekretariat: ["manage"],
+    tenaga_pendidik: ["manage"],
   });
-  constantStore.setTitle("Sekretariat / Laporan");
+  constantStore.setTitle("Tenaga Pendidik / Laporan");
 
   const musyId = ref<number | undefined>();
   const { data: musyOption, status: statusMusy } = await useFetch(
@@ -21,7 +21,7 @@
     {
       query: {
         musyawarahId: musyId,
-        bidang: "sekretariat",
+        bidang: "tenaga_pendidik",
       },
       immediate: false,
     }
@@ -56,7 +56,7 @@
   async function clickDelete(ids: number[]) {
     openConfirmModal(
       "/musyawarah/laporan",
-      { id: ids, musyawarahId: musyId, bidang: "sekretariat" },
+      { id: ids, musyawarahId: musyId, bidang: "tenaga_pendidik" },
       refresh
     );
   }
@@ -74,7 +74,7 @@
 </script>
 
 <template>
-  <Title>Sekretariat | Laporan</Title>
+  <Title>Tenaga Pendidik | Laporan</Title>
   <LazyUModal
     v-model:open="modalOpen"
     title="Detail Laporan Musyawarah"

@@ -8,7 +8,7 @@
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
-  const sekretariatManage = authStore.hasPermission({
+  const absensiManage = authStore.hasPermission({
     sekretariat: ["manage"],
   });
   constantStore.setTitle("Sekretariat / Absensi");
@@ -159,7 +159,7 @@
             @update:model-value="searchDebounced"
           />
           <UButton
-            v-if="sekretariatManage"
+            v-if="absensiManage"
             icon="i-lucide-save"
             class="text-white dark:bg-blue-600 hover:dark:bg-blue-600/75"
             :disabled="!isChange"
@@ -188,7 +188,7 @@
               size="xl"
               :items="['Hadir', 'Izin', 'Tanpa Keterangan']"
               default-value="Tanpa Keterangan"
-              :disabled="!sekretariatManage || statusAbsensi === 'pending'"
+              :disabled="!absensiManage || statusAbsensi === 'pending'"
               @update:model-value="
                 (event) => handleStatusChange(row.original.id, event)
               "
@@ -200,7 +200,7 @@
                 state.find((i) => i.pengurusId === row.original.id)?.detail
               "
               placeholder="Keterangan..."
-              :disabled="!sekretariatManage || statusAbsensi === 'pending'"
+              :disabled="!absensiManage || statusAbsensi === 'pending'"
               @update:model-value="
                 (event) => {
                   ((state.find(
