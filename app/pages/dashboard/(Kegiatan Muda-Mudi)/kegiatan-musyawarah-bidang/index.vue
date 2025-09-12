@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "#ui/types";
-  import { useSubmit } from "~/composables/function";
-  import { openConfirmModal } from "~/composables/modal";
-  import { useToastError } from "~/composables/toast";
-  import { useAuthStore } from "~/stores/auth";
-  import { useConstantStore } from "~/stores/constant";
   import { APIBASE, type ExtractObjectType } from "~/utils";
-  import type { Schema } from "./_constants";
   import { columns, getInitialFormData, schema } from "./_constants";
+  import type { Schema } from "./_constants";
+  import { useConstantStore } from "~/stores/constant";
+  import { useAuthStore } from "~/stores/auth";
+  import { useSubmit } from "~/composables/function";
+  import { useToastError } from "~/composables/toast";
+  import { openConfirmModal } from "~/composables/modal";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -59,8 +59,8 @@
 
   async function clickDelete(ids: number[]) {
     openConfirmModal(
-      "/musyawarah-bidang/bidang/kegiatan_muda_mudi",
-      { id: ids },
+      "/musyawarah-bidang",
+      { id: ids, bidang: "kegiatan_muda_mudi" },
       refresh
     );
   }
@@ -137,7 +137,7 @@
         <AppTambahExport
           :add-permission="musyBidangManage"
           :add-function="clickAdd"
-          path="proker"
+          path="musyawarah-bidang/export?bidang=kegiatan_muda_mudi"
         />
       </div>
       <AppTable

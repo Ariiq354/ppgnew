@@ -17,7 +17,7 @@
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
-  const prokerManage = authStore.hasPermission({ proker: ["manage"] });
+  const prokerEdit = authStore.hasPermission({ proker: ["manage"] });
   constantStore.setTitle("Kegiatan Muda-Mudi / Proker");
 
   const state = ref(getInitialFormData());
@@ -59,7 +59,11 @@
   }
 
   async function clickDelete(ids: number[]) {
-    openConfirmModal("/proker/bidang/kegiatan_muda_mudi", { id: ids }, refresh);
+    openConfirmModal(
+      "/proker",
+      { id: ids, bidang: "kegiatan_muda_mudi" },
+      refresh
+    );
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
@@ -91,7 +95,7 @@
             <UInput
               v-model="state.mingguKe"
               type="number"
-              :disabled="isLoading || !prokerManage || viewStatus"
+              :disabled="isLoading || !prokerEdit || viewStatus"
             />
           </UFormField>
           <UFormField label="Bulan" name="bulan">
@@ -99,39 +103,39 @@
               v-model="state.bulan"
               placeholder="Pilih bulan"
               :items="bulanOptions"
-              :disabled="isLoading || !prokerManage || viewStatus"
+              :disabled="isLoading || !prokerEdit || viewStatus"
             />
           </UFormField>
           <UFormField label="Tahun" name="tahun">
             <UInput
               v-model="state.tahun"
-              :disabled="isLoading || !prokerManage || viewStatus"
+              :disabled="isLoading || !prokerEdit || viewStatus"
               type="number"
             />
           </UFormField>
           <UFormField label="Peserta" name="peserta">
             <UInput
               v-model="state.peserta"
-              :disabled="isLoading || !prokerManage || viewStatus"
+              :disabled="isLoading || !prokerEdit || viewStatus"
             />
           </UFormField>
           <UFormField label="Biaya" name="biaya">
             <UInput
               v-model="state.biaya"
               type="number"
-              :disabled="isLoading || !prokerManage || viewStatus"
+              :disabled="isLoading || !prokerEdit || viewStatus"
             />
           </UFormField>
           <UFormField label="Kegiatan" name="kegiatan">
             <UTextarea
               v-model="state.kegiatan"
-              :disabled="isLoading || !prokerManage || viewStatus"
+              :disabled="isLoading || !prokerEdit || viewStatus"
             />
           </UFormField>
           <UFormField label="Keterangan" name="keterangan">
             <UTextarea
               v-model="state.keterangan"
-              :disabled="isLoading || !prokerManage || viewStatus"
+              :disabled="isLoading || !prokerEdit || viewStatus"
             />
           </UFormField>
           <UFormField label="Status" name="status">
@@ -139,7 +143,7 @@
               v-model="state.status"
               placeholder="Pilih status"
               :items="statusOptions"
-              :disabled="isLoading || !prokerManage || viewStatus"
+              :disabled="isLoading || !prokerEdit || viewStatus"
             />
           </UFormField>
         </UForm>
@@ -174,9 +178,9 @@
           @update:model-value="searchDebounced"
         />
         <AppTambahExport
-          :add-permission="prokerManage"
+          :add-permission="prokerEdit"
           :add-function="clickAdd"
-          path="proker"
+          path="proker/export?bidang=kegiatan_muda_mudi"
         />
       </div>
       <AppTable
@@ -186,8 +190,8 @@
         :loading="status === 'pending'"
         :total="data?.metadata.total"
         enumerate
-        :deletable="prokerManage"
-        :editable="prokerManage"
+        :deletable="prokerEdit"
+        :editable="prokerEdit"
         viewable
         selectable
         pagination
