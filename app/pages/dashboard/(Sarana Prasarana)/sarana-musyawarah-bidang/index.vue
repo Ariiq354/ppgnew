@@ -59,8 +59,8 @@
 
   async function clickDelete(ids: number[]) {
     openConfirmModal(
-      "/musyawarah-bidang/bidang/sarana_prasarana",
-      { id: ids },
+      "/musyawarah-bidang",
+      { id: ids, bidang: "sarana_prasarana" },
       refresh
     );
   }
@@ -137,7 +137,7 @@
         <AppTambahExport
           :add-permission="musyBidangManage"
           :add-function="clickAdd"
-          path="proker"
+          path="musyawarah-bidang/export?bidang=sarana_prasarana"
         />
       </div>
       <AppTable
