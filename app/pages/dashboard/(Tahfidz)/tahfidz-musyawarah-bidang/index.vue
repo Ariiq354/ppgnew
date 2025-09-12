@@ -58,7 +58,11 @@
   }
 
   async function clickDelete(ids: number[]) {
-    openConfirmModal("/musyawarah-bidang/bidang/tahfidz", { id: ids }, refresh);
+    openConfirmModal(
+      "/musyawarah-bidang",
+      { id: ids, bidang: "tahfidz" },
+      refresh
+    );
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
@@ -133,7 +137,7 @@
         <AppTambahExport
           :add-permission="musyBidangManage"
           :add-function="clickAdd"
-          path="proker"
+          path="musyawarah-bidang/export?bidang=tahfidz"
         />
       </div>
       <AppTable
