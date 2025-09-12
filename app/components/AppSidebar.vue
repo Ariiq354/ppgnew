@@ -1221,33 +1221,6 @@
                   },
                 },
                 {
-                  label: "Daftar Kelas",
-                  to: "/dashboard/kelompok-kelas",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
-                },
-                {
-                  label: "Absensi",
-                  to: "/dashboard/kelompok-absensi",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
-                },
-                {
-                  label: "Monitoring Kehadiran",
-                  to: "/dashboard/kelompok-monitoring-kehadiran",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
-                },
-                {
                   label: "Daftar Konseling",
                   to: "/dashboard/kelompok-konseling",
                   onSelect: () => {
@@ -1256,6 +1229,39 @@
                     }
                   },
                 },
+                {
+                  label: "Pengajian Generus",
+                  children: [
+                    {
+                      label: "Daftar Kelas",
+                      to: "/dashboard/kelompok-kelas",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                    {
+                      label: "Absensi",
+                      to: "/dashboard/kelompok-absensi",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                    {
+                      label: "Monitoring Kehadiran",
+                      to: "/dashboard/kelompok-monitoring-kehadiran",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                  ],
+                },
+
                 {
                   label: "Musyawarah",
                   children: [
