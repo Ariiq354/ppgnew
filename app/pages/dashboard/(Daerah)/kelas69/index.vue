@@ -92,38 +92,50 @@
                   <td class="text-center">{{ index2 + 1 }}</td>
                   <td>{{ item2.name }}</td>
                   <td class="text-center">
-                    {{ 0 }}
+                    {{ data?.data.kelompokCounts[item2.id]?.countLaki6 ?? 0 }}
                   </td>
                   <td class="text-center">
-                    {{ 0 }}
+                    {{
+                      data?.data.kelompokCounts[item2.id]?.countPerempuan6 ?? 0
+                    }}
                   </td>
                   <td class="text-center">
-                    {{ 0 }}
+                    {{ data?.data.kelompokCounts[item2.id]?.countLaki9 ?? 0 }}
                   </td>
                   <td class="text-center">
-                    {{ 0 }}
+                    {{
+                      data?.data.kelompokCounts[item2.id]?.countPerempuan9 ?? 0
+                    }}
                   </td>
                   <td class="text-center">
-                    {{ 0 }}
+                    {{
+                      Object.values(
+                        data?.data.kelompokCounts[item2.id] ?? {}
+                      ).reduce((a, i) => (a += i), 0)
+                    }}
                   </td>
                 </tr>
                 <tr>
                   <td />
                   <td class="text-center font-bold">Subtotal</td>
                   <td class="text-center font-bold">
-                    {{ 0 }}
+                    {{ data?.data.desaCounts[item.id]?.countLaki6 ?? 0 }}
                   </td>
                   <td class="text-center font-bold">
-                    {{ 0 }}
+                    {{ data?.data.desaCounts[item.id]?.countPerempuan6 ?? 0 }}
                   </td>
                   <td class="text-center font-bold">
-                    {{ 0 }}
+                    {{ data?.data.desaCounts[item.id]?.countLaki9 ?? 0 }}
                   </td>
                   <td class="text-center font-bold">
-                    {{ 0 }}
+                    {{ data?.data.desaCounts[item.id]?.countPerempuan9 ?? 0 }}
                   </td>
                   <td class="text-center font-bold">
-                    {{ 0 }}
+                    {{
+                      Object.values(
+                        data?.data.desaCounts[item.id] ?? {}
+                      ).reduce((a, i) => (a += i), 0)
+                    }}
                   </td>
                 </tr>
               </template>
@@ -131,27 +143,38 @@
                 <td rowspan="2" />
                 <td rowspan="2" class="text-center font-bold">GRAND TOTAL</td>
                 <td class="text-center font-bold">
-                  {{ 0 }}
+                  {{ data?.data.grandTotal.countLaki6 }}
                 </td>
                 <td class="text-center font-bold">
-                  {{ 0 }}
+                  {{ data?.data.grandTotal.countPerempuan6 }}
                 </td>
                 <td class="text-center font-bold">
-                  {{ 0 }}
+                  {{ data?.data.grandTotal.countLaki9 }}
                 </td>
                 <td class="text-center font-bold">
-                  {{ 0 }}
+                  {{ data?.data.grandTotal.countPerempuan9 }}
                 </td>
                 <td rowspan="2" class="text-center font-bold">
-                  {{ 0 }}
+                  {{
+                    Object.values(data?.data.grandTotal ?? {}).reduce(
+                      (a, i) => (a += i),
+                      0
+                    )
+                  }}
                 </td>
               </tr>
               <tr class="highlight">
                 <td colspan="2" class="text-center font-bold">
-                  {{ 0 }}
+                  {{
+                    (data?.data.grandTotal.countLaki6 ?? 0) +
+                    (data?.data.grandTotal.countPerempuan6 ?? 0)
+                  }}
                 </td>
                 <td colspan="2" class="text-center font-bold">
-                  {{ 0 }}
+                  {{
+                    (data?.data.grandTotal.countLaki9 ?? 0) +
+                    (data?.data.grandTotal.countPerempuan9 ?? 0)
+                  }}
                 </td>
               </tr>
             </tbody>

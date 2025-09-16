@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
 
   const data = await getAllGenerus(user.daerahId, query);
 
-  data.data = data.data.map((i) => ({
+  const newData = data.data.map((i) => ({
     ...i,
     kelasSekolah: getCurrentKelas(i.kelasSekolah, i.tanggalMasukKelas),
   }));
@@ -24,5 +24,5 @@ export default defineEventHandler(async (event) => {
     totalPage: Math.ceil(data.total / query.limit),
   };
 
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(newData, metadata);
 });

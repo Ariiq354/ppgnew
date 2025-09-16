@@ -4,7 +4,12 @@ import * as XLSX from "xlsx";
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["view"] });
 
-  const data = await getAllGenerusExport(user.kelompokId!);
+  let data = await getAllGenerusExport(user.kelompokId!);
+
+  data = data.map((i) => ({
+    ...i,
+    kelasSekolah: getCurrentKelas(i.kelasSekolah, i.tanggalMasukKelas),
+  }));
 
   const worksheet = XLSX.utils.json_to_sheet(data);
   const workbook = XLSX.utils.book_new();

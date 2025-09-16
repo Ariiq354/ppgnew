@@ -85,10 +85,24 @@ export async function getAllGenerusExport(kelompokId: number) {
       kelasPengajian: generusTable.kelasPengajian,
       namaOrtu: generusTable.namaOrtu,
       noTeleponOrtu: generusTable.noTeleponOrtu,
+      tanggalMasukKelas: generusTable.tanggalMasukKelas,
       foto: generusTable.foto,
     })
     .from(generusTable)
     .where(eq(generusTable.kelompokId, kelompokId));
+}
+
+export async function getAllGenerus69(daerahId: number) {
+  return await db
+    .select({
+      kelasSekolah: generusTable.kelasSekolah,
+      tanggalMasukKelas: generusTable.tanggalMasukKelas,
+      kelompokId: generusTable.kelompokId,
+      desaId: generusTable.desaId,
+      gender: generusTable.gender,
+    })
+    .from(generusTable)
+    .where(eq(generusTable.daerahId, daerahId));
 }
 
 export async function getAllGenerusChart(daerahId: number) {
