@@ -1,10 +1,10 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 import { roles } from "../../../shared/permission";
-import { timestamp } from "./common";
+import { createdUpdated } from "./common";
 import { daerahTable } from "./wilayah";
 
-export const pengurusTable = sqliteTable("pengurus", {
-  id: int().primaryKey({ autoIncrement: true }),
+export const pengurusTable = pgTable("pengurus", {
+  id: serial().primaryKey(),
   nama: text().notNull(),
   tempatLahir: text().notNull(),
   tanggalLahir: text().notNull(),
@@ -13,25 +13,25 @@ export const pengurusTable = sqliteTable("pengurus", {
     enum: roles,
   }).notNull(),
   foto: text().notNull(),
-  daerahId: int()
+  daerahId: integer()
     .notNull()
     .references(() => daerahTable.id, { onDelete: "cascade" }),
-  ...timestamp,
+  ...createdUpdated,
 });
 
-export const musyawarahTable = sqliteTable("musyawarah", {
-  id: int().primaryKey({ autoIncrement: true }),
+export const musyawarahTable = pgTable("musyawarah", {
+  id: serial().primaryKey(),
   nama: text().notNull(),
   tanggal: text().notNull(),
-  daerahId: int()
+  daerahId: integer()
     .notNull()
     .references(() => daerahTable.id, { onDelete: "cascade" }),
-  ...timestamp,
+  ...createdUpdated,
 });
 
-export const laporanMusyawarahTable = sqliteTable("laporan_musyawarah", {
-  id: int().primaryKey({ autoIncrement: true }),
-  musyawarahId: int()
+export const laporanMusyawarahTable = pgTable("laporan_musyawarah", {
+  id: serial().primaryKey(),
+  musyawarahId: integer()
     .notNull()
     .references(() => musyawarahTable.id, { onDelete: "cascade" }),
   bidang: text({
@@ -39,18 +39,18 @@ export const laporanMusyawarahTable = sqliteTable("laporan_musyawarah", {
   }).notNull(),
   laporan: text().notNull(),
   keterangan: text().notNull(),
-  ...timestamp,
+  ...createdUpdated,
 });
 
-export const absensiPengurusTable = sqliteTable("absensi_pengurus", {
-  id: int().primaryKey({ autoIncrement: true }),
-  musyawarahId: int()
+export const absensiPengurusTable = pgTable("absensi_pengurus", {
+  id: serial().primaryKey(),
+  musyawarahId: integer()
     .notNull()
     .references(() => musyawarahTable.id, { onDelete: "cascade" }),
-  pengurusId: int()
+  pengurusId: integer()
     .notNull()
     .references(() => pengurusTable.id, { onDelete: "cascade" }),
   keterangan: text().notNull(),
   detail: text().notNull().default(""),
-  ...timestamp,
+  ...createdUpdated,
 });

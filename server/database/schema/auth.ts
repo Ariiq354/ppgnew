@@ -1,52 +1,55 @@
-import {
-  sqliteTable,
-  text,
-  int,
-  uniqueIndex,
-  index,
-} from "drizzle-orm/sqlite-core";
-import { timestamp } from "./common";
+import { createdUpdated } from "./common";
 import { daerahTable, desaTable, kelompokTable } from "./wilayah";
+import {
+  boolean,
+  index,
+  integer,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  uniqueIndex,
+} from "drizzle-orm/pg-core";
 
-export const userTable = sqliteTable(
+export const userTable = pgTable(
   "user",
   {
-    id: int().primaryKey({ autoIncrement: true }),
+    id: serial().primaryKey(),
     name: text().notNull(),
     username: text().notNull(),
     displayUsername: text().notNull(),
     email: text().notNull().unique(),
-    emailVerified: int({ mode: "boolean" }).notNull(),
+    emailVerified: boolean().notNull(),
     image: text(),
     role: text(),
-    daerahId: int()
+    daerahId: integer()
       .notNull()
       .references(() => daerahTable.id, { onDelete: "cascade" }),
-    desaId: int().references(() => desaTable.id, { onDelete: "cascade" }),
-    kelompokId: int().references(() => kelompokTable.id, {
+    desaId: integer().references(() => desaTable.id, { onDelete: "cascade" }),
+    kelompokId: integer().references(() => kelompokTable.id, {
       onDelete: "cascade",
     }),
-    banned: int({ mode: "boolean" }),
+    banned: boolean(),
     banReason: text(),
-    banExpires: int({ mode: "timestamp" }),
-    ...timestamp,
+    banExpires: timestamp({ withTimezone: true }),
+    ...createdUpdated,
   },
   (table) => [uniqueIndex("email_idx").on(table.email)]
 );
 
-export const session = sqliteTable(
+export const session = pgTable(
   "session",
   {
-    id: int().primaryKey({ autoIncrement: true }),
-    expiresAt: int({ mode: "timestamp" }).notNull(),
+    id: serial().primaryKey(),
+    expiresAt: timestamp({ withTimezone: true }).notNull(),
     token: text().notNull().unique(),
     ipAddress: text(),
     userAgent: text(),
-    userId: int()
+    userId: integer()
       .notNull()
       .references(() => userTable.id, { onDelete: "cascade" }),
     impersonatedBy: text(),
-    ...timestamp,
+    ...createdUpdated,
   },
   (table) => [
     index("userid_idx_session").on(table.userId),
@@ -54,39 +57,35 @@ export const session = sqliteTable(
   ]
 );
 
-export const account = sqliteTable(
+export const account = pgTable(
   "account",
   {
-    id: int().primaryKey({ autoIncrement: true }),
+    id: serial().primaryKey(),
     accountId: text().notNull(),
     providerId: text().notNull(),
-    userId: int()
+    userId: integer()
       .notNull()
       .references(() => userTable.id, { onDelete: "cascade" }),
     accessToken: text(),
     refreshToken: text(),
     idToken: text(),
-    accessTokenExpiresAt: int({
-      mode: "timestamp",
-    }),
-    refreshTokenExpiresAt: int({
-      mode: "timestamp",
-    }),
+    accessTokenExpiresAt: timestamp({ withTimezone: true }),
+    refreshTokenExpiresAt: timestamp({ withTimezone: true }),
     scope: text(),
     password: text(),
-    ...timestamp,
+    ...createdUpdated,
   },
   (table) => [index("userid_idx").on(table.userId)]
 );
 
-export const verification = sqliteTable(
+export const verification = pgTable(
   "verification",
   {
-    id: int().primaryKey({ autoIncrement: true }),
+    id: serial().primaryKey(),
     identifier: text().notNull(),
     value: text().notNull(),
-    expiresAt: int({ mode: "timestamp" }).notNull(),
-    ...timestamp,
+    expiresAt: timestamp({ withTimezone: true }).notNull(),
+    ...createdUpdated,
   },
   (table) => [index("identifier_idx").on(table.identifier)]
 );

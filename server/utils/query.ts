@@ -1,16 +1,15 @@
-import { sql } from "drizzle-orm";
+import type { PgSelect } from "drizzle-orm/pg-core";
 import { db } from "../database";
-import type { SQLiteSelect } from "drizzle-orm/sqlite-core";
 
-export async function getTotalQuery<T extends SQLiteSelect>(
+export async function getTotalQuery<T extends PgSelect>(
   query: T
 ): Promise<number> {
-  const newQuery = query.as("sq");
+  return await db.$count(query);
 
-  const countResult = await db
-    .select({
-      count: sql<number>`COUNT(*)`,
-    })
-    .from(newQuery);
-  return countResult[0]?.count ?? 0;
+  // const countResult = await db
+  //   .select({
+  //     count: sql<number>`COUNT(*)`,
+  //   })
+  //   .from(sql`(${query}) as sq`);
+  // return countResult[0]?.count ?? 0;
 }

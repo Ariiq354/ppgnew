@@ -1,4 +1,4 @@
-import { drizzle } from "drizzle-orm/libsql";
+import { drizzle } from "drizzle-orm/neon-http";
 import * as auth from "./schema/auth";
 import * as wilayah from "./schema/wilayah";
 import * as dokumen from "./schema/dokumen";
@@ -16,8 +16,9 @@ import Env from "../../shared/env";
 
 export const db = drizzle({
   connection: {
-    url: Env.DATABASE_URL,
-    authToken: Env.DATABASE_AUTH_TOKEN,
+    // url: Env.DATABASE_URL,
+    // authToken: Env.DATABASE_AUTH_TOKEN,
+    connectionString: Env.DATABASE_URL,
   },
   schema: {
     ...auth,

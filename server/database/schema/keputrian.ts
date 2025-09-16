@@ -1,30 +1,30 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { daerahTable } from "./wilayah";
-import { timestamp } from "./common";
+import { createdUpdated } from "./common";
 import { generusTable } from "./generus";
+import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 
-export const kelasKeputrianTable = sqliteTable("kelas_keputrian", {
-  id: int().primaryKey({ autoIncrement: true }),
+export const kelasKeputrianTable = pgTable("kelas_keputrian", {
+  id: serial().primaryKey(),
   nama: text().notNull(),
   tanggal: text().notNull(),
-  daerahId: int()
+  daerahId: integer()
     .notNull()
     .references(() => daerahTable.id, { onDelete: "cascade" }),
-  ...timestamp,
+  ...createdUpdated,
 });
 
-export const absensiGenerusKeputrianTable = sqliteTable(
+export const absensiGenerusKeputrianTable = pgTable(
   "absensi_generus_keputrian",
   {
-    id: int().primaryKey({ autoIncrement: true }),
-    kelasId: int()
+    id: serial().primaryKey(),
+    kelasId: integer()
       .notNull()
       .references(() => kelasKeputrianTable.id, { onDelete: "cascade" }),
-    generusId: int()
+    generusId: integer()
       .notNull()
       .references(() => generusTable.id, { onDelete: "cascade" }),
     keterangan: text().notNull(),
     detail: text().notNull().default(""),
-    ...timestamp,
+    ...createdUpdated,
   }
 );

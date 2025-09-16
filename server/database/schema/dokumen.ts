@@ -1,15 +1,15 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { timestamp } from "./common";
+import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
+import { createdUpdated } from "./common";
 import { daerahTable } from "./wilayah";
 
-export const dokumenTable = sqliteTable("dokumen", {
-  id: int().primaryKey({ autoIncrement: true }),
+export const dokumenTable = pgTable("dokumen", {
+  id: serial().primaryKey(),
   name: text().notNull(),
   url: text().notNull(),
-  size: int().notNull(),
+  size: integer().notNull(),
   type: text().notNull(),
-  daerahId: int()
+  daerahId: integer()
     .notNull()
     .references(() => daerahTable.id, { onDelete: "cascade" }),
-  ...timestamp,
+  ...createdUpdated,
 });

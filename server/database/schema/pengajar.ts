@@ -1,9 +1,9 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { daerahTable, desaTable, kelompokTable } from "./wilayah";
-import { timestamp } from "./common";
+import { createdUpdated } from "./common";
+import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 
-export const pengajarTable = sqliteTable("pengajar", {
-  id: int().primaryKey({ autoIncrement: true }),
+export const pengajarTable = pgTable("pengajar", {
+  id: serial().primaryKey(),
   nama: text().notNull(),
   tempatLahir: text().notNull(),
   tanggalLahir: text().notNull(),
@@ -13,16 +13,16 @@ export const pengajarTable = sqliteTable("pengajar", {
   tanggalTugas: text().notNull(),
   noTelepon: text().notNull(),
   foto: text().notNull(),
-  daerahId: int()
+  daerahId: integer()
     .notNull()
     .references(() => daerahTable.id, { onDelete: "cascade" }),
-  desaId: int()
+  desaId: integer()
     .notNull()
     .references(() => desaTable.id, { onDelete: "cascade" }),
-  kelompokId: int()
+  kelompokId: integer()
     .notNull()
     .references(() => kelompokTable.id, {
       onDelete: "cascade",
     }),
-  ...timestamp,
+  ...createdUpdated,
 });

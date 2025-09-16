@@ -1,83 +1,80 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { daerahTable, desaTable, kelompokTable } from "./wilayah";
-import { timestamp } from "./common";
+import { createdUpdated } from "./common";
 import { generusTable } from "./generus";
+import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 
-export const musyawarahMuslimunTable = sqliteTable("musyawarah_muslimun", {
-  id: int().primaryKey({ autoIncrement: true }),
+export const musyawarahMuslimunTable = pgTable("musyawarah_muslimun", {
+  id: serial().primaryKey(),
   nama: text().notNull(),
   tanggal: text().notNull(),
-  kelompokId: int()
+  kelompokId: integer()
     .notNull()
     .references(() => kelompokTable.id, { onDelete: "cascade" }),
-  ...timestamp,
+  ...createdUpdated,
 });
 
-export const laporanMusyawarahMuslimunTable = sqliteTable(
+export const laporanMusyawarahMuslimunTable = pgTable(
   "laporan_musyawarah_muslimun",
   {
-    id: int().primaryKey({ autoIncrement: true }),
-    musyawarahId: int()
+    id: serial().primaryKey(),
+    musyawarahId: integer()
       .notNull()
       .references(() => musyawarahMuslimunTable.id, { onDelete: "cascade" }),
     laporan: text().notNull(),
     keterangan: text().notNull(),
-    ...timestamp,
+    ...createdUpdated,
   }
 );
 
-export const jamaahTable = sqliteTable("jamaah", {
-  id: int().primaryKey({ autoIncrement: true }),
+export const jamaahTable = pgTable("jamaah", {
+  id: serial().primaryKey(),
   nama: text().notNull(),
-  daerahId: int()
+  daerahId: integer()
     .notNull()
     .references(() => daerahTable.id, { onDelete: "cascade" }),
-  desaId: int()
+  desaId: integer()
     .notNull()
     .references(() => desaTable.id, { onDelete: "cascade" }),
-  kelompokId: int()
+  kelompokId: integer()
     .notNull()
     .references(() => kelompokTable.id, {
       onDelete: "cascade",
     }),
-  ...timestamp,
+  ...createdUpdated,
 });
 
-export const kelasKelompokTable = sqliteTable("kelas_kelompok", {
-  id: int().primaryKey({ autoIncrement: true }),
+export const kelasKelompokTable = pgTable("kelas_kelompok", {
+  id: serial().primaryKey(),
   nama: text().notNull(),
   tanggal: text().notNull(),
-  kelompokId: int()
+  kelompokId: integer()
     .notNull()
     .references(() => kelompokTable.id, { onDelete: "cascade" }),
-  ...timestamp,
+  ...createdUpdated,
 });
 
-export const absensiJamaahKelompokTable = sqliteTable(
-  "absensi_jamaah_kelompok",
-  {
-    id: int().primaryKey({ autoIncrement: true }),
-    kelasId: int()
-      .notNull()
-      .references(() => kelasKelompokTable.id, { onDelete: "cascade" }),
-    jamaahId: int()
-      .notNull()
-      .references(() => jamaahTable.id, { onDelete: "cascade" }),
-    keterangan: text().notNull(),
-    detail: text().notNull().default(""),
-    ...timestamp,
-  }
-);
+export const absensiJamaahKelompokTable = pgTable("absensi_jamaah_kelompok", {
+  id: serial().primaryKey(),
+  kelasId: integer()
+    .notNull()
+    .references(() => kelasKelompokTable.id, { onDelete: "cascade" }),
+  jamaahId: integer()
+    .notNull()
+    .references(() => jamaahTable.id, { onDelete: "cascade" }),
+  keterangan: text().notNull(),
+  detail: text().notNull().default(""),
+  ...createdUpdated,
+});
 
-export const generusKonselingTable = sqliteTable("generus_konseling", {
-  id: int().primaryKey({ autoIncrement: true }),
-  generusId: int()
+export const generusKonselingTable = pgTable("generus_konseling", {
+  id: serial().primaryKey(),
+  generusId: integer()
     .notNull()
     .references(() => generusTable.id, { onDelete: "cascade" }),
   keterangan: text().notNull(),
   status: text({ enum: ["Baru", "Diproses", "Selesai"] }).notNull(),
-  daerahId: int()
+  daerahId: integer()
     .notNull()
     .references(() => daerahTable.id, { onDelete: "cascade" }),
-  ...timestamp,
+  ...createdUpdated,
 });

@@ -1,9 +1,16 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { daerahTable, desaTable, kelompokTable } from "./wilayah";
-import { timestamp } from "./common";
+import { createdUpdated } from "./common";
+import {
+  integer,
+  json,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 
-export const generusTable = sqliteTable("generus", {
-  id: int().primaryKey({ autoIncrement: true }),
+export const generusTable = pgTable("generus", {
+  id: serial().primaryKey(),
   nama: text().notNull(),
   noTelepon: text().notNull(),
   noTeleponOrtu: text().notNull(),
@@ -14,41 +21,41 @@ export const generusTable = sqliteTable("generus", {
   kelasSekolah: text().notNull(),
   kelasPengajian: text().notNull(),
   foto: text().notNull(),
-  status: text({ mode: "json" }).$type<string[]>().notNull(),
-  tanggalMasukKelas: int({ mode: "timestamp" }).notNull(),
-  daerahId: int()
+  status: json().$type<string[]>().notNull(),
+  tanggalMasukKelas: timestamp({ withTimezone: true }).notNull(),
+  daerahId: integer()
     .notNull()
     .references(() => daerahTable.id, { onDelete: "cascade" }),
-  desaId: int()
+  desaId: integer()
     .notNull()
     .references(() => desaTable.id, { onDelete: "cascade" }),
-  kelompokId: int()
+  kelompokId: integer()
     .notNull()
     .references(() => kelompokTable.id, {
       onDelete: "cascade",
     }),
-  ...timestamp,
+  ...createdUpdated,
 });
 
-export const kelasTable = sqliteTable("kelas", {
-  id: int().primaryKey({ autoIncrement: true }),
+export const kelasTable = pgTable("kelas", {
+  id: serial().primaryKey(),
   nama: text().notNull(),
   tanggal: text().notNull(),
-  kelompokId: int()
+  kelompokId: integer()
     .notNull()
     .references(() => kelompokTable.id, { onDelete: "cascade" }),
-  ...timestamp,
+  ...createdUpdated,
 });
 
-export const absensiGenerusTable = sqliteTable("absensi_generus", {
-  id: int().primaryKey({ autoIncrement: true }),
-  kelasId: int()
+export const absensiGenerusTable = pgTable("absensi_generus", {
+  id: serial().primaryKey(),
+  kelasId: integer()
     .notNull()
     .references(() => kelasTable.id, { onDelete: "cascade" }),
-  generusId: int()
+  generusId: integer()
     .notNull()
     .references(() => generusTable.id, { onDelete: "cascade" }),
   keterangan: text().notNull(),
   detail: text().notNull().default(""),
-  ...timestamp,
+  ...createdUpdated,
 });

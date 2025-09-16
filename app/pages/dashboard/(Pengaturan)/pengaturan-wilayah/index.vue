@@ -137,10 +137,10 @@
     modalOpen.value = true;
   }
 
-  async function handleDelete(type: WilayahType, id: number) {
+  async function handleDelete(type: WilayahType, ids: number) {
     wilayah.value = type;
 
-    openConfirmModal(type, [id], () => refreshData(type));
+    openConfirmModal(`/${type}`, { id: [ids] }, () => refreshData(type));
   }
 
   function openEditModal(type: WilayahType, id: number, name: string) {

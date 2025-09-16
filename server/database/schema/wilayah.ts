@@ -1,29 +1,29 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { timestamp } from "./common";
+import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
+import { createdUpdated } from "./common";
 import { relations } from "drizzle-orm";
 
-export const daerahTable = sqliteTable("daerah", {
-  id: int().primaryKey({ autoIncrement: true }),
+export const daerahTable = pgTable("daerah", {
+  id: serial().primaryKey(),
   name: text().notNull(),
-  ...timestamp,
+  ...createdUpdated,
 });
 
-export const desaTable = sqliteTable("desa", {
-  id: int().primaryKey({ autoIncrement: true }),
+export const desaTable = pgTable("desa", {
+  id: serial().primaryKey(),
   name: text().notNull(),
-  daerahId: int()
+  daerahId: integer()
     .notNull()
     .references(() => daerahTable.id, { onDelete: "cascade" }),
-  ...timestamp,
+  ...createdUpdated,
 });
 
-export const kelompokTable = sqliteTable("kelompok", {
-  id: int().primaryKey({ autoIncrement: true }),
+export const kelompokTable = pgTable("kelompok", {
+  id: serial().primaryKey(),
   name: text().notNull(),
-  desaId: int()
+  desaId: integer()
     .notNull()
     .references(() => desaTable.id, { onDelete: "cascade" }),
-  ...timestamp,
+  ...createdUpdated,
 });
 
 export const daerahRelations = relations(daerahTable, ({ many }) => ({

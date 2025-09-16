@@ -1,12 +1,9 @@
-import { sql } from "drizzle-orm";
-import { int } from "drizzle-orm/sqlite-core";
+import { timestamp } from "drizzle-orm/pg-core";
 
-export const timestamp = {
-  createdAt: int({ mode: "timestamp" })
-    .notNull()
-    .default(sql`(unixepoch())`),
-  updatedAt: int({ mode: "timestamp" })
-    .default(sql`(unixepoch())`)
+export const createdUpdated = {
+  createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp({ withTimezone: true })
+    .defaultNow()
     .$onUpdate(() => new Date())
     .notNull(),
 };

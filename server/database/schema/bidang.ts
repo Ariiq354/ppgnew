@@ -1,6 +1,6 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 import { roles } from "../../../shared/permission";
-import { timestamp } from "./common";
+import { createdUpdated } from "./common";
 import { daerahTable } from "./wilayah";
 
 const bulanOptions = [
@@ -18,47 +18,47 @@ const bulanOptions = [
   "Desember",
 ] as const;
 
-export const prokerTable = sqliteTable("proker", {
-  id: int().primaryKey({ autoIncrement: true }),
+export const prokerTable = pgTable("proker", {
+  id: serial().primaryKey(),
   kegiatan: text().notNull(),
   peserta: text().notNull(),
   bulan: text({ enum: bulanOptions }).notNull(),
-  tahun: int().notNull(),
-  biaya: int().notNull(),
+  tahun: integer().notNull(),
+  biaya: integer().notNull(),
   keterangan: text().notNull(),
-  mingguKe: int().notNull(),
+  mingguKe: integer().notNull(),
   bidang: text({
     enum: roles,
   }).notNull(),
-  daerahId: int()
+  daerahId: integer()
     .notNull()
     .references(() => daerahTable.id, { onDelete: "cascade" }),
   status: text({ enum: ["Aktif", "Pending", "Terlaksana"] })
     .notNull()
     .default("Aktif"),
-  ...timestamp,
+  ...createdUpdated,
 });
 
-export const musyawarahBidangTable = sqliteTable("musyawarah_bidang", {
-  id: int().primaryKey({ autoIncrement: true }),
+export const musyawarahBidangTable = pgTable("musyawarah_bidang", {
+  id: serial().primaryKey(),
   nama: text().notNull(),
   tanggal: text().notNull(),
   bidang: text({ enum: roles }).notNull(),
-  daerahId: int()
+  daerahId: integer()
     .notNull()
     .references(() => daerahTable.id, { onDelete: "cascade" }),
-  ...timestamp,
+  ...createdUpdated,
 });
 
-export const laporanMusyawarahBidangTable = sqliteTable(
+export const laporanMusyawarahBidangTable = pgTable(
   "laporan_musyawarah_bidang",
   {
-    id: int().primaryKey({ autoIncrement: true }),
-    musyawarahId: int()
+    id: serial().primaryKey(),
+    musyawarahId: integer()
       .notNull()
       .references(() => musyawarahBidangTable.id, { onDelete: "cascade" }),
     laporan: text().notNull(),
     keterangan: text().notNull(),
-    ...timestamp,
+    ...createdUpdated,
   }
 );

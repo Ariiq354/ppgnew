@@ -1,30 +1,27 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { daerahTable } from "./wilayah";
-import { timestamp } from "./common";
+import { createdUpdated } from "./common";
 import { generusTable } from "./generus";
+import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 
-export const kelasTahfidzTable = sqliteTable("kelas_tahfidz", {
-  id: int().primaryKey({ autoIncrement: true }),
+export const kelasTahfidzTable = pgTable("kelas_tahfidz", {
+  id: serial().primaryKey(),
   nama: text().notNull(),
   tanggal: text().notNull(),
-  daerahId: int()
+  daerahId: integer()
     .notNull()
     .references(() => daerahTable.id, { onDelete: "cascade" }),
-  ...timestamp,
+  ...createdUpdated,
 });
 
-export const absensiGenerusTahfidzTable = sqliteTable(
-  "absensi_generus_tahfidz",
-  {
-    id: int().primaryKey({ autoIncrement: true }),
-    kelasId: int()
-      .notNull()
-      .references(() => kelasTahfidzTable.id, { onDelete: "cascade" }),
-    generusId: int()
-      .notNull()
-      .references(() => generusTable.id, { onDelete: "cascade" }),
-    keterangan: text().notNull(),
-    detail: text().notNull().default(""),
-    ...timestamp,
-  }
-);
+export const absensiGenerusTahfidzTable = pgTable("absensi_generus_tahfidz", {
+  id: serial().primaryKey(),
+  kelasId: integer()
+    .notNull()
+    .references(() => kelasTahfidzTable.id, { onDelete: "cascade" }),
+  generusId: integer()
+    .notNull()
+    .references(() => generusTable.id, { onDelete: "cascade" }),
+  keterangan: text().notNull(),
+  detail: text().notNull().default(""),
+  ...createdUpdated,
+});
