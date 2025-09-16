@@ -37,11 +37,10 @@ export async function getAllPengurus(
       tanggalLahir: pengurusTable.tanggalLahir,
     })
     .from(pengurusTable)
-    .where(and(...conditions))
-    .$dynamic();
+    .where(and(...conditions));
 
   try {
-    const total = await getTotalQuery(query);
+    const total = await db.$count(query);
     const data = await query.limit(limit).offset(offset);
 
     return {
@@ -102,11 +101,10 @@ export async function getAllPengurusAbsensi(
       absensiPengurusTable,
       eq(pengurusTable.id, absensiPengurusTable.pengurusId)
     )
-    .groupBy(pengurusTable.id, pengurusTable.nama, pengurusTable.bidang)
-    .$dynamic();
+    .groupBy(pengurusTable.id, pengurusTable.nama, pengurusTable.bidang);
 
   try {
-    const total = await getTotalQuery(query);
+    const total = await db.$count(query);
     const data = await query.limit(limit).offset(offset);
 
     return {

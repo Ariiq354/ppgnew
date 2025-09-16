@@ -1,6 +1,14 @@
+import { UBadge } from "#components";
+import type { TableColumn } from "@nuxt/ui";
 import { roles } from "~~/shared/permission";
 
-export const columns = [
+const statusMap = {
+  Pending: { label: "pending", color: "warning" as const },
+  Aktif: { label: "aktif", color: "info" as const },
+  Terlaksana: { label: "terlaksana", color: "success" as const },
+} as const;
+
+export const columns: TableColumn<any>[] = [
   {
     accessorKey: "bidang",
     header: "Bidang",
@@ -12,10 +20,6 @@ export const columns = [
   {
     accessorKey: "peserta",
     header: "Peserta",
-  },
-  {
-    accessorKey: "biaya",
-    header: "Biaya",
   },
   {
     accessorKey: "mingguKe",
@@ -32,6 +36,30 @@ export const columns = [
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => {
+      const status =
+        statusMap[row.getValue("status") as keyof typeof statusMap];
+
+      if (!status) return row.getValue("status");
+
+      return h(
+        UBadge,
+        { class: "capitalize rounded-full", color: status.color },
+        () => status.label
+      );
+    },
+  },
+  {
+    accessorKey: "biaya",
+    header: "Biaya",
+    footer: () => {
+      const formatted = new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+      }).format(2000);
+
+      return `Total: ${formatted}`;
+    },
   },
 ];
 

@@ -2,7 +2,6 @@ import { count, eq, inArray } from "drizzle-orm";
 import { db } from "~~/server/database";
 import type { TKelompokCreate, TKelompokList } from "./dto/kelompok.dto";
 import { desaTable, kelompokTable } from "~~/server/database/schema/wilayah";
-import { getTotalQuery } from "~~/server/utils/query";
 
 export async function getAllKelompok({ limit, page, desaId }: TKelompokList) {
   const offset = (page - 1) * limit;
@@ -13,11 +12,10 @@ export async function getAllKelompok({ limit, page, desaId }: TKelompokList) {
       desaId: kelompokTable.desaId,
     })
     .from(kelompokTable)
-    .where(eq(kelompokTable.desaId, desaId))
-    .$dynamic();
+    .where(eq(kelompokTable.desaId, desaId));
 
   try {
-    const total = await getTotalQuery(query);
+    const total = await db.$count(query);
     const data = await query.limit(limit).offset(offset);
 
     return {

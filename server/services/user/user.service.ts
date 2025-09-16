@@ -1,7 +1,6 @@
 import { and, eq, like, ne, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { userTable } from "~~/server/database/schema/auth";
-import { getTotalQuery } from "~~/server/utils/query";
 import type { TUserList } from "./dto/user.dto";
 
 export async function getAllUser(
@@ -34,11 +33,10 @@ export async function getAllUser(
       role: userTable.role,
     })
     .from(userTable)
-    .where(and(...conditions))
-    .$dynamic();
+    .where(and(...conditions));
 
   try {
-    const total = await getTotalQuery(query);
+    const total = await db.$count(query);
     const data = await query.limit(limit).offset(offset);
 
     return {

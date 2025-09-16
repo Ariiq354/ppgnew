@@ -1,4 +1,5 @@
 import { z } from "zod/mini";
+import { z as zo } from "zod";
 import { OPagination } from "~~/server/utils/dto";
 import { roles } from "~~/shared/permission";
 
@@ -33,8 +34,17 @@ export type TProkerCreate = z.infer<typeof OProkerCreate>;
 
 export const OProkerList = z.object({
   ...OPagination.def.shape,
-  bidang: z.enum(roles),
+  bidang: zo.preprocess(
+    (val) => (val === "" ? undefined : val),
+    z.optional(z.enum(roles))
+  ),
   search: z.string(),
+  tahun: z.optional(z.coerce.number()),
+  bulan: zo.preprocess(
+    (val) => (val === "" ? undefined : val),
+    z.optional(z.enum(bulanOptions))
+  ),
+  mingguKe: z.optional(z.coerce.number()),
 });
 
 export type TProkerList = z.infer<typeof OProkerList>;

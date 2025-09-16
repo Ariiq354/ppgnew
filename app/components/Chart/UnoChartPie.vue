@@ -27,7 +27,7 @@
   const triggers = {
     [Donut.selectors.segment]: (d: any) => {
       const label = String(props.data[d.index]![props.index]);
-      const value = props.data[d.index];
+      const value = props.data[d.index]![props.category];
 
       return `
         <div class="p-3 text-left border-gray-200">${label} ${value}</div>

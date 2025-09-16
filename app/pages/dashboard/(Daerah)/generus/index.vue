@@ -14,14 +14,13 @@
     page: 1,
     kelasSekolah: "",
     kelasPengajian: "",
-    daerahId: authStore.user?.daerahId,
     desaId: "",
     kelompokId: "",
   });
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
   }, 500);
-  const { status } = await useFetch(`${APIBASE}/home/generus`, {
+  const { data, status } = await useFetch(`${APIBASE}/home/generus`, {
     query,
   });
 
@@ -29,7 +28,7 @@
     `${APIBASE}/options/desa`,
     {
       query: {
-        daerahId: computed(() => query.daerahId),
+        daerahId: computed(() => authStore.user?.daerahId),
       },
       onResponse() {
         query.kelompokId = "";
@@ -50,6 +49,13 @@
   watchOnce(
     () => query.desaId,
     () => refresh()
+  );
+
+  watch(
+    () => query.desaId,
+    () => {
+      query.kelompokId = "";
+    }
   );
 
   watch(
@@ -148,9 +154,9 @@
       <AppTable
         v-model:page="query.page"
         :columns="columns"
-        :data="[]"
+        :data="data?.data"
         :loading="status === 'pending'"
-        :total="0"
+        :total="data?.metadata.total"
         enumerate
         pagination
         viewable

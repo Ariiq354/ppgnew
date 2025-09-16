@@ -30,11 +30,10 @@ export async function getAllMuslimun(
       tanggal: musyawarahMuslimunTable.tanggal,
     })
     .from(musyawarahMuslimunTable)
-    .where(and(...conditions))
-    .$dynamic();
+    .where(and(...conditions));
 
   try {
-    const total = await getTotalQuery(query);
+    const total = await db.$count(query);
     const data = await query.limit(limit).offset(offset);
 
     return {

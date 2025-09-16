@@ -1,7 +1,6 @@
 import { count, eq, inArray } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { desaTable } from "~~/server/database/schema/wilayah";
-import { getTotalQuery } from "~~/server/utils/query";
 import type { TDesaCreate, TDesaList } from "./dto/desa.dto";
 
 export async function getAllDesa({ limit, page, daerahId }: TDesaList) {
@@ -13,11 +12,10 @@ export async function getAllDesa({ limit, page, daerahId }: TDesaList) {
       daerahId: desaTable.daerahId,
     })
     .from(desaTable)
-    .where(eq(desaTable.daerahId, daerahId))
-    .$dynamic();
+    .where(eq(desaTable.daerahId, daerahId));
 
   try {
-    const total = await getTotalQuery(query);
+    const total = await db.$count(query);
     const data = await query.limit(limit).offset(offset);
 
     return {

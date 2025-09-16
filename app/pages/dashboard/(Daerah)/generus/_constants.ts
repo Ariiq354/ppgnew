@@ -1,15 +1,23 @@
-export const columns = [
+import { UAvatar } from "#components";
+import type { TableColumn } from "@nuxt/ui";
+
+export const columns: TableColumn<any>[] = [
   {
     accessorKey: "nama",
     header: "Nama Generus",
+    cell: ({ row }) => {
+      return h("div", { class: "flex items-center gap-2" }, [
+        h(UAvatar, {
+          src: row.original.foto,
+          alt: row.original.nama,
+        }),
+        row.original.nama,
+      ]);
+    },
   },
   {
     accessorKey: "gender",
     header: "Jenis Kelamin",
-  },
-  {
-    accessorKey: "umur",
-    header: "Umur",
   },
   {
     accessorKey: "kelasSekolah",
@@ -20,8 +28,9 @@ export const columns = [
     header: "Kelas Pengajian",
   },
   {
-    accessorKey: "namaKelompok",
-    header: "Kelompok",
+    accessorKey: "umur",
+    header: "Umur",
+    cell: ({ row }) => getAge(row.original.tanggalLahir),
   },
 ];
 

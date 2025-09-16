@@ -18,18 +18,18 @@
     page: 1,
     bulan: "",
     tahun: "",
-    minggu: "",
+    mingguKe: "",
     bidang: "",
   });
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
   }, 500);
-  const { status } = await useFetch(`${APIBASE}/home/pengajar`, {
+  const { data, status } = await useFetch(`${APIBASE}/home/proker`, {
     query,
   });
 
   watch(
-    () => [query.bulan, query.tahun, query.minggu, query.bidang],
+    () => [query.bulan, query.tahun, query.mingguKe, query.bidang],
     () => {
       query.page = 1;
     }
@@ -59,7 +59,7 @@
           :items="bulanOptions"
         />
         <ClearableSelectMenu
-          v-model="query.minggu"
+          v-model="query.mingguKe"
           placeholder="Minggu"
           :items="mingguOptions"
         />
@@ -96,7 +96,7 @@
           :items="bulanOptions"
         />
         <ClearableSelectMenu
-          v-model="query.minggu"
+          v-model="query.mingguKe"
           placeholder="Minggu"
           class="hidden flex-1 md:flex"
           :items="mingguOptions"
@@ -111,9 +111,9 @@
       <AppTable
         v-model:page="query.page"
         :columns="columns"
-        :data="[]"
+        :data="data?.data"
         :loading="status === 'pending'"
-        :total="0"
+        :total="data?.metadata.total"
         enumerate
         pagination
         action

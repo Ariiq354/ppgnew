@@ -50,6 +50,13 @@
   );
 
   watch(
+    () => query.desaId,
+    () => {
+      query.kelompokId = "";
+    }
+  );
+
+  watch(
     () => [query.status, query.kelompokId],
     () => {
       query.page = 1;

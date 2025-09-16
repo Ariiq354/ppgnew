@@ -1,18 +1,16 @@
 import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { prokerTable } from "~~/server/database/schema/bidang";
-import { getTotalQuery } from "~~/server/utils/query";
 import type { roles } from "~~/shared/permission";
 import type { TProkerCreate, TProkerList } from "./dto/proker.dto";
 
 export async function getAllProker(
   daerahId: number,
-  { limit, page, search, bidang }: TProkerList
+  { limit, page, search, bidang, tahun, bulan, mingguKe }: TProkerList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(prokerTable.daerahId, daerahId),
-    eq(prokerTable.bidang, bidang),
   ];
 
   if (search) {
@@ -25,6 +23,22 @@ export async function getAllProker(
         like(prokerTable.peserta, searchCondition)
       )
     );
+  }
+
+  if (bidang) {
+    conditions.push(eq(prokerTable.bidang, bidang));
+  }
+
+  if (tahun) {
+    conditions.push(eq(prokerTable.tahun, tahun));
+  }
+
+  if (bulan) {
+    conditions.push(eq(prokerTable.bulan, bulan));
+  }
+
+  if (mingguKe) {
+    conditions.push(eq(prokerTable.mingguKe, mingguKe));
   }
 
   const query = db
@@ -41,11 +55,10 @@ export async function getAllProker(
       status: prokerTable.status,
     })
     .from(prokerTable)
-    .where(and(...conditions))
-    .$dynamic();
+    .where(and(...conditions));
 
   try {
-    const total = await getTotalQuery(query);
+    const total = await db.$count(query);
     const data = await query.limit(limit).offset(offset);
 
     return {

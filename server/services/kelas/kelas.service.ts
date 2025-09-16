@@ -29,11 +29,10 @@ export async function getAllKelas(
       tanggal: kelasTable.tanggal,
     })
     .from(kelasTable)
-    .where(and(...conditions))
-    .$dynamic();
+    .where(and(...conditions));
 
   try {
-    const total = await getTotalQuery(query);
+    const total = await db.$count(query);
     const data = await query.limit(limit).offset(offset);
 
     return {

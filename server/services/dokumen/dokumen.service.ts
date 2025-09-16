@@ -2,7 +2,6 @@ import { eq, inArray } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { dokumenTable } from "~~/server/database/schema/dokumen";
 import type { TPagination } from "~~/server/utils/dto";
-import { getTotalQuery } from "~~/server/utils/query";
 import type { TDokumenCreate } from "./dto/dokumen.dto";
 
 export async function getAllDokumen(
@@ -20,11 +19,10 @@ export async function getAllDokumen(
       createdAt: dokumenTable.createdAt,
     })
     .from(dokumenTable)
-    .where(eq(dokumenTable.daerahId, daerahId))
-    .$dynamic();
+    .where(eq(dokumenTable.daerahId, daerahId));
 
   try {
-    const total = await getTotalQuery(query);
+    const total = await db.$count(query);
     const data = await query.limit(limit).offset(offset);
 
     return {

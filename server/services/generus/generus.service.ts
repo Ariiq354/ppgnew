@@ -55,11 +55,10 @@ export async function getAllGenerus(
       foto: generusTable.foto,
     })
     .from(generusTable)
-    .where(and(...conditions))
-    .$dynamic();
+    .where(and(...conditions));
 
   try {
-    const total = await getTotalQuery(query);
+    const total = await db.$count(query);
     const data = await query.limit(limit).offset(offset);
 
     return {

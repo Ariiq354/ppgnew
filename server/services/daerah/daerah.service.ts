@@ -6,7 +6,6 @@ import {
   kelompokTable,
 } from "~~/server/database/schema/wilayah";
 import type { TPagination } from "~~/server/utils/dto";
-import { getTotalQuery } from "~~/server/utils/query";
 import type { TDaerahCreate } from "./dto/daerah.dto";
 
 export async function getAllDaerah({ limit, page }: TPagination) {
@@ -16,11 +15,10 @@ export async function getAllDaerah({ limit, page }: TPagination) {
       id: daerahTable.id,
       name: daerahTable.name,
     })
-    .from(daerahTable)
-    .$dynamic();
+    .from(daerahTable);
 
   try {
-    const total = await getTotalQuery(query);
+    const total = await db.$count(query);
     const data = await query.limit(limit).offset(offset);
 
     return {
