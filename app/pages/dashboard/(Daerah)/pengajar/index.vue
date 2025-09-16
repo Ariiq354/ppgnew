@@ -13,14 +13,13 @@
     search: "",
     page: 1,
     status: "",
-    daerahId: authStore.user?.daerahId,
     desaId: "",
     kelompokId: "",
   });
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
   }, 500);
-  const { status } = await useFetch(`${APIBASE}/home/pengajar`, {
+  const { data, status } = await useFetch(`${APIBASE}/home/pengajar`, {
     query,
   });
 
@@ -28,7 +27,7 @@
     `${APIBASE}/options/desa`,
     {
       query: {
-        daerahId: computed(() => query.daerahId),
+        daerahId: computed(() => authStore.user?.daerahId),
       },
       onResponse() {
         query.kelompokId = "";
@@ -51,7 +50,7 @@
   );
 
   watch(
-    () => [query.status, query.kelompokId, query.daerahId],
+    () => [query.status, query.kelompokId],
     () => {
       query.page = 1;
     }
@@ -83,8 +82,6 @@
           v-model="query.status"
           placeholder="Status"
           :items="statusOptions"
-          label-key="name"
-          value-key="value"
         />
       </div>
     </template>
@@ -121,8 +118,6 @@
           placeholder="Status"
           class="hidden flex-1 md:flex"
           :items="statusOptions"
-          label-key="name"
-          value-key="value"
         />
         <UButton
           variant="subtle"
@@ -134,9 +129,9 @@
       <AppTable
         v-model:page="query.page"
         :columns="columns"
-        :data="[]"
+        :data="data?.data"
         :loading="status === 'pending'"
-        :total="0"
+        :total="data?.metadata.total"
         viewable
         enumerate
         pagination

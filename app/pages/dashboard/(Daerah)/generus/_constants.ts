@@ -25,17 +25,6 @@ export const columns = [
   },
 ];
 
-export const genderOptions = [
-  {
-    value: "laki",
-    name: "Laki - laki",
-  },
-  {
-    value: "perempuan",
-    name: "Perempuan",
-  },
-];
-
 export const pengajianOptions = [
   "PAUD",
   "Cabe Rawit",
@@ -44,6 +33,7 @@ export const pengajianOptions = [
   "Pranikah",
   "Usia Mandiri",
 ];
+
 export const kelasOptions = [
   "PAUD/TK",
   "SD 1",
@@ -59,4 +49,5 @@ export const kelasOptions = [
   "SMA 11",
   "SMA 12",
   "Kuliah",
+  "Bekerja / Tidak Bekerja",
 ];

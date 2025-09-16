@@ -99,13 +99,14 @@ export async function deleteDesa(id: number[]) {
   }
 }
 
-export async function getCountDesa() {
+export async function getCountDesa(daerahId: number) {
   try {
     const [data] = await db
       .select({
         count: count(),
       })
-      .from(desaTable);
+      .from(desaTable)
+      .where(eq(desaTable.daerahId, daerahId));
     return data?.count;
   } catch (error) {
     console.error("Failed to get Count Desa", error);

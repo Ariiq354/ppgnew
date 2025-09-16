@@ -12,7 +12,7 @@ export const OGenerusCreate = z.object({
   kelasSekolah: z.string(),
   kelasPengajian: z.string(),
   foto: z.string(),
-  status: z.string(),
+  status: z.array(z.string()),
 });
 
 export type TGenerusCreate = z.infer<typeof OGenerusCreate>;
@@ -27,6 +27,8 @@ export const OGenerusList = z.object({
   search: z.string(),
   kelasSekolah: z.string(),
   kelasPengajian: z.string(),
+  desaId: z.optional(z.coerce.number()),
+  kelompokId: z.optional(z.coerce.number()),
 });
 
 export type TGenerusList = z.infer<typeof OGenerusList>;

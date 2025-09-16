@@ -6,7 +6,10 @@ export default defineEventHandler(async (event) => {
 
   const query = await getValidatedQuery(event, (q) => OPengajarList.parse(q));
 
-  const data = await getAllPengajar(user.kelompokId!, query);
+  query.kelompokId = user.kelompokId!;
+  query.desaId = user.desaId!;
+
+  const data = await getAllPengajar(user.daerahId, query);
   const metadata = {
     page: query.page,
     itemPerPage: query.limit,

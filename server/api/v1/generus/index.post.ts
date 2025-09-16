@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const fields: Record<string, string> = {};
+  const fields: Record<string, string | string[]> = {};
 
   for (const part of result) {
     if (part.filename) {
@@ -43,7 +43,18 @@ export default defineEventHandler(async (event) => {
 
       fields["foto"] = uploadResult.secure_url;
     } else {
-      fields[part.name as string] = part.data.toString();
+      const key = part.name as string;
+      const value = part.data.toString();
+
+      if (fields[key]) {
+        if (Array.isArray(fields[key])) {
+          (fields[key] as string[]).push(value);
+        } else {
+          fields[key] = [fields[key] as string, value];
+        }
+      } else {
+        fields[key] = value;
+      }
     }
   }
 

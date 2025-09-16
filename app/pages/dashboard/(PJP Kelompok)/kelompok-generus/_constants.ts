@@ -59,9 +59,11 @@ export const kelasOptions = [
   "SMA 11",
   "SMA 12",
   "Kuliah",
+  "Bekerja / Tidak Bekerja",
 ];
 
 export const statusOptions = [
+  "GPS",
   "Tahfidz",
   "Pindah",
   "Mondok",
@@ -80,7 +82,7 @@ export const schema = z.object({
   namaOrtu: z.string().check(z.minLength(1, "Required")),
   kelasSekolah: z.string().check(z.minLength(1, "Required")),
   kelasPengajian: z.string().check(z.minLength(1, "Required")),
-  status: z.string().check(z.minLength(1, "Required")),
+  status: z.array(z.string()),
   foto: z.string(),
   file: z.optional(
     z
@@ -103,7 +105,7 @@ export const getInitialFormData = (): Schema => ({
   namaOrtu: "",
   kelasSekolah: "",
   kelasPengajian: "",
-  status: "",
+  status: [],
   foto: "",
   file: undefined,
 });

@@ -59,7 +59,12 @@
     <VisXYContainer v-if="isDesktop" :data="data" :height="500">
       <VisGroupedBar :x="x" :y="y" :rounded-corners="10" :bar-padding="0.02" />
       <VisTooltip :triggers="triggers" />
-      <VisAxis type="x" :tick-format="tickFormat" :grid-line="false" />
+      <VisAxis
+        type="x"
+        :grid-line="false"
+        :tick-format="tickFormat"
+        :tick-values="[0, 1, 2, 3, 4, 5]"
+      />
       <VisAxis type="y" />
     </VisXYContainer>
     <VisXYContainer v-else :data="data" :height="400">
@@ -71,7 +76,12 @@
         :bar-padding="0.02"
       />
       <VisTooltip :triggers="triggers" />
-      <VisAxis type="y" :tick-format="tickFormat" :grid-line="false" />
+      <VisAxis
+        type="y"
+        :tick-format="tickFormat"
+        :tick-values="[0, 1, 2, 3, 4, 5]"
+        :grid-line="false"
+      />
       <VisAxis type="x" />
     </VisXYContainer>
   </ClientOnly>

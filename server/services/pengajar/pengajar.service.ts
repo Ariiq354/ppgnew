@@ -8,12 +8,12 @@ import type {
 } from "./dto/pengajar.dto";
 
 export async function getAllPengajar(
-  kelompokId: number,
-  { limit, page, search, status }: TPengajarList
+  daerahId: number,
+  { limit, page, search, status, desaId, kelompokId }: TPengajarList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
-    eq(pengajarTable.kelompokId, kelompokId),
+    eq(pengajarTable.daerahId, daerahId),
   ];
 
   if (search) {
@@ -28,6 +28,13 @@ export async function getAllPengajar(
 
   if (status) {
     conditions.push(eq(pengajarTable.status, status));
+  }
+
+  if (desaId) {
+    conditions.push(eq(pengajarTable.desaId, desaId));
+  }
+  if (kelompokId) {
+    conditions.push(eq(pengajarTable.kelompokId, kelompokId));
   }
 
   const query = db
@@ -79,18 +86,29 @@ export async function getAllPengajarExport(kelompokId: number) {
     .where(eq(pengajarTable.kelompokId, kelompokId));
 }
 
-export async function getCountPengajar() {
+export async function getCountPengajar(daerahId: number) {
   try {
     const [data] = await db
       .select({
         count: count(),
       })
-      .from(pengajarTable);
+      .from(pengajarTable)
+      .where(eq(pengajarTable.daerahId, daerahId));
     return data?.count;
   } catch (error) {
     console.error("Failed to get Count Pengajar", error);
     throw InternalError;
   }
+}
+
+export async function getAllPengajarChart(daerahId: number) {
+  return await db
+    .select({
+      gender: pengajarTable.gender,
+      status: pengajarTable.status,
+    })
+    .from(pengajarTable)
+    .where(eq(pengajarTable.daerahId, daerahId));
 }
 
 export async function getPengajarById(kelompokId: number, id: number) {

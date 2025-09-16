@@ -1,62 +1,82 @@
 import { getCountDesa } from "~~/server/services/desa/desa.service";
-import { getCountGenerus } from "~~/server/services/generus/generus.service";
+import {
+  getAllGenerusChart,
+  getCountGenerus,
+} from "~~/server/services/generus/generus.service";
 import { getCountKelompok } from "~~/server/services/kelompok/kelompok.service";
-import { getCountPengajar } from "~~/server/services/pengajar/pengajar.service";
+import {
+  getAllPengajarChart,
+  getCountPengajar,
+} from "~~/server/services/pengajar/pengajar.service";
+
+const pengajianOptions = [
+  "PAUD",
+  "Cabe Rawit",
+  "Praremaja",
+  "Remaja",
+  "Pranikah",
+  "Usia Mandiri",
+];
+const statusOptions = [
+  "Mubalig Tugasan",
+  "Mubalig Setempat",
+  "Asisten Pengajar",
+];
+
+type GroupData = {
+  gender: string;
+  [key: string]: any;
+};
+
+function groupByField(
+  data: GroupData[],
+  groupField: string,
+  options: string[]
+): { name: string; "Laki-laki": number; Perempuan: number }[] {
+  const result = options.map((opt) => ({
+    name: opt,
+    "Laki-laki": 0,
+    Perempuan: 0,
+  }));
+
+  data.forEach((curr) => {
+    const groupValue = curr[groupField];
+    const target = result.find((r) => r.name === groupValue);
+    if (target) {
+      target[curr.gender as "Laki-laki" | "Perempuan"]++;
+    }
+  });
+
+  return result;
+}
 
 export default defineEventHandler(async (event) => {
-  authGuard(event);
+  const user = authGuard(event);
 
-  const countKelompok = await getCountKelompok();
-  const countDesa = await getCountDesa();
-  const countGenerus = await getCountGenerus();
-  const countPengajar = await getCountPengajar();
+  const countKelompok = await getCountKelompok(user.daerahId);
+  const countDesa = await getCountDesa(user.daerahId);
+  const countGenerus = await getCountGenerus(user.daerahId);
+  const countPengajar = await getCountPengajar(user.daerahId);
 
-  function createDatasets(maleData: number[], femaleData: number[]) {
-    return [
-      {
-        label: "Laki-laki",
-        data: maleData,
-        borderWidth: 1,
-        backgroundColor: "rgba(54, 162, 235, 0.5)",
-        borderColor: "rgb(54, 162, 235)",
-      },
-      {
-        label: "Perempuan",
-        data: femaleData,
-        borderWidth: 1,
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-        borderColor: "rgb(255, 99, 132)",
-      },
-    ];
-  }
+  const dataGenerus = await getAllGenerusChart(user.daerahId);
+  const dataPengajar = await getAllPengajarChart(user.daerahId);
 
-  function createGroupDataset(groupData: number[], label: string) {
-    return [
-      {
-        label,
-        data: groupData,
-        backgroundColor: [
-          "#FF6384", // Red
-          "#36A2EB", // Blue
-          "#FFCE56", // Yellow
-          "#4BC0C0", // Teal
-          "#9966FF", // Purple
-          "#FF9F40", // Orange
-        ],
-      },
-    ];
-  }
-
-  const generusDatasets = createDatasets(
-    [1, 5, 8, 2, 8, 2],
-    [2, 8, 5, 1, 5, 1]
+  const generusDatasets = groupByField(
+    dataGenerus,
+    "kelasPengajian",
+    pengajianOptions
   );
-  const generusGroupDatasets = createGroupDataset(
-    [1, 5, 8, 2, 8, 2],
-    "Generus Group"
-  );
-  const pengajarDatasets = createDatasets([1, 5, 8], [2, 8, 5]);
-  const pengajarGroupDatasets = createGroupDataset([1, 5, 8], "Pengajar Group");
+  const pengajarDatasets = groupByField(dataPengajar, "status", statusOptions);
+
+  const generusGroupDatasets = generusDatasets.map((i) => ({
+    name: i.name,
+    value: i["Laki-laki"] + i.Perempuan,
+  }));
+  const pengajarGroupDatasets = pengajarDatasets.map((i) => ({
+    name: i.name,
+    value: i["Laki-laki"] + i.Perempuan,
+  }));
+
   const data = {
     countKelompok,
     countDesa,

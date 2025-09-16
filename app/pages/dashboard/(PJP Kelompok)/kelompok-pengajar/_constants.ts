@@ -40,7 +40,7 @@ export const genderOptions = ["Laki-laki", "Perempuan"];
 export const statusOptions = [
   "Mubalig Tugasan",
   "Mubalig Setempat",
-  "Asisten Pengjar",
+  "Asisten Pengajar",
 ];
 
 export const schema = z.object({

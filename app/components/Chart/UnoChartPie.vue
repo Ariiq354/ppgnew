@@ -19,12 +19,18 @@
   const data = props.data.map((i) => i[props.category]);
   const value = (d: number) => d;
 
+  const count = props.data.reduce(
+    (a, i) => (a += Number(i[props.category])),
+    0
+  );
+
   const triggers = {
     [Donut.selectors.segment]: (d: any) => {
       const label = String(props.data[d.index]![props.index]);
+      const value = props.data[d.index];
 
       return `
-        <div class="p-3 text-left border-gray-200">${label}</div>
+        <div class="p-3 text-left border-gray-200">${label} ${value}</div>
       `;
     },
   };
@@ -42,7 +48,7 @@
     <VisSingleContainer :data>
       <VisDonut
         :value
-        central-label="1081"
+        :central-label="count"
         central-sub-label="Generus"
         :arc-width="75"
       />

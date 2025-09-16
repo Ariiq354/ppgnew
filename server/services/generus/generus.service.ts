@@ -4,12 +4,20 @@ import { generusTable } from "~~/server/database/schema/generus";
 import type { TGenerusCreate, TGenerusList, TWilayah } from "./dto/generus.dto";
 
 export async function getAllGenerus(
-  kelompokId: number,
-  { limit, page, search, kelasSekolah, kelasPengajian }: TGenerusList
+  daerahId: number,
+  {
+    limit,
+    page,
+    search,
+    kelasSekolah,
+    kelasPengajian,
+    desaId,
+    kelompokId,
+  }: TGenerusList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
-    eq(generusTable.kelompokId, kelompokId),
+    eq(generusTable.daerahId, daerahId),
   ];
 
   if (search) {
@@ -22,6 +30,12 @@ export async function getAllGenerus(
   }
   if (kelasPengajian) {
     conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
+  }
+  if (desaId) {
+    conditions.push(eq(generusTable.desaId, desaId));
+  }
+  if (kelompokId) {
+    conditions.push(eq(generusTable.kelompokId, kelompokId));
   }
 
   const query = db
@@ -37,6 +51,7 @@ export async function getAllGenerus(
       kelasPengajian: generusTable.kelasPengajian,
       namaOrtu: generusTable.namaOrtu,
       noTeleponOrtu: generusTable.noTeleponOrtu,
+      tanggalMasukKelas: generusTable.tanggalMasukKelas,
       foto: generusTable.foto,
     })
     .from(generusTable)
@@ -77,13 +92,24 @@ export async function getAllGenerusExport(kelompokId: number) {
     .where(eq(generusTable.kelompokId, kelompokId));
 }
 
-export async function getCountGenerus() {
+export async function getAllGenerusChart(daerahId: number) {
+  return await db
+    .select({
+      gender: generusTable.gender,
+      kelasPengajian: generusTable.kelasPengajian,
+    })
+    .from(generusTable)
+    .where(eq(generusTable.daerahId, daerahId));
+}
+
+export async function getCountGenerus(daerahId: number) {
   try {
     const [data] = await db
       .select({
         count: count(),
       })
-      .from(generusTable);
+      .from(generusTable)
+      .where(eq(generusTable.daerahId, daerahId));
     return data?.count;
   } catch (error) {
     console.error("Failed to get Count Generus", error);
@@ -114,6 +140,7 @@ export async function createGenerus(wilayah: TWilayah, data: TGenerusCreate) {
     return await db.insert(generusTable).values({
       ...data,
       ...wilayah,
+      tanggalMasukKelas: new Date(),
     });
   } catch (error) {
     console.error("Failed to create Generus", error);
@@ -127,9 +154,22 @@ export async function updateGenerus(
   data: TGenerusCreate
 ) {
   try {
+    const user = await db.query.generusTable.findFirst({
+      where: and(
+        eq(generusTable.id, id),
+        eq(generusTable.kelompokId, kelompokId)
+      ),
+    });
+
+    const updateData: Partial<typeof generusTable.$inferInsert> = { ...data };
+
+    if (user && user.kelasSekolah !== data.kelasSekolah) {
+      updateData.tanggalMasukKelas = new Date();
+    }
+
     return await db
       .update(generusTable)
-      .set(data)
+      .set(updateData)
       .where(
         and(eq(generusTable.id, id), eq(generusTable.kelompokId, kelompokId))
       );

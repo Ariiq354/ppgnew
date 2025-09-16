@@ -6,7 +6,7 @@ import { generusTable } from "~~/server/database/schema/generus";
 
 export async function getAllKonseling(
   daerahId: number,
-  { limit, page, search }: TKonselingList
+  { limit, page, search, kelompokId }: TKonselingList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -19,15 +19,23 @@ export async function getAllKonseling(
     conditions.push(or(like(generusTable.nama, searchCondition)));
   }
 
+  if (kelompokId) {
+    conditions.push(eq(generusTable.kelompokId, kelompokId));
+  }
+
   const query = db
     .select({
       id: generusKonselingTable.id,
-      nama: generusKonselingTable.nama,
-      bidangPekerjaan: generusKonselingTable.bidangPekerjaan,
-      namaUsaha: generusKonselingTable.namaUsaha,
-      noTelepon: generusKonselingTable.noTelepon,
+      generusId: generusKonselingTable.generusId,
+      nama: generusTable.nama,
+      keterangan: generusKonselingTable.keterangan,
+      status: generusKonselingTable.status,
     })
     .from(generusKonselingTable)
+    .leftJoin(
+      generusTable,
+      eq(generusKonselingTable.generusId, generusTable.id)
+    )
     .where(and(...conditions))
     .$dynamic();
 
@@ -45,32 +53,30 @@ export async function getAllKonseling(
   }
 }
 
-export async function getAllKonselingExport(daerahId: number) {
+export async function getAllKonselingExport(
+  daerahId: number,
+  kelompokId?: number
+) {
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(generusKonselingTable.daerahId, daerahId),
+  ];
+
+  if (kelompokId) {
+    conditions.push(eq(generusTable.kelompokId, kelompokId));
+  }
+
   return await db
     .select({
-      nama: generusKonselingTable.nama,
-      bidangPekerjaan: generusKonselingTable.bidangPekerjaan,
-      namaUsaha: generusKonselingTable.namaUsaha,
-      noTelepon: generusKonselingTable.noTelepon,
+      nama: generusTable.nama,
+      keterangan: generusKonselingTable.keterangan,
+      status: generusKonselingTable.status,
     })
     .from(generusKonselingTable)
+    .leftJoin(
+      generusTable,
+      eq(generusKonselingTable.generusId, generusTable.id)
+    )
     .where(eq(generusKonselingTable.daerahId, daerahId));
-}
-
-export async function getCountKonseling(daerahId: number) {
-  try {
-    const [data] = await db
-      .select({
-        count: count(),
-      })
-      .from(generusKonselingTable)
-      .where(eq(generusKonselingTable.daerahId, daerahId));
-
-    return data!.count;
-  } catch (error) {
-    console.error("Failed to get Count Konseling", error);
-    throw InternalError;
-  }
 }
 
 export async function createKonseling(
@@ -109,7 +115,7 @@ export async function updateKonseling(
   }
 }
 
-export async function deleteKonseling(daerahId: number, id: number[]) {
+export async function deleteKonseling(kelompokId: number, id: number[]) {
   try {
     return await db
       .delete(generusKonselingTable)

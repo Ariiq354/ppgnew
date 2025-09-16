@@ -14,7 +14,8 @@ export const generusTable = sqliteTable("generus", {
   kelasSekolah: text().notNull(),
   kelasPengajian: text().notNull(),
   foto: text().notNull(),
-  status: text().notNull().default(""),
+  status: text({ mode: "json" }).$type<string[]>().notNull(),
+  tanggalMasukKelas: int({ mode: "timestamp" }).notNull(),
   daerahId: int()
     .notNull()
     .references(() => daerahTable.id, { onDelete: "cascade" }),

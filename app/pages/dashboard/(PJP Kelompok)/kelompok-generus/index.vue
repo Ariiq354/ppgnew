@@ -48,7 +48,13 @@
     for (const [key, value] of Object.entries(
       event.data as Record<string, any>
     )) {
-      formData.append(key, value);
+      if (Array.isArray(value)) {
+        for (const v of value) {
+          formData.append(key, v);
+        }
+      } else {
+        formData.append(key, value);
+      }
     }
 
     const basePath = `${APIBASE}/generus`;
@@ -171,6 +177,7 @@
             <UFormField label="Status" name="status">
               <USelectMenu
                 v-model="state.status"
+                multiple
                 :disabled="isLoading || !generusEdit || viewStatus"
                 :items="statusOptions"
               />

@@ -24,6 +24,8 @@ export const OPengajarList = z.object({
   ...OPagination.def.shape,
   search: z.string(),
   status: z.string(),
+  desaId: z.optional(z.coerce.number()),
+  kelompokId: z.optional(z.coerce.number()),
 });
 
 export type TPengajarList = z.infer<typeof OPengajarList>;

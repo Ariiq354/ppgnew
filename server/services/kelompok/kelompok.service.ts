@@ -99,13 +99,15 @@ export async function deleteKelompok(id: number[]) {
   }
 }
 
-export async function getCountKelompok() {
+export async function getCountKelompok(daerahId: number) {
   try {
     const [data] = await db
       .select({
         count: count(),
       })
-      .from(kelompokTable);
+      .from(kelompokTable)
+      .leftJoin(desaTable, eq(kelompokTable.desaId, desaTable.id))
+      .where(eq(desaTable.daerahId, daerahId));
     return data?.count;
   } catch (error) {
     console.error("Failed to get Count Kelompok", error);

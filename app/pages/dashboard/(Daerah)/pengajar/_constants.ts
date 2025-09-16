@@ -1,48 +1,41 @@
-export const columns = [
+import { UAvatar } from "#components";
+import type { TableColumn } from "@nuxt/ui";
+
+export const columns: TableColumn<any>[] = [
   {
     accessorKey: "nama",
     header: "Nama Pengajar",
+    cell: ({ row }) => {
+      return h("div", { class: "flex items-center gap-2" }, [
+        h(UAvatar, {
+          src: row.original.foto,
+          alt: row.original.nama,
+        }),
+        row.original.nama,
+      ]);
+    },
   },
   {
-    accessorKey: "namaKelompok",
-    header: "Tempat Tugas",
+    accessorKey: "gender",
+    header: "Jenis Kelamin",
   },
   {
-    accessorKey: "noTelepon",
-    header: "No. Telepon",
+    accessorKey: "tanggalTugas",
+    header: "Tanggal Tugas",
+    cell: ({ row }) => formatDate(row.getValue("tanggalTugas")),
   },
   {
     accessorKey: "status",
     header: "Status",
   },
   {
-    accessorKey: "gender",
-    header: "Jenis Kelamin",
-  },
-];
-
-export const genderOptions = [
-  {
-    value: "laki",
-    name: "Laki - laki",
-  },
-  {
-    value: "perempuan",
-    name: "Perempuan",
+    accessorKey: "noTelepon",
+    header: "No. Telepon",
   },
 ];
 
 export const statusOptions = [
-  {
-    value: "mt",
-    name: "Mubalig Tugasan",
-  },
-  {
-    value: "ms",
-    name: "Mubalig Setempat",
-  },
-  {
-    value: "asisten",
-    name: "Asisten Pengajar",
-  },
+  "Mubalig Tugasan",
+  "Mubalig Setempat",
+  "Asisten Pengajar",
 ];
