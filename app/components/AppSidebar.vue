@@ -1299,7 +1299,7 @@
                     },
                     {
                       label: "Daftar Pengajian",
-                      to: "/dashboard/kelompok-kelas-kelompok",
+                      to: "/dashboard/kelompok-pengajian",
                       onSelect: () => {
                         if (!isDesktop.value) {
                           constantStore.toggleSidebar();
@@ -1308,7 +1308,7 @@
                     },
                     {
                       label: "Absensi",
-                      to: "/dashboard/kelompok-absensi-kelompok",
+                      to: "/dashboard/kelompok-absensi-pengajian",
                       onSelect: () => {
                         if (!isDesktop.value) {
                           constantStore.toggleSidebar();
@@ -1317,7 +1317,7 @@
                     },
                     {
                       label: "Monitoring",
-                      to: "/dashboard/kelompok-monitoring-kehadiran-kelompok",
+                      to: "/dashboard/kelompok-monitoring-kehadiran-pengajian",
                       onSelect: () => {
                         if (!isDesktop.value) {
                           constantStore.toggleSidebar();

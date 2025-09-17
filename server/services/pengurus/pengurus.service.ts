@@ -92,8 +92,8 @@ export async function getAllPengurusAbsensi(
       id: pengurusTable.id,
       nama: pengurusTable.nama,
       bidang: pengurusTable.bidang,
-      hadir: sql<number>`SUM(CASE WHEN ${absensiPengurusTable.keterangan} = 'Hadir' THEN 1 ELSE 0 END)`,
-      izin: sql<number>`SUM(CASE WHEN ${absensiPengurusTable.keterangan} = 'Izin' THEN 1 ELSE 0 END)`,
+      hadir: sql<number>`CAST(SUM(CASE WHEN ${absensiPengurusTable.keterangan} = 'Hadir' THEN 1 ELSE 0 END) AS INT)`,
+      izin: sql<number>`CAST(SUM(CASE WHEN ${absensiPengurusTable.keterangan} = 'Izin' THEN 1 ELSE 0 END) AS INT)`,
     })
     .from(pengurusTable)
     .where(and(...conditions))

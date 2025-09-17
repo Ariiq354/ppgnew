@@ -24,12 +24,12 @@ export default defineEventHandler(async (event) => {
   for (const item of res.absen) {
     if (item.id) {
       if (item.keterangan === "Tanpa Keterangan") {
-        await deleteAbsensiPengurus([item.id], user.daerahId, res.musyawarahId);
+        await deleteAbsensiPengurus([item.id], res.musyawarahId);
       } else {
-        updateAbsensiPengurus(item.id, user.daerahId, res.musyawarahId, item);
+        updateAbsensiPengurus(item.id, res.musyawarahId, item);
       }
     } else {
-      await createAbsensiPengurus(res.musyawarahId, user.daerahId, item);
+      await createAbsensiPengurus(res.musyawarahId, item);
     }
   }
 

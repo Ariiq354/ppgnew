@@ -16,8 +16,6 @@ import Env from "../../shared/env";
 
 export const db = drizzle({
   connection: {
-    // url: Env.DATABASE_URL,
-    // authToken: Env.DATABASE_AUTH_TOKEN,
     connectionString: Env.DATABASE_URL,
   },
   schema: {

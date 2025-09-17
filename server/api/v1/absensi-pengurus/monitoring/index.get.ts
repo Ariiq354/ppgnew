@@ -11,12 +11,11 @@ export default defineEventHandler(async (event) => {
   const musyawarah = await getAllMusyawarahOptions(user.daerahId);
 
   data.data = data.data.map((i) => {
+    const total = musyawarah.data.length;
     return {
       ...i,
-      tanpaKeterangan: musyawarah.data.length - i.hadir - i.izin,
-      kehadiran: (((i.hadir + i.izin) * 100) / musyawarah.data.length).toFixed(
-        0
-      ),
+      tanpaKeterangan: total - i.hadir - i.izin,
+      kehadiran: total > 0 ? ((i.hadir + i.izin) * 100) / total : 0,
     };
   });
 

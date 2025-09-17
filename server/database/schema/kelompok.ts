@@ -43,7 +43,7 @@ export const jamaahTable = pgTable("jamaah", {
   ...createdUpdated,
 });
 
-export const kelasKelompokTable = pgTable("kelas_kelompok", {
+export const pengajianTable = pgTable("pengajian", {
   id: serial().primaryKey(),
   nama: text().notNull(),
   tanggal: text().notNull(),
@@ -55,9 +55,9 @@ export const kelasKelompokTable = pgTable("kelas_kelompok", {
 
 export const absensiJamaahKelompokTable = pgTable("absensi_jamaah_kelompok", {
   id: serial().primaryKey(),
-  kelasId: integer()
+  pengajianId: integer()
     .notNull()
-    .references(() => kelasKelompokTable.id, { onDelete: "cascade" }),
+    .references(() => pengajianTable.id, { onDelete: "cascade" }),
   jamaahId: integer()
     .notNull()
     .references(() => jamaahTable.id, { onDelete: "cascade" }),
