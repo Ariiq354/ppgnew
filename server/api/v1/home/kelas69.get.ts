@@ -44,17 +44,17 @@ function summarizeGenerus(generus: Generus[]) {
 
     if (g.kelasSekolah === "SD 6") {
       if (g.gender === "Laki-laki") {
-        result[g.kelompokId].countLaki6++;
+        result[g.kelompokId]!.countLaki6++;
       } else {
-        result[g.kelompokId].countPerempuan6++;
+        result[g.kelompokId]!.countPerempuan6++;
       }
     }
 
     if (g.kelasSekolah === "SMP 9") {
       if (g.gender === "Laki-laki") {
-        result[g.kelompokId].countLaki9++;
+        result[g.kelompokId]!.countLaki9++;
       } else {
-        result[g.kelompokId].countPerempuan9++;
+        result[g.kelompokId]!.countPerempuan9++;
       }
     }
   }

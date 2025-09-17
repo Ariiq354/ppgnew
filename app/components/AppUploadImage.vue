@@ -25,7 +25,7 @@
     highlight
     color="neutral"
     icon="i-lucide-image"
-    description="max. 5MB"
+    :description="!disabled ? 'max. 5MB' : undefined"
     class="aspect-square w-40"
     :disabled="disabled"
   />

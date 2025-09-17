@@ -50,7 +50,7 @@ const fixedKelas = new Set([
   "Bekerja / Tidak Bekerja",
 ]);
 
-export function getCurrentKelas(kelas: string, tanggalMasuk: Date) {
+export function getCurrentKelas(kelas: string, tanggalMasuk: Date): string {
   if (fixedKelas.has(kelas)) {
     return kelas;
   }
@@ -75,13 +75,13 @@ export function getCurrentKelas(kelas: string, tanggalMasuk: Date) {
 
   for (let i = startIndex; i <= currentIndex; i++) {
     if (fixedKelas.has(kelasOptions[i]!)) {
-      return kelasOptions[i];
+      return kelasOptions[i]!;
     }
   }
 
   if (currentIndex >= kelasOptions.length - 1) {
-    return kelasOptions[kelasOptions.length - 1];
+    return kelasOptions[kelasOptions.length - 1]!;
   }
 
-  return kelasOptions[currentIndex];
+  return kelasOptions[currentIndex]!;
 }

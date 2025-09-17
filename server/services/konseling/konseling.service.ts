@@ -114,7 +114,7 @@ export async function updateKonseling(
   }
 }
 
-export async function deleteKonseling(kelompokId: number, id: number[]) {
+export async function deleteKonseling(daerahId: number, id: number[]) {
   try {
     return await db
       .delete(generusKonselingTable)

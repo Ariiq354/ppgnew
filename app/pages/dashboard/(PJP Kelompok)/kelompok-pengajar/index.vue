@@ -86,7 +86,7 @@
     <LazyUModal
       v-model:open="modalOpen"
       :title="
-        (state.id ? (viewStatus ? 'Detail' : 'Edit') : 'Tambah') + ' Pengurus'
+        (state.id ? (viewStatus ? 'Detail' : 'Edit') : 'Tambah') + ' Pengajar'
       "
       class="max-w-4xl"
     >

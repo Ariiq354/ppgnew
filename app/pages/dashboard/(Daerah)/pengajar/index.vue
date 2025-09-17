@@ -62,10 +62,59 @@
       query.page = 1;
     }
   );
+
+  const modalOpen = ref(false);
+  const state = ref();
+  function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
+    modalOpen.value = true;
+    state.value = { ...itemData };
+  }
 </script>
 
 <template>
   <Title>Dashboard | Tenaga Pengajar</Title>
+  <LazyUModal
+    v-model:open="modalOpen"
+    title="Detail Pengajar"
+    class="max-w-4xl"
+  >
+    <template #body>
+      <div class="space-y-4">
+        <UFormField label="Foto Diri">
+          <AppUploadImage v-model:foto="state.foto" disabled />
+        </UFormField>
+        <UFormField label="Nama">
+          <UInput v-model="state.nama" disabled />
+        </UFormField>
+        <UFormField label="Jenis Kelamin">
+          <UInput v-model="state.gender" disabled />
+        </UFormField>
+        <UFormField label="No. Telepon">
+          <UInput v-model="state.noTelepon" disabled />
+        </UFormField>
+        <UFormField label="Pendidikan Terakhir">
+          <UInput v-model="state.pendidikan" disabled />
+        </UFormField>
+        <UFormField label="Status">
+          <UInput v-model="state.status" disabled />
+        </UFormField>
+        <UFormField label="Tempat Lahir">
+          <UInput v-model="state.tempatLahir" disabled />
+        </UFormField>
+        <UFormField label="Tanggal Lahir">
+          <UInput v-model="state.tanggalLahir" type="date" disabled />
+        </UFormField>
+        <UFormField label="Tanggal Mulai Tugas Awal">
+          <UInput v-model="state.tanggalTugas" type="date" disabled />
+        </UFormField>
+      </div>
+    </template>
+    <template #footer>
+      <UButton icon="i-lucide-x" variant="ghost" @click="modalOpen = false">
+        Tutup
+      </UButton>
+    </template>
+  </LazyUModal>
   <LazyUModal v-model:open="filterModal" title="Filter">
     <template #body>
       <div class="flex flex-col gap-4">
@@ -142,6 +191,7 @@
         viewable
         enumerate
         pagination
+        @view="(i) => clickUpdate(i)"
       />
     </UCard>
   </main>
