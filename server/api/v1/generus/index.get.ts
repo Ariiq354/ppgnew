@@ -12,9 +12,9 @@ export default defineEventHandler(async (event) => {
 
   const data = await getAllGenerus(user.daerahId, query);
 
-  const newData = data.data.map((i) => ({
-    ...i,
-    kelasSekolah: getCurrentKelas(i.kelasSekolah, i.tanggalMasukKelas),
+  const newData = data.data.map(({ tanggalMasukKelas, ...rest }) => ({
+    ...rest,
+    kelasSekolah: getCurrentKelas(rest.kelasSekolah, tanggalMasukKelas),
   }));
 
   const metadata = {

@@ -105,6 +105,27 @@ export async function getAllGenerus69(daerahId: number) {
     .where(eq(generusTable.daerahId, daerahId));
 }
 
+export async function getGenerusOptionsKelompok(kelompokId: number) {
+  return await db
+    .select({
+      id: generusTable.id,
+      nama: generusTable.nama,
+      tempatLahir: generusTable.tempatLahir,
+      tanggalLahir: generusTable.tanggalLahir,
+      kelasSekolah: generusTable.kelasSekolah,
+      gender: generusTable.gender,
+      noTelepon: generusTable.noTelepon,
+      status: generusTable.status,
+      kelasPengajian: generusTable.kelasPengajian,
+      namaOrtu: generusTable.namaOrtu,
+      noTeleponOrtu: generusTable.noTeleponOrtu,
+      tanggalMasukKelas: generusTable.tanggalMasukKelas,
+      foto: generusTable.foto,
+    })
+    .from(generusTable)
+    .where(eq(generusTable.kelompokId, kelompokId));
+}
+
 export async function getAllGenerusChart(daerahId: number) {
   return await db
     .select({

@@ -61,8 +61,6 @@ export const rolesDeclaration = {
     kegiatan_muda_mudi: ["view"],
     tahfidz: ["view"],
     media_publikasi: ["view"],
-    pjp_desa: ["view"],
-    pjp_kelompok: ["view"],
     desa: ["manage"],
     kelompok: ["manage"],
   }),

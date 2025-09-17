@@ -1,7 +1,7 @@
 import { and, eq, like, ne, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { userTable } from "~~/server/database/schema/auth";
-import type { TUserList } from "./dto/user.dto";
+import type { TUserList, TUserWilayah } from "./dto/user.dto";
 
 export async function getAllUser(
   daerahId: number,
@@ -45,6 +45,15 @@ export async function getAllUser(
     };
   } catch (error) {
     console.error("Failed to get List User", error);
+    throw InternalError;
+  }
+}
+
+export async function updateUserWilayah(id: number, body: TUserWilayah) {
+  try {
+    return await db.update(userTable).set(body).where(eq(userTable.id, id));
+  } catch (error) {
+    console.error("Failed to update User wilayah", error);
     throw InternalError;
   }
 }

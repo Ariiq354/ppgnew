@@ -7,3 +7,11 @@ export const OUserList = z.object({
 });
 
 export type TUserList = z.infer<typeof OUserList>;
+
+export const OUserWilayah = z.object({
+  daerahId: z.number(),
+  desaId: z.number(),
+  kelompokId: z.number(),
+});
+
+export type TUserWilayah = z.infer<typeof OUserWilayah>;

@@ -21,6 +21,12 @@ const authClient = createAuthClient({
   ],
 });
 
+type Wilayah = {
+  daerahId: number;
+  desaId: number;
+  kelompokId: number;
+};
+
 type TSignIn = {
   username: string;
   password: string;
@@ -124,6 +130,24 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     loading.value = false;
   }
 
+  async function updateWilayah(body: Wilayah) {
+    loading.value = true;
+    try {
+      const res = await $fetch(`${APIBASE}/user/wilayah`, {
+        method: "POST",
+        body,
+      });
+
+      useToastSuccess("Wilayah berhasil diganti", "Selamat Datang");
+      reloadNuxtApp({ force: true });
+      return res;
+    } catch (error: any) {
+      useToastError("Change Wilayah Failed", error.data.message);
+    } finally {
+      loading.value = false;
+    }
+  }
+
   return {
     init,
     loading,
@@ -134,5 +158,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     hasPermission,
     updatePassword,
     session,
+    updateWilayah,
   };
 });

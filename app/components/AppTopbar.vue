@@ -6,15 +6,27 @@
   const constantStore = useConstantStore();
 
   const modalOpen = ref(false);
+  const modalWilayahOpen = ref(false);
   const items = [
     [
       {
-        label: "Profil",
-        icon: "i-lucide-user",
+        label: "Password",
+        icon: "i-lucide-key-round",
         onSelect: () => {
           modalOpen.value = true;
         },
       },
+      ...(authStore.user?.role === "admin"
+        ? [
+            {
+              label: "Wilayah",
+              icon: "i-lucide-map",
+              onSelect: () => {
+                modalWilayahOpen.value = true;
+              },
+            },
+          ]
+        : []),
       {
         label: "Keluar",
         icon: "i-lucide-log-out",
@@ -38,6 +50,7 @@
 
 <template>
   <ModalProfile v-model="modalOpen" />
+  <ModalWilayah v-model="modalWilayahOpen" />
   <header class="mb-8 flex justify-between">
     <div class="flex items-center gap-8">
       <UButton
