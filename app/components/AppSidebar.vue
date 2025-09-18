@@ -610,32 +610,38 @@
                   },
                 },
                 {
-                  label: "Daftar Kelas",
-                  to: "/dashboard/keputrian-kelas",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
+                  label: "Pengajian Keputrian",
+                  children: [
+                    {
+                      label: "Daftar Kelas",
+                      to: "/dashboard/keputrian-kelas",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                    {
+                      label: "Absensi",
+                      to: "/dashboard/keputrian-absensi",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                    {
+                      label: "Monitoring Kehadiran",
+                      to: "/dashboard/keputrian-monitoring-kehadiran",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                  ],
                 },
-                {
-                  label: "Absensi",
-                  to: "/dashboard/keputrian-absensi",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
-                },
-                {
-                  label: "Monitoring Kehadiran",
-                  to: "/dashboard/keputrian-monitoring-kehadiran",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
-                },
+
                 {
                   label: "Musyawarah Bidang",
                   children: [
@@ -870,22 +876,27 @@
                   },
                 },
                 {
-                  label: "Daftar Kelas",
-                  to: "/dashboard/kegiatan-kelas",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
-                },
-                {
-                  label: "Absensi",
-                  to: "/dashboard/kegiatan-absensi",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
+                  label: "Pengajian Muda-mudi",
+                  children: [
+                    {
+                      label: "Daftar Kelas",
+                      to: "/dashboard/kegiatan-kelas",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                    {
+                      label: "Absensi",
+                      to: "/dashboard/kegiatan-absensi",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                  ],
                 },
                 {
                   label: "Monitoring Kehadiran",
@@ -999,31 +1010,36 @@
                   },
                 },
                 {
-                  label: "Daftar Kelas",
-                  to: "/dashboard/tahfidz-kelas",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
-                },
-                {
-                  label: "Absensi",
-                  to: "/dashboard/tahfidz-absensi",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
-                },
-                {
-                  label: "Monitoring Kehadiran",
-                  to: "/dashboard/tahfidz-monitoring-kehadiran",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
+                  label: "Pengajian Tahfidz",
+                  children: [
+                    {
+                      label: "Daftar Kelas",
+                      to: "/dashboard/tahfidz-kelas",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                    {
+                      label: "Absensi",
+                      to: "/dashboard/tahfidz-absensi",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                    {
+                      label: "Monitoring Kehadiran",
+                      to: "/dashboard/tahfidz-monitoring-kehadiran",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                  ],
                 },
               ],
             },
@@ -1124,22 +1140,27 @@
                   },
                 },
                 {
-                  label: "Daftar Kelas",
-                  to: "/dashboard/desa-kelas",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
-                },
-                {
-                  label: "Absensi",
-                  to: "/dashboard/desa-absensi",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
+                  label: "Pengajian Desa",
+                  children: [
+                    {
+                      label: "Daftar Kelas",
+                      to: "/dashboard/desa-kelas",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                    {
+                      label: "Absensi",
+                      to: "/dashboard/desa-absensi",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                  ],
                 },
                 {
                   label: "Monitoring Kehadiran",

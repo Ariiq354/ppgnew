@@ -68,6 +68,13 @@
     state.value.keterangan = itemData.keterangan;
     viewStatus.value = false;
   }
+
+  watch(
+    () => [query.search],
+    () => {
+      query.page = 1;
+    }
+  );
 </script>
 
 <template>

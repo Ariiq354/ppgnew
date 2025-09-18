@@ -1,0 +1,48 @@
+import {
+  createAbsensiKeputrian,
+  deleteAbsensiKeputrian,
+  updateAbsensiKeputrian,
+} from "~~/server/services/absensi-keputrian/absensi-keputrian.service";
+import { OAbsensiKeputrianCreate } from "~~/server/services/absensi-keputrian/dto/absensi-keputrian.dto";
+import { getKelasKeputrianById } from "~~/server/services/kelas-keputrian/kelas-keputrian.service";
+
+export default defineEventHandler(async (event) => {
+  const user = await permissionGuard(event, { keputrian: ["manage"] });
+
+  const res = await readValidatedBody(event, (body) =>
+    OAbsensiKeputrianCreate.parse(body)
+  );
+
+  const check = await getKelasKeputrianById(res.kelasId);
+  if (check.data?.daerahId !== user.daerahId) {
+    throw createError({
+      statusCode: 403,
+      message: "Anda tidak punya akses ke daerah ini",
+    });
+  }
+
+  for (const item of res.absen) {
+    if (item.id) {
+      if (item.keterangan === "Tanpa Keterangan") {
+        await deleteAbsensiKeputrian([item.id], res.kelasId);
+      } else {
+        updateAbsensiKeputrian(
+          item.id,
+          res.kelasId,
+          user.daerahId,
+          check.data!.nama,
+          item
+        );
+      }
+    } else {
+      await createAbsensiKeputrian(
+        res.kelasId,
+        user.daerahId,
+        check.data!.nama,
+        item
+      );
+    }
+  }
+
+  return HttpResponse();
+});
