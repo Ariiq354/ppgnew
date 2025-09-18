@@ -1,7 +1,7 @@
 export const columns = [
   {
     accessorKey: "nama",
-    header: "Nama Generus",
+    header: "Nama Jamaah",
   },
   {
     accessorKey: "absensi",
@@ -11,4 +11,13 @@ export const columns = [
     accessorKey: "keterangan",
     header: "Catatan",
   },
+];
+
+export const pengajianOptions = [
+  "PAUD",
+  "Cabe Rawit",
+  "Praremaja",
+  "Remaja",
+  "Pranikah",
+  "Usia Mandiri",
 ];

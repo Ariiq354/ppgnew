@@ -2,6 +2,7 @@ import { and, count, eq, inArray } from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
   absensiJamaahKelompokTable,
+  jamaahTable,
   pengajianTable,
 } from "~~/server/database/schema/kelompok";
 import type { TAbsensiJamaahCreate } from "./dto/absensi-jamaah.dto";
@@ -61,9 +62,21 @@ export async function getCountAbsensi(kelompokId: number) {
 
 export async function createAbsensiJamaah(
   pengajianId: number,
+  kelompokId: number,
   data: TAbsensiJamaahCreate
 ) {
   try {
+    const jamaah = await db.query.jamaahTable.findFirst({
+      where: eq(jamaahTable.id, data.jamaahId),
+    });
+
+    if (jamaah?.kelompokId !== kelompokId) {
+      throw createError({
+        statusCode: 403,
+        message: "Tidak ada jamaah di kelompok ini",
+      });
+    }
+
     return await db.insert(absensiJamaahKelompokTable).values({
       ...data,
       pengajianId,
@@ -77,9 +90,21 @@ export async function createAbsensiJamaah(
 export async function updateAbsensiJamaah(
   id: number,
   pengajianId: number,
+  kelompokId: number,
   data: TAbsensiJamaahCreate
 ) {
   try {
+    const jamaah = await db.query.jamaahTable.findFirst({
+      where: eq(jamaahTable.id, data.jamaahId),
+    });
+
+    if (jamaah?.kelompokId !== kelompokId) {
+      throw createError({
+        statusCode: 403,
+        message: "Tidak ada jamaah di kelompok ini",
+      });
+    }
+
     return await db
       .update(absensiJamaahKelompokTable)
       .set(data)

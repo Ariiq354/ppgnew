@@ -1,25 +1,41 @@
-import { and, count, eq, inArray, sql, type SQL } from "drizzle-orm";
+import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { kelasTable } from "~~/server/database/schema/generus";
-import type { TKelasCreate, TKelasList } from "./dto/kelas.dto";
+import type {
+  TKelasCreate,
+  TKelasList,
+  TKelasOptionsList,
+} from "./dto/kelas-kelompok.dto";
 
 export async function getAllKelas(
   kelompokId: number,
-  { limit, page, nama, bulan, tahun }: TKelasList
+  { limit, page, search, bulan, tahun, nama }: TKelasList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(kelasTable.kelompokId, kelompokId),
   ];
 
+  if (search) {
+    const searchCondition = `%${search}%`;
+
+    conditions.push(or(like(kelasTable.nama, searchCondition)));
+  }
+
   if (nama) {
     conditions.push(eq(kelasTable.nama, nama));
   }
-  if (tahun) {
-    conditions.push(eq(sql`strftime('%Y', ${kelasTable.tanggal})`, tahun));
-  }
+
   if (bulan) {
-    conditions.push(eq(sql`strftime('%m', ${kelasTable.tanggal})`, bulan));
+    conditions.push(
+      eq(sql`extract(month from ${kelasTable.tanggal}::date)`, bulan)
+    );
+  }
+
+  if (tahun) {
+    conditions.push(
+      eq(sql`extract(year from ${kelasTable.tanggal}::date)`, tahun)
+    );
   }
 
   const query = db
@@ -45,6 +61,16 @@ export async function getAllKelas(
   }
 }
 
+export async function getAllKelasExport(kelompokId: number) {
+  return await db
+    .select({
+      nama: kelasTable.nama,
+      tanggal: kelasTable.tanggal,
+    })
+    .from(kelasTable)
+    .where(eq(kelasTable.kelompokId, kelompokId));
+}
+
 export async function getKelasById(id: number) {
   const data = await db.query.kelasTable.findFirst({
     where: eq(kelasTable.id, id),
@@ -55,15 +81,22 @@ export async function getKelasById(id: number) {
       data,
     };
   } catch (error) {
-    console.error("Failed to get Kelas By Id", error);
+    console.error("Failed to get Kelas Kelompok By Id", error);
     throw InternalError;
   }
 }
 
-export async function getAllKelasOptions(kelompokId: number) {
+export async function getAllKelasOptions(
+  kelompokId: number,
+  query: TKelasOptionsList
+) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(kelasTable.kelompokId, kelompokId),
   ];
+
+  if (query.nama) {
+    conditions.push(eq(kelasTable.nama, query.nama));
+  }
 
   const data = await db
     .select({
@@ -79,23 +112,25 @@ export async function getAllKelasOptions(kelompokId: number) {
       data,
     };
   } catch (error) {
-    console.error("Failed to get List All Kelas", error);
+    console.error("Failed to get List All Kelas Kelompok", error);
     throw InternalError;
   }
 }
 
-export async function getCountKelas(kelompokId: number) {
+export async function getCountKelas(
+  kelompokId: number,
+  kelasPengajian: string
+) {
   try {
-    const [data] = await db
-      .select({
-        count: count(),
-      })
-      .from(kelasTable)
-      .where(eq(kelasTable.kelompokId, kelompokId));
-
-    return data!.count;
+    return await db.$count(
+      kelasTable,
+      and(
+        eq(kelasTable.kelompokId, kelompokId),
+        eq(kelasTable.nama, kelasPengajian)
+      )
+    );
   } catch (error) {
-    console.error("Failed to get Count Kelas", error);
+    console.error("Failed to get Count Kelas Kelompok", error);
     throw InternalError;
   }
 }
@@ -107,7 +142,7 @@ export async function createKelas(kelompokId: number, data: TKelasCreate) {
       kelompokId,
     });
   } catch (error) {
-    console.error("Failed to create Kelas", error);
+    console.error("Failed to create Kelas Kelompok", error);
     throw InternalError;
   }
 }
@@ -123,7 +158,7 @@ export async function updateKelas(
       .set(data)
       .where(and(eq(kelasTable.id, id), eq(kelasTable.kelompokId, kelompokId)));
   } catch (error) {
-    console.error("Failed to Update Kelas", error);
+    console.error("Failed to Update Kelas Kelompok", error);
     throw InternalError;
   }
 }
@@ -136,7 +171,7 @@ export async function deleteKelas(kelompokId: number, id: number[]) {
         and(inArray(kelasTable.id, id), eq(kelasTable.kelompokId, kelompokId))
       );
   } catch (error) {
-    console.error("Failed to delete Kelas", error);
+    console.error("Failed to delete Kelas Kelompok", error);
     throw InternalError;
   }
 }

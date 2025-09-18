@@ -1,0 +1,34 @@
+import type { TableColumn } from "@nuxt/ui";
+
+export const columns: TableColumn<any>[] = [
+  {
+    accessorKey: "nama",
+    header: "Nama Generus",
+  },
+  {
+    accessorKey: "kehadiran",
+    header: "Kehadiran",
+    cell: ({ row }) => `${row.original.kehadiran}%`,
+  },
+  {
+    accessorKey: "hadir",
+    header: "Hadir",
+  },
+  {
+    accessorKey: "izin",
+    header: "Izin",
+  },
+  {
+    accessorKey: "tanpaKeterangan",
+    header: "Tanpa Keterangan",
+  },
+];
+
+export const pengajianOptions = [
+  "PAUD",
+  "Cabe Rawit",
+  "Praremaja",
+  "Remaja",
+  "Pranikah",
+  "Usia Mandiri",
+];

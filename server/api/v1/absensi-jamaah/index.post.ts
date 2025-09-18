@@ -26,10 +26,10 @@ export default defineEventHandler(async (event) => {
       if (item.keterangan === "Tanpa Keterangan") {
         await deleteAbsensiJamaah([item.id], res.pengajianId);
       } else {
-        updateAbsensiJamaah(item.id, res.pengajianId, item);
+        updateAbsensiJamaah(item.id, res.pengajianId, user.kelompokId!, item);
       }
     } else {
-      await createAbsensiJamaah(res.pengajianId, item);
+      await createAbsensiJamaah(res.pengajianId, user.kelompokId!, item);
     }
   }
 

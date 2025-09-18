@@ -1,13 +1,13 @@
-import { daerahTable, desaTable, kelompokTable } from "./wilayah";
-import { createdUpdated } from "./common";
 import {
   integer,
-  json,
+  jsonb,
   pgTable,
   serial,
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
+import { createdUpdated } from "./common";
+import { daerahTable, desaTable, kelompokTable } from "./wilayah";
 
 export const generusTable = pgTable("generus", {
   id: serial().primaryKey(),
@@ -21,7 +21,7 @@ export const generusTable = pgTable("generus", {
   kelasSekolah: text().notNull(),
   kelasPengajian: text().notNull(),
   foto: text().notNull(),
-  status: json().$type<string[]>().notNull(),
+  status: jsonb().$type<string[]>().notNull(),
   tanggalMasukKelas: timestamp({ withTimezone: true }).notNull(),
   daerahId: integer()
     .notNull()

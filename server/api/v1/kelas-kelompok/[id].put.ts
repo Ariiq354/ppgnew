@@ -1,6 +1,6 @@
 import { z } from "zod/mini";
-import { OKelasCreate } from "~~/server/services/kelas/dto/kelas.dto";
-import { updateKelas } from "~~/server/services/kelas/kelas.service";
+import { OKelasCreate } from "~~/server/services/kelas-kelompok/dto/kelas-kelompok.dto";
+import { updateKelas } from "~~/server/services/kelas-kelompok/kelas-kelompok.service";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });

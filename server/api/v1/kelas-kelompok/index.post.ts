@@ -1,5 +1,5 @@
-import { OKelasCreate } from "~~/server/services/kelas/dto/kelas.dto";
-import { createKelas } from "~~/server/services/kelas/kelas.service";
+import { OKelasCreate } from "~~/server/services/kelas-kelompok/dto/kelas-kelompok.dto";
+import { createKelas } from "~~/server/services/kelas-kelompok/kelas-kelompok.service";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });
