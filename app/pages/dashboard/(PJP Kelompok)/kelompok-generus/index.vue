@@ -87,6 +87,13 @@
     state.value = { ...itemData };
     viewStatus.value = false;
   }
+
+  watch(
+    () => [query.search, query.kelasPengajian, query.kelasSekolah],
+    () => {
+      query.page = 1;
+    }
+  );
 </script>
 
 <template>

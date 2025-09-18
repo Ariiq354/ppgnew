@@ -77,11 +77,7 @@
   }
 
   watch(
-    () => [
-      query.tahun,
-      query.bulan,
-      query.nama,
-    ],
+    () => [query.search, query.tahun, query.bulan, query.nama],
     () => {
       query.page = 1;
     }

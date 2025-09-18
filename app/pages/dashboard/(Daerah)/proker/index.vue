@@ -29,7 +29,13 @@
   });
 
   watch(
-    () => [query.bulan, query.tahun, query.mingguKe, query.bidang],
+    () => [
+      query.search,
+      query.bulan,
+      query.tahun,
+      query.mingguKe,
+      query.bidang,
+    ],
     () => {
       query.page = 1;
     }

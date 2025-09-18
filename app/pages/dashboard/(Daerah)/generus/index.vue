@@ -60,6 +60,7 @@
 
   watch(
     () => [
+      query.search,
       query.kelasPengajian,
       query.kelompokId,
       query.kelasSekolah,

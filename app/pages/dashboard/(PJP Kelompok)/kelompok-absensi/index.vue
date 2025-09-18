@@ -110,6 +110,13 @@
       item.keterangan = keterangan;
     }
   }
+
+  watch(
+    () => [query.search, query.kelasPengajian],
+    () => {
+      query.page = 1;
+    }
+  );
 </script>
 
 <template>

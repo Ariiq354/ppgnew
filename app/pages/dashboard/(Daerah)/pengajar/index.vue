@@ -57,7 +57,7 @@
   );
 
   watch(
-    () => [query.status, query.kelompokId],
+    () => [query.search, query.status, query.kelompokId],
     () => {
       query.page = 1;
     }

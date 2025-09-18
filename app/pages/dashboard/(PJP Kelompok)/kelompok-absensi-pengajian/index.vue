@@ -92,6 +92,13 @@
       item.keterangan = keterangan;
     }
   }
+
+  watch(
+    () => [query.search],
+    () => {
+      query.page = 1;
+    }
+  );
 </script>
 
 <template>
