@@ -1,7 +1,8 @@
-import { and, count, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
+import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { musyawarahMuslimunTable } from "~~/server/database/schema/kelompok";
-import type { TMuslimunCreate, TMuslimunList } from "./dto/muslimun.dto";
+import type { TMuslimunList } from "./dto/muslimun.dto";
+import type { TNamaTanggal } from "~~/server/utils/dto";
 
 export async function getAllMuslimun(
   kelompokId: number,
@@ -87,24 +88,17 @@ export async function getAllMuslimunOptions(kelompokId: number) {
 
 export async function getCountMuslimun(kelompokId: number) {
   try {
-    const [data] = await db
-      .select({
-        count: count(),
-      })
-      .from(musyawarahMuslimunTable)
-      .where(eq(musyawarahMuslimunTable.kelompokId, kelompokId));
-
-    return data!.count;
+    return await db.$count(
+      musyawarahMuslimunTable,
+      eq(musyawarahMuslimunTable.kelompokId, kelompokId)
+    );
   } catch (error) {
     console.error("Failed to get Count Muslimun", error);
     throw InternalError;
   }
 }
 
-export async function createMuslimun(
-  kelompokId: number,
-  data: TMuslimunCreate
-) {
+export async function createMuslimun(kelompokId: number, data: TNamaTanggal) {
   try {
     return await db.insert(musyawarahMuslimunTable).values({
       ...data,
@@ -119,7 +113,7 @@ export async function createMuslimun(
 export async function updateMuslimun(
   id: number,
   kelompokId: number,
-  data: TMuslimunCreate
+  data: TNamaTanggal
 ) {
   try {
     return await db

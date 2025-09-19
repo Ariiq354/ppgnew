@@ -1,11 +1,11 @@
 import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { pengajianTable } from "~~/server/database/schema/kelompok";
-import type { TPengajianCreate, TPengajianList } from "./dto/pengajian.dto";
+import type { TNamaTanggal, TSearchPagination } from "~~/server/utils/dto";
 
 export async function getAllPengajian(
   kelompokId: number,
-  { limit, page, search }: TPengajianList
+  { limit, page, search }: TSearchPagination
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -102,10 +102,7 @@ export async function getCountPengajian(kelompokId: number) {
   }
 }
 
-export async function createPengajian(
-  kelompokId: number,
-  data: TPengajianCreate
-) {
+export async function createPengajian(kelompokId: number, data: TNamaTanggal) {
   try {
     return await db.insert(pengajianTable).values({
       ...data,
@@ -120,7 +117,7 @@ export async function createPengajian(
 export async function updatePengajian(
   id: number,
   kelompokId: number,
-  data: TPengajianCreate
+  data: TNamaTanggal
 ) {
   try {
     return await db

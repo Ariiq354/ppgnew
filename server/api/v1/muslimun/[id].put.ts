@@ -1,5 +1,4 @@
 import { z } from "zod/mini";
-import { OMuslimunCreate } from "~~/server/services/muslimun/dto/muslimun.dto";
 import { updateMuslimun } from "~~/server/services/muslimun/muslimun.service";
 
 export default defineEventHandler(async (event) => {
@@ -7,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, "id");
   const parsed = z.coerce.number().parse(id);
 
-  const body = await readValidatedBody(event, (b) => OMuslimunCreate.parse(b));
+  const body = await readValidatedBody(event, (b) => ONamaTanggal.parse(b));
 
   await updateMuslimun(parsed, user.kelompokId!, body);
 

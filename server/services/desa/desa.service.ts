@@ -1,4 +1,4 @@
-import { count, eq, inArray } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { desaTable } from "~~/server/database/schema/wilayah";
 import type { TDesaCreate, TDesaList } from "./dto/desa.dto";
@@ -99,13 +99,7 @@ export async function deleteDesa(id: number[]) {
 
 export async function getCountDesa(daerahId: number) {
   try {
-    const [data] = await db
-      .select({
-        count: count(),
-      })
-      .from(desaTable)
-      .where(eq(desaTable.daerahId, daerahId));
-    return data?.count;
+    return await db.$count(desaTable, eq(desaTable.daerahId, daerahId));
   } catch (error) {
     console.error("Failed to get Count Desa", error);
     throw InternalError;

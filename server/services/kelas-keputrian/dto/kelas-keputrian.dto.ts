@@ -1,13 +1,6 @@
 import { z } from "zod/mini";
 import { OPagination } from "~~/server/utils/dto";
 
-export const OKelasKeputrianCreate = z.object({
-  nama: z.string(),
-  tanggal: z.string(),
-});
-
-export type TKelasKeputrianCreate = z.infer<typeof OKelasKeputrianCreate>;
-
 export const OKelasKeputrianList = z.object({
   ...OPagination.def.shape,
   search: z.string(),

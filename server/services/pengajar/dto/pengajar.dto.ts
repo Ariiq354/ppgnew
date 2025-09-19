@@ -14,11 +14,6 @@ export const OPengajarCreate = z.object({
 });
 
 export type TPengajarCreate = z.infer<typeof OPengajarCreate>;
-export type TWilayah = {
-  daerahId: number;
-  desaId: number;
-  kelompokId: number;
-};
 
 export const OPengajarList = z.object({
   ...OPagination.def.shape,

@@ -1,5 +1,4 @@
 import { z } from "zod/mini";
-import { OPagination } from "~~/server/utils/dto";
 
 export const OKonselingCreate = z.object({
   generusId: z.number(),
@@ -14,10 +13,3 @@ export const OKonselingUpdate = z.object({
 });
 
 export type TKonselingUpdate = z.infer<typeof OKonselingUpdate>;
-
-export const OKonselingList = z.object({
-  ...OPagination.def.shape,
-  search: z.string(),
-});
-
-export type TKonselingList = z.infer<typeof OKonselingList>;

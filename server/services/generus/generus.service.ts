@@ -1,7 +1,7 @@
-import { and, count, eq, inArray, like, or, type SQL } from "drizzle-orm";
+import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { generusTable } from "~~/server/database/schema/generus";
-import type { TGenerusCreate, TGenerusList, TWilayah } from "./dto/generus.dto";
+import type { TGenerusCreate, TGenerusList } from "./dto/generus.dto";
 
 export async function getAllGenerus(
   daerahId: number,
@@ -138,13 +138,7 @@ export async function getAllGenerusChart(daerahId: number) {
 
 export async function getCountGenerus(daerahId: number) {
   try {
-    const [data] = await db
-      .select({
-        count: count(),
-      })
-      .from(generusTable)
-      .where(eq(generusTable.daerahId, daerahId));
-    return data?.count;
+    return await db.$count(generusTable, eq(generusTable.daerahId, daerahId));
   } catch (error) {
     console.error("Failed to get Count Generus", error);
     throw InternalError;

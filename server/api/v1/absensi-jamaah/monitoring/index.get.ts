@@ -1,11 +1,12 @@
-import { getAllPengajianOptions } from "~~/server/services/pengajian/pengajian.service";
-import { OJamaahList } from "~~/server/services/jamaah/dto/jamaah.dto";
 import { getAllJamaahAbsensi } from "~~/server/services/jamaah/jamaah.service";
+import { getAllPengajianOptions } from "~~/server/services/pengajian/pengajian.service";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["view"] });
 
-  const query = await getValidatedQuery(event, (q) => OJamaahList.parse(q));
+  const query = await getValidatedQuery(event, (q) =>
+    OSearchPagination.parse(q)
+  );
 
   const data = await getAllJamaahAbsensi(user.kelompokId!, query);
   const pengajian = await getAllPengajianOptions(user.kelompokId!);

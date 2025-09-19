@@ -1,11 +1,12 @@
 import { getAllMusyawarahOptions } from "~~/server/services/musyawarah/musyawarah.service";
-import { OPengurusList } from "~~/server/services/pengurus/dto/pengurus.dto";
 import { getAllPengurusAbsensi } from "~~/server/services/pengurus/pengurus.service";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { sekretariat: ["view"] });
 
-  const query = await getValidatedQuery(event, (q) => OPengurusList.parse(q));
+  const query = await getValidatedQuery(event, (q) =>
+    OSearchPagination.parse(q)
+  );
 
   const data = await getAllPengurusAbsensi(user.daerahId, query);
   const musyawarah = await getAllMusyawarahOptions(user.daerahId);

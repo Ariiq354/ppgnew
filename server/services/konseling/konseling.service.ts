@@ -2,15 +2,12 @@ import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { generusTable } from "~~/server/database/schema/generus";
 import { generusKonselingTable } from "~~/server/database/schema/kelompok";
-import type {
-  TKonselingCreate,
-  TKonselingList,
-  TKonselingUpdate,
-} from "./dto/konseling.dto";
+import type { TSearchPagination } from "~~/server/utils/dto";
+import type { TKonselingCreate, TKonselingUpdate } from "./dto/konseling.dto";
 
 export async function getAllKonseling(
   kelompokId: number,
-  { limit, page, search }: TKonselingList
+  { limit, page, search }: TSearchPagination
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -54,7 +51,7 @@ export async function getAllKonseling(
 
 export async function getAllKonselingDaerah(
   daerahId: number,
-  { limit, page, search }: TKonselingList
+  { limit, page, search }: TSearchPagination
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [

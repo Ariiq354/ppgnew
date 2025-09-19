@@ -1,10 +1,11 @@
-import { OKonselingList } from "~~/server/services/konseling/dto/konseling.dto";
 import { getAllKonseling } from "~~/server/services/konseling/konseling.service";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["view"] });
 
-  const query = await getValidatedQuery(event, (q) => OKonselingList.parse(q));
+  const query = await getValidatedQuery(event, (q) =>
+    OSearchPagination.parse(q)
+  );
 
   const data = await getAllKonseling(user.kelompokId!, query);
   const metadata = {

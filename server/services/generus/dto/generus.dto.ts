@@ -16,11 +16,6 @@ export const OGenerusCreate = z.object({
 });
 
 export type TGenerusCreate = z.infer<typeof OGenerusCreate>;
-export type TWilayah = {
-  daerahId: number;
-  desaId: number;
-  kelompokId: number;
-};
 
 export const OGenerusList = z.object({
   ...OPagination.def.shape,

@@ -1,11 +1,11 @@
+import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
-import type { TMusyawarahCreate, TMusyawarahList } from "./dto/musyawarah.dto";
-import { and, count, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { musyawarahTable } from "~~/server/database/schema/pengurus";
+import type { TNamaTanggal, TSearchPagination } from "~~/server/utils/dto";
 
 export async function getAllMusyawarah(
   daerahId: number,
-  { limit, page, search }: TMusyawarahList
+  { limit, page, search }: TSearchPagination
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -92,24 +92,17 @@ export async function getAllMusyawarahOptions(daerahId: number) {
 
 export async function getCountMusyawarah(daerahId: number) {
   try {
-    const [data] = await db
-      .select({
-        count: count(),
-      })
-      .from(musyawarahTable)
-      .where(eq(musyawarahTable.daerahId, daerahId));
-
-    return data!.count;
+    return await db.$count(
+      musyawarahTable,
+      eq(musyawarahTable.daerahId, daerahId)
+    );
   } catch (error) {
     console.error("Failed to get Count Musyawarah", error);
     throw InternalError;
   }
 }
 
-export async function createMusyawarah(
-  daerahId: number,
-  data: TMusyawarahCreate
-) {
+export async function createMusyawarah(daerahId: number, data: TNamaTanggal) {
   try {
     return await db.insert(musyawarahTable).values({
       ...data,
@@ -124,7 +117,7 @@ export async function createMusyawarah(
 export async function updateMusyawarah(
   id: number,
   daerahId: number,
-  data: TMusyawarahCreate
+  data: TNamaTanggal
 ) {
   try {
     return await db

@@ -1,10 +1,11 @@
-import { OPengusahaList } from "~~/server/services/pengusaha/dto/pengusaha.dto";
 import { getAllPengusaha } from "~~/server/services/pengusaha/pengusaha.service";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { kemandirian: ["view"] });
 
-  const query = await getValidatedQuery(event, (q) => OPengusahaList.parse(q));
+  const query = await getValidatedQuery(event, (q) =>
+    OSearchPagination.parse(q)
+  );
 
   const data = await getAllPengusaha(user.daerahId, query);
   const metadata = {

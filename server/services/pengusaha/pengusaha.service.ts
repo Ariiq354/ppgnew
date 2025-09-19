@@ -1,11 +1,12 @@
+import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
-import type { TPengusahaCreate, TPengusahaList } from "./dto/pengusaha.dto";
-import { and, count, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { pengusahaTable } from "~~/server/database/schema/kemandirian";
+import type { TSearchPagination } from "~~/server/utils/dto";
+import type { TPengusahaCreate } from "./dto/pengusaha.dto";
 
 export async function getAllPengusaha(
   daerahId: number,
-  { limit, page, search }: TPengusahaList
+  { limit, page, search }: TSearchPagination
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -60,14 +61,10 @@ export async function getAllPengusahaExport(daerahId: number) {
 
 export async function getCountPengusaha(daerahId: number) {
   try {
-    const [data] = await db
-      .select({
-        count: count(),
-      })
-      .from(pengusahaTable)
-      .where(eq(pengusahaTable.daerahId, daerahId));
-
-    return data!.count;
+    return await db.$count(
+      pengusahaTable,
+      eq(pengusahaTable.daerahId, daerahId)
+    );
   } catch (error) {
     console.error("Failed to get Count Pengusaha", error);
     throw InternalError;

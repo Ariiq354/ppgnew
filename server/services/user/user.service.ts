@@ -1,11 +1,11 @@
 import { and, eq, like, ne, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { userTable } from "~~/server/database/schema/auth";
-import type { TUserList, TUserWilayah } from "./dto/user.dto";
+import type { TSearchPagination, TWilayah } from "~~/server/utils/dto";
 
 export async function getAllUser(
   daerahId: number,
-  { limit, page, search }: TUserList
+  { limit, page, search }: TSearchPagination
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -49,7 +49,7 @@ export async function getAllUser(
   }
 }
 
-export async function updateUserWilayah(id: number, body: TUserWilayah) {
+export async function updateUserWilayah(id: number, body: TWilayah) {
   try {
     return await db.update(userTable).set(body).where(eq(userTable.id, id));
   } catch (error) {

@@ -1,14 +1,15 @@
-import { and, count, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
+import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
   absensiPengurusTable,
   pengurusTable,
 } from "~~/server/database/schema/pengurus";
-import type { TPengurusCreate, TPengurusList } from "./dto/pengurus.dto";
+import type { TSearchPagination } from "~~/server/utils/dto";
+import type { TPengurusCreate } from "./dto/pengurus.dto";
 
 export async function getAllPengurus(
   daerahId: number,
-  { limit, page, search }: TPengurusList
+  { limit, page, search }: TSearchPagination
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -69,7 +70,7 @@ export async function getAllPengurusExport(daerahId: number) {
 
 export async function getAllPengurusAbsensi(
   daerahId: number,
-  { limit, page, search }: TPengurusList
+  { limit, page, search }: TSearchPagination
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -137,14 +138,7 @@ export async function getPengurusById(daerahId: number, id: number) {
 
 export async function getCountPengurus(daerahId: number) {
   try {
-    const [data] = await db
-      .select({
-        count: count(),
-      })
-      .from(pengurusTable)
-      .where(eq(pengurusTable.daerahId, daerahId));
-
-    return data!.count;
+    return await db.$count(pengurusTable, eq(pengurusTable.daerahId, daerahId));
   } catch (error) {
     console.error("Failed to get Count Pengurus", error);
     throw InternalError;

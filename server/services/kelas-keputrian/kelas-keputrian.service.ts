@@ -2,10 +2,10 @@ import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { kelasKeputrianTable } from "~~/server/database/schema/keputrian";
 import type {
-  TKelasKeputrianCreate,
   TKelasKeputrianList,
   TKelasKeputrianOptionsList,
 } from "./dto/kelas-keputrian.dto";
+import type { TNamaTanggal } from "~~/server/utils/dto";
 
 export async function getAllKelasKeptrian(
   daerahId: number,
@@ -137,7 +137,7 @@ export async function getCountKelasKeputrian(
 
 export async function createKelasKeputrian(
   daerahId: number,
-  data: TKelasKeputrianCreate
+  data: TNamaTanggal
 ) {
   try {
     return await db.insert(kelasKeputrianTable).values({
@@ -153,7 +153,7 @@ export async function createKelasKeputrian(
 export async function updateKelasKeputrian(
   id: number,
   daerahId: number,
-  data: TKelasKeputrianCreate
+  data: TNamaTanggal
 ) {
   try {
     return await db

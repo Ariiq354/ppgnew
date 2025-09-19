@@ -4,11 +4,12 @@ import {
   absensiJamaahKelompokTable,
   jamaahTable,
 } from "~~/server/database/schema/kelompok";
-import type { TJamaahCreate, TJamaahList, TWilayah } from "./dto/jamaah.dto";
+import type { TJamaahCreate } from "./dto/jamaah.dto";
+import type { TWilayah, TSearchPagination } from "~~/server/utils/dto";
 
 export async function getAllJamaah(
   kelompokId: number,
-  { limit, page, search }: TJamaahList
+  { limit, page, search }: TSearchPagination
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -54,7 +55,7 @@ export async function getAllJamaahExport(kelompokId: number) {
 
 export async function getAllJamaahAbsensi(
   kelompokId: number,
-  { limit, page, search }: TJamaahList
+  { limit, page, search }: TSearchPagination
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [

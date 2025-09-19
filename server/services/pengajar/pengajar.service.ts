@@ -1,11 +1,8 @@
-import { and, count, eq, inArray, like, or, type SQL } from "drizzle-orm";
+import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { pengajarTable } from "~~/server/database/schema/pengajar";
-import type {
-  TPengajarCreate,
-  TPengajarList,
-  TWilayah,
-} from "./dto/pengajar.dto";
+import type { TWilayah } from "~~/server/utils/dto";
+import type { TPengajarCreate, TPengajarList } from "./dto/pengajar.dto";
 
 export async function getAllPengajar(
   daerahId: number,
@@ -87,13 +84,7 @@ export async function getAllPengajarExport(kelompokId: number) {
 
 export async function getCountPengajar(daerahId: number) {
   try {
-    const [data] = await db
-      .select({
-        count: count(),
-      })
-      .from(pengajarTable)
-      .where(eq(pengajarTable.daerahId, daerahId));
-    return data?.count;
+    return await db.$count(pengajarTable, eq(pengajarTable.daerahId, daerahId));
   } catch (error) {
     console.error("Failed to get Count Pengajar", error);
     throw InternalError;

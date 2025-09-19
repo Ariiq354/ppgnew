@@ -1,11 +1,8 @@
 import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { kelasTable } from "~~/server/database/schema/generus";
-import type {
-  TKelasCreate,
-  TKelasList,
-  TKelasOptionsList,
-} from "./dto/kelas-kelompok.dto";
+import type { TKelasList, TKelasOptionsList } from "./dto/kelas-kelompok.dto";
+import type { TNamaTanggal } from "~~/server/utils/dto";
 
 export async function getAllKelas(
   kelompokId: number,
@@ -135,7 +132,7 @@ export async function getCountKelas(
   }
 }
 
-export async function createKelas(kelompokId: number, data: TKelasCreate) {
+export async function createKelas(kelompokId: number, data: TNamaTanggal) {
   try {
     return await db.insert(kelasTable).values({
       ...data,
@@ -150,7 +147,7 @@ export async function createKelas(kelompokId: number, data: TKelasCreate) {
 export async function updateKelas(
   id: number,
   kelompokId: number,
-  data: TKelasCreate
+  data: TNamaTanggal
 ) {
   try {
     return await db
