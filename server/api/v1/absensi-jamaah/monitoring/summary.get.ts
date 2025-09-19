@@ -1,4 +1,4 @@
-import { getCountAbsensi } from "~~/server/services/absensi-jamaah/absensi-jamaah.service";
+import { getCountAbsensiJamaah } from "~~/server/services/absensi-jamaah/absensi-jamaah.service";
 import { getCountPengajian } from "~~/server/services/pengajian/pengajian.service";
 import { getCountJamaah } from "~~/server/services/jamaah/jamaah.service";
 
@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
 
   const countJamaah = await getCountJamaah(user.kelompokId!);
   const countPengajian = await getCountPengajian(user.kelompokId!);
-  const countAbsensi = await getCountAbsensi(user.kelompokId!);
+  const countAbsensi = await getCountAbsensiJamaah(user.kelompokId!);
 
   const denominator = countJamaah * countPengajian;
   const kehadiran =

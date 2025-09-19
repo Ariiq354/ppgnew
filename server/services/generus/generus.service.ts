@@ -1,19 +1,11 @@
-import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
+import { and, eq, inArray, like, or, Param, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { generusTable } from "~~/server/database/schema/generus";
 import type { TGenerusCreate, TGenerusList } from "./dto/generus.dto";
 
 export async function getAllGenerus(
   daerahId: number,
-  {
-    limit,
-    page,
-    search,
-    kelasSekolah,
-    kelasPengajian,
-    desaId,
-    kelompokId,
-  }: TGenerusList
+  { limit, page, search, kelasPengajian, desaId, kelompokId }: TGenerusList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -25,9 +17,70 @@ export async function getAllGenerus(
     conditions.push(or(like(generusTable.nama, searchCondition)));
   }
 
-  if (kelasSekolah) {
-    conditions.push(eq(generusTable.kelasSekolah, kelasSekolah));
+  if (kelasPengajian) {
+    conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
   }
+
+  if (desaId) {
+    conditions.push(eq(generusTable.desaId, desaId));
+  }
+  if (kelompokId) {
+    conditions.push(eq(generusTable.kelompokId, kelompokId));
+  }
+
+  const query = db
+    .select({
+      id: generusTable.id,
+      nama: generusTable.nama,
+      tempatLahir: generusTable.tempatLahir,
+      tanggalLahir: generusTable.tanggalLahir,
+      kelasSekolah: generusTable.kelasSekolah,
+      gender: generusTable.gender,
+      noTelepon: generusTable.noTelepon,
+      status: generusTable.status,
+      kelasPengajian: generusTable.kelasPengajian,
+      namaOrtu: generusTable.namaOrtu,
+      noTeleponOrtu: generusTable.noTeleponOrtu,
+      tanggalMasukKelas: generusTable.tanggalMasukKelas,
+      foto: generusTable.foto,
+    })
+    .from(generusTable)
+    .where(and(...conditions));
+
+  try {
+    const total = await db.$count(query);
+    const data = await query.limit(limit).offset(offset);
+
+    return {
+      data,
+      total,
+    };
+  } catch (error) {
+    console.error("Failed to get List Generus", error);
+    throw InternalError;
+  }
+}
+
+export async function getAllGenerusKeputrian(
+  daerahId: number,
+  { limit, page, search, kelasPengajian, desaId, kelompokId }: TGenerusList
+) {
+  const offset = (page - 1) * limit;
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(generusTable.daerahId, daerahId),
+    eq(generusTable.gender, "Perempuan"),
+    inArray(generusTable.kelasPengajian, [
+      "Remaja",
+      "Pranikah",
+      "Usia Mandiri",
+    ]),
+  ];
+
+  if (search) {
+    const searchCondition = `%${search}%`;
+    conditions.push(or(like(generusTable.nama, searchCondition)));
+  }
+
   if (kelasPengajian) {
     conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
   }
@@ -66,7 +119,185 @@ export async function getAllGenerus(
       total,
     };
   } catch (error) {
-    console.error("Failed to get List Generus", error);
+    console.error("Failed to get List Generus Keputrian", error);
+    throw InternalError;
+  }
+}
+
+export async function getAllGenerusMudamudi(
+  daerahId: number,
+  { limit, page, search, kelasPengajian, desaId, kelompokId }: TGenerusList
+) {
+  const offset = (page - 1) * limit;
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(generusTable.daerahId, daerahId),
+    inArray(generusTable.kelasPengajian, [
+      "Remaja",
+      "Pranikah",
+      "Usia Mandiri",
+    ]),
+  ];
+
+  if (search) {
+    const searchCondition = `%${search}%`;
+    conditions.push(or(like(generusTable.nama, searchCondition)));
+  }
+
+  if (kelasPengajian) {
+    conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
+  }
+  if (desaId) {
+    conditions.push(eq(generusTable.desaId, desaId));
+  }
+  if (kelompokId) {
+    conditions.push(eq(generusTable.kelompokId, kelompokId));
+  }
+
+  const query = db
+    .select({
+      id: generusTable.id,
+      nama: generusTable.nama,
+      tempatLahir: generusTable.tempatLahir,
+      tanggalLahir: generusTable.tanggalLahir,
+      kelasSekolah: generusTable.kelasSekolah,
+      gender: generusTable.gender,
+      noTelepon: generusTable.noTelepon,
+      status: generusTable.status,
+      kelasPengajian: generusTable.kelasPengajian,
+      namaOrtu: generusTable.namaOrtu,
+      noTeleponOrtu: generusTable.noTeleponOrtu,
+      tanggalMasukKelas: generusTable.tanggalMasukKelas,
+      foto: generusTable.foto,
+    })
+    .from(generusTable)
+    .where(and(...conditions));
+
+  try {
+    const total = await db.$count(query);
+    const data = await query.limit(limit).offset(offset);
+
+    return {
+      data,
+      total,
+    };
+  } catch (error) {
+    console.error("Failed to get List Generus Keputrian", error);
+    throw InternalError;
+  }
+}
+
+export async function getAllGenerusGPS(
+  daerahId: number,
+  { limit, page, search, kelasPengajian, desaId, kelompokId }: TGenerusList
+) {
+  const offset = (page - 1) * limit;
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(generusTable.daerahId, daerahId),
+    sql`(${generusTable.status} ?| ${new Param(["GPS"])})`,
+  ];
+
+  if (search) {
+    const searchCondition = `%${search}%`;
+    conditions.push(or(like(generusTable.nama, searchCondition)));
+  }
+
+  if (kelasPengajian) {
+    conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
+  }
+  if (desaId) {
+    conditions.push(eq(generusTable.desaId, desaId));
+  }
+  if (kelompokId) {
+    conditions.push(eq(generusTable.kelompokId, kelompokId));
+  }
+
+  const query = db
+    .select({
+      id: generusTable.id,
+      nama: generusTable.nama,
+      tempatLahir: generusTable.tempatLahir,
+      tanggalLahir: generusTable.tanggalLahir,
+      kelasSekolah: generusTable.kelasSekolah,
+      gender: generusTable.gender,
+      noTelepon: generusTable.noTelepon,
+      status: generusTable.status,
+      kelasPengajian: generusTable.kelasPengajian,
+      namaOrtu: generusTable.namaOrtu,
+      noTeleponOrtu: generusTable.noTeleponOrtu,
+      tanggalMasukKelas: generusTable.tanggalMasukKelas,
+      foto: generusTable.foto,
+    })
+    .from(generusTable)
+    .where(and(...conditions));
+
+  try {
+    const total = await db.$count(query);
+    const data = await query.limit(limit).offset(offset);
+
+    return {
+      data,
+      total,
+    };
+  } catch (error) {
+    console.error("Failed to get List Generus Keputrian", error);
+    throw InternalError;
+  }
+}
+
+export async function getAllGenerusTahfidz(
+  daerahId: number,
+  { limit, page, search, kelasPengajian, desaId, kelompokId }: TGenerusList
+) {
+  const offset = (page - 1) * limit;
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(generusTable.daerahId, daerahId),
+    sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
+  ];
+
+  if (search) {
+    const searchCondition = `%${search}%`;
+    conditions.push(or(like(generusTable.nama, searchCondition)));
+  }
+
+  if (kelasPengajian) {
+    conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
+  }
+  if (desaId) {
+    conditions.push(eq(generusTable.desaId, desaId));
+  }
+  if (kelompokId) {
+    conditions.push(eq(generusTable.kelompokId, kelompokId));
+  }
+
+  const query = db
+    .select({
+      id: generusTable.id,
+      nama: generusTable.nama,
+      tempatLahir: generusTable.tempatLahir,
+      tanggalLahir: generusTable.tanggalLahir,
+      kelasSekolah: generusTable.kelasSekolah,
+      gender: generusTable.gender,
+      noTelepon: generusTable.noTelepon,
+      status: generusTable.status,
+      kelasPengajian: generusTable.kelasPengajian,
+      namaOrtu: generusTable.namaOrtu,
+      noTeleponOrtu: generusTable.noTeleponOrtu,
+      tanggalMasukKelas: generusTable.tanggalMasukKelas,
+      foto: generusTable.foto,
+    })
+    .from(generusTable)
+    .where(and(...conditions));
+
+  try {
+    const total = await db.$count(query);
+    const data = await query.limit(limit).offset(offset);
+
+    return {
+      data,
+      total,
+    };
+  } catch (error) {
+    console.error("Failed to get List Generus Keputrian", error);
     throw InternalError;
   }
 }

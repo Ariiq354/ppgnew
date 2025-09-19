@@ -20,7 +20,10 @@ export async function getAllMuslimun(
   }
   if (tahun) {
     conditions.push(
-      eq(sql`strftime('%Y', ${musyawarahMuslimunTable.tanggal})`, tahun)
+      eq(
+        sql`extract(year from ${musyawarahMuslimunTable.tanggal}::date)`,
+        tahun
+      )
     );
   }
 

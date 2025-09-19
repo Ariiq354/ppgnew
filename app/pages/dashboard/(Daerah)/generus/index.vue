@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { useConstantStore } from "~/stores/constant";
-  import { columns, kelasOptions, pengajianOptions } from "./_constants";
+  import { columns, pengajianOptions } from "./_constants";
   import { useAuthStore } from "~/stores/auth";
   import { APIBASE } from "~/utils";
 
@@ -12,7 +12,6 @@
   const query = reactive({
     search: "",
     page: 1,
-    kelasSekolah: "",
     kelasPengajian: "",
     desaId: "",
     kelompokId: "",
@@ -59,13 +58,7 @@
   );
 
   watch(
-    () => [
-      query.search,
-      query.kelasPengajian,
-      query.kelompokId,
-      query.kelasSekolah,
-      query.desaId,
-    ],
+    () => [query.search, query.kelasPengajian, query.kelompokId, query.desaId],
     () => {
       query.page = 1;
     }
@@ -147,11 +140,6 @@
           :loading="statusKelompok === 'pending'"
         />
         <ClearableSelectMenu
-          v-model="query.kelasSekolah"
-          placeholder="Kelas Sekolah"
-          :items="kelasOptions"
-        />
-        <ClearableSelectMenu
           v-model="query.kelasPengajian"
           placeholder="Kelas Pengajian"
           :items="pengajianOptions"
@@ -185,12 +173,6 @@
           value-key="id"
           label-key="name"
           :loading="statusKelompok === 'pending'"
-        />
-        <ClearableSelectMenu
-          v-model="query.kelasSekolah"
-          placeholder="Kelas Sekolah"
-          class="hidden flex-1 md:flex"
-          :items="kelasOptions"
         />
         <ClearableSelectMenu
           v-model="query.kelasPengajian"

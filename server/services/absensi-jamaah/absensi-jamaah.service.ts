@@ -40,7 +40,7 @@ export async function getAbsensiJamaahByPengajianId(
   }
 }
 
-export async function getCountAbsensi(kelompokId: number) {
+export async function getCountAbsensiJamaah(kelompokId: number) {
   try {
     const [data] = await db
       .select({

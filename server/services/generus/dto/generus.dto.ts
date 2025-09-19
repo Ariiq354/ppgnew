@@ -20,7 +20,6 @@ export type TGenerusCreate = z.infer<typeof OGenerusCreate>;
 export const OGenerusList = z.object({
   ...OPagination.def.shape,
   search: z.string(),
-  kelasSekolah: z.string(),
   kelasPengajian: z.string(),
   desaId: z.optional(z.coerce.number()),
   kelompokId: z.optional(z.coerce.number()),

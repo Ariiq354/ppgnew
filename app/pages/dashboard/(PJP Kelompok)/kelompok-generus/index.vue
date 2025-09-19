@@ -28,7 +28,6 @@
   const state = ref(getInitialFormData());
   const query = reactive({
     search: "",
-    kelasSekolah: "",
     kelasPengajian: "",
     page: 1,
   });
@@ -89,7 +88,7 @@
   }
 
   watch(
-    () => [query.search, query.kelasPengajian, query.kelasSekolah],
+    () => [query.search, query.kelasPengajian],
     () => {
       query.page = 1;
     }
@@ -216,11 +215,6 @@
       <template #body>
         <div class="flex flex-col gap-4">
           <ClearableSelectMenu
-            v-model="query.kelasSekolah"
-            placeholder="Kelas Sekolah"
-            :items="kelasOptions"
-          />
-          <ClearableSelectMenu
             v-model="query.kelasPengajian"
             placeholder="Kelas Pengajian"
             :items="pengajianOptions"
@@ -236,12 +230,6 @@
           leading-icon="i-lucide-search"
           placeholder="Search..."
           @update:model-value="searchDebounced"
-        />
-        <ClearableSelectMenu
-          v-model="query.kelasSekolah"
-          placeholder="Kelas Sekolah"
-          class="hidden flex-1 md:flex"
-          :items="kelasOptions"
         />
         <ClearableSelectMenu
           v-model="query.kelasPengajian"

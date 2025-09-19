@@ -25,3 +25,26 @@ export const absensiGenerusDesaTable = pgTable("absensi_generus_desa", {
   detail: text().notNull().default(""),
   ...createdUpdated,
 });
+
+export const kelasGpsTable = pgTable("kelas_gps", {
+  id: serial().primaryKey(),
+  nama: text().notNull(),
+  tanggal: text().notNull(),
+  desaId: integer()
+    .notNull()
+    .references(() => desaTable.id, { onDelete: "cascade" }),
+  ...createdUpdated,
+});
+
+export const absensiGenerusGpsTable = pgTable("absensi_generus_gps", {
+  id: serial().primaryKey(),
+  kelasId: integer()
+    .notNull()
+    .references(() => kelasGpsTable.id, { onDelete: "cascade" }),
+  generusId: integer()
+    .notNull()
+    .references(() => generusTable.id, { onDelete: "cascade" }),
+  keterangan: text().notNull(),
+  detail: text().notNull().default(""),
+  ...createdUpdated,
+});

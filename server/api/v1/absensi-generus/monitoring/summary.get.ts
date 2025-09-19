@@ -1,5 +1,5 @@
 import {
-  getCountAbsensi,
+  getCountAbsensiGenerus,
   getCountGenerusAbsensi,
 } from "~~/server/services/absensi-generus/absensi-generus.service";
 import { OAbsensiKelasPengajianList } from "~~/server/services/absensi-generus/dto/absensi-generus.dto";
@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     user.kelompokId!,
     query.kelasPengajian
   );
-  const countAbsensi = await getCountAbsensi(
+  const countAbsensi = await getCountAbsensiGenerus(
     user.kelompokId!,
     query.kelasPengajian
   );
