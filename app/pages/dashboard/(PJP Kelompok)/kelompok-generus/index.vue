@@ -48,9 +48,7 @@
       event.data as Record<string, any>
     )) {
       if (Array.isArray(value)) {
-        for (const v of value) {
-          formData.append(key, v);
-        }
+        formData.append(`${key}[]`, JSON.stringify(value));
       } else {
         formData.append(key, value);
       }

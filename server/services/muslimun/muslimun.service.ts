@@ -1,12 +1,12 @@
-import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
+import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { musyawarahMuslimunTable } from "~~/server/database/schema/kelompok";
-import type { TMuslimunList } from "./dto/muslimun.dto";
 import type { TNamaTanggal } from "~~/server/utils/dto";
+import type { TMuslimunList } from "./dto/muslimun.dto";
 
 export async function getAllMuslimun(
   kelompokId: number,
-  { limit, page, search, tahun }: TMuslimunList
+  { limit, page, search }: TMuslimunList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -17,14 +17,6 @@ export async function getAllMuslimun(
     const searchCondition = `%${search}%`;
 
     conditions.push(or(like(musyawarahMuslimunTable.nama, searchCondition)));
-  }
-  if (tahun) {
-    conditions.push(
-      eq(
-        sql`extract(year from ${musyawarahMuslimunTable.tanggal}::date)`,
-        tahun
-      )
-    );
   }
 
   const query = db

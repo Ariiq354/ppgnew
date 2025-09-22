@@ -36,9 +36,7 @@ export const pengajianOptions = [
   "PAUD",
   "Cabe Rawit",
   "Praremaja",
-  "Remaja",
-  "Pranikah",
-  "Usia Mandiri",
+  "Muda-mudi",
 ];
 
 export const bulanOptions = [

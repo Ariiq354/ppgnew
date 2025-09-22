@@ -82,23 +82,55 @@ export async function getAllPengajarExport(kelompokId: number) {
     .where(eq(pengajarTable.kelompokId, kelompokId));
 }
 
-export async function getCountPengajar(daerahId: number) {
+export async function getCountPengajar(
+  daerahId: number,
+  desaId?: number,
+  kelompokId?: number
+) {
   try {
-    return await db.$count(pengajarTable, eq(pengajarTable.daerahId, daerahId));
+    const conditions: (SQL<unknown> | undefined)[] = [
+      eq(pengajarTable.daerahId, daerahId),
+    ];
+
+    if (desaId) {
+      conditions.push(eq(pengajarTable.desaId, desaId));
+    }
+
+    if (kelompokId) {
+      conditions.push(eq(pengajarTable.kelompokId, kelompokId));
+    }
+
+    return await db.$count(pengajarTable, and(...conditions));
   } catch (error) {
     console.error("Failed to get Count Pengajar", error);
     throw InternalError;
   }
 }
 
-export async function getAllPengajarChart(daerahId: number) {
+export async function getAllPengajarChart(
+  daerahId: number,
+  desaId?: number,
+  kelompokId?: number
+) {
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(pengajarTable.daerahId, daerahId),
+  ];
+
+  if (desaId) {
+    conditions.push(eq(pengajarTable.desaId, desaId));
+  }
+
+  if (kelompokId) {
+    conditions.push(eq(pengajarTable.kelompokId, kelompokId));
+  }
+
   return await db
     .select({
       gender: pengajarTable.gender,
       status: pengajarTable.status,
     })
     .from(pengajarTable)
-    .where(eq(pengajarTable.daerahId, daerahId));
+    .where(and(...conditions));
 }
 
 export async function getPengajarById(kelompokId: number, id: number) {

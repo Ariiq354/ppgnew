@@ -357,19 +357,51 @@ export async function getGenerusOptionsKelompok(kelompokId: number) {
     .where(eq(generusTable.kelompokId, kelompokId));
 }
 
-export async function getAllGenerusChart(daerahId: number) {
+export async function getAllGenerusChart(
+  daerahId: number,
+  desaId?: number,
+  kelompokId?: number
+) {
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(generusTable.daerahId, daerahId),
+  ];
+
+  if (desaId) {
+    conditions.push(eq(generusTable.desaId, desaId));
+  }
+
+  if (kelompokId) {
+    conditions.push(eq(generusTable.kelompokId, kelompokId));
+  }
+
   return await db
     .select({
       gender: generusTable.gender,
       kelasPengajian: generusTable.kelasPengajian,
     })
     .from(generusTable)
-    .where(eq(generusTable.daerahId, daerahId));
+    .where(and(...conditions));
 }
 
-export async function getCountGenerus(daerahId: number) {
+export async function getCountGenerus(
+  daerahId: number,
+  desaId?: number,
+  kelompokId?: number
+) {
   try {
-    return await db.$count(generusTable, eq(generusTable.daerahId, daerahId));
+    const conditions: (SQL<unknown> | undefined)[] = [
+      eq(generusTable.daerahId, daerahId),
+    ];
+
+    if (desaId) {
+      conditions.push(eq(generusTable.desaId, desaId));
+    }
+
+    if (kelompokId) {
+      conditions.push(eq(generusTable.kelompokId, kelompokId));
+    }
+
+    return await db.$count(generusTable, and(...conditions));
   } catch (error) {
     console.error("Failed to get Count Generus", error);
     throw InternalError;

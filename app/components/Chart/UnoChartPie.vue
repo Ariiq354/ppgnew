@@ -50,7 +50,7 @@
         :value
         :central-label="count"
         central-sub-label="Generus"
-        :arc-width="75"
+        :arc-width="60"
       />
       <VisTooltip :triggers="triggers" />
     </VisSingleContainer>

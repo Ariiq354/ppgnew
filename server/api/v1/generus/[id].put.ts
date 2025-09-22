@@ -47,18 +47,16 @@ export default defineEventHandler(async (event) => {
 
       fields["file"] = uploadResult.secure_url;
     } else {
-      const key = part.name as string;
-      const value = part.data.toString();
+      let key = part.name as string;
+      let value = part.data.toString();
 
-      if (fields[key]) {
-        if (Array.isArray(fields[key])) {
-          (fields[key] as string[]).push(value);
-        } else {
-          fields[key] = [fields[key] as string, value];
-        }
-      } else {
-        fields[key] = value;
+      const isArrayKey = key.endsWith("[]");
+      if (isArrayKey) {
+        key = key.slice(0, -2);
+        value = JSON.parse(value);
       }
+
+      fields[key] = value;
     }
   }
 

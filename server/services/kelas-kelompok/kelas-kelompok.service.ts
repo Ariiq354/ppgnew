@@ -132,6 +132,21 @@ export async function getCountKelas(
   }
 }
 
+export async function getKelasByKelompokId(kelompokId: number) {
+  try {
+    return await db
+      .select({
+        id: kelasTable.id,
+        nama: kelasTable.nama,
+      })
+      .from(kelasTable)
+      .where(eq(kelasTable.kelompokId, kelompokId));
+  } catch (error) {
+    console.error("Failed to get Kelas By Kelompok Id", error);
+    throw InternalError;
+  }
+}
+
 export async function createKelas(kelompokId: number, data: TNamaTanggal) {
   try {
     return await db.insert(kelasTable).values({
