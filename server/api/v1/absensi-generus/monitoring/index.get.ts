@@ -1,5 +1,4 @@
-import { getAllGenerusAbsensi } from "~~/server/services/absensi-generus/absensi-generus.service";
-import { OGenerusAbsensiList } from "~~/server/services/absensi-generus/dto/absensi-generus.dto";
+import { getAllGenerusSummary } from "~~/server/services/absensi-generus/absensi-generus.service";
 import { getAllKelasOptions } from "~~/server/services/kelas-kelompok/kelas-kelompok.service";
 
 export default defineEventHandler(async (event) => {
@@ -9,7 +8,7 @@ export default defineEventHandler(async (event) => {
     OGenerusAbsensiList.parse(q)
   );
 
-  const data = await getAllGenerusAbsensi(user.kelompokId!, query);
+  const data = await getAllGenerusSummary(user.kelompokId!, query);
   const kelas = await getAllKelasOptions(user.kelompokId!, {
     nama: query.kelasPengajian,
   });

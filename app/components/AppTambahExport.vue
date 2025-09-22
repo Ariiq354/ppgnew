@@ -4,7 +4,7 @@
   const {
     path,
     addFunction = () => {},
-    addPermission = true,
+    addPermission = false,
   } = defineProps<{
     path: string;
     addPermission?: boolean;

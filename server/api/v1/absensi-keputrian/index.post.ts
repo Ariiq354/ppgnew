@@ -3,14 +3,13 @@ import {
   deleteAbsensiKeputrian,
   updateAbsensiKeputrian,
 } from "~~/server/services/absensi-keputrian/absensi-keputrian.service";
-import { OAbsensiKeputrianCreate } from "~~/server/services/absensi-keputrian/dto/absensi-keputrian.dto";
 import { getKelasKeputrianById } from "~~/server/services/kelas-keputrian/kelas-keputrian.service";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { keputrian: ["manage"] });
 
   const res = await readValidatedBody(event, (body) =>
-    OAbsensiKeputrianCreate.parse(body)
+    OAbsensiGenerusCreate.parse(body)
   );
 
   const check = await getKelasKeputrianById(res.kelasId);

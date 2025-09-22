@@ -11,20 +11,20 @@ import {
 } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { generusTable } from "~~/server/database/schema/generus";
-import type {
-  TAbsensiMudamudiCreate,
-  TMudamudiAbsensiList,
-} from "./dto/absensi-mudamudi.dto";
 import {
   absensiGenerusMudaMudiTable,
   kelasMudaMudiTable,
 } from "~~/server/database/schema/mudamudi";
+import type {
+  TAbsensiGenerusCreate,
+  TGenerusAbsensiList,
+} from "~~/server/utils/dto";
 
 const exclude = ["Pindah", "Mondok", "Tugas"];
 
 export async function getAllMudamudiExclude(
   daerahId: number,
-  { limit, page, search, kelasPengajian }: TMudamudiAbsensiList
+  { limit, page, search, kelasPengajian }: TGenerusAbsensiList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -155,7 +155,7 @@ export async function getCountMudamudi(daerahId: number) {
 
 export async function getAllMudamudiSummary(
   daerahId: number,
-  { limit, page, search, kelasPengajian }: TMudamudiAbsensiList
+  { limit, page, search, kelasPengajian }: TGenerusAbsensiList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -229,7 +229,7 @@ export async function createAbsensiMudamudi(
   kelasId: number,
   daerahId: number,
   namaKelas: string,
-  data: TAbsensiMudamudiCreate
+  data: TAbsensiGenerusCreate
 ) {
   try {
     const generus = await db.query.generusTable.findFirst({
@@ -268,7 +268,7 @@ export async function updateAbsensiMudamudi(
   kelasId: number,
   daerahId: number,
   namaKelas: string,
-  data: TAbsensiMudamudiCreate
+  data: TAbsensiGenerusCreate
 ) {
   try {
     const generus = await db.query.generusTable.findFirst({

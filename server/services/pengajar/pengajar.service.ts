@@ -3,6 +3,7 @@ import { db } from "~~/server/database";
 import { pengajarTable } from "~~/server/database/schema/pengajar";
 import type { TWilayah } from "~~/server/utils/dto";
 import type { TPengajarCreate, TPengajarList } from "./dto/pengajar.dto";
+import { kelompokTable } from "~~/server/database/schema/wilayah";
 
 export async function getAllPengajar(
   daerahId: number,
@@ -46,9 +47,11 @@ export async function getAllPengajar(
       status: pengajarTable.status,
       tanggalTugas: pengajarTable.tanggalTugas,
       foto: pengajarTable.foto,
+      namaKelompok: kelompokTable.name,
     })
     .from(pengajarTable)
-    .where(and(...conditions));
+    .where(and(...conditions))
+    .leftJoin(kelompokTable, eq(kelompokTable.id, pengajarTable.kelompokId));
 
   try {
     const total = await db.$count(query);
@@ -80,6 +83,26 @@ export async function getAllPengajarExport(kelompokId: number) {
     })
     .from(pengajarTable)
     .where(eq(pengajarTable.kelompokId, kelompokId));
+}
+
+export async function getAllPengajarExportDesa(desaId: number) {
+  return await db
+    .select({
+      id: pengajarTable.id,
+      nama: pengajarTable.nama,
+      tempatLahir: pengajarTable.tempatLahir,
+      tanggalLahir: pengajarTable.tanggalLahir,
+      pendidikan: pengajarTable.pendidikan,
+      gender: pengajarTable.gender,
+      noTelepon: pengajarTable.noTelepon,
+      status: pengajarTable.status,
+      tanggalTugas: pengajarTable.tanggalTugas,
+      foto: pengajarTable.foto,
+      namaKelompok: kelompokTable.name,
+    })
+    .from(pengajarTable)
+    .where(eq(pengajarTable.desaId, desaId))
+    .leftJoin(kelompokTable, eq(kelompokTable.id, pengajarTable.kelompokId));
 }
 
 export async function getCountPengajar(

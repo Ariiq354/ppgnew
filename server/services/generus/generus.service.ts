@@ -2,6 +2,7 @@ import { and, eq, inArray, like, or, Param, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { generusTable } from "~~/server/database/schema/generus";
 import type { TGenerusCreate, TGenerusList } from "./dto/generus.dto";
+import { kelompokTable } from "~~/server/database/schema/wilayah";
 
 export async function getAllGenerus(
   daerahId: number,
@@ -43,9 +44,11 @@ export async function getAllGenerus(
       noTeleponOrtu: generusTable.noTeleponOrtu,
       tanggalMasukKelas: generusTable.tanggalMasukKelas,
       foto: generusTable.foto,
+      namaKelompok: kelompokTable.name,
     })
     .from(generusTable)
-    .where(and(...conditions));
+    .where(and(...conditions))
+    .leftJoin(kelompokTable, eq(generusTable.kelompokId, kelompokTable.id));
 
   try {
     const total = await db.$count(query);
@@ -321,6 +324,29 @@ export async function getAllGenerusExport(kelompokId: number) {
     })
     .from(generusTable)
     .where(eq(generusTable.kelompokId, kelompokId));
+}
+
+export async function getAllGenerusExportDesa(desaId: number) {
+  return await db
+    .select({
+      id: generusTable.id,
+      nama: generusTable.nama,
+      tempatLahir: generusTable.tempatLahir,
+      tanggalLahir: generusTable.tanggalLahir,
+      kelasSekolah: generusTable.kelasSekolah,
+      gender: generusTable.gender,
+      noTelepon: generusTable.noTelepon,
+      status: generusTable.status,
+      kelasPengajian: generusTable.kelasPengajian,
+      namaOrtu: generusTable.namaOrtu,
+      noTeleponOrtu: generusTable.noTeleponOrtu,
+      tanggalMasukKelas: generusTable.tanggalMasukKelas,
+      foto: generusTable.foto,
+      namaKelompok: kelompokTable.name,
+    })
+    .from(generusTable)
+    .where(eq(generusTable.desaId, desaId))
+    .leftJoin(kelompokTable, eq(generusTable.kelompokId, kelompokTable.id));
 }
 
 export async function getAllGenerus69(daerahId: number) {

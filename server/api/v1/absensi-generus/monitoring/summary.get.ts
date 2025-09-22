@@ -2,7 +2,6 @@ import {
   getCountAbsensiGenerus,
   getCountGenerusAbsensi,
 } from "~~/server/services/absensi-generus/absensi-generus.service";
-import { OAbsensiKelasPengajianList } from "~~/server/services/absensi-generus/dto/absensi-generus.dto";
 import { getCountKelas } from "~~/server/services/kelas-kelompok/kelas-kelompok.service";
 
 export default defineEventHandler(async (event) => {

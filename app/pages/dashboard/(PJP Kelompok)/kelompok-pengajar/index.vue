@@ -80,7 +80,7 @@
   }
 
   watch(
-    () => [query.search],
+    () => [query.search, query.status],
     () => {
       query.page = 1;
     }
@@ -222,7 +222,7 @@
         <AppTambahExport
           :add-permission="pengajarEdit"
           :add-function="clickAdd"
-          path="pengajar"
+          path="pengajar/export"
         />
       </div>
       <AppTable

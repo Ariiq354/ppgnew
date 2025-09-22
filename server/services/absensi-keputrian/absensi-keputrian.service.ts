@@ -11,20 +11,20 @@ import {
 } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { generusTable } from "~~/server/database/schema/generus";
-import type {
-  TAbsensiKeputrianCreate,
-  TKeputrianAbsensiList,
-} from "./dto/absensi-keputrian.dto";
 import {
   absensiGenerusKeputrianTable,
   kelasKeputrianTable,
 } from "~~/server/database/schema/keputrian";
+import type {
+  TAbsensiGenerusCreate,
+  TGenerusAbsensiList,
+} from "~~/server/utils/dto";
 
 const exclude = ["Pindah", "Mondok", "Tugas"];
 
 export async function getAllKeputrianExclude(
   daerahId: number,
-  { limit, page, search, kelasPengajian }: TKeputrianAbsensiList
+  { limit, page, search, kelasPengajian }: TGenerusAbsensiList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -157,7 +157,7 @@ export async function getCountKeputrian(daerahId: number) {
 
 export async function getAllKeputrianSummary(
   daerahId: number,
-  { limit, page, search, kelasPengajian }: TKeputrianAbsensiList
+  { limit, page, search, kelasPengajian }: TGenerusAbsensiList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -233,7 +233,7 @@ export async function createAbsensiKeputrian(
   kelasId: number,
   daerahId: number,
   namaKelas: string,
-  data: TAbsensiKeputrianCreate
+  data: TAbsensiGenerusCreate
 ) {
   try {
     const generus = await db.query.generusTable.findFirst({
@@ -272,7 +272,7 @@ export async function updateAbsensiKeputrian(
   kelasId: number,
   daerahId: number,
   namaKelas: string,
-  data: TAbsensiKeputrianCreate
+  data: TAbsensiGenerusCreate
 ) {
   try {
     const generus = await db.query.generusTable.findFirst({

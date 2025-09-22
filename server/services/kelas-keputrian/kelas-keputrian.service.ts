@@ -2,14 +2,14 @@ import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { kelasKeputrianTable } from "~~/server/database/schema/keputrian";
 import type {
-  TKelasKeputrianList,
-  TKelasKeputrianOptionsList,
-} from "./dto/kelas-keputrian.dto";
-import type { TNamaTanggal } from "~~/server/utils/dto";
+  TKelasList,
+  TKelasOptionsList,
+  TNamaTanggal,
+} from "~~/server/utils/dto";
 
 export async function getAllKelasKeptrian(
   daerahId: number,
-  { limit, page, search, bulan, tahun, nama }: TKelasKeputrianList
+  { limit, page, search, bulan, tahun, nama }: TKelasList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -88,7 +88,7 @@ export async function getKelasKeputrianById(id: number) {
 
 export async function getAllKelasKeputrianOptions(
   daerahId: number,
-  query: TKelasKeputrianOptionsList
+  query: TKelasOptionsList
 ) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(kelasKeputrianTable.daerahId, daerahId),

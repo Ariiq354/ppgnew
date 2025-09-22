@@ -3,7 +3,6 @@ import {
   deleteAbsensiGenerus,
   updateAbsensiGenerus,
 } from "~~/server/services/absensi-generus/absensi-generus.service";
-import { OAbsensiGenerusCreate } from "~~/server/services/absensi-generus/dto/absensi-generus.dto";
 import { getKelasById } from "~~/server/services/kelas-kelompok/kelas-kelompok.service";
 
 export default defineEventHandler(async (event) => {

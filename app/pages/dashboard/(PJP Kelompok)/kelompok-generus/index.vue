@@ -244,7 +244,7 @@
         <AppTambahExport
           :add-permission="generusEdit"
           :add-function="clickAdd"
-          path="generus"
+          path="generus/export"
         />
       </div>
       <AppTable

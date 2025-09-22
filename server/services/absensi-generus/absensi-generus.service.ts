@@ -18,7 +18,7 @@ import {
 import type {
   TAbsensiGenerusCreate,
   TGenerusAbsensiList,
-} from "./dto/absensi-generus.dto";
+} from "~~/server/utils/dto";
 
 const exclude = ["Pindah", "Mondok", "Tugas"];
 
@@ -181,7 +181,7 @@ export async function getCountGenerus(kelompokId: number) {
   }
 }
 
-export async function getAllGenerusAbsensi(
+export async function getAllGenerusSummary(
   kelompokId: number,
   { limit, page, search, kelasPengajian }: TGenerusAbsensiList
 ) {

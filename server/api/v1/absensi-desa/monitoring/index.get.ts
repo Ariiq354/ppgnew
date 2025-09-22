@@ -1,15 +1,16 @@
-import { getAllKeputrianSummary } from "~~/server/services/absensi-keputrian/absensi-keputrian.service";
-import { getAllKelasKeputrianOptions } from "~~/server/services/kelas-keputrian/kelas-keputrian.service";
+import { getAllGenerusDesaSummary } from "~~/server/services/absensi-desa/absensi-desa.service";
+import { OGenerusDesaAbsensiList } from "~~/server/services/absensi-desa/dto/absensi.desa.dto";
+import { getAllKelasDesaOptions } from "~~/server/services/kelas-desa/kelas-desa.service";
 
 export default defineEventHandler(async (event) => {
-  const user = await permissionGuard(event, { keputrian: ["view"] });
+  const user = await permissionGuard(event, { pjp_desa: ["view"] });
 
   const query = await getValidatedQuery(event, (q) =>
-    OGenerusAbsensiList.parse(q)
+    OGenerusDesaAbsensiList.parse(q)
   );
 
-  const data = await getAllKeputrianSummary(user.daerahId, query);
-  const kelas = await getAllKelasKeputrianOptions(user.daerahId, {
+  const data = await getAllGenerusDesaSummary(user.desaId!, query);
+  const kelas = await getAllKelasDesaOptions(user.desaId!, {
     nama: query.kelasPengajian,
   });
 

@@ -1,12 +1,12 @@
-import { getAllKelas } from "~~/server/services/kelas-kelompok/kelas-kelompok.service";
+import { getAllKelasDesa } from "~~/server/services/kelas-desa/kelas-desa.service";
 import { OKelasList } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {
-  const user = await permissionGuard(event, { pjp_kelompok: ["view"] });
+  const user = await permissionGuard(event, { pjp_desa: ["view"] });
 
   const query = await getValidatedQuery(event, (q) => OKelasList.parse(q));
 
-  const data = await getAllKelas(user.kelompokId!, query);
+  const data = await getAllKelasDesa(user.desaId!, query);
   const metadata = {
     page: query.page,
     itemPerPage: query.limit,

@@ -1,8 +1,11 @@
 import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { kelasTable } from "~~/server/database/schema/generus";
-import type { TKelasList, TKelasOptionsList } from "./dto/kelas-kelompok.dto";
-import type { TNamaTanggal } from "~~/server/utils/dto";
+import type {
+  TKelasList,
+  TKelasOptionsList,
+  TNamaTanggal,
+} from "~~/server/utils/dto";
 
 export async function getAllKelas(
   kelompokId: number,
