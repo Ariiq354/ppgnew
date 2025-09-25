@@ -26,3 +26,12 @@ export const OGenerusList = z.object({
 });
 
 export type TGenerusList = z.infer<typeof OGenerusList>;
+
+export const OGenerusBaseList = z.object({
+  ...OPagination.def.shape,
+  search: z.string(),
+  desaId: z.optional(z.coerce.number()),
+  kelompokId: z.optional(z.coerce.number()),
+});
+
+export type TGenerusBaseList = z.infer<typeof OGenerusBaseList>;

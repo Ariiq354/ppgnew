@@ -10,13 +10,15 @@ import {
   sql,
 } from "drizzle-orm";
 import { db } from "~~/server/database";
-import { generusTable } from "~~/server/database/schema/generus";
-import type { TAbsensiGpsCreate } from "./dto/absensi-gps.dto";
 import {
   absensiGenerusGpsTable,
   kelasGpsTable,
 } from "~~/server/database/schema/desa";
-import type { TSearchPagination } from "~~/server/utils/dto";
+import { generusTable } from "~~/server/database/schema/generus";
+import type {
+  TAbsensiGenerusCreate,
+  TSearchPagination,
+} from "~~/server/utils/dto";
 
 export async function getAllGpsExclude(
   desaId: number,
@@ -205,7 +207,7 @@ export async function getCountGpsAbsensi(
 export async function createAbsensiGps(
   kelasId: number,
   desaId: number,
-  data: TAbsensiGpsCreate
+  data: TAbsensiGenerusCreate
 ) {
   try {
     const generus = await db.query.generusTable.findFirst({
@@ -233,7 +235,7 @@ export async function updateAbsensiGps(
   id: number,
   kelasId: number,
   desaId: number,
-  data: TAbsensiGpsCreate
+  data: TAbsensiGenerusCreate
 ) {
   try {
     const generus = await db.query.generusTable.findFirst({

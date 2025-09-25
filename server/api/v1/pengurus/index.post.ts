@@ -1,4 +1,4 @@
-import { OPengurusCreate } from "~~/server/services/pengurus/dto/pengurus.dto";
+import { OPengurusCreate } from "~~/server/services/pengurus/pengurus.dto";
 import { createPengurus } from "~~/server/services/pengurus/pengurus.service";
 import ENV from "~~/shared/env";
 

@@ -5,7 +5,7 @@ import {
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);
-  const body = await readValidatedBody(event, (b) => ODeleteSchema.parse(b));
+  const body = await readValidatedBody(event, (b) => ODelete.parse(b));
 
   for (const id of body.id) {
     const data = await getDokumenById(id);

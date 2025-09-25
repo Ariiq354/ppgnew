@@ -1,15 +1,11 @@
 import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { kelasGpsTable } from "~~/server/database/schema/desa";
-import type {
-  TKelasList,
-  TKelasOptionsList,
-  TNamaTanggal,
-} from "~~/server/utils/dto";
+import type { TKelasBaseList, TNamaTanggal } from "~~/server/utils/dto";
 
 export async function getAllKelasGps(
   desaId: number,
-  { limit, page, search, bulan, tahun, nama }: TKelasList
+  { limit, page, search, bulan, tahun }: TKelasBaseList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -20,10 +16,6 @@ export async function getAllKelasGps(
     const searchCondition = `%${search}%`;
 
     conditions.push(or(like(kelasGpsTable.nama, searchCondition)));
-  }
-
-  if (nama) {
-    conditions.push(eq(kelasGpsTable.nama, nama));
   }
 
   if (bulan) {
@@ -86,17 +78,10 @@ export async function getKelasGpsById(id: number) {
   }
 }
 
-export async function getAllKelasGpsOptions(
-  desaId: number,
-  query: TKelasOptionsList
-) {
+export async function getAllKelasGpsOptions(desaId: number) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(kelasGpsTable.desaId, desaId),
   ];
-
-  if (query.nama) {
-    conditions.push(eq(kelasGpsTable.nama, query.nama));
-  }
 
   const data = await db
     .select({

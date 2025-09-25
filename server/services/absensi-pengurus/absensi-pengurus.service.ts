@@ -4,7 +4,7 @@ import {
   absensiPengurusTable,
   musyawarahTable,
 } from "~~/server/database/schema/pengurus";
-import type { TAbsensiPengurusCreate } from "./dto/absensi-pengurus.dto";
+import type { TAbsensiPengurusCreate } from "./absensi-pengurus.dto";
 
 export async function getAbsensiPengurusByMusyawarahId(
   daerahId: number,

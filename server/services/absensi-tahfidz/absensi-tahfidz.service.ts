@@ -11,7 +11,7 @@ import {
 } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { generusTable } from "~~/server/database/schema/generus";
-import type { TAbsensiTahfidzCreate } from "./dto/absensi-tahfidz.dto";
+import type { TAbsensiTahfidzCreate } from "./absensi-tahfidz.dto";
 import {
   absensiGenerusTahfidzTable,
   kelasTahfidzTable,

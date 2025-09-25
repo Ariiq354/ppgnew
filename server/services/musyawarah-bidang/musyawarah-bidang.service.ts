@@ -2,7 +2,7 @@ import { db } from "~~/server/database";
 import type {
   TMusyawarahBidangCreate,
   TMusyawarahBidangList,
-} from "./dto/musyawarah-bidang.dto";
+} from "./musyawarah-bidang.dto";
 import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { musyawarahBidangTable } from "~~/server/database/schema/bidang";
 import type { roles } from "~~/shared/permission";

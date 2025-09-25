@@ -1,5 +1,5 @@
 import { createDokumen } from "~~/server/services/dokumen/dokumen.service";
-import { ODokumenCreate } from "~~/server/services/dokumen/dto/dokumen.dto";
+import { ODokumenCreate } from "~~/server/services/dokumen/dokumen.dto";
 import { uploadCloudinary } from "~~/server/utils/cloudinary";
 import Env from "~~/shared/env";
 

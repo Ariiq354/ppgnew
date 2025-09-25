@@ -1,6 +1,6 @@
 import { z } from "zod/mini";
 import { updateDesa } from "~~/server/services/desa/desa.service";
-import { ODesaCreate } from "~~/server/services/desa/dto/desa.dto";
+import { ODesaCreate } from "~~/server/services/desa/desa.dto";
 
 const paramsSchema = z.coerce.number();
 

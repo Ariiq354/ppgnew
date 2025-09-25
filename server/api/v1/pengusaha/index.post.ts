@@ -1,4 +1,4 @@
-import { OPengusahaCreate } from "~~/server/services/pengusaha/dto/pengusaha.dto";
+import { OPengusahaCreate } from "~~/server/services/pengusaha/pengusaha.dto";
 import { createPengusaha } from "~~/server/services/pengusaha/pengusaha.service";
 
 export default defineEventHandler(async (event) => {

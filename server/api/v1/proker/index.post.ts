@@ -1,4 +1,4 @@
-import { OProkerCreate } from "~~/server/services/proker/dto/proker.dto";
+import { OProkerCreate } from "~~/server/services/proker/proker.dto";
 import { createProker } from "~~/server/services/proker/proker.service";
 
 export default defineEventHandler(async (event) => {

@@ -1,5 +1,5 @@
 import { z } from "zod/mini";
-import { OProkerCreate } from "~~/server/services/proker/dto/proker.dto";
+import { OProkerCreate } from "~~/server/services/proker/proker.dto";
 import { updateProker } from "~~/server/services/proker/proker.service";
 
 export default defineEventHandler(async (event) => {

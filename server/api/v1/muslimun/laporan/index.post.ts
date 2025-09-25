@@ -1,5 +1,5 @@
 import sanitizeHtml from "sanitize-html";
-import { OLaporanMuslimunCreate } from "~~/server/services/laporan-muslimun/dto/laporan-muslimun.dto";
+import { OLaporanMuslimunCreate } from "~~/server/services/laporan-muslimun/laporan-muslimun.dto";
 import { createLaporanMuslimun } from "~~/server/services/laporan-muslimun/laporan-muslimun.service";
 
 export default defineEventHandler(async (event) => {

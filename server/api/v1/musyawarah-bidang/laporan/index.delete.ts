@@ -1,4 +1,4 @@
-import { OLaporanMusyawarahBidangDelete } from "~~/server/services/laporan-musyawarah-bidang/dto/laporan-musyawarah-bidang.dto";
+import { OLaporanMusyawarahBidangDelete } from "~~/server/services/laporan-musyawarah-bidang/laporan-musyawarah-bidang.dto";
 import { deleteLaporanMusyawarahBidang } from "~~/server/services/laporan-musyawarah-bidang/laporan-musyawarah-bidang.service";
 
 export default defineEventHandler(async (event) => {

@@ -2,7 +2,7 @@ import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { pengajarTable } from "~~/server/database/schema/pengajar";
 import type { TWilayah } from "~~/server/utils/dto";
-import type { TPengajarCreate, TPengajarList } from "./dto/pengajar.dto";
+import type { TPengajarCreate, TPengajarList } from "./pengajar.dto";
 import { kelompokTable } from "~~/server/database/schema/wilayah";
 
 export async function getAllPengajar(

@@ -1,4 +1,4 @@
-import { OProkerList } from "~~/server/services/proker/dto/proker.dto";
+import { OProkerList } from "~~/server/services/proker/proker.dto";
 import { getAllProker } from "~~/server/services/proker/proker.service";
 import { viewWhitelist } from "~~/shared/permission";
 

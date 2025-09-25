@@ -1,6 +1,6 @@
 import { z } from "zod/mini";
 import { updatePengurus } from "~~/server/services/pengurus/pengurus.service";
-import { OPengurusCreate } from "~~/server/services/pengurus/dto/pengurus.dto";
+import { OPengurusCreate } from "~~/server/services/pengurus/pengurus.dto";
 import ENV from "~~/shared/env";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;

@@ -5,7 +5,7 @@ import {
   pengurusTable,
 } from "~~/server/database/schema/pengurus";
 import type { TSearchPagination } from "~~/server/utils/dto";
-import type { TPengurusCreate } from "./dto/pengurus.dto";
+import type { TPengurusCreate } from "./pengurus.dto";
 
 export async function getAllPengurus(
   daerahId: number,

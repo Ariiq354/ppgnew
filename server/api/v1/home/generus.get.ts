@@ -1,4 +1,4 @@
-import { OGenerusList } from "~~/server/services/generus/dto/generus.dto";
+import { OGenerusList } from "~~/server/services/generus/generus.dto";
 import { getAllGenerus } from "~~/server/services/generus/generus.service";
 import { getCurrentKelas } from "~~/server/utils/common";
 

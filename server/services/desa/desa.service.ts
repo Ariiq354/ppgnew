@@ -1,7 +1,7 @@
 import { eq, inArray } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { desaTable } from "~~/server/database/schema/wilayah";
-import type { TDesaCreate, TDesaList } from "./dto/desa.dto";
+import type { TDesaCreate, TDesaList } from "./desa.dto";
 
 export async function getAllDesa({ limit, page, daerahId }: TDesaList) {
   const offset = (page - 1) * limit;

@@ -8,7 +8,7 @@ import type { roles } from "~~/shared/permission";
 import type {
   TLaporanMusyawarahBidangCreate,
   TLaporanMusyawarahBidangList,
-} from "./dto/laporan-musyawarah-bidang.dto";
+} from "./laporan-musyawarah-bidang.dto";
 
 export async function getLaporanMusyawarahBidangByMusyawarahId(
   daerahId: number,

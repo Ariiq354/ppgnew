@@ -1,5 +1,5 @@
 import sanitizeHtml from "sanitize-html";
-import { OLaporanMusyawarahBidangCreate } from "~~/server/services/laporan-musyawarah-bidang/dto/laporan-musyawarah-bidang.dto";
+import { OLaporanMusyawarahBidangCreate } from "~~/server/services/laporan-musyawarah-bidang/laporan-musyawarah-bidang.dto";
 import { createLaporanMusyawarahBidang } from "~~/server/services/laporan-musyawarah-bidang/laporan-musyawarah-bidang.service";
 
 export default defineEventHandler(async (event) => {

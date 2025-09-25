@@ -1,4 +1,4 @@
-import { OMusyawarahBidangList } from "~~/server/services/musyawarah-bidang/dto/musyawarah-bidang.dto";
+import { OMusyawarahBidangList } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.dto";
 import { getAllMusyawarahBidang } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.service";
 import { viewWhitelist } from "~~/shared/permission";
 

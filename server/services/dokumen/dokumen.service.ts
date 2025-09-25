@@ -2,7 +2,7 @@ import { eq, inArray } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { dokumenTable } from "~~/server/database/schema/dokumen";
 import type { TPagination } from "~~/server/utils/dto";
-import type { TDokumenCreate } from "./dto/dokumen.dto";
+import type { TDokumenCreate } from "./dokumen.dto";
 
 export async function getAllDokumen(
   daerahId: number,

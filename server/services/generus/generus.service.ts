@@ -1,7 +1,11 @@
 import { and, eq, inArray, like, or, Param, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { generusTable } from "~~/server/database/schema/generus";
-import type { TGenerusCreate, TGenerusList } from "./dto/generus.dto";
+import type {
+  TGenerusBaseList,
+  TGenerusCreate,
+  TGenerusList,
+} from "./generus.dto";
 import { kelompokTable } from "~~/server/database/schema/wilayah";
 
 export async function getAllGenerus(
@@ -191,7 +195,7 @@ export async function getAllGenerusMudamudi(
 
 export async function getAllGenerusGPS(
   daerahId: number,
-  { limit, page, search, kelasPengajian, desaId, kelompokId }: TGenerusList
+  { limit, page, search, desaId, kelompokId }: TGenerusBaseList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -204,9 +208,6 @@ export async function getAllGenerusGPS(
     conditions.push(or(like(generusTable.nama, searchCondition)));
   }
 
-  if (kelasPengajian) {
-    conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
-  }
   if (desaId) {
     conditions.push(eq(generusTable.desaId, desaId));
   }
@@ -249,7 +250,7 @@ export async function getAllGenerusGPS(
 
 export async function getAllGenerusTahfidz(
   daerahId: number,
-  { limit, page, search, kelasPengajian, desaId, kelompokId }: TGenerusList
+  { limit, page, search, desaId, kelompokId }: TGenerusBaseList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -262,9 +263,6 @@ export async function getAllGenerusTahfidz(
     conditions.push(or(like(generusTable.nama, searchCondition)));
   }
 
-  if (kelasPengajian) {
-    conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
-  }
   if (desaId) {
     conditions.push(eq(generusTable.desaId, desaId));
   }

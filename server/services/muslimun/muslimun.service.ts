@@ -1,12 +1,11 @@
 import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { musyawarahMuslimunTable } from "~~/server/database/schema/kelompok";
-import type { TNamaTanggal } from "~~/server/utils/dto";
-import type { TMuslimunList } from "./dto/muslimun.dto";
+import type { TNamaTanggal, TSearchPagination } from "~~/server/utils/dto";
 
 export async function getAllMuslimun(
   kelompokId: number,
-  { limit, page, search }: TMuslimunList
+  { limit, page, search }: TSearchPagination
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [

@@ -1,4 +1,4 @@
-import { OGenerusCreate } from "~~/server/services/generus/dto/generus.dto";
+import { OGenerusCreate } from "~~/server/services/generus/generus.dto";
 import { createGenerus } from "~~/server/services/generus/generus.service";
 import ENV from "~~/shared/env";
 

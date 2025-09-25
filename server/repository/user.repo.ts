@@ -35,25 +35,30 @@ export async function getAllUser(
     .from(userTable)
     .where(and(...conditions));
 
-  try {
-    const total = await db.$count(query);
-    const data = await query.limit(limit).offset(offset);
-
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List User", error);
+  const [total, err1] = await to(db.$count(query));
+  if (err1) {
+    console.error("Failed to get total user", err1);
     throw InternalError;
   }
+
+  const [data, err2] = await to(query.limit(limit).offset(offset));
+  if (err2) {
+    console.error("Failed to get list user", err2);
+    throw InternalError;
+  }
+
+  return {
+    data,
+    total,
+  };
 }
 
 export async function updateUserWilayah(id: number, body: TWilayah) {
-  try {
-    return await db.update(userTable).set(body).where(eq(userTable.id, id));
-  } catch (error) {
-    console.error("Failed to update User wilayah", error);
+  const [_, err] = await to(
+    db.update(userTable).set(body).where(eq(userTable.id, id))
+  );
+  if (err) {
+    console.error("Failed to update user wilayah", err);
     throw InternalError;
   }
 }

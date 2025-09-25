@@ -1,5 +1,5 @@
 import { getAllGenerusDesaSummary } from "~~/server/services/absensi-desa/absensi-desa.service";
-import { OGenerusDesaAbsensiList } from "~~/server/services/absensi-desa/dto/absensi.desa.dto";
+import { OGenerusDesaAbsensiList } from "~~/server/services/absensi-desa/absensi.desa.dto";
 import { getAllKelasDesaOptions } from "~~/server/services/kelas-desa/kelas-desa.service";
 
 export default defineEventHandler(async (event) => {

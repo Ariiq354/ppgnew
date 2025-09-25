@@ -2,7 +2,7 @@ import { z } from "zod/mini";
 import {
   checkWilayahNameExist,
   createDaerah,
-} from "~~/server/services/daerah/daerah.service";
+} from "~~/server/repository/daerah.repo";
 import { roles } from "~~/shared/permission";
 
 const bodySchema = z.object({

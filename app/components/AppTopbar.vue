@@ -36,16 +36,6 @@
       },
     ],
   ];
-
-  const colorMode = useColorMode();
-
-  function toggleColorMode() {
-    if (colorMode.value === "dark") {
-      colorMode.preference = "light";
-    } else {
-      colorMode.preference = "dark";
-    }
-  }
 </script>
 
 <template>
@@ -66,16 +56,7 @@
       </ClientOnly>
     </div>
     <div class="flex items-center gap-2">
-      <ClientOnly>
-        <UButton
-          :icon="colorMode.value === 'dark' ? 'i-lucide-moon' : 'i-lucide-sun'"
-          class="rounded-full p-2"
-          variant="ghost"
-          color="neutral"
-          aria-label="Color mode toggle"
-          @click="toggleColorMode"
-        />
-      </ClientOnly>
+      <UColorModeButton class="rounded-full" />
       <UDropdownMenu :items="items">
         <UButton
           icon="i-lucide-circle-user"

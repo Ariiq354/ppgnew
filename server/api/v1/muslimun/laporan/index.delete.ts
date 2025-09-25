@@ -1,4 +1,4 @@
-import { OLaporanMuslimunDelete } from "~~/server/services/laporan-muslimun/dto/laporan-muslimun.dto";
+import { OLaporanMuslimunDelete } from "~~/server/services/laporan-muslimun/laporan-muslimun.dto";
 import { deleteLaporanMuslimun } from "~~/server/services/laporan-muslimun/laporan-muslimun.service";
 
 export default defineEventHandler(async (event) => {

@@ -5,7 +5,7 @@ import {
   jamaahTable,
   pengajianTable,
 } from "~~/server/database/schema/kelompok";
-import type { TAbsensiJamaahCreate } from "./dto/absensi-jamaah.dto";
+import type { TAbsensiJamaahCreate } from "./absensi-jamaah.dto";
 
 export async function getAbsensiJamaahByPengajianId(
   kelompokId: number,

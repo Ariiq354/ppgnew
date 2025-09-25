@@ -1097,6 +1097,7 @@
             },
           ]
         : []),
+
       ...(pjp_desa
         ? [
             {
@@ -1163,11 +1164,52 @@
                   ],
                 },
                 {
+                  label: "Pengajian GPS",
+                  children: [
+                    {
+                      label: "Daftar GPS",
+                      to: "/dashboard/desa-gps",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                    {
+                      label: "Daftar Kelas",
+                      to: "/dashboard/desa-kelas-gps",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                    {
+                      label: "Absensi",
+                      to: "/dashboard/desa-absensi-gps",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                  ],
+                },
+                {
                   label: "Monitoring Kehadiran",
                   children: [
                     {
                       label: "Desa",
                       to: "/dashboard/desa-monitoring-kehadiran",
+                      onSelect: () => {
+                        if (!isDesktop.value) {
+                          constantStore.toggleSidebar();
+                        }
+                      },
+                    },
+                    {
+                      label: "GPS",
+                      to: "/dashboard/desa-monitoring-kehadiran-gps",
                       onSelect: () => {
                         if (!isDesktop.value) {
                           constantStore.toggleSidebar();

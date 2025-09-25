@@ -1,4 +1,4 @@
-import { OPengajarCreate } from "~~/server/services/pengajar/dto/pengajar.dto";
+import { OPengajarCreate } from "~~/server/services/pengajar/pengajar.dto";
 import { createPengajar } from "~~/server/services/pengajar/pengajar.service";
 import ENV from "~~/shared/env";
 

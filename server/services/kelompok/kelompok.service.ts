@@ -64,6 +64,22 @@ export async function getKelompokByDaerahId(daerahId: number) {
   }
 }
 
+export async function getKelompokByDesaId(desaId: number) {
+  try {
+    return await db
+      .select({
+        id: kelompokTable.id,
+        name: kelompokTable.name,
+        desaId: kelompokTable.desaId,
+      })
+      .from(kelompokTable)
+      .where(eq(kelompokTable.desaId, desaId));
+  } catch (error) {
+    console.error("Failed to get List Kelompok By desa Id", error);
+    throw InternalError;
+  }
+}
+
 export async function createKelompok(data: TKelompokCreate) {
   try {
     return await db

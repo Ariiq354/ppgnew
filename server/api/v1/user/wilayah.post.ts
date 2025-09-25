@@ -1,4 +1,4 @@
-import { updateUserWilayah } from "~~/server/services/user/user.service";
+import { updateUserWilayah } from "~~/server/repository/user.repo";
 
 export default defineEventHandler(async (event) => {
   const user = adminGuard(event);

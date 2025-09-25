@@ -1,4 +1,4 @@
-import { OLaporanMusyawarahList } from "~~/server/services/laporan-musyawarah/dto/laporan-musyawarah.dto";
+import { OLaporanMusyawarahList } from "~~/server/services/laporan-musyawarah/laporan-musyawarah.dto";
 import { getLaporanMusyawarahByMusyawarahId } from "~~/server/services/laporan-musyawarah/laporan-musyawarah.service";
 import { viewWhitelist } from "~~/shared/permission";
 

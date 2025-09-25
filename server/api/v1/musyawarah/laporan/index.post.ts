@@ -1,4 +1,4 @@
-import { OLaporanMusyawarahCreate } from "~~/server/services/laporan-musyawarah/dto/laporan-musyawarah.dto";
+import { OLaporanMusyawarahCreate } from "~~/server/services/laporan-musyawarah/laporan-musyawarah.dto";
 import { createLaporanMusyawarah } from "~~/server/services/laporan-musyawarah/laporan-musyawarah.service";
 import sanitizeHtml from "sanitize-html";
 

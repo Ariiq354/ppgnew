@@ -16,7 +16,7 @@ import {
   kelasDesaTable,
 } from "~~/server/database/schema/desa";
 import type { TAbsensiGenerusCreate } from "~~/server/utils/dto";
-import type { TGenerusDesaAbsensiList } from "./dto/absensi.desa.dto";
+import type { TGenerusDesaAbsensiList } from "./absensi.desa.dto";
 
 const exclude = ["Pindah", "Mondok", "Tugas"];
 
@@ -235,6 +235,39 @@ export async function getCountGenerusDesaAbsensi(
     );
   } catch (error) {
     console.error("Failed to get Count Generus", error);
+    throw InternalError;
+  }
+}
+
+export async function getAbsensiGenerusByDesaId(desaId: number) {
+  try {
+    const data = await db
+      .select({
+        id: absensiGenerusDesaTable.id,
+        generusId: absensiGenerusDesaTable.generusId,
+        kelasPengajian: generusTable.kelasPengajian,
+        detail: absensiGenerusDesaTable.detail,
+        keterangan: absensiGenerusDesaTable.keterangan,
+      })
+      .from(absensiGenerusDesaTable)
+      .leftJoin(
+        kelasDesaTable,
+        eq(absensiGenerusDesaTable.kelasId, kelasDesaTable.id)
+      )
+      .leftJoin(
+        generusTable,
+        eq(generusTable.id, absensiGenerusDesaTable.generusId)
+      )
+      .where(
+        and(
+          eq(kelasDesaTable.desaId, desaId),
+          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
+        )
+      );
+
+    return data;
+  } catch (error) {
+    console.error("Failed to get Absensi Generus Desa By Desa Id", error);
     throw InternalError;
   }
 }

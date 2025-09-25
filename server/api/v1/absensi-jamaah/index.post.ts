@@ -3,7 +3,7 @@ import {
   deleteAbsensiJamaah,
   updateAbsensiJamaah,
 } from "~~/server/services/absensi-jamaah/absensi-jamaah.service";
-import { OAbsensiJamaahCreate } from "~~/server/services/absensi-jamaah/dto/absensi-jamaah.dto";
+import { OAbsensiJamaahCreate } from "~~/server/services/absensi-jamaah/absensi-jamaah.dto";
 import { getPengajianById } from "~~/server/services/pengajian/pengajian.service";
 
 export default defineEventHandler(async (event) => {

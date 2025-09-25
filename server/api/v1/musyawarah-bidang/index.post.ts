@@ -1,4 +1,4 @@
-import { OMusyawarahBidangCreate } from "~~/server/services/musyawarah-bidang/dto/musyawarah-bidang.dto";
+import { OMusyawarahBidangCreate } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.dto";
 import { createMusyawarahBidang } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.service";
 
 export default defineEventHandler(async (event) => {

@@ -1,13 +1,11 @@
-import { z } from "zod/mini";
-import { updateDaerah } from "~~/server/services/daerah/daerah.service";
-import { ODaerahCreate } from "~~/server/services/daerah/dto/daerah.dto";
-
-const paramsSchema = z.coerce.number();
+import { OParam } from "~~/server/utils/dto";
+import { ODaerahCreate } from "./_dto";
+import { updateDaerah } from "~~/server/repository/daerah.repo";
 
 export default defineEventHandler(async (event) => {
   permissionGuard(event, { daerah: ["manage"] });
   const result = await readValidatedBody(event, (b) => ODaerahCreate.parse(b));
-  const id = paramsSchema.parse(getRouterParam(event, "id"));
+  const id = OParam.parse(getRouterParam(event, "id"));
 
   await updateDaerah(id, result);
 

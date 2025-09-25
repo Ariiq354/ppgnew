@@ -1,5 +1,5 @@
 import { getAllDesa } from "~~/server/services/desa/desa.service";
-import { ODesaList } from "~~/server/services/desa/dto/desa.dto";
+import { ODesaList } from "~~/server/services/desa/desa.dto";
 
 export default defineEventHandler(async (event) => {
   authGuard(event);

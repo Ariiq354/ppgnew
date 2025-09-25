@@ -1,5 +1,5 @@
 import { z } from "zod/mini";
-import { OPengusahaCreate } from "~~/server/services/pengusaha/dto/pengusaha.dto";
+import { OPengusahaCreate } from "~~/server/services/pengusaha/pengusaha.dto";
 import { updatePengusaha } from "~~/server/services/pengusaha/pengusaha.service";
 
 export default defineEventHandler(async (event) => {

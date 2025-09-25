@@ -1,4 +1,4 @@
-import { OSummaryLaporanMusyawarahList } from "~~/server/services/laporan-musyawarah/dto/laporan-musyawarah.dto";
+import { OSummaryLaporanMusyawarahList } from "~~/server/services/laporan-musyawarah/laporan-musyawarah.dto";
 import { getLaporanMusyawarahByMusyawarahId } from "~~/server/services/laporan-musyawarah/laporan-musyawarah.service";
 
 export default defineEventHandler(async (event) => {

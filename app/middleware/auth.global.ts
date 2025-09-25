@@ -22,6 +22,20 @@ export default defineNuxtRouteMiddleware(async (to) => {
     return navigateTo("/dashboard");
   }
 
+  if (
+    to.path.startsWith("/dashboard/kelompok") &&
+    !authStore.hasPermission({ pjp_kelompok: ["view"] })
+  ) {
+    return navigateTo("/dashboard");
+  }
+
+  if (
+    to.path.startsWith("/dashboard/desa") &&
+    !authStore.hasPermission({ pjp_desa: ["view"] })
+  ) {
+    return navigateTo("/dashboard");
+  }
+
   if (authStore.user) {
     const routePermissions: {
       route: string;

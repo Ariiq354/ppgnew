@@ -1,4 +1,4 @@
-import { getAllDaerah } from "~~/server/services/daerah/daerah.service";
+import { getAllDaerah } from "~~/server/repository/daerah.repo";
 import { OPagination } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {

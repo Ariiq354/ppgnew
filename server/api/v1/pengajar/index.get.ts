@@ -1,4 +1,4 @@
-import { OPengajarList } from "~~/server/services/pengajar/dto/pengajar.dto";
+import { OPengajarList } from "~~/server/services/pengajar/pengajar.dto";
 import { getAllPengajar } from "~~/server/services/pengajar/pengajar.service";
 
 export default defineEventHandler(async (event) => {

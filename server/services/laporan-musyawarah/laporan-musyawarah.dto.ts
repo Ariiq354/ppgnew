@@ -22,7 +22,7 @@ export const OSummaryLaporanMusyawarahList = z.object({
 export type TLaporanMusyawarahList = z.infer<typeof OLaporanMusyawarahList>;
 
 export const OLaporanMusyawarahDelete = z.object({
-  ...ODeleteSchema.def.shape,
+  ...ODelete.def.shape,
   musyawarahId: z.number(),
   bidang: z.enum(roles),
 });

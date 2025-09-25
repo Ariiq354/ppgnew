@@ -1,11 +1,9 @@
 import { deleteMusyawarahBidang } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.service";
-import { ODeleteBidangSchema } from "~~/server/utils/dto";
+import { ODeleteBidang } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { musyawarah_bidang: ["manage"] });
-  const body = await readValidatedBody(event, (b) =>
-    ODeleteBidangSchema.parse(b)
-  );
+  const body = await readValidatedBody(event, (b) => ODeleteBidang.parse(b));
 
   if (user.role !== "admin" && user.role !== body.bidang) {
     throw createError({

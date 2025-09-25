@@ -1,6 +1,6 @@
 import { z } from "zod/mini";
 import { updatePengajar } from "~~/server/services/pengajar/pengajar.service";
-import { OPengajarCreate } from "~~/server/services/pengajar/dto/pengajar.dto";
+import { OPengajarCreate } from "~~/server/services/pengajar/pengajar.dto";
 import ENV from "~~/shared/env";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;

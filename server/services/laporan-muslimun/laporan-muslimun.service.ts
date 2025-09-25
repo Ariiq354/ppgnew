@@ -7,7 +7,7 @@ import {
 import type {
   TLaporanMuslimunCreate,
   TLaporanMuslimunList,
-} from "./dto/laporan-muslimun.dto";
+} from "./laporan-muslimun.dto";
 
 export async function getLaporanMuslimunByMusyawarahId(
   kelompokId: number,

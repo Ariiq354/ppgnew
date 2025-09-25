@@ -1,16 +1,14 @@
 import { z } from "zod/mini";
 import { roles } from "~~/shared/permission";
 
-export const ODeleteSchema = z.object({
+export const OParam = z.coerce.number();
+
+export const ODelete = z.object({
   id: z.array(z.number()),
 });
 
-export const ODeleteBidangSchema = z.object({
+export const ODeleteBidang = z.object({
   id: z.array(z.number()),
-  bidang: z.enum(roles),
-});
-
-export const OBidangSchema = z.object({
   bidang: z.enum(roles),
 });
 
@@ -35,12 +33,23 @@ export const ONamaTanggal = z.object({
   tanggal: z.string(),
 });
 
-export const OKelasList = z.object({
+export const OKegiatanWithNama = z.object({
   ...OPagination.def.shape,
   search: z.string(),
   nama: z.string(),
   tahun: z.string(),
   bulan: z.string(),
+});
+
+export const OKegiatan = z.object({
+  ...OPagination.def.shape,
+  search: z.string(),
+  tahun: z.string(),
+  bulan: z.string(),
+});
+
+export const OBidangSchema = z.object({
+  bidang: z.enum(roles),
 });
 
 export const OKelasOptionsList = z.object({
@@ -79,7 +88,9 @@ export type TAbsensiKelasPengajianList = z.infer<
   typeof OAbsensiKelasPengajianList
 >;
 
-export type TKelasList = z.infer<typeof OKelasList>;
+export type TKelasList = z.infer<typeof OKegiatanWithNama>;
+
+export type TKelasBaseList = z.infer<typeof OKegiatan>;
 
 export type TKelasOptionsList = z.infer<typeof OKelasOptionsList>;
 

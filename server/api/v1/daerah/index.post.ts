@@ -1,9 +1,9 @@
+import { roles } from "~~/shared/permission";
+import { ODaerahCreate } from "./_dto";
 import {
   checkWilayahNameExist,
   createDaerah,
-} from "~~/server/services/daerah/daerah.service";
-import { ODaerahCreate } from "~~/server/services/daerah/dto/daerah.dto";
-import { roles } from "~~/shared/permission";
+} from "~~/server/repository/daerah.repo";
 
 export default defineEventHandler(async (event) => {
   permissionGuard(event, { daerah: ["manage"] });

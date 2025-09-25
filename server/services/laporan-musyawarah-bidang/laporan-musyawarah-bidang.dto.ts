@@ -26,7 +26,7 @@ export type TLaporanMusyawarahBidangList = z.infer<
 >;
 
 export const OLaporanMusyawarahBidangDelete = z.object({
-  ...ODeleteSchema.def.shape,
+  ...ODelete.def.shape,
   musyawarahId: z.number(),
   bidang: z.enum(roles),
 });

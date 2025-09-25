@@ -1,4 +1,4 @@
-import { getAllUser } from "~~/server/services/user/user.service";
+import { getAllUser } from "~~/server/repository/user.repo";
 
 export default defineEventHandler(async (event) => {
   const user = adminGuard(event);

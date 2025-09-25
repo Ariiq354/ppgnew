@@ -13,16 +13,11 @@ export function authGuard(event: H3Event) {
 }
 
 export async function permissionGuard(event: H3Event, permission: TStatement) {
-  if (!event.context.user) {
-    throw createError({
-      statusCode: 401,
-      message: "Unauthenticated",
-    });
-  }
+  const user = authGuard(event);
 
   const res = await auth.api.userHasPermission({
     body: {
-      userId: String(event.context.user.id),
+      userId: String(user.id),
       permission,
     },
   });
@@ -34,7 +29,7 @@ export async function permissionGuard(event: H3Event, permission: TStatement) {
     });
   }
 
-  return event.context.user;
+  return user;
 }
 
 export function adminGuard(event: H3Event) {

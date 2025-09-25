@@ -2,7 +2,7 @@ import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { prokerTable } from "~~/server/database/schema/bidang";
 import type { roles } from "~~/shared/permission";
-import type { TProkerCreate, TProkerList } from "./dto/proker.dto";
+import type { TProkerCreate, TProkerList } from "./proker.dto";
 
 export async function getAllProker(
   daerahId: number,

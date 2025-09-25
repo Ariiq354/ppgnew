@@ -86,6 +86,21 @@ export async function getKelasDesaById(id: number) {
   }
 }
 
+export async function getKelasByDesaId(desaId: number) {
+  try {
+    return await db
+      .select({
+        id: kelasDesaTable.id,
+        nama: kelasDesaTable.nama,
+      })
+      .from(kelasDesaTable)
+      .where(eq(kelasDesaTable.desaId, desaId));
+  } catch (error) {
+    console.error("Failed to get Kelas Desa By Desa Id", error);
+    throw InternalError;
+  }
+}
+
 export async function getAllKelasDesaOptions(
   desaId: number,
   query: TKelasOptionsList

@@ -2,7 +2,7 @@ import { deleteKelasKeputrian } from "~~/server/services/kelas-keputrian/kelas-k
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { keputrian: ["manage"] });
-  const body = await readValidatedBody(event, (b) => ODeleteSchema.parse(b));
+  const body = await readValidatedBody(event, (b) => ODelete.parse(b));
 
   await deleteKelasKeputrian(user.daerahId, body.id);
   return HttpResponse();

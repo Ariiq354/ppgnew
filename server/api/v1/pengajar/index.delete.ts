@@ -5,7 +5,7 @@ import {
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });
-  const body = await readValidatedBody(event, (b) => ODeleteSchema.parse(b));
+  const body = await readValidatedBody(event, (b) => ODelete.parse(b));
 
   for (const id of body.id) {
     const data = await getPengajarById(user.kelompokId!, id);

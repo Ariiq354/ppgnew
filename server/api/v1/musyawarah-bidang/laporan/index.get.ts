@@ -1,4 +1,4 @@
-import { OLaporanMusyawarahBidangList } from "~~/server/services/laporan-musyawarah-bidang/dto/laporan-musyawarah-bidang.dto";
+import { OLaporanMusyawarahBidangList } from "~~/server/services/laporan-musyawarah-bidang/laporan-musyawarah-bidang.dto";
 import { getLaporanMusyawarahBidangByMusyawarahId } from "~~/server/services/laporan-musyawarah-bidang/laporan-musyawarah-bidang.service";
 import { viewWhitelist } from "~~/shared/permission";
 

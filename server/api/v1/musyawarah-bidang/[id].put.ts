@@ -1,5 +1,5 @@
 import { z } from "zod/mini";
-import { OMusyawarahBidangCreate } from "~~/server/services/musyawarah-bidang/dto/musyawarah-bidang.dto";
+import { OMusyawarahBidangCreate } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.dto";
 import { updateMusyawarahBidang } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.service";
 
 export default defineEventHandler(async (event) => {

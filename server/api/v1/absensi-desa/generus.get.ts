@@ -1,5 +1,5 @@
 import { getAllGenerusDesaExclude } from "~~/server/services/absensi-desa/absensi-desa.service";
-import { OGenerusDesaAbsensiList } from "~~/server/services/absensi-desa/dto/absensi.desa.dto";
+import { OGenerusDesaAbsensiList } from "~~/server/services/absensi-desa/absensi.desa.dto";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["view"] });

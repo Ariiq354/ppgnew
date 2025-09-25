@@ -1,6 +1,6 @@
 import { z } from "zod/mini";
 import { updateGenerus } from "~~/server/services/generus/generus.service";
-import { OGenerusCreate } from "~~/server/services/generus/dto/generus.dto";
+import { OGenerusCreate } from "~~/server/services/generus/generus.dto";
 import ENV from "~~/shared/env";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;

@@ -2,7 +2,6 @@ import { z } from "zod/mini";
 
 const EnvSchema = z.object({
   DATABASE_URL: z.string().check(z.minLength(1)),
-  // DATABASE_AUTH_TOKEN: z.string().check(z.minLength(1)),
   DOKUMEN_PRESET: z.string().check(z.minLength(1)),
   PENGURUS_PRESET: z.string().check(z.minLength(1)),
   PENGAJAR_PRESET: z.string().check(z.minLength(1)),

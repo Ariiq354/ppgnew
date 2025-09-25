@@ -15,6 +15,6 @@ export const OLaporanMuslimunList = z.object({
 export type TLaporanMuslimunList = z.infer<typeof OLaporanMuslimunList>;
 
 export const OLaporanMuslimunDelete = z.object({
-  ...ODeleteSchema.def.shape,
+  ...ODelete.def.shape,
   musyawarahId: z.number(),
 });
