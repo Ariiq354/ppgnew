@@ -5,7 +5,7 @@ import {
   pengurusTable,
 } from "~~/server/database/schema/pengurus";
 import type { TSearchPagination } from "~~/server/utils/dto";
-import type { TPengurusCreate } from "./pengurus.dto";
+import type { TPengurusCreate } from "../api/v1/pengurus/_dto";
 
 export async function getAllPengurus(
   daerahId: number,
@@ -40,32 +40,35 @@ export async function getAllPengurus(
     .from(pengurusTable)
     .where(and(...conditions));
 
-  try {
-    const total = await db.$count(query);
-    const data = await query.limit(limit).offset(offset);
+  const total = assertNoErr(
+    "Failed to get total Pengurus",
+    await to(db.$count(query))
+  );
+  const data = assertNoErr(
+    "Failed to get data Pengurus",
+    await to(query.limit(limit).offset(offset))
+  );
 
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List Pengurus", error);
-    throw InternalError;
-  }
+  return { data, total };
 }
 
 export async function getAllPengurusExport(daerahId: number) {
-  return await db
-    .select({
-      nama: pengurusTable.nama,
-      pendidikan: pengurusTable.pendidikan,
-      bidang: pengurusTable.bidang,
-      foto: pengurusTable.foto,
-      tempatLahir: pengurusTable.tempatLahir,
-      tanggalLahir: pengurusTable.tanggalLahir,
-    })
-    .from(pengurusTable)
-    .where(eq(pengurusTable.daerahId, daerahId));
+  return assertNoErr(
+    "Failed to export pengurus",
+    await to(
+      db
+        .select({
+          nama: pengurusTable.nama,
+          pendidikan: pengurusTable.pendidikan,
+          bidang: pengurusTable.bidang,
+          foto: pengurusTable.foto,
+          tempatLahir: pengurusTable.tempatLahir,
+          tanggalLahir: pengurusTable.tanggalLahir,
+        })
+        .from(pengurusTable)
+        .where(eq(pengurusTable.daerahId, daerahId))
+    )
+  );
 }
 
 export async function getAllPengurusAbsensi(
@@ -104,57 +107,53 @@ export async function getAllPengurusAbsensi(
     )
     .groupBy(pengurusTable.id, pengurusTable.nama, pengurusTable.bidang);
 
-  try {
-    const total = await db.$count(query);
-    const data = await query.limit(limit).offset(offset);
+  const total = assertNoErr(
+    "Failed to get total Pengurus",
+    await to(db.$count(query))
+  );
+  const data = assertNoErr(
+    "Failed to get data Pengurus",
+    await to(query.limit(limit).offset(offset))
+  );
 
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List Pengurus", error);
-    throw InternalError;
-  }
+  return { data, total };
 }
 
 export async function getPengurusById(daerahId: number, id: number) {
-  try {
-    return await db.query.pengurusTable.findFirst({
-      where: and(
-        eq(pengurusTable.daerahId, daerahId),
-        eq(pengurusTable.id, id)
-      ),
-      columns: {
-        id: true,
-        foto: true,
-      },
-    });
-  } catch (error) {
-    console.error("Failed to get Pengurus By Id", error);
-    throw InternalError;
-  }
+  return assertNoErr(
+    "Failed to get Pengurus by id",
+    await to(
+      db.query.pengurusTable.findFirst({
+        where: and(
+          eq(pengurusTable.daerahId, daerahId),
+          eq(pengurusTable.id, id)
+        ),
+        columns: {
+          id: true,
+          foto: true,
+        },
+      })
+    )
+  );
 }
 
 export async function getCountPengurus(daerahId: number) {
-  try {
-    return await db.$count(pengurusTable, eq(pengurusTable.daerahId, daerahId));
-  } catch (error) {
-    console.error("Failed to get Count Pengurus", error);
-    throw InternalError;
-  }
+  return assertNoErr(
+    "Failed to count Pengurus",
+    await to(db.$count(pengurusTable, eq(pengurusTable.daerahId, daerahId)))
+  );
 }
 
 export async function createPengurus(daerahId: number, data: TPengurusCreate) {
-  try {
-    return await db.insert(pengurusTable).values({
-      ...data,
-      daerahId,
-    });
-  } catch (error) {
-    console.error("Failed to create Pengurus", error);
-    throw InternalError;
-  }
+  assertNoErr(
+    "Failed to create Pengurus",
+    await to(
+      db.insert(pengurusTable).values({
+        ...data,
+        daerahId,
+      })
+    )
+  );
 }
 
 export async function updatePengurus(
@@ -162,28 +161,31 @@ export async function updatePengurus(
   daerahId: number,
   data: TPengurusCreate
 ) {
-  try {
-    return await db
-      .update(pengurusTable)
-      .set(data)
-      .where(
-        and(eq(pengurusTable.id, id), eq(pengurusTable.daerahId, daerahId))
-      );
-  } catch (error) {
-    console.error("Failed to Update Pengurus", error);
-    throw InternalError;
-  }
+  assertNoErr(
+    "Failed to update Pengurus",
+    await to(
+      db
+        .update(pengurusTable)
+        .set(data)
+        .where(
+          and(eq(pengurusTable.id, id), eq(pengurusTable.daerahId, daerahId))
+        )
+    )
+  );
 }
 
 export async function deletePengurus(daerahId: number, id: number[]) {
-  try {
-    return await db
-      .delete(pengurusTable)
-      .where(
-        and(inArray(pengurusTable.id, id), eq(pengurusTable.daerahId, daerahId))
-      );
-  } catch (error) {
-    console.error("Failed to delete Pengurus", error);
-    throw InternalError;
-  }
+  assertNoErr(
+    "Failed to delete Pengurus",
+    await to(
+      db
+        .delete(pengurusTable)
+        .where(
+          and(
+            inArray(pengurusTable.id, id),
+            eq(pengurusTable.daerahId, daerahId)
+          )
+        )
+    )
+  );
 }

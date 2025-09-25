@@ -17,113 +17,89 @@ export async function getAllDaerah({ limit, page }: TPagination) {
     })
     .from(daerahTable);
 
-  const [total, err1] = await to(db.$count(query));
-  if (err1) {
-    console.error("Failed to get total daerah", err1);
-    throw InternalError;
-  }
+  const total = assertNoErr(
+    "Failed to get total daerah",
+    await to(db.$count(query))
+  );
 
-  const [data, err2] = await to(query.limit(limit).offset(offset));
-  if (err2) {
-    console.error("Failed to get data daerah", err2);
-    throw InternalError;
-  }
+  const data = assertNoErr(
+    "Failed to get data daerah",
+    await to(query.limit(limit).offset(offset))
+  );
 
-  return {
-    data,
-    total,
-  };
+  return { data, total };
 }
 
 export async function getOptionsDaerah() {
-  const [_, err] = await to(
-    db
-      .select({
-        id: daerahTable.id,
-        name: daerahTable.name,
-      })
-      .from(daerahTable)
+  return assertNoErr(
+    "Failed to get options daerah",
+    await to(
+      db
+        .select({
+          id: daerahTable.id,
+          name: daerahTable.name,
+        })
+        .from(daerahTable)
+    )
   );
-  if (err) {
-    console.error("Failed to get options daerah", err);
-    throw InternalError;
-  }
 }
 
 export async function createDaerah(data: TDaerahCreate) {
-  const [res, err] = await to(
-    db
-      .insert(daerahTable)
-      .values(data)
-      .returning({ insertedId: daerahTable.id })
+  return assertNoErr(
+    "Failed to create daerah",
+    await to(
+      db
+        .insert(daerahTable)
+        .values(data)
+        .returning({ insertedId: daerahTable.id })
+    )
   );
-  if (err) {
-    console.error("Failed to create daerah", err);
-    throw InternalError;
-  }
-
-  return res;
 }
 
 export async function updateDaerah(id: number, data: TDaerahCreate) {
-  const [_, err] = await to(
-    db.update(daerahTable).set(data).where(eq(daerahTable.id, id))
+  assertNoErr(
+    "Failed to update daerah",
+    await to(db.update(daerahTable).set(data).where(eq(daerahTable.id, id)))
   );
-  if (err) {
-    console.error("Failed to update daerah", err);
-    throw InternalError;
-  }
 }
 
 export async function deleteDaerah(id: number[]) {
-  const [_, err] = await to(
-    db.delete(daerahTable).where(inArray(daerahTable.id, id))
+  assertNoErr(
+    "Failed to delete daerah",
+    await to(db.delete(daerahTable).where(inArray(daerahTable.id, id)))
   );
-  if (err) {
-    console.error("Failed to delete daerah", err);
-    throw InternalError;
-  }
 }
 
 export async function checkWilayahNameExist(name: string) {
-  const [daerah, err1] = await to(
-    db
-      .select({ name: daerahTable.name })
-      .from(daerahTable)
-      .where(eq(daerahTable.name, name))
+  const daerah = assertNoErr(
+    "Failed to check daerah name",
+    await to(
+      db
+        .select({ name: daerahTable.name })
+        .from(daerahTable)
+        .where(eq(daerahTable.name, name))
+    )
   );
-  if (err1) {
-    console.error("Failed to check daerah Name", err1);
-    throw InternalError;
-  }
 
-  const [desa, err2] = await to(
-    db
-      .select({ name: desaTable.name })
-      .from(desaTable)
-      .where(eq(desaTable.name, name))
+  const desa = assertNoErr(
+    "Failed to check desa name",
+    await to(
+      db
+        .select({ name: desaTable.name })
+        .from(desaTable)
+        .where(eq(desaTable.name, name))
+    )
   );
-  if (err2) {
-    console.error("Failed to check desa Name", err2);
-    throw InternalError;
-  }
 
-  const [kelompok, err3] = await to(
-    db
-      .select({ name: kelompokTable.name })
-      .from(kelompokTable)
-      .where(eq(kelompokTable.name, name))
+  const kelompok = assertNoErr(
+    "Failed to check kelompok name",
+    await to(
+      db
+        .select({ name: kelompokTable.name })
+        .from(kelompokTable)
+        .where(eq(kelompokTable.name, name))
+    )
   );
-  if (err3) {
-    console.error("Failed to check desa Name", err3);
-    throw InternalError;
-  }
 
-  const itemArr = [...daerah, ...desa, ...kelompok];
-
-  if (itemArr.length > 0) {
-    return true;
-  }
-
-  return false;
+  return [...daerah, ...desa, ...kelompok].length > 0;
 }

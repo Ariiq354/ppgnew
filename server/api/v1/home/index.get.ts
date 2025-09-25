@@ -1,9 +1,9 @@
-import { getCountDesa } from "~~/server/services/desa/desa.service";
+import { getCountDesa } from "~~/server/repository/desa.repo";
+import { getCountKelompok } from "~~/server/repository/kelompok.repo";
 import {
   getAllGenerusChart,
   getCountGenerus,
 } from "~~/server/services/generus/generus.service";
-import { getCountKelompok } from "~~/server/services/kelompok/kelompok.service";
 import {
   getAllPengajarChart,
   getCountPengajar,

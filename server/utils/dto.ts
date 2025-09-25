@@ -88,6 +88,12 @@ export type TAbsensiKelasPengajianList = z.infer<
   typeof OAbsensiKelasPengajianList
 >;
 
+export type TDelete = z.infer<typeof ODelete>;
+
+export type TDeleteBidang = z.infer<typeof ODeleteBidang>;
+
+export type TBidangSchema = z.infer<typeof OBidangSchema>;
+
 export type TKelasList = z.infer<typeof OKegiatanWithNama>;
 
 export type TKelasBaseList = z.infer<typeof OKegiatan>;

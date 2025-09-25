@@ -1,7 +1,7 @@
-import { createKelompok } from "~~/server/services/kelompok/kelompok.service";
-import { OKelompokCreate } from "~~/server/services/kelompok/dto/kelompok.dto";
-import { checkWilayahNameExist } from "~~/server/services/daerah/daerah.service";
-import { getDesaById } from "~~/server/services/desa/desa.service";
+import { checkWilayahNameExist } from "~~/server/repository/daerah.repo";
+import { getDesaById } from "~~/server/repository/desa.repo";
+import { OKelompokCreate } from "./_dto";
+import { createKelompok } from "~~/server/repository/kelompok.repo";
 
 export default defineEventHandler(async (event) => {
   permissionGuard(event, { kelompok: ["manage"] });

@@ -4,7 +4,7 @@ import {
   updateAbsensiJamaah,
 } from "~~/server/services/absensi-jamaah/absensi-jamaah.service";
 import { OAbsensiJamaahCreate } from "~~/server/services/absensi-jamaah/absensi-jamaah.dto";
-import { getPengajianById } from "~~/server/services/pengajian/pengajian.service";
+import { getPengajianById } from "~~/server/repository/pengajian.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });

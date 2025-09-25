@@ -1,6 +1,6 @@
-import { getDesaByDaerahId } from "~~/server/services/desa/desa.service";
+import { getDesaByDaerahId } from "~~/server/repository/desa.repo";
+import { getKelompokByDaerahId } from "~~/server/repository/kelompok.repo";
 import { getAllGenerus69 } from "~~/server/services/generus/generus.service";
-import { getKelompokByDaerahId } from "~~/server/services/kelompok/kelompok.service";
 
 type Generus = {
   kelasSekolah: string;

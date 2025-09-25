@@ -1,5 +1,5 @@
 import { z } from "zod/mini";
-import { getOptionsKelompok } from "~~/server/services/kelompok/kelompok.service";
+import { getOptionsKelompok } from "~~/server/repository/kelompok.repo";
 
 export default defineEventHandler(async (event) => {
   authGuard(event);
@@ -14,5 +14,5 @@ export default defineEventHandler(async (event) => {
 
   const data = await getOptionsKelompok(query.desaId);
 
-  return HttpResponse(data.data);
+  return HttpResponse(data);
 });

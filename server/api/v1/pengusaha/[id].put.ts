@@ -1,15 +1,13 @@
-import { z } from "zod/mini";
-import { OPengusahaCreate } from "~~/server/services/pengusaha/pengusaha.dto";
-import { updatePengusaha } from "~~/server/services/pengusaha/pengusaha.service";
+import { OPengusahaCreate } from "~~/server/api/v1/pengusaha/_dto";
+import { updatePengusaha } from "~~/server/repository/pengusaha.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { kemandirian: ["manage"] });
-  const id = getRouterParam(event, "id");
-  const parsed = z.coerce.number().parse(id);
+  const id = OParam.parse(getRouterParam(event, "id"));
 
   const body = await readValidatedBody(event, (b) => OPengusahaCreate.parse(b));
 
-  await updatePengusaha(parsed, user.daerahId, body);
+  await updatePengusaha(id, user.daerahId, body);
 
   return HttpResponse();
 });

@@ -2,21 +2,7 @@ import { z } from "zod/mini";
 import { z as zo } from "zod";
 import { OPagination } from "~~/server/utils/dto";
 import { roles } from "~~/shared/permission";
-
-const bulanOptions = [
-  "Januari",
-  "Februari",
-  "Maret",
-  "April",
-  "Mei",
-  "Juni",
-  "Juli",
-  "Agustus",
-  "September",
-  "Oktober",
-  "November",
-  "Desember",
-] as const;
+import { bulanOptions } from "~~/shared/contants";
 
 export const OProkerCreate = z.object({
   kegiatan: z.string(),

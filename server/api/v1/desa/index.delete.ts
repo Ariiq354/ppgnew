@@ -1,4 +1,4 @@
-import { deleteDesa } from "~~/server/services/desa/desa.service";
+import { deleteDesa } from "~~/server/repository/desa.repo";
 
 export default defineEventHandler(async (event) => {
   permissionGuard(event, { desa: ["manage"] });

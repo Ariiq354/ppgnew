@@ -1,5 +1,5 @@
 import { getAllMusyawarahOptions } from "~~/server/services/musyawarah/musyawarah.service";
-import { getAllPengurusAbsensi } from "~~/server/services/pengurus/pengurus.service";
+import { getAllPengurusAbsensi } from "~~/server/repository/pengurus.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { sekretariat: ["view"] });

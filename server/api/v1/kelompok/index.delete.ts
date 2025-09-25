@@ -1,4 +1,4 @@
-import { deleteKelompok } from "~~/server/services/kelompok/kelompok.service";
+import { deleteKelompok } from "~~/server/repository/kelompok.repo";
 
 export default defineEventHandler(async (event) => {
   permissionGuard(event, { kelompok: ["manage"] });

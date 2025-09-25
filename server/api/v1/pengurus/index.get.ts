@@ -1,4 +1,4 @@
-import { getAllPengurus } from "~~/server/services/pengurus/pengurus.service";
+import { getAllPengurus } from "~~/server/repository/pengurus.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { sekretariat: ["view"] });

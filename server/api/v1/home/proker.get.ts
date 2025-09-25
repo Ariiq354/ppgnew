@@ -1,5 +1,5 @@
-import { OProkerList } from "~~/server/services/proker/proker.dto";
-import { getAllProker } from "~~/server/services/proker/proker.service";
+import { getAllProker } from "~~/server/repository/proker.repo";
+import { OProkerList } from "../proker/_dto";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);

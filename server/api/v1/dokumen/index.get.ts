@@ -1,4 +1,4 @@
-import { getAllDokumen } from "~~/server/services/dokumen/dokumen.service";
+import { getAllDokumen } from "~~/server/repository/dokumen.repo";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);

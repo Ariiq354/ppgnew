@@ -1,4 +1,4 @@
-import { getAllPengajianOptions } from "~~/server/services/pengajian/pengajian.service";
+import { getAllPengajianOptions } from "~~/server/repository/pengajian.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["view"] });

@@ -1,4 +1,4 @@
-import { createPengajian } from "~~/server/services/pengajian/pengajian.service";
+import { createPengajian } from "~~/server/repository/pengajian.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });

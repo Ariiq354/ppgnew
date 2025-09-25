@@ -1,6 +1,6 @@
-import { checkWilayahNameExist } from "~~/server/services/daerah/daerah.service";
-import { createDesa } from "~~/server/services/desa/desa.service";
-import { ODesaCreate } from "~~/server/services/desa/desa.dto";
+import { checkWilayahNameExist } from "~~/server/repository/daerah.repo";
+import { ODesaCreate } from "./_dto";
+import { createDesa } from "~~/server/repository/desa.repo";
 
 export default defineEventHandler(async (event) => {
   permissionGuard(event, { desa: ["manage"] });

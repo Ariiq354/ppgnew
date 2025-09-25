@@ -1,4 +1,4 @@
-import { getAllPengusaha } from "~~/server/services/pengusaha/pengusaha.service";
+import { getAllPengusaha } from "~~/server/repository/pengusaha.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { kemandirian: ["view"] });

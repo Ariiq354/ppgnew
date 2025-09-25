@@ -1,21 +1,13 @@
-import { z } from "zod/mini";
-import { OProkerCreate } from "~~/server/services/proker/proker.dto";
-import { updateProker } from "~~/server/services/proker/proker.service";
+import { updateProkerService } from "~~/server/services/proker.service";
+import { OProkerCreate } from "./_dto";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { proker: ["manage"] });
-  const id = getRouterParam(event, "id");
-  const parsed = z.coerce.number().parse(id);
+  const id = OParam.parse(getRouterParam(event, "id"));
 
   const body = await readValidatedBody(event, (b) => OProkerCreate.parse(b));
-  if (user.role !== "admin" && user.role !== body.bidang) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Unauthorized",
-    });
-  }
 
-  await updateProker(parsed, user.daerahId, body);
+  await updateProkerService(id, user, body);
 
   return HttpResponse();
 });

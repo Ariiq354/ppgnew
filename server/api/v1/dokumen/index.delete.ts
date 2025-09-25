@@ -1,7 +1,7 @@
 import {
   deleteDokumen,
   getDokumenById,
-} from "~~/server/services/dokumen/dokumen.service";
+} from "~~/server/repository/dokumen.repo";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);

@@ -1,7 +1,7 @@
-import { createDokumen } from "~~/server/services/dokumen/dokumen.service";
-import { ODokumenCreate } from "~~/server/services/dokumen/dokumen.dto";
+import { createDokumen } from "~~/server/repository/dokumen.repo";
 import { uploadCloudinary } from "~~/server/utils/cloudinary";
 import Env from "~~/shared/env";
+import { ODokumenCreate } from "./_dto";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 

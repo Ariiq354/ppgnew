@@ -1,5 +1,5 @@
-import { getAllKelompok } from "~~/server/services/kelompok/kelompok.service";
-import { OKelompokList } from "~~/server/services/kelompok/dto/kelompok.dto";
+import { getAllKelompok } from "~~/server/repository/kelompok.repo";
+import { OKelompokList } from "./_dto";
 
 export default defineEventHandler(async (event) => {
   authGuard(event);

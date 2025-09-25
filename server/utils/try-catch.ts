@@ -8,3 +8,11 @@ export async function to<T, E = Error>(
     return [null, error as E];
   }
 }
+
+export function assertNoErr<T>(label: string, [data, err]: [T | null, any]) {
+  if (err) {
+    console.error(label, err);
+    throw InternalError;
+  }
+  return data as T;
+}

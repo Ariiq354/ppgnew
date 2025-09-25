@@ -1,10 +1,10 @@
+import { getKelompokByDesaId } from "~~/server/repository/kelompok.repo";
 import { OAbsensiKelasPengajianKelompokList } from "~~/server/services/absensi-generus/absensi-generus.dto";
 import {
   getCountAbsensiGenerus,
   getCountGenerusAbsensi,
 } from "~~/server/services/absensi-generus/absensi-generus.service";
 import { getCountKelas } from "~~/server/services/kelas-kelompok/kelas-kelompok.service";
-import { getKelompokByDesaId } from "~~/server/services/kelompok/kelompok.service";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["view"] });
