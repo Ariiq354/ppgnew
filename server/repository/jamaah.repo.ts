@@ -4,7 +4,7 @@ import {
   absensiJamaahKelompokTable,
   jamaahTable,
 } from "~~/server/database/schema/kelompok";
-import type { TJamaahCreate } from "./dto/jamaah.dto";
+import type { TJamaahCreate } from "../api/v1/jamaah/_dto";
 import type { TWilayah, TSearchPagination } from "~~/server/utils/dto";
 
 export async function getAllJamaah(
@@ -18,7 +18,6 @@ export async function getAllJamaah(
 
   if (search) {
     const searchCondition = `%${search}%`;
-
     conditions.push(or(like(jamaahTable.nama, searchCondition)));
   }
 
@@ -30,27 +29,31 @@ export async function getAllJamaah(
     .from(jamaahTable)
     .where(and(...conditions));
 
-  try {
-    const total = await db.$count(query);
-    const data = await query.limit(limit).offset(offset);
+  const total = assertNoErr(
+    "Failed to get total count of Jamaah",
+    await to(db.$count(query))
+  );
 
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List Jamaah", error);
-    throw InternalError;
-  }
+  const data = assertNoErr(
+    "Failed to get list of Jamaah",
+    await to(query.limit(limit).offset(offset))
+  );
+
+  return { data, total };
 }
 
 export async function getAllJamaahExport(kelompokId: number) {
-  return await db
-    .select({
-      nama: jamaahTable.nama,
-    })
-    .from(jamaahTable)
-    .where(eq(jamaahTable.kelompokId, kelompokId));
+  return assertNoErr(
+    "Failed to export Jamaah data",
+    await to(
+      db
+        .select({
+          nama: jamaahTable.nama,
+        })
+        .from(jamaahTable)
+        .where(eq(jamaahTable.kelompokId, kelompokId))
+    )
+  );
 }
 
 export async function getAllJamaahAbsensi(
@@ -64,7 +67,6 @@ export async function getAllJamaahAbsensi(
 
   if (search) {
     const searchCondition = `%${search}%`;
-
     conditions.push(or(like(jamaahTable.nama, searchCondition)));
   }
 
@@ -83,39 +85,36 @@ export async function getAllJamaahAbsensi(
     )
     .groupBy(jamaahTable.id, jamaahTable.nama);
 
-  try {
-    const total = await db.$count(query);
-    const data = await query.limit(limit).offset(offset);
+  const total = assertNoErr(
+    "Failed to get total count of Jamaah Absensi",
+    await to(db.$count(query))
+  );
 
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List Jamaah Absensi", error);
-    throw InternalError;
-  }
+  const data = assertNoErr(
+    "Failed to get list of Jamaah Absensi",
+    await to(query.limit(limit).offset(offset))
+  );
+
+  return { data, total };
 }
 
 export async function getCountJamaah(kelompokId: number) {
-  try {
-    return await db.$count(jamaahTable, eq(jamaahTable.kelompokId, kelompokId));
-  } catch (error) {
-    console.error("Failed to get Count Jamaah", error);
-    throw InternalError;
-  }
+  return assertNoErr(
+    "Failed to get count of Jamaah",
+    await to(db.$count(jamaahTable, eq(jamaahTable.kelompokId, kelompokId)))
+  );
 }
 
 export async function createJamaah(wilayah: TWilayah, data: TJamaahCreate) {
-  try {
-    return await db.insert(jamaahTable).values({
-      ...data,
-      ...wilayah,
-    });
-  } catch (error) {
-    console.error("Failed to create Jamaah", error);
-    throw InternalError;
-  }
+  return assertNoErr(
+    "Failed to create Jamaah",
+    await to(
+      db.insert(jamaahTable).values({
+        ...data,
+        ...wilayah,
+      })
+    )
+  );
 }
 
 export async function updateJamaah(
@@ -123,28 +122,31 @@ export async function updateJamaah(
   kelompokId: number,
   data: TJamaahCreate
 ) {
-  try {
-    return await db
-      .update(jamaahTable)
-      .set(data)
-      .where(
-        and(eq(jamaahTable.id, id), eq(jamaahTable.kelompokId, kelompokId))
-      );
-  } catch (error) {
-    console.error("Failed to Update Jamaah", error);
-    throw InternalError;
-  }
+  return assertNoErr(
+    "Failed to Update Jamaah",
+    await to(
+      db
+        .update(jamaahTable)
+        .set(data)
+        .where(
+          and(eq(jamaahTable.id, id), eq(jamaahTable.kelompokId, kelompokId))
+        )
+    )
+  );
 }
 
 export async function deleteJamaah(kelompokId: number, id: number[]) {
-  try {
-    return await db
-      .delete(jamaahTable)
-      .where(
-        and(inArray(jamaahTable.id, id), eq(jamaahTable.kelompokId, kelompokId))
-      );
-  } catch (error) {
-    console.error("Failed to delete Jamaah", error);
-    throw InternalError;
-  }
+  return assertNoErr(
+    "Failed to delete Jamaah",
+    await to(
+      db
+        .delete(jamaahTable)
+        .where(
+          and(
+            inArray(jamaahTable.id, id),
+            eq(jamaahTable.kelompokId, kelompokId)
+          )
+        )
+    )
+  );
 }

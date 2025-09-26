@@ -1,4 +1,4 @@
-import { getAllMuslimunOptions } from "~~/server/services/muslimun/muslimun.service";
+import { getAllMuslimunOptions } from "~~/server/repository/muslimun.repo";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);

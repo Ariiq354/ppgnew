@@ -1,4 +1,4 @@
-import { getAllKelasGps } from "~~/server/services/kelas-gps/kelas-gps.service";
+import { getAllKelasGps } from "~~/server/repository/kelas-gps.repo";
 import { OKegiatan } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {

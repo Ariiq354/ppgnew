@@ -1,4 +1,4 @@
-import { getAllKelas } from "~~/server/services/kelas-kelompok/kelas-kelompok.service";
+import { getAllKelas } from "~~/server/repository/kelas-kelompok.repo";
 import { OKegiatanWithNama } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {

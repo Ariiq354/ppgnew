@@ -1,5 +1,5 @@
-import { OMusyawarahBidangCreate } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.dto";
-import { createMusyawarahBidang } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.service";
+import { OMusyawarahBidangCreate } from "~~/server/api/v1/musyawarah-bidang/_dto";
+import { createMusyawarahBidangService } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.service";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { musyawarah_bidang: ["manage"] });
@@ -7,14 +7,8 @@ export default defineEventHandler(async (event) => {
   const body = await readValidatedBody(event, (b) =>
     OMusyawarahBidangCreate.parse(b)
   );
-  if (user.role !== "admin" && user.role !== body.bidang) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Unauthorized",
-    });
-  }
 
-  await createMusyawarahBidang(user.daerahId, body);
+  await createMusyawarahBidangService(user, body);
 
   return HttpResponse();
 });

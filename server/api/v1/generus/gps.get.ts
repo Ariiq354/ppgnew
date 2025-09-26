@@ -1,5 +1,5 @@
-import { OGenerusBaseList } from "~~/server/services/generus/generus.dto";
-import { getAllGenerusGPS } from "~~/server/services/generus/generus.service";
+import { OGenerusBaseList } from "~~/server/api/v1/generus/_dto";
+import { getAllGenerusGPS } from "~~/server/repository/generus.repo";
 import { getCurrentKelas } from "~~/server/utils/common";
 
 export default defineEventHandler(async (event) => {

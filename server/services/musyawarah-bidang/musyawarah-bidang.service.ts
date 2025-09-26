@@ -1,151 +1,102 @@
-import { db } from "~~/server/database";
+import type { H3Event } from "h3";
+import { viewWhitelist } from "~~/shared/permission";
 import type {
   TMusyawarahBidangCreate,
   TMusyawarahBidangList,
-} from "./musyawarah-bidang.dto";
-import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
-import { musyawarahBidangTable } from "~~/server/database/schema/bidang";
-import type { roles } from "~~/shared/permission";
+} from "../../api/v1/musyawarah-bidang/_dto";
+import {
+  createMusyawarahBidang,
+  deleteMusyawarahBidang,
+  getAllMusyawarahBidang,
+  getAllMusyawarahBidangExport,
+  getAllMusyawarahBidangOptions,
+  updateMusyawarahBidang,
+} from "../../repository/musyawarah-bidang/musyawarah-bidang.repo";
 
-export async function getAllMusyawarahBidang(
-  daerahId: number,
-  { limit, page, search, bidang }: TMusyawarahBidangList
+export async function getAllMusyawarahBidangOptionsService(
+  user: UserWithId,
+  query: TBidangSchema
 ) {
-  const offset = (page - 1) * limit;
-  const conditions: (SQL<unknown> | undefined)[] = [
-    eq(musyawarahBidangTable.daerahId, daerahId),
-    eq(musyawarahBidangTable.bidang, bidang),
-  ];
-
-  if (search) {
-    const searchCondition = `%${search}%`;
-
-    conditions.push(or(like(musyawarahBidangTable.nama, searchCondition)));
-  }
-
-  const query = db
-    .select({
-      id: musyawarahBidangTable.id,
-      nama: musyawarahBidangTable.nama,
-      tanggal: musyawarahBidangTable.tanggal,
-      bidang: musyawarahBidangTable.bidang,
-    })
-    .from(musyawarahBidangTable)
-    .where(and(...conditions));
-
-  try {
-    const total = await db.$count(query);
-    const data = await query.limit(limit).offset(offset);
-
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List MusyawarahBidang", error);
-    throw InternalError;
-  }
-}
-
-export async function getAllMusyawarahBidangExport(
-  daerahId: number,
-  bidang: (typeof roles)[number]
-) {
-  return await db
-    .select({
-      nama: musyawarahBidangTable.nama,
-      tanggal: musyawarahBidangTable.tanggal,
-    })
-    .from(musyawarahBidangTable)
-    .where(
-      and(
-        eq(musyawarahBidangTable.daerahId, daerahId),
-        eq(musyawarahBidangTable.bidang, bidang)
-      )
-    );
-}
-
-export async function getAllMusyawarahBidangOptions(
-  daerahId: number,
-  bidang: (typeof roles)[number]
-) {
-  const conditions: (SQL<unknown> | undefined)[] = [
-    eq(musyawarahBidangTable.daerahId, daerahId),
-    eq(musyawarahBidangTable.bidang, bidang),
-  ];
-
-  const data = await db
-    .select({
-      id: musyawarahBidangTable.id,
-      nama: musyawarahBidangTable.nama,
-      tanggal: musyawarahBidangTable.tanggal,
-    })
-    .from(musyawarahBidangTable)
-    .where(and(...conditions));
-
-  try {
-    return {
-      data,
-    };
-  } catch (error) {
-    console.error("Failed to get List All MusyawarahBidang", error);
-    throw InternalError;
-  }
-}
-
-export async function createMusyawarahBidang(
-  daerahId: number,
-  data: TMusyawarahBidangCreate
-) {
-  try {
-    return await db.insert(musyawarahBidangTable).values({
-      ...data,
-      daerahId,
+  if (!viewWhitelist.has(user.role!) && user.role !== query.bidang) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Unauthorized",
     });
-  } catch (error) {
-    console.error("Failed to create MusyawarahBidang", error);
-    throw InternalError;
   }
+
+  return await getAllMusyawarahBidangOptions(user.daerahId, query.bidang);
 }
 
-export async function updateMusyawarahBidang(
+export async function createMusyawarahBidangService(
+  user: UserWithId,
+  body: TMusyawarahBidangCreate
+) {
+  if (user.role !== "admin" && user.role !== body.bidang) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Unauthorized",
+    });
+  }
+
+  await createMusyawarahBidang(user.daerahId, body);
+}
+
+export async function getAllMusyawarahBidangService(
+  user: UserWithId,
+  query: TMusyawarahBidangList
+) {
+  if (!viewWhitelist.has(user.role!) && user.role !== query.bidang) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Unauthorized",
+    });
+  }
+
+  return await getAllMusyawarahBidang(user.daerahId, query);
+}
+
+export async function deleteMusyawarahBidangService(
+  user: UserWithId,
+  body: TDeleteBidang
+) {
+  if (user.role !== "admin" && user.role !== body.bidang) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Unauthorized",
+    });
+  }
+
+  await deleteMusyawarahBidang(user.daerahId, body.bidang, body.id);
+}
+
+export async function updateMusyawarahBidangService(
   id: number,
-  daerahId: number,
-  data: TMusyawarahBidangCreate
+  user: UserWithId,
+  body: TMusyawarahBidangCreate
 ) {
-  try {
-    return await db
-      .update(musyawarahBidangTable)
-      .set(data)
-      .where(
-        and(
-          eq(musyawarahBidangTable.id, id),
-          eq(musyawarahBidangTable.daerahId, daerahId)
-        )
-      );
-  } catch (error) {
-    console.error("Failed to Update MusyawarahBidang", error);
-    throw InternalError;
+  if (user.role !== "admin" && user.role !== body.bidang) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Unauthorized",
+    });
   }
+
+  await updateMusyawarahBidang(id, user.daerahId, body);
 }
 
-export async function deleteMusyawarahBidang(
-  daerahId: number,
-  bidang: (typeof roles)[number],
-  id: number[]
+export async function exportMusyawarahBidangService(
+  event: H3Event,
+  user: UserWithId,
+  query: TBidangSchema
 ) {
-  try {
-    return await db
-      .delete(musyawarahBidangTable)
-      .where(
-        and(
-          inArray(musyawarahBidangTable.id, id),
-          eq(musyawarahBidangTable.daerahId, daerahId),
-          eq(musyawarahBidangTable.bidang, bidang)
-        )
-      );
-  } catch (error) {
-    console.error("Failed to delete MusyawarahBidang", error);
-    throw InternalError;
+  if (!viewWhitelist.has(user.role!) && user.role !== query.bidang) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Unauthorized",
+    });
   }
+
+  const data = await getAllMusyawarahBidangExport(user.daerahId, query.bidang);
+
+  return exportToXlsx(event, "musyawarah-bidang", data);
 }

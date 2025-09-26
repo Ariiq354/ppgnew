@@ -1,13 +1,13 @@
+import {
+  getAllPengajarChart,
+  getCountPengajar,
+} from "~~/server/repository/pengajar.repo";
 import { getAbsensiGenerusByKelompokId } from "~~/server/services/absensi-generus/absensi-generus.service";
 import {
   getAllGenerusChart,
   getCountGenerus,
-} from "~~/server/services/generus/generus.service";
-import { getKelasByKelompokId } from "~~/server/services/kelas-kelompok/kelas-kelompok.service";
-import {
-  getAllPengajarChart,
-  getCountPengajar,
-} from "~~/server/services/pengajar/pengajar.service";
+} from "~~/server/repository/generus.repo";
+import { getKelasByKelompokId } from "~~/server/repository/kelas-kelompok.repo";
 
 const pengajianOptions = [
   "PAUD",

@@ -1,4 +1,4 @@
-import { getAllMusyawarah } from "~~/server/services/musyawarah/musyawarah.service";
+import { getAllMusyawarah } from "~~/server/repository/musyawarah.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { sekretariat: ["view"] });

@@ -1,4 +1,4 @@
-import { deleteJamaah } from "~~/server/services/jamaah/jamaah.service";
+import { deleteJamaah } from "~~/server/repository/jamaah.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });

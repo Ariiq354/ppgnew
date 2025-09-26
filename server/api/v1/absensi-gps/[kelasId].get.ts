@@ -1,5 +1,5 @@
 import { getAbsensiGpsByKelasId } from "~~/server/services/absensi-gps/absensi-gps.service";
-import { getKelasGpsById } from "~~/server/services/kelas-gps/kelas-gps.service";
+import { getKelasGpsById } from "~~/server/repository/kelas-gps.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["view"] });

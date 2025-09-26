@@ -1,5 +1,5 @@
 import { getAllGenerusSummary } from "~~/server/services/absensi-generus/absensi-generus.service";
-import { getAllKelasOptions } from "~~/server/services/kelas-kelompok/kelas-kelompok.service";
+import { getAllKelasOptions } from "~~/server/repository/kelas-kelompok.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["view"] });

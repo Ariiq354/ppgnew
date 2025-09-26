@@ -1,0 +1,136 @@
+import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
+import { db } from "~~/server/database";
+import { musyawarahMuslimunTable } from "~~/server/database/schema/kelompok";
+import type { TNamaTanggal, TSearchPagination } from "~~/server/utils/dto";
+
+export async function getAllMuslimun(
+  kelompokId: number,
+  { limit, page, search }: TSearchPagination
+) {
+  const offset = (page - 1) * limit;
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(musyawarahMuslimunTable.kelompokId, kelompokId),
+  ];
+
+  if (search) {
+    const searchCondition = `%${search}%`;
+    conditions.push(or(like(musyawarahMuslimunTable.nama, searchCondition)));
+  }
+
+  const query = db
+    .select({
+      id: musyawarahMuslimunTable.id,
+      nama: musyawarahMuslimunTable.nama,
+      tanggal: musyawarahMuslimunTable.tanggal,
+    })
+    .from(musyawarahMuslimunTable)
+    .where(and(...conditions));
+
+  const total = assertNoErr(
+    "Failed to get total count of Muslimun",
+    await to(db.$count(query))
+  );
+
+  const data = assertNoErr(
+    "Failed to get list of Muslimun",
+    await to(query.limit(limit).offset(offset))
+  );
+
+  return { data, total };
+}
+
+export async function getMuslimunById(id: number) {
+  const data = assertNoErr(
+    "Failed to get Muslimun by Id",
+    await to(
+      db.query.musyawarahMuslimunTable.findFirst({
+        where: eq(musyawarahMuslimunTable.id, id),
+      })
+    )
+  );
+
+  return { data };
+}
+
+export async function getAllMuslimunOptions(kelompokId: number) {
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(musyawarahMuslimunTable.kelompokId, kelompokId),
+  ];
+
+  const data = assertNoErr(
+    "Failed to get all Muslimun options",
+    await to(
+      db
+        .select({
+          id: musyawarahMuslimunTable.id,
+          nama: musyawarahMuslimunTable.nama,
+          tanggal: musyawarahMuslimunTable.tanggal,
+        })
+        .from(musyawarahMuslimunTable)
+        .where(and(...conditions))
+    )
+  );
+
+  return { data };
+}
+
+export async function getCountMuslimun(kelompokId: number) {
+  return assertNoErr(
+    "Failed to get count of Muslimun",
+    await to(
+      db.$count(
+        musyawarahMuslimunTable,
+        eq(musyawarahMuslimunTable.kelompokId, kelompokId)
+      )
+    )
+  );
+}
+
+export async function createMuslimun(kelompokId: number, data: TNamaTanggal) {
+  return assertNoErr(
+    "Failed to create Muslimun",
+    await to(
+      db.insert(musyawarahMuslimunTable).values({
+        ...data,
+        kelompokId,
+      })
+    )
+  );
+}
+
+export async function updateMuslimun(
+  id: number,
+  kelompokId: number,
+  data: TNamaTanggal
+) {
+  return assertNoErr(
+    "Failed to update Muslimun",
+    await to(
+      db
+        .update(musyawarahMuslimunTable)
+        .set(data)
+        .where(
+          and(
+            eq(musyawarahMuslimunTable.id, id),
+            eq(musyawarahMuslimunTable.kelompokId, kelompokId)
+          )
+        )
+    )
+  );
+}
+
+export async function deleteMuslimun(kelompokId: number, id: number[]) {
+  return assertNoErr(
+    "Failed to delete Muslimun",
+    await to(
+      db
+        .delete(musyawarahMuslimunTable)
+        .where(
+          and(
+            inArray(musyawarahMuslimunTable.id, id),
+            eq(musyawarahMuslimunTable.kelompokId, kelompokId)
+          )
+        )
+    )
+  );
+}

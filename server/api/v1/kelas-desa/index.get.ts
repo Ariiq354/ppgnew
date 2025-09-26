@@ -1,4 +1,4 @@
-import { getAllKelasDesa } from "~~/server/services/kelas-desa/kelas-desa.service";
+import { getAllKelasDesa } from "~~/server/repository/kelas-desa.repo";
 import { OKegiatanWithNama } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {

@@ -1,14 +1,12 @@
-import { z } from "zod/mini";
-import { updateMusyawarah } from "~~/server/services/musyawarah/musyawarah.service";
+import { updateMusyawarah } from "~~/server/repository/musyawarah.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { sekretariat: ["manage"] });
-  const id = getRouterParam(event, "id");
-  const parsed = z.coerce.number().parse(id);
+  const id = OParam.parse(getRouterParam(event, "id"));
 
   const body = await readValidatedBody(event, (b) => ONamaTanggal.parse(b));
 
-  await updateMusyawarah(parsed, user.daerahId, body);
+  await updateMusyawarah(id, user.daerahId, body);
 
   return HttpResponse();
 });

@@ -1,5 +1,5 @@
 import { z } from "zod/mini";
-import { updateMuslimun } from "~~/server/services/muslimun/muslimun.service";
+import { updateMuslimun } from "~~/server/repository/muslimun.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });

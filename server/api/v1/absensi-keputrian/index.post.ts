@@ -3,7 +3,7 @@ import {
   deleteAbsensiKeputrian,
   updateAbsensiKeputrian,
 } from "~~/server/services/absensi-keputrian/absensi-keputrian.service";
-import { getKelasKeputrianById } from "~~/server/services/kelas-keputrian/kelas-keputrian.service";
+import { getKelasKeputrianById } from "~~/server/repository/kelas-keputrian.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { keputrian: ["manage"] });

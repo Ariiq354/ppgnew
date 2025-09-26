@@ -2,12 +2,12 @@ import { getAbsensiGenerusByDesaId } from "~~/server/services/absensi-desa/absen
 import {
   getAllGenerusChart,
   getCountGenerus,
-} from "~~/server/services/generus/generus.service";
-import { getKelasByDesaId } from "~~/server/services/kelas-desa/kelas-desa.service";
+} from "~~/server/repository/generus.repo";
+import { getKelasByDesaId } from "~~/server/repository/kelas-desa.repo";
 import {
   getAllPengajarChart,
   getCountPengajar,
-} from "~~/server/services/pengajar/pengajar.service";
+} from "~~/server/repository/pengajar.repo";
 
 const pengajianOptions = [
   "PAUD",

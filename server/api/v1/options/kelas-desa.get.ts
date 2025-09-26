@@ -1,4 +1,4 @@
-import { getAllKelasDesaOptions } from "~~/server/services/kelas-desa/kelas-desa.service";
+import { getAllKelasDesaOptions } from "~~/server/repository/kelas-desa.repo";
 import { OKelasOptionsList } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {

@@ -1,4 +1,4 @@
-import { deleteMuslimun } from "~~/server/services/muslimun/muslimun.service";
+import { deleteMuslimun } from "~~/server/repository/muslimun.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });

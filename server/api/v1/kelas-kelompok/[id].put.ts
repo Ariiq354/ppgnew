@@ -1,14 +1,12 @@
-import { z } from "zod/mini";
-import { updateKelas } from "~~/server/services/kelas-kelompok/kelas-kelompok.service";
+import { updateKelas } from "~~/server/repository/kelas-kelompok.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });
-  const id = getRouterParam(event, "id");
-  const parsed = z.coerce.number().parse(id);
+  const id = OParam.parse(getRouterParam(event, "id"));
 
   const body = await readValidatedBody(event, (b) => ONamaTanggal.parse(b));
 
-  await updateKelas(parsed, user.kelompokId!, body);
+  await updateKelas(id, user.kelompokId!, body);
 
   return HttpResponse();
 });

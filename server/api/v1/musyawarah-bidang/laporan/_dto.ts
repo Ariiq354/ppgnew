@@ -30,3 +30,7 @@ export const OLaporanMusyawarahBidangDelete = z.object({
   musyawarahId: z.number(),
   bidang: z.enum(roles),
 });
+
+export type TLaporanMusyawarahBidangDelete = z.infer<
+  typeof OLaporanMusyawarahBidangDelete
+>;

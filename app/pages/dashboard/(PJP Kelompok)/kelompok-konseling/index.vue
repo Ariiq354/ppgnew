@@ -28,9 +28,7 @@
     query,
   });
 
-  const { data: dataGenerus } = await useFetch(
-    `${APIBASE}/options/generus/kelompok`
-  );
+  const { data: dataGenerus } = await useFetch(`${APIBASE}/options/generus`);
 
   const viewStatus = ref(false);
   const modalOpen = ref(false);

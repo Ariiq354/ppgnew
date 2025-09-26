@@ -1,6 +1,5 @@
-import { OMusyawarahBidangList } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.dto";
-import { getAllMusyawarahBidang } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.service";
-import { viewWhitelist } from "~~/shared/permission";
+import { OMusyawarahBidangList } from "~~/server/api/v1/musyawarah-bidang/_dto";
+import { getAllMusyawarahBidangService } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.service";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { musyawarah_bidang: ["view"] });
@@ -9,14 +8,8 @@ export default defineEventHandler(async (event) => {
     OMusyawarahBidangList.parse(q)
   );
 
-  if (!viewWhitelist.has(user.role!) && user.role !== query.bidang) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Unauthorized",
-    });
-  }
+  const data = await getAllMusyawarahBidangService(user, query);
 
-  const data = await getAllMusyawarahBidang(user.daerahId, query);
   const metadata = {
     page: query.page,
     itemPerPage: query.limit,

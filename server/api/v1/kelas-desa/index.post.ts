@@ -1,4 +1,4 @@
-import { createKelasDesa } from "~~/server/services/kelas-desa/kelas-desa.service";
+import { createKelasDesa } from "~~/server/repository/kelas-desa.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["manage"] });

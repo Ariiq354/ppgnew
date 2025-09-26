@@ -1,5 +1,5 @@
-import { OPengajarList } from "~~/server/services/pengajar/pengajar.dto";
-import { getAllPengajar } from "~~/server/services/pengajar/pengajar.service";
+import { OPengajarList } from "~~/server/api/v1/pengajar/_dto";
+import { getAllPengajar } from "~~/server/repository/pengajar.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["view"] });

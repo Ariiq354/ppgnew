@@ -5,7 +5,7 @@ import type {
   TGenerusBaseList,
   TGenerusCreate,
   TGenerusList,
-} from "./generus.dto";
+} from "../api/v1/generus/_dto";
 import { kelompokTable } from "~~/server/database/schema/wilayah";
 
 export async function getAllGenerus(
@@ -54,18 +54,16 @@ export async function getAllGenerus(
     .where(and(...conditions))
     .leftJoin(kelompokTable, eq(generusTable.kelompokId, kelompokTable.id));
 
-  try {
-    const total = await db.$count(query);
-    const data = await query.limit(limit).offset(offset);
+  const total = assertNoErr(
+    "Failed to get total count of Generus",
+    await to(db.$count(query))
+  );
+  const data = assertNoErr(
+    "Failed to get list of Generus",
+    await to(query.limit(limit).offset(offset))
+  );
 
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List Generus", error);
-    throw InternalError;
-  }
+  return { data, total };
 }
 
 export async function getAllGenerusKeputrian(
@@ -117,18 +115,16 @@ export async function getAllGenerusKeputrian(
     .from(generusTable)
     .where(and(...conditions));
 
-  try {
-    const total = await db.$count(query);
-    const data = await query.limit(limit).offset(offset);
+  const total = assertNoErr(
+    "Failed to get total count of Generus Keputrian",
+    await to(db.$count(query))
+  );
+  const data = assertNoErr(
+    "Failed to get list of Generus Keputrian",
+    await to(query.limit(limit).offset(offset))
+  );
 
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List Generus Keputrian", error);
-    throw InternalError;
-  }
+  return { data, total };
 }
 
 export async function getAllGenerusMudamudi(
@@ -179,18 +175,16 @@ export async function getAllGenerusMudamudi(
     .from(generusTable)
     .where(and(...conditions));
 
-  try {
-    const total = await db.$count(query);
-    const data = await query.limit(limit).offset(offset);
+  const total = assertNoErr(
+    "Failed to get total count of Generus Mudamudi",
+    await to(db.$count(query))
+  );
+  const data = assertNoErr(
+    "Failed to get list of Generus Mudamudi",
+    await to(query.limit(limit).offset(offset))
+  );
 
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List Generus Keputrian", error);
-    throw InternalError;
-  }
+  return { data, total };
 }
 
 export async function getAllGenerusGPS(
@@ -234,18 +228,16 @@ export async function getAllGenerusGPS(
     .from(generusTable)
     .where(and(...conditions));
 
-  try {
-    const total = await db.$count(query);
-    const data = await query.limit(limit).offset(offset);
+  const total = assertNoErr(
+    "Failed to get total count of Generus GPS",
+    await to(db.$count(query))
+  );
+  const data = assertNoErr(
+    "Failed to get list of Generus GPS",
+    await to(query.limit(limit).offset(offset))
+  );
 
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List Generus Keputrian", error);
-    throw InternalError;
-  }
+  return { data, total };
 }
 
 export async function getAllGenerusTahfidz(
@@ -289,96 +281,114 @@ export async function getAllGenerusTahfidz(
     .from(generusTable)
     .where(and(...conditions));
 
-  try {
-    const total = await db.$count(query);
-    const data = await query.limit(limit).offset(offset);
+  const total = assertNoErr(
+    "Failed to get total count of Generus Tahfidz",
+    await to(db.$count(query))
+  );
+  const data = assertNoErr(
+    "Failed to get list of Generus Tahfidz",
+    await to(query.limit(limit).offset(offset))
+  );
 
-    return {
-      data,
-      total,
-    };
-  } catch (error) {
-    console.error("Failed to get List Generus Keputrian", error);
-    throw InternalError;
-  }
+  return { data, total };
 }
 
 export async function getAllGenerusExport(kelompokId: number) {
-  return await db
-    .select({
-      id: generusTable.id,
-      nama: generusTable.nama,
-      tempatLahir: generusTable.tempatLahir,
-      tanggalLahir: generusTable.tanggalLahir,
-      kelasSekolah: generusTable.kelasSekolah,
-      gender: generusTable.gender,
-      noTelepon: generusTable.noTelepon,
-      status: generusTable.status,
-      kelasPengajian: generusTable.kelasPengajian,
-      namaOrtu: generusTable.namaOrtu,
-      noTeleponOrtu: generusTable.noTeleponOrtu,
-      tanggalMasukKelas: generusTable.tanggalMasukKelas,
-      foto: generusTable.foto,
-    })
-    .from(generusTable)
-    .where(eq(generusTable.kelompokId, kelompokId));
+  return assertNoErr(
+    "Failed to export Generus data",
+    await to(
+      db
+        .select({
+          id: generusTable.id,
+          nama: generusTable.nama,
+          tempatLahir: generusTable.tempatLahir,
+          tanggalLahir: generusTable.tanggalLahir,
+          kelasSekolah: generusTable.kelasSekolah,
+          gender: generusTable.gender,
+          noTelepon: generusTable.noTelepon,
+          status: generusTable.status,
+          kelasPengajian: generusTable.kelasPengajian,
+          namaOrtu: generusTable.namaOrtu,
+          noTeleponOrtu: generusTable.noTeleponOrtu,
+          tanggalMasukKelas: generusTable.tanggalMasukKelas,
+          foto: generusTable.foto,
+        })
+        .from(generusTable)
+        .where(eq(generusTable.kelompokId, kelompokId))
+    )
+  );
 }
 
 export async function getAllGenerusExportDesa(desaId: number) {
-  return await db
-    .select({
-      id: generusTable.id,
-      nama: generusTable.nama,
-      tempatLahir: generusTable.tempatLahir,
-      tanggalLahir: generusTable.tanggalLahir,
-      kelasSekolah: generusTable.kelasSekolah,
-      gender: generusTable.gender,
-      noTelepon: generusTable.noTelepon,
-      status: generusTable.status,
-      kelasPengajian: generusTable.kelasPengajian,
-      namaOrtu: generusTable.namaOrtu,
-      noTeleponOrtu: generusTable.noTeleponOrtu,
-      tanggalMasukKelas: generusTable.tanggalMasukKelas,
-      foto: generusTable.foto,
-      namaKelompok: kelompokTable.name,
-    })
-    .from(generusTable)
-    .where(eq(generusTable.desaId, desaId))
-    .leftJoin(kelompokTable, eq(generusTable.kelompokId, kelompokTable.id));
+  return assertNoErr(
+    "Failed to export Generus data by Desa",
+    await to(
+      db
+        .select({
+          id: generusTable.id,
+          nama: generusTable.nama,
+          tempatLahir: generusTable.tempatLahir,
+          tanggalLahir: generusTable.tanggalLahir,
+          kelasSekolah: generusTable.kelasSekolah,
+          gender: generusTable.gender,
+          noTelepon: generusTable.noTelepon,
+          status: generusTable.status,
+          kelasPengajian: generusTable.kelasPengajian,
+          namaOrtu: generusTable.namaOrtu,
+          noTeleponOrtu: generusTable.noTeleponOrtu,
+          tanggalMasukKelas: generusTable.tanggalMasukKelas,
+          foto: generusTable.foto,
+          namaKelompok: kelompokTable.name,
+        })
+        .from(generusTable)
+        .where(eq(generusTable.desaId, desaId))
+        .leftJoin(kelompokTable, eq(generusTable.kelompokId, kelompokTable.id))
+    )
+  );
 }
 
 export async function getAllGenerus69(daerahId: number) {
-  return await db
-    .select({
-      kelasSekolah: generusTable.kelasSekolah,
-      tanggalMasukKelas: generusTable.tanggalMasukKelas,
-      kelompokId: generusTable.kelompokId,
-      desaId: generusTable.desaId,
-      gender: generusTable.gender,
-    })
-    .from(generusTable)
-    .where(eq(generusTable.daerahId, daerahId));
+  return assertNoErr(
+    "Failed to get Generus 69 data",
+    await to(
+      db
+        .select({
+          kelasSekolah: generusTable.kelasSekolah,
+          tanggalMasukKelas: generusTable.tanggalMasukKelas,
+          kelompokId: generusTable.kelompokId,
+          desaId: generusTable.desaId,
+          gender: generusTable.gender,
+        })
+        .from(generusTable)
+        .where(eq(generusTable.daerahId, daerahId))
+    )
+  );
 }
 
 export async function getGenerusOptionsKelompok(kelompokId: number) {
-  return await db
-    .select({
-      id: generusTable.id,
-      nama: generusTable.nama,
-      tempatLahir: generusTable.tempatLahir,
-      tanggalLahir: generusTable.tanggalLahir,
-      kelasSekolah: generusTable.kelasSekolah,
-      gender: generusTable.gender,
-      noTelepon: generusTable.noTelepon,
-      status: generusTable.status,
-      kelasPengajian: generusTable.kelasPengajian,
-      namaOrtu: generusTable.namaOrtu,
-      noTeleponOrtu: generusTable.noTeleponOrtu,
-      tanggalMasukKelas: generusTable.tanggalMasukKelas,
-      foto: generusTable.foto,
-    })
-    .from(generusTable)
-    .where(eq(generusTable.kelompokId, kelompokId));
+  return assertNoErr(
+    "Failed to get Generus options for Kelompok",
+    await to(
+      db
+        .select({
+          id: generusTable.id,
+          nama: generusTable.nama,
+          tempatLahir: generusTable.tempatLahir,
+          tanggalLahir: generusTable.tanggalLahir,
+          kelasSekolah: generusTable.kelasSekolah,
+          gender: generusTable.gender,
+          noTelepon: generusTable.noTelepon,
+          status: generusTable.status,
+          kelasPengajian: generusTable.kelasPengajian,
+          namaOrtu: generusTable.namaOrtu,
+          noTeleponOrtu: generusTable.noTeleponOrtu,
+          tanggalMasukKelas: generusTable.tanggalMasukKelas,
+          foto: generusTable.foto,
+        })
+        .from(generusTable)
+        .where(eq(generusTable.kelompokId, kelompokId))
+    )
+  );
 }
 
 export async function getAllGenerusChart(
@@ -398,13 +408,18 @@ export async function getAllGenerusChart(
     conditions.push(eq(generusTable.kelompokId, kelompokId));
   }
 
-  return await db
-    .select({
-      gender: generusTable.gender,
-      kelasPengajian: generusTable.kelasPengajian,
-    })
-    .from(generusTable)
-    .where(and(...conditions));
+  return assertNoErr(
+    "Failed to get Generus chart data",
+    await to(
+      db
+        .select({
+          gender: generusTable.gender,
+          kelasPengajian: generusTable.kelasPengajian,
+        })
+        .from(generusTable)
+        .where(and(...conditions))
+    )
+  );
 }
 
 export async function getCountGenerus(
@@ -412,55 +427,53 @@ export async function getCountGenerus(
   desaId?: number,
   kelompokId?: number
 ) {
-  try {
-    const conditions: (SQL<unknown> | undefined)[] = [
-      eq(generusTable.daerahId, daerahId),
-    ];
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(generusTable.daerahId, daerahId),
+  ];
 
-    if (desaId) {
-      conditions.push(eq(generusTable.desaId, desaId));
-    }
-
-    if (kelompokId) {
-      conditions.push(eq(generusTable.kelompokId, kelompokId));
-    }
-
-    return await db.$count(generusTable, and(...conditions));
-  } catch (error) {
-    console.error("Failed to get Count Generus", error);
-    throw InternalError;
+  if (desaId) {
+    conditions.push(eq(generusTable.desaId, desaId));
   }
+
+  if (kelompokId) {
+    conditions.push(eq(generusTable.kelompokId, kelompokId));
+  }
+
+  return assertNoErr(
+    "Failed to get count of Generus",
+    await to(db.$count(generusTable, and(...conditions)))
+  );
 }
 
 export async function getGenerusById(kelompokId: number, id: number) {
-  try {
-    return await db.query.generusTable.findFirst({
-      where: and(
-        eq(generusTable.kelompokId, kelompokId),
-        eq(generusTable.id, id)
-      ),
-      columns: {
-        id: true,
-        foto: true,
-      },
-    });
-  } catch (error) {
-    console.error("Failed to get Generus By Id", error);
-    throw InternalError;
-  }
+  return assertNoErr(
+    "Failed to get Generus by ID",
+    await to(
+      db.query.generusTable.findFirst({
+        where: and(
+          eq(generusTable.kelompokId, kelompokId),
+          eq(generusTable.id, id)
+        ),
+        columns: {
+          id: true,
+          foto: true,
+        },
+      })
+    )
+  );
 }
 
 export async function createGenerus(wilayah: TWilayah, data: TGenerusCreate) {
-  try {
-    return await db.insert(generusTable).values({
-      ...data,
-      ...wilayah,
-      tanggalMasukKelas: new Date(),
-    });
-  } catch (error) {
-    console.error("Failed to create Generus", error);
-    throw InternalError;
-  }
+  return assertNoErr(
+    "Failed to create Generus",
+    await to(
+      db.insert(generusTable).values({
+        ...data,
+        ...wilayah,
+        tanggalMasukKelas: new Date(),
+      })
+    )
+  );
 }
 
 export async function updateGenerus(
@@ -468,44 +481,49 @@ export async function updateGenerus(
   kelompokId: number,
   data: TGenerusCreate
 ) {
-  try {
-    const user = await db.query.generusTable.findFirst({
-      where: and(
-        eq(generusTable.id, id),
-        eq(generusTable.kelompokId, kelompokId)
-      ),
-    });
+  const user = assertNoErr(
+    "Failed to find Generus for update",
+    await to(
+      db.query.generusTable.findFirst({
+        where: and(
+          eq(generusTable.id, id),
+          eq(generusTable.kelompokId, kelompokId)
+        ),
+      })
+    )
+  );
 
-    const updateData: Partial<typeof generusTable.$inferInsert> = { ...data };
+  const updateData: Partial<typeof generusTable.$inferInsert> = { ...data };
 
-    if (user && user.kelasSekolah !== data.kelasSekolah) {
-      updateData.tanggalMasukKelas = new Date();
-    }
-
-    return await db
-      .update(generusTable)
-      .set(updateData)
-      .where(
-        and(eq(generusTable.id, id), eq(generusTable.kelompokId, kelompokId))
-      );
-  } catch (error) {
-    console.error("Failed to Update Generus", error);
-    throw InternalError;
+  if (user && user.kelasSekolah !== data.kelasSekolah) {
+    updateData.tanggalMasukKelas = new Date();
   }
+
+  return assertNoErr(
+    "Failed to update Generus",
+    await to(
+      db
+        .update(generusTable)
+        .set(updateData)
+        .where(
+          and(eq(generusTable.id, id), eq(generusTable.kelompokId, kelompokId))
+        )
+    )
+  );
 }
 
 export async function deleteGenerus(kelompokId: number, id: number[]) {
-  try {
-    return await db
-      .delete(generusTable)
-      .where(
-        and(
-          inArray(generusTable.id, id),
-          eq(generusTable.kelompokId, kelompokId)
+  return assertNoErr(
+    "Failed to delete Generus",
+    await to(
+      db
+        .delete(generusTable)
+        .where(
+          and(
+            inArray(generusTable.id, id),
+            eq(generusTable.kelompokId, kelompokId)
+          )
         )
-      );
-  } catch (error) {
-    console.error("Failed to delete Generus", error);
-    throw InternalError;
-  }
+    )
+  );
 }

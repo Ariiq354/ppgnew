@@ -3,7 +3,7 @@ import {
   deleteAbsensiGps,
   updateAbsensiGps,
 } from "~~/server/services/absensi-gps/absensi-gps.service";
-import { getKelasGpsById } from "~~/server/services/kelas-gps/kelas-gps.service";
+import { getKelasGpsById } from "~~/server/repository/kelas-gps.repo";
 import { OAbsensiGenerusCreate } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {

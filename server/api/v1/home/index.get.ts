@@ -3,11 +3,11 @@ import { getCountKelompok } from "~~/server/repository/kelompok.repo";
 import {
   getAllGenerusChart,
   getCountGenerus,
-} from "~~/server/services/generus/generus.service";
+} from "~~/server/repository/generus.repo";
 import {
   getAllPengajarChart,
   getCountPengajar,
-} from "~~/server/services/pengajar/pengajar.service";
+} from "~~/server/repository/pengajar.repo";
 
 const pengajianOptions = [
   "PAUD",

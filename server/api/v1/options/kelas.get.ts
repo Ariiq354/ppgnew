@@ -1,4 +1,4 @@
-import { getAllKelasOptions } from "~~/server/services/kelas-kelompok/kelas-kelompok.service";
+import { getAllKelasOptions } from "~~/server/repository/kelas-kelompok.repo";
 import { OKelasOptionsList } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {

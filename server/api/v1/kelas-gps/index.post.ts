@@ -1,4 +1,4 @@
-import { createKelasGps } from "~~/server/services/kelas-gps/kelas-gps.service";
+import { createKelasGps } from "~~/server/repository/kelas-gps.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["manage"] });

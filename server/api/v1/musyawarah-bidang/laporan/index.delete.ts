@@ -1,24 +1,13 @@
-import { OLaporanMusyawarahBidangDelete } from "~~/server/services/laporan-musyawarah-bidang/laporan-musyawarah-bidang.dto";
-import { deleteLaporanMusyawarahBidang } from "~~/server/services/laporan-musyawarah-bidang/laporan-musyawarah-bidang.service";
+import { deleteLaporanMusyawarahBidangService } from "~~/server/services/musyawarah-bidang/laporan-musyawarah-bidang.service";
+import { OLaporanMusyawarahBidangDelete } from "./_dto";
 
 export default defineEventHandler(async (event) => {
-  const user = await permissionGuard(event, { sekretariat: ["manage"] });
+  const user = await permissionGuard(event, { musyawarah_bidang: ["manage"] });
   const body = await readValidatedBody(event, (b) =>
     OLaporanMusyawarahBidangDelete.parse(b)
   );
 
-  if (user.role !== "admin" && user.role !== body.bidang) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Unauthorized",
-    });
-  }
+  await deleteLaporanMusyawarahBidangService(user, body);
 
-  await deleteLaporanMusyawarahBidang(
-    body.id,
-    body.musyawarahId,
-    user.daerahId,
-    body.bidang
-  );
   return HttpResponse();
 });

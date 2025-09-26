@@ -1,4 +1,4 @@
-import { getAllJamaahAbsensi } from "~~/server/services/jamaah/jamaah.service";
+import { getAllJamaahAbsensi } from "~~/server/repository/jamaah.repo";
 import { getAllPengajianOptions } from "~~/server/repository/pengajian.repo";
 
 export default defineEventHandler(async (event) => {

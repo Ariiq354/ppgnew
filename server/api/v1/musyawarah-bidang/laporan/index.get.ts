@@ -1,25 +1,17 @@
-import { OLaporanMusyawarahBidangList } from "~~/server/services/laporan-musyawarah-bidang/laporan-musyawarah-bidang.dto";
-import { getLaporanMusyawarahBidangByMusyawarahId } from "~~/server/services/laporan-musyawarah-bidang/laporan-musyawarah-bidang.service";
-import { viewWhitelist } from "~~/shared/permission";
+import { getLaporanMusyawarahBidangByMusyawarahIdService } from "~~/server/services/musyawarah-bidang/laporan-musyawarah-bidang.service";
+import { OLaporanMusyawarahBidangList } from "./_dto";
 
 export default defineEventHandler(async (event) => {
-  const user = await permissionGuard(event, { musyawarah_ppg: ["view"] });
+  const user = await permissionGuard(event, { musyawarah_bidang: ["view"] });
 
   const query = await getValidatedQuery(event, (q) =>
     OLaporanMusyawarahBidangList.parse(q)
   );
 
-  if (!viewWhitelist.has(user.role!) && user.role !== query.bidang) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Unauthorized",
-    });
-  }
-
-  const data = await getLaporanMusyawarahBidangByMusyawarahId(
-    user.daerahId,
+  const data = await getLaporanMusyawarahBidangByMusyawarahIdService(
+    user,
     query
   );
 
-  return HttpResponse(data.data);
+  return HttpResponse(data);
 });

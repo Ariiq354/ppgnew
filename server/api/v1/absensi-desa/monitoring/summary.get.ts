@@ -2,7 +2,7 @@ import {
   getCountAbsensiGenerusDesa,
   getCountGenerusDesaAbsensi,
 } from "~~/server/services/absensi-desa/absensi-desa.service";
-import { getCountKelasDesa } from "~~/server/services/kelas-desa/kelas-desa.service";
+import { getCountKelasDesa } from "~~/server/repository/kelas-desa.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["view"] });

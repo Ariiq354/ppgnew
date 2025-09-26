@@ -1,4 +1,4 @@
-import { getAllMuslimun } from "~~/server/services/muslimun/muslimun.service";
+import { getAllMuslimun } from "~~/server/repository/muslimun.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["view"] });

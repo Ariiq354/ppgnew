@@ -3,7 +3,7 @@ import {
   deleteAbsensiGenerusDesa,
   updateAbsensiGenerusDesa,
 } from "~~/server/services/absensi-desa/absensi-desa.service";
-import { getKelasDesaById } from "~~/server/services/kelas-desa/kelas-desa.service";
+import { getKelasDesaById } from "~~/server/repository/kelas-desa.repo";
 import { OAbsensiGenerusCreate } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {

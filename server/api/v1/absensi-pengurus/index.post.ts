@@ -4,7 +4,7 @@ import {
   updateAbsensiPengurus,
 } from "~~/server/services/absensi-pengurus/absensi-pengurus.service";
 import { OAbsensiPengurusCreate } from "~~/server/services/absensi-pengurus/absensi-pengurus.dto";
-import { getMusyawarahById } from "~~/server/services/musyawarah/musyawarah.service";
+import { getMusyawarahById } from "~~/server/repository/musyawarah.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { sekretariat: ["manage"] });

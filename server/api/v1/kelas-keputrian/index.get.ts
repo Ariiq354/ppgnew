@@ -1,4 +1,4 @@
-import { getAllKelasKeptrian } from "~~/server/services/kelas-keputrian/kelas-keputrian.service";
+import { getAllKelasKeputrian } from "~~/server/repository/kelas-keputrian.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { keputrian: ["view"] });
@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     OKegiatanWithNama.parse(q)
   );
 
-  const data = await getAllKelasKeptrian(user.daerahId, query);
+  const data = await getAllKelasKeputrian(user.daerahId, query);
   const metadata = {
     page: query.page,
     itemPerPage: query.limit,

@@ -1,5 +1,5 @@
-import { OJamaahCreate } from "~~/server/services/jamaah/dto/jamaah.dto";
-import { createJamaah } from "~~/server/services/jamaah/jamaah.service";
+import { OJamaahCreate } from "~~/server/api/v1/jamaah/_dto";
+import { createJamaah } from "~~/server/repository/jamaah.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });

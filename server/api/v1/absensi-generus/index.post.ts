@@ -3,7 +3,7 @@ import {
   deleteAbsensiGenerus,
   updateAbsensiGenerus,
 } from "~~/server/services/absensi-generus/absensi-generus.service";
-import { getKelasById } from "~~/server/services/kelas-kelompok/kelas-kelompok.service";
+import { getKelasById } from "~~/server/repository/kelas-kelompok.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });
