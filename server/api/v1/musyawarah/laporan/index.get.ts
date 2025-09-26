@@ -1,6 +1,5 @@
-import { OLaporanMusyawarahList } from "~~/server/services/laporan-musyawarah/laporan-musyawarah.dto";
-import { getLaporanMusyawarahByMusyawarahId } from "~~/server/services/laporan-musyawarah/laporan-musyawarah.service";
-import { viewWhitelist } from "~~/shared/permission";
+import { getLaporanMusyawarahByMusyawarahIdService } from "~~/server/services/musyawarah/laporan-musyawarah.service";
+import { OLaporanMusyawarahList } from "./_dto";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { musyawarah_ppg: ["view"] });
@@ -9,14 +8,7 @@ export default defineEventHandler(async (event) => {
     OLaporanMusyawarahList.parse(q)
   );
 
-  if (!viewWhitelist.has(user.role!) && user.role !== query.bidang) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Unauthorized",
-    });
-  }
+  const data = await getLaporanMusyawarahByMusyawarahIdService(user, query);
 
-  const data = await getLaporanMusyawarahByMusyawarahId(user.daerahId, query);
-
-  return HttpResponse(data.data);
+  return HttpResponse(data);
 });

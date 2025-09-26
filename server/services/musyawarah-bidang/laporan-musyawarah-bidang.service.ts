@@ -22,7 +22,7 @@ export async function getLaporanMusyawarahBidangByMusyawarahIdService(
     });
   }
 
-  return getLaporanMusyawarahBidangByMusyawarahId(user.daerahId, query);
+  return await getLaporanMusyawarahBidangByMusyawarahId(user.daerahId, query);
 }
 
 export async function createLaporanMusyawarahBidangService(

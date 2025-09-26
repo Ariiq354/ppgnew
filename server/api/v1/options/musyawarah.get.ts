@@ -1,4 +1,4 @@
-import { getAllMusyawarahOptions } from "~~/server/repository/musyawarah.repo";
+import { getAllMusyawarahOptions } from "~~/server/repository/musyawarah/musyawarah.repo";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);

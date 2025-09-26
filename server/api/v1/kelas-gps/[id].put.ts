@@ -1,4 +1,3 @@
-import { z } from "zod/mini";
 import { updateKelasGps } from "~~/server/repository/kelas-gps.repo";
 
 export default defineEventHandler(async (event) => {

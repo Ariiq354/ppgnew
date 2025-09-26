@@ -1,5 +1,5 @@
 import { getCountAbsensiPengurus } from "~~/server/services/absensi-pengurus/absensi-pengurus.service";
-import { getCountMusyawarah } from "~~/server/repository/musyawarah.repo";
+import { getCountMusyawarah } from "~~/server/repository/musyawarah/musyawarah.repo";
 import { getCountPengurus } from "~~/server/repository/pengurus.repo";
 
 export default defineEventHandler(async (event) => {

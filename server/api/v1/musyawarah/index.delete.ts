@@ -1,4 +1,4 @@
-import { deleteMusyawarah } from "~~/server/repository/musyawarah.repo";
+import { deleteMusyawarah } from "~~/server/repository/musyawarah/musyawarah.repo";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { sekretariat: ["manage"] });

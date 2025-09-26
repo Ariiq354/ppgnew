@@ -1,6 +1,5 @@
-import { OLaporanMusyawarahCreate } from "~~/server/services/laporan-musyawarah/laporan-musyawarah.dto";
-import { createLaporanMusyawarah } from "~~/server/services/laporan-musyawarah/laporan-musyawarah.service";
-import sanitizeHtml from "sanitize-html";
+import { createLaporanMusyawarahService } from "~~/server/services/musyawarah/laporan-musyawarah.service";
+import { OLaporanMusyawarahCreate } from "./_dto";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { musyawarah_ppg: ["manage"] });
@@ -8,16 +7,8 @@ export default defineEventHandler(async (event) => {
   const body = await readValidatedBody(event, (b) =>
     OLaporanMusyawarahCreate.parse(b)
   );
-  if (user.role !== "admin" && user.role !== body.bidang) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Unauthorized",
-    });
-  }
 
-  body.keterangan = sanitizeHtml(body.keterangan);
-
-  await createLaporanMusyawarah(user.daerahId, body);
+  await createLaporanMusyawarahService(user, body);
 
   return HttpResponse();
 });

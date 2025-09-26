@@ -1,4 +1,4 @@
-import { getAllMusyawarahOptions } from "~~/server/repository/musyawarah.repo";
+import { getAllMusyawarahOptions } from "~~/server/repository/musyawarah/musyawarah.repo";
 import { getAllPengurusAbsensi } from "~~/server/repository/pengurus.repo";
 
 export default defineEventHandler(async (event) => {

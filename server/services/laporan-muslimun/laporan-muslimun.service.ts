@@ -60,7 +60,7 @@ export async function createLaporanMuslimun(
     if (!exist) {
       throw createError({
         status: 403,
-        message: "Muslimun tidak ada di daerah ini",
+        message: "Muslimun tidak ada di kelompok ini",
       });
     }
 
@@ -89,7 +89,7 @@ export async function deleteLaporanMuslimun(
     if (!exist) {
       throw createError({
         status: 403,
-        message: "Muslimun tidak ada di daerah ini",
+        message: "Muslimun tidak ada di kelompok ini",
       });
     }
 

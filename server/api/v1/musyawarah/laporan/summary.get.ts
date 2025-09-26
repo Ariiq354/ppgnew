@@ -1,5 +1,5 @@
-import { OSummaryLaporanMusyawarahList } from "~~/server/services/laporan-musyawarah/laporan-musyawarah.dto";
-import { getLaporanMusyawarahByMusyawarahId } from "~~/server/services/laporan-musyawarah/laporan-musyawarah.service";
+import { getLaporanMusyawarahByMusyawarahId } from "~~/server/repository/musyawarah/laporan-musyawarah.repo";
+import { OSummaryLaporanMusyawarahList } from "./_dto";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { sekretariat: ["view"] });
@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
 
   const data = await getLaporanMusyawarahByMusyawarahId(user.daerahId, query);
 
-  const grouped = data.data.reduce(
+  const grouped = data.reduce(
     (acc, item) => {
       if (!acc[item.bidang]) {
         acc[item.bidang] = [];
