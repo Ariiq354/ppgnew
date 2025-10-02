@@ -86,7 +86,6 @@
         :schema="schema"
         :state="state"
         class="space-y-4"
-        accept="image/png,image/jpeg,image/webp"
         @submit="onSubmit"
       >
         <UFormField label="Nama" name="nama">

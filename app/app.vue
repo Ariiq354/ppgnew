@@ -1,6 +1,6 @@
 <script setup lang="ts">
   useSeoMeta({
-    description: "Keluarga Bahagia",
+    description: "PPG",
   });
 
   useHead({
