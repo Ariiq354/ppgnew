@@ -38,12 +38,12 @@ export async function getAllKelasGps(
     .from(kelasGpsTable)
     .where(and(...conditions));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total count of Kelas Gps",
     await to(db.$count(query))
   );
 
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get list of Kelas Gps",
     await to(query.limit(limit).offset(offset))
   );
@@ -52,7 +52,7 @@ export async function getAllKelasGps(
 }
 
 export async function getAllKelasGpsExport(desaId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to export Kelas Gps data",
     await to(
       db
@@ -67,7 +67,7 @@ export async function getAllKelasGpsExport(desaId: number) {
 }
 
 export async function getKelasGpsById(id: number) {
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get Kelas Gps By Id",
     await to(
       db.query.kelasGpsTable.findFirst({
@@ -84,7 +84,7 @@ export async function getAllKelasGpsOptions(desaId: number) {
     eq(kelasGpsTable.desaId, desaId),
   ];
 
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get all Kelas Gps options",
     await to(
       db
@@ -105,7 +105,7 @@ export async function getCountKelasGps(
   desaId: number,
   kelasGpsPengajian: string
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get count of Kelas Gps",
     await to(
       db.$count(
@@ -120,7 +120,7 @@ export async function getCountKelasGps(
 }
 
 export async function createKelasGps(desaId: number, data: TNamaTanggal) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to create Kelas Gps",
     await to(
       db.insert(kelasGpsTable).values({
@@ -136,7 +136,7 @@ export async function updateKelasGps(
   desaId: number,
   data: TNamaTanggal
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to update Kelas Gps",
     await to(
       db
@@ -148,7 +148,7 @@ export async function updateKelasGps(
 }
 
 export async function deleteKelasGps(desaId: number, id: number[]) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to delete Kelas Gps",
     await to(
       db

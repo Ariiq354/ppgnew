@@ -40,11 +40,11 @@ export async function getAllPengurus(
     .from(pengurusTable)
     .where(and(...conditions));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total Pengurus",
     await to(db.$count(query))
   );
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get data Pengurus",
     await to(query.limit(limit).offset(offset))
   );
@@ -53,7 +53,7 @@ export async function getAllPengurus(
 }
 
 export async function getAllPengurusExport(daerahId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to export pengurus",
     await to(
       db
@@ -107,11 +107,11 @@ export async function getAllPengurusAbsensi(
     )
     .groupBy(pengurusTable.id, pengurusTable.nama, pengurusTable.bidang);
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total Pengurus",
     await to(db.$count(query))
   );
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get data Pengurus",
     await to(query.limit(limit).offset(offset))
   );
@@ -120,7 +120,7 @@ export async function getAllPengurusAbsensi(
 }
 
 export async function getPengurusById(daerahId: number, id: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get Pengurus by id",
     await to(
       db.query.pengurusTable.findFirst({
@@ -138,14 +138,14 @@ export async function getPengurusById(daerahId: number, id: number) {
 }
 
 export async function getCountPengurus(daerahId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to count Pengurus",
     await to(db.$count(pengurusTable, eq(pengurusTable.daerahId, daerahId)))
   );
 }
 
 export async function createPengurus(daerahId: number, data: TPengurusCreate) {
-  assertNoErr(
+  await tryCatch(
     "Failed to create Pengurus",
     await to(
       db.insert(pengurusTable).values({
@@ -161,7 +161,7 @@ export async function updatePengurus(
   daerahId: number,
   data: TPengurusCreate
 ) {
-  assertNoErr(
+  await tryCatch(
     "Failed to update Pengurus",
     await to(
       db
@@ -175,7 +175,7 @@ export async function updatePengurus(
 }
 
 export async function deletePengurus(daerahId: number, id: number[]) {
-  assertNoErr(
+  await tryCatch(
     "Failed to delete Pengurus",
     await to(
       db

@@ -36,12 +36,12 @@ export async function getAllPengusaha(
     .from(pengusahaTable)
     .where(and(...conditions));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total pengusaha",
     await to(db.$count(query))
   );
 
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get list pengusaha",
     await to(query.limit(limit).offset(offset))
   );
@@ -50,7 +50,7 @@ export async function getAllPengusaha(
 }
 
 export async function getAllPengusahaExport(daerahId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to export pengusaha",
     await to(
       db
@@ -67,7 +67,7 @@ export async function getAllPengusahaExport(daerahId: number) {
 }
 
 export async function getCountPengusaha(daerahId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get count pengusaha",
     await to(db.$count(pengusahaTable, eq(pengusahaTable.daerahId, daerahId)))
   );
@@ -77,7 +77,7 @@ export async function createPengusaha(
   daerahId: number,
   data: TPengusahaCreate
 ) {
-  assertNoErr(
+  await tryCatch(
     "Failed to create pengusaha",
     await to(db.insert(pengusahaTable).values({ ...data, daerahId }))
   );
@@ -88,7 +88,7 @@ export async function updatePengusaha(
   daerahId: number,
   data: TPengusahaCreate
 ) {
-  assertNoErr(
+  await tryCatch(
     "Failed to update pengusaha",
     await to(
       db
@@ -102,7 +102,7 @@ export async function updatePengusaha(
 }
 
 export async function deletePengusaha(daerahId: number, id: number[]) {
-  assertNoErr(
+  await tryCatch(
     "Failed to delete pengusaha",
     await to(
       db

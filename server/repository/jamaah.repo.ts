@@ -4,8 +4,8 @@ import {
   absensiJamaahKelompokTable,
   jamaahTable,
 } from "~~/server/database/schema/kelompok";
+import type { TSearchPagination, TWilayah } from "~~/server/utils/dto";
 import type { TJamaahCreate } from "../api/v1/jamaah/_dto";
-import type { TWilayah, TSearchPagination } from "~~/server/utils/dto";
 
 export async function getAllJamaah(
   kelompokId: number,
@@ -29,12 +29,12 @@ export async function getAllJamaah(
     .from(jamaahTable)
     .where(and(...conditions));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total count of Jamaah",
     await to(db.$count(query))
   );
 
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get list of Jamaah",
     await to(query.limit(limit).offset(offset))
   );
@@ -43,7 +43,7 @@ export async function getAllJamaah(
 }
 
 export async function getAllJamaahExport(kelompokId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to export Jamaah data",
     await to(
       db
@@ -85,12 +85,12 @@ export async function getAllJamaahAbsensi(
     )
     .groupBy(jamaahTable.id, jamaahTable.nama);
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total count of Jamaah Absensi",
     await to(db.$count(query))
   );
 
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get list of Jamaah Absensi",
     await to(query.limit(limit).offset(offset))
   );
@@ -99,14 +99,14 @@ export async function getAllJamaahAbsensi(
 }
 
 export async function getCountJamaah(kelompokId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get count of Jamaah",
     await to(db.$count(jamaahTable, eq(jamaahTable.kelompokId, kelompokId)))
   );
 }
 
 export async function createJamaah(wilayah: TWilayah, data: TJamaahCreate) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to create Jamaah",
     await to(
       db.insert(jamaahTable).values({
@@ -122,7 +122,7 @@ export async function updateJamaah(
   kelompokId: number,
   data: TJamaahCreate
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to Update Jamaah",
     await to(
       db
@@ -136,7 +136,7 @@ export async function updateJamaah(
 }
 
 export async function deleteJamaah(kelompokId: number, id: number[]) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to delete Jamaah",
     await to(
       db

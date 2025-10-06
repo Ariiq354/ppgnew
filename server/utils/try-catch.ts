@@ -1,18 +1,11 @@
-export async function to<T, E = Error>(
+export async function tryCatch<T>(
+  label: string,
   promise: Promise<T>
-): Promise<[T, null] | [null, E]> {
+): Promise<T> {
   try {
-    const data = await promise;
-    return [data, null];
-  } catch (error) {
-    return [null, error as E];
-  }
-}
-
-export function assertNoErr<T>(label: string, [data, err]: [T | null, any]) {
-  if (err) {
+    return await promise;
+  } catch (err) {
     console.error(label, err);
     throw InternalError;
   }
-  return data as T;
 }

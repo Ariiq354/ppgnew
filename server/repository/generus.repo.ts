@@ -1,12 +1,12 @@
 import { and, eq, inArray, like, or, Param, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { generusTable } from "~~/server/database/schema/generus";
+import { kelompokTable } from "~~/server/database/schema/wilayah";
 import type {
   TGenerusBaseList,
   TGenerusCreate,
   TGenerusList,
 } from "../api/v1/generus/_dto";
-import { kelompokTable } from "~~/server/database/schema/wilayah";
 
 export async function getAllGenerus(
   daerahId: number,
@@ -54,11 +54,11 @@ export async function getAllGenerus(
     .where(and(...conditions))
     .leftJoin(kelompokTable, eq(generusTable.kelompokId, kelompokTable.id));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total count of Generus",
     await to(db.$count(query))
   );
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get list of Generus",
     await to(query.limit(limit).offset(offset))
   );
@@ -115,11 +115,11 @@ export async function getAllGenerusKeputrian(
     .from(generusTable)
     .where(and(...conditions));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total count of Generus Keputrian",
     await to(db.$count(query))
   );
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get list of Generus Keputrian",
     await to(query.limit(limit).offset(offset))
   );
@@ -175,11 +175,11 @@ export async function getAllGenerusMudamudi(
     .from(generusTable)
     .where(and(...conditions));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total count of Generus Mudamudi",
     await to(db.$count(query))
   );
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get list of Generus Mudamudi",
     await to(query.limit(limit).offset(offset))
   );
@@ -228,11 +228,11 @@ export async function getAllGenerusGPS(
     .from(generusTable)
     .where(and(...conditions));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total count of Generus GPS",
     await to(db.$count(query))
   );
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get list of Generus GPS",
     await to(query.limit(limit).offset(offset))
   );
@@ -281,11 +281,11 @@ export async function getAllGenerusTahfidz(
     .from(generusTable)
     .where(and(...conditions));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total count of Generus Tahfidz",
     await to(db.$count(query))
   );
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get list of Generus Tahfidz",
     await to(query.limit(limit).offset(offset))
   );
@@ -294,7 +294,7 @@ export async function getAllGenerusTahfidz(
 }
 
 export async function getAllGenerusExport(kelompokId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to export Generus data",
     await to(
       db
@@ -320,7 +320,7 @@ export async function getAllGenerusExport(kelompokId: number) {
 }
 
 export async function getAllGenerusExportDesa(desaId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to export Generus data by Desa",
     await to(
       db
@@ -348,7 +348,7 @@ export async function getAllGenerusExportDesa(desaId: number) {
 }
 
 export async function getAllGenerus69(daerahId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get Generus 69 data",
     await to(
       db
@@ -366,7 +366,7 @@ export async function getAllGenerus69(daerahId: number) {
 }
 
 export async function getGenerusOptionsKelompok(kelompokId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get Generus options for Kelompok",
     await to(
       db
@@ -408,7 +408,7 @@ export async function getAllGenerusChart(
     conditions.push(eq(generusTable.kelompokId, kelompokId));
   }
 
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get Generus chart data",
     await to(
       db
@@ -439,14 +439,14 @@ export async function getCountGenerus(
     conditions.push(eq(generusTable.kelompokId, kelompokId));
   }
 
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get count of Generus",
     await to(db.$count(generusTable, and(...conditions)))
   );
 }
 
 export async function getGenerusById(kelompokId: number, id: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get Generus by ID",
     await to(
       db.query.generusTable.findFirst({
@@ -464,7 +464,7 @@ export async function getGenerusById(kelompokId: number, id: number) {
 }
 
 export async function createGenerus(wilayah: TWilayah, data: TGenerusCreate) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to create Generus",
     await to(
       db.insert(generusTable).values({
@@ -481,7 +481,7 @@ export async function updateGenerus(
   kelompokId: number,
   data: TGenerusCreate
 ) {
-  const user = assertNoErr(
+  const user = await tryCatch(
     "Failed to find Generus for update",
     await to(
       db.query.generusTable.findFirst({
@@ -499,7 +499,7 @@ export async function updateGenerus(
     updateData.tanggalMasukKelas = new Date();
   }
 
-  return assertNoErr(
+  return await tryCatch(
     "Failed to update Generus",
     await to(
       db
@@ -513,7 +513,7 @@ export async function updateGenerus(
 }
 
 export async function deleteGenerus(kelompokId: number, id: number[]) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to delete Generus",
     await to(
       db

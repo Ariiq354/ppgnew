@@ -46,12 +46,12 @@ export async function getAllKelasDesa(
     .from(kelasDesaTable)
     .where(and(...conditions));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total count of Kelas Desa",
     await to(db.$count(query))
   );
 
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get list of Kelas Desa",
     await to(query.limit(limit).offset(offset))
   );
@@ -60,7 +60,7 @@ export async function getAllKelasDesa(
 }
 
 export async function getAllKelasDesaExport(desaId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to export Kelas Desa data",
     await to(
       db
@@ -75,7 +75,7 @@ export async function getAllKelasDesaExport(desaId: number) {
 }
 
 export async function getKelasDesaById(id: number) {
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get Kelas Desa By Id",
     await to(
       db.query.kelasDesaTable.findFirst({
@@ -88,7 +88,7 @@ export async function getKelasDesaById(id: number) {
 }
 
 export async function getKelasByDesaId(desaId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get Kelas Desa By Desa Id",
     await to(
       db
@@ -114,7 +114,7 @@ export async function getAllKelasDesaOptions(
     conditions.push(eq(kelasDesaTable.nama, query.nama));
   }
 
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get all Kelas Desa options",
     await to(
       db
@@ -135,7 +135,7 @@ export async function getCountKelasDesa(
   desaId: number,
   kelasDesaPengajian: string
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get count of Kelas Desa",
     await to(
       db.$count(
@@ -150,7 +150,7 @@ export async function getCountKelasDesa(
 }
 
 export async function createKelasDesa(desaId: number, data: TNamaTanggal) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to create Kelas Desa",
     await to(
       db.insert(kelasDesaTable).values({
@@ -166,7 +166,7 @@ export async function updateKelasDesa(
   desaId: number,
   data: TNamaTanggal
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to update Kelas Desa",
     await to(
       db
@@ -180,7 +180,7 @@ export async function updateKelasDesa(
 }
 
 export async function deleteKelasDesa(desaId: number, id: number[]) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to delete Kelas Desa",
     await to(
       db

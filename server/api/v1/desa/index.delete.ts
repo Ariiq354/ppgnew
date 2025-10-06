@@ -1,9 +1,9 @@
-import { deleteDesa } from "~~/server/repository/desa.repo";
+import { deleteDesaService } from "~~/server/modules/desa";
 
 export default defineEventHandler(async (event) => {
   permissionGuard(event, { desa: ["manage"] });
   const body = await readValidatedBody(event, (b) => ODelete.parse(b));
 
-  await deleteDesa(body.id);
+  await deleteDesaService(body.id);
   return HttpResponse();
 });

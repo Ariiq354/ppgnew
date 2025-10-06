@@ -21,11 +21,11 @@ export async function getAllDokumen(
     .from(dokumenTable)
     .where(eq(dokumenTable.daerahId, daerahId));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total dokumen",
     await to(db.$count(query))
   );
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get data dokumen",
     await to(query.limit(limit).offset(offset))
   );
@@ -34,7 +34,7 @@ export async function getAllDokumen(
 }
 
 export async function getDokumenById(id: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get Dokumen by id",
     await to(
       db.query.dokumenTable.findFirst({
@@ -45,14 +45,14 @@ export async function getDokumenById(id: number) {
 }
 
 export async function createDokumen(daerahId: number, data: TDokumenCreate) {
-  assertNoErr(
+  await tryCatch(
     "Failed to create Dokumen",
     await to(db.insert(dokumenTable).values({ ...data, daerahId }))
   );
 }
 
 export async function deleteDokumen(id: number[]) {
-  assertNoErr(
+  await tryCatch(
     "Failed to delete Dokumen",
     await to(db.delete(dokumenTable).where(inArray(dokumenTable.id, id)))
   );

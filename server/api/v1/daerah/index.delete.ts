@@ -1,9 +1,10 @@
-import { deleteDaerah } from "~~/server/repository/daerah.repo";
+import { deleteDaerahService } from "~~/server/modules/daerah";
 
 export default defineEventHandler(async (event) => {
   permissionGuard(event, { daerah: ["manage"] });
   const body = await readValidatedBody(event, (b) => ODelete.parse(b));
 
-  await deleteDaerah(body.id);
+  await deleteDaerahService(body.id);
+
   return HttpResponse();
 });

@@ -1,3 +1,4 @@
+import type { MultiPartData } from "h3";
 import { OPengurusCreate } from "~~/server/api/v1/pengurus/_dto";
 import {
   createPengurus,
@@ -6,7 +7,6 @@ import {
   updatePengurus,
 } from "~~/server/repository/pengurus.repo";
 import ENV from "~~/shared/env";
-import type { MultiPartData } from "h3";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];

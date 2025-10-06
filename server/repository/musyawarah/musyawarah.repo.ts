@@ -26,12 +26,12 @@ export async function getAllMusyawarah(
     .from(musyawarahTable)
     .where(and(...conditions));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total count of Musyawarah",
     await to(db.$count(query))
   );
 
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get list of Musyawarah",
     await to(query.limit(limit).offset(offset))
   );
@@ -40,7 +40,7 @@ export async function getAllMusyawarah(
 }
 
 export async function getAllMusyawarahExport(daerahId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to export Musyawarah data",
     await to(
       db
@@ -55,7 +55,7 @@ export async function getAllMusyawarahExport(daerahId: number) {
 }
 
 export async function getMusyawarahById(id: number) {
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get Musyawarah by ID",
     await to(
       db.query.musyawarahTable.findFirst({
@@ -72,7 +72,7 @@ export async function getAllMusyawarahOptions(daerahId: number) {
     eq(musyawarahTable.daerahId, daerahId),
   ];
 
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get all Musyawarah options",
     await to(
       db
@@ -90,14 +90,14 @@ export async function getAllMusyawarahOptions(daerahId: number) {
 }
 
 export async function getCountMusyawarah(daerahId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get count of Musyawarah",
     await to(db.$count(musyawarahTable, eq(musyawarahTable.daerahId, daerahId)))
   );
 }
 
 export async function createMusyawarah(daerahId: number, data: TNamaTanggal) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to create Musyawarah",
     await to(
       db.insert(musyawarahTable).values({
@@ -113,7 +113,7 @@ export async function updateMusyawarah(
   daerahId: number,
   data: TNamaTanggal
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to update Musyawarah",
     await to(
       db
@@ -130,7 +130,7 @@ export async function updateMusyawarah(
 }
 
 export async function deleteMusyawarah(daerahId: number, id: number[]) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to delete Musyawarah",
     await to(
       db

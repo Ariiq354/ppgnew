@@ -32,12 +32,12 @@ export async function getAllMusyawarahBidang(
     .from(musyawarahBidangTable)
     .where(and(...conditions));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total count of MusyawarahBidang",
     await to(db.$count(query))
   );
 
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get list of MusyawarahBidang",
     await to(query.limit(limit).offset(offset))
   );
@@ -49,7 +49,7 @@ export async function getAllMusyawarahBidangExport(
   daerahId: number,
   bidang: (typeof roles)[number]
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to export MusyawarahBidang data",
     await to(
       db
@@ -77,7 +77,7 @@ export async function getAllMusyawarahBidangOptions(
     eq(musyawarahBidangTable.bidang, bidang),
   ];
 
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get all MusyawarahBidang options",
     await to(
       db
@@ -98,7 +98,7 @@ export async function createMusyawarahBidang(
   daerahId: number,
   data: TMusyawarahBidangCreate
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to create MusyawarahBidang",
     await to(
       db.insert(musyawarahBidangTable).values({
@@ -114,7 +114,7 @@ export async function updateMusyawarahBidang(
   daerahId: number,
   data: TMusyawarahBidangCreate
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to Update MusyawarahBidang",
     await to(
       db
@@ -135,7 +135,7 @@ export async function deleteMusyawarahBidang(
   bidang: (typeof roles)[number],
   id: number[]
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to delete MusyawarahBidang",
     await to(
       db

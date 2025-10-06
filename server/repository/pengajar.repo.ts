@@ -1,8 +1,8 @@
 import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { pengajarTable } from "~~/server/database/schema/pengajar";
-import type { TWilayah } from "~~/server/utils/dto";
 import { kelompokTable } from "~~/server/database/schema/wilayah";
+import type { TWilayah } from "~~/server/utils/dto";
 import type { TPengajarCreate, TPengajarList } from "../api/v1/pengajar/_dto";
 
 export async function getAllPengajar(
@@ -53,12 +53,12 @@ export async function getAllPengajar(
     .where(and(...conditions))
     .leftJoin(kelompokTable, eq(kelompokTable.id, pengajarTable.kelompokId));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total count of Pengajar",
     await to(db.$count(query))
   );
 
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get list of Pengajar",
     await to(query.limit(limit).offset(offset))
   );
@@ -67,7 +67,7 @@ export async function getAllPengajar(
 }
 
 export async function getAllPengajarExport(kelompokId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get all Pengajar for export",
     await to(
       db
@@ -90,7 +90,7 @@ export async function getAllPengajarExport(kelompokId: number) {
 }
 
 export async function getAllPengajarExportDesa(desaId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get Pengajar for export by Desa",
     await to(
       db
@@ -131,7 +131,7 @@ export async function getCountPengajar(
     conditions.push(eq(pengajarTable.kelompokId, kelompokId));
   }
 
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get count of Pengajar",
     await to(db.$count(pengajarTable, and(...conditions)))
   );
@@ -154,7 +154,7 @@ export async function getAllPengajarChart(
     conditions.push(eq(pengajarTable.kelompokId, kelompokId));
   }
 
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get Pengajar for chart",
     await to(
       db
@@ -169,7 +169,7 @@ export async function getAllPengajarChart(
 }
 
 export async function getPengajarById(kelompokId: number, id: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get Pengajar by Id",
     await to(
       db.query.pengajarTable.findFirst({
@@ -187,7 +187,7 @@ export async function getPengajarById(kelompokId: number, id: number) {
 }
 
 export async function createPengajar(wilayah: TWilayah, data: TPengajarCreate) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to create Pengajar",
     await to(
       db.insert(pengajarTable).values({
@@ -203,7 +203,7 @@ export async function updatePengajar(
   kelompokId: number,
   data: TPengajarCreate
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to update Pengajar",
     await to(
       db
@@ -220,7 +220,7 @@ export async function updatePengajar(
 }
 
 export async function deletePengajar(kelompokId: number, id: number[]) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to delete Pengajar",
     await to(
       db

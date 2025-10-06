@@ -26,12 +26,12 @@ export async function getAllPengajian(
     .from(pengajianTable)
     .where(and(...conditions));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total count of Pengajian",
     await to(db.$count(query))
   );
 
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get list of Pengajian",
     await to(query.limit(limit).offset(offset))
   );
@@ -40,7 +40,7 @@ export async function getAllPengajian(
 }
 
 export async function getAllPengajianExport(kelompokId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get all Pengajian for export",
     await to(
       db
@@ -55,7 +55,7 @@ export async function getAllPengajianExport(kelompokId: number) {
 }
 
 export async function getPengajianById(id: number) {
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get Pengajian By Id",
     await to(
       db.query.pengajianTable.findFirst({
@@ -71,7 +71,7 @@ export async function getAllPengajianOptions(kelompokId: number) {
     eq(pengajianTable.kelompokId, kelompokId),
   ];
 
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get all Pengajian options",
     await to(
       db
@@ -89,7 +89,7 @@ export async function getAllPengajianOptions(kelompokId: number) {
 }
 
 export async function getCountPengajian(kelompokId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get count of Pengajian",
     await to(
       db.$count(pengajianTable, eq(pengajianTable.kelompokId, kelompokId))
@@ -98,7 +98,7 @@ export async function getCountPengajian(kelompokId: number) {
 }
 
 export async function createPengajian(kelompokId: number, data: TNamaTanggal) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to create Pengajian",
     await to(
       db.insert(pengajianTable).values({
@@ -114,7 +114,7 @@ export async function updatePengajian(
   kelompokId: number,
   data: TNamaTanggal
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to update Pengajian",
     await to(
       db
@@ -131,7 +131,7 @@ export async function updatePengajian(
 }
 
 export async function deletePengajian(kelompokId: number, id: number[]) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to delete Pengajian",
     await to(
       db

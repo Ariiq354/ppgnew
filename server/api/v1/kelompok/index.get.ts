@@ -1,18 +1,14 @@
-import { getAllKelompok } from "~~/server/repository/kelompok.repo";
-import { OKelompokList } from "./_dto";
+import {
+  getAllKelompokService,
+  OKelompokList,
+} from "~~/server/modules/kelompok";
 
 export default defineEventHandler(async (event) => {
   authGuard(event);
 
   const query = await getValidatedQuery(event, (q) => OKelompokList.parse(q));
 
-  const data = await getAllKelompok(query);
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
+  const data = await getAllKelompokService(query);
 
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

@@ -1,20 +1,20 @@
 import { and, eq, inArray, type SQL } from "drizzle-orm";
+import type {
+  TLaporanMusyawarahCreate,
+  TLaporanMusyawarahList,
+} from "~~/server/api/v1/musyawarah/laporan/_dto";
 import { db } from "~~/server/database";
 import {
   laporanMusyawarahTable,
   musyawarahTable,
 } from "~~/server/database/schema/pengurus";
 import type { roles } from "~~/shared/permission";
-import type {
-  TLaporanMusyawarahCreate,
-  TLaporanMusyawarahList,
-} from "~~/server/api/v1/musyawarah/laporan/_dto";
 
 export async function findMusyawarahByDaerah(
   musyawarahId: number,
   daerahId: number
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to find musyawarah by daerah",
     await to(
       db.query.musyawarahTable.findFirst({
@@ -40,7 +40,7 @@ export async function getLaporanMusyawarahByMusyawarahId(
     conditions.push(eq(laporanMusyawarahTable.bidang, query.bidang));
   }
 
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get Laporan Musyawarah",
     await to(
       db
@@ -64,7 +64,7 @@ export async function getLaporanMusyawarahByMusyawarahId(
 }
 
 export async function createLaporanMusyawarah(data: TLaporanMusyawarahCreate) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to create Laporan Musyawarah",
     await to(db.insert(laporanMusyawarahTable).values({ ...data }))
   );
@@ -75,7 +75,7 @@ export async function deleteLaporanMusyawarah(
   musyawarahId: number,
   bidang: (typeof roles)[number]
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to delete Laporan Musyawarah",
     await to(
       db

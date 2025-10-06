@@ -45,11 +45,11 @@ export async function getAllProker(
     .from(prokerTable)
     .where(and(...conditions));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to count Proker",
     await to(db.$count(query))
   );
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get List Proker",
     await to(query.limit(limit).offset(offset))
   );
@@ -61,7 +61,7 @@ export async function getAllProkerExport(
   daerahId: number,
   bidang: (typeof roles)[number]
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to export Proker",
     await to(
       db
@@ -88,7 +88,7 @@ export async function getAllProkerExport(
 }
 
 export async function createProker(daerahId: number, data: TProkerCreate) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to create Proker",
     await to(
       db.insert(prokerTable).values({
@@ -104,7 +104,7 @@ export async function updateProker(
   daerahId: number,
   data: TProkerCreate
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to update Proker",
     await to(
       db
@@ -120,7 +120,7 @@ export async function deleteProker(
   bidang: (typeof roles)[number],
   id: number[]
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to delete Proker",
     await to(
       db

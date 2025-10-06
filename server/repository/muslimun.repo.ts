@@ -26,12 +26,12 @@ export async function getAllMuslimun(
     .from(musyawarahMuslimunTable)
     .where(and(...conditions));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total count of Muslimun",
     await to(db.$count(query))
   );
 
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get list of Muslimun",
     await to(query.limit(limit).offset(offset))
   );
@@ -40,7 +40,7 @@ export async function getAllMuslimun(
 }
 
 export async function getMuslimunById(id: number) {
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get Muslimun by Id",
     await to(
       db.query.musyawarahMuslimunTable.findFirst({
@@ -57,7 +57,7 @@ export async function getAllMuslimunOptions(kelompokId: number) {
     eq(musyawarahMuslimunTable.kelompokId, kelompokId),
   ];
 
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get all Muslimun options",
     await to(
       db
@@ -75,7 +75,7 @@ export async function getAllMuslimunOptions(kelompokId: number) {
 }
 
 export async function getCountMuslimun(kelompokId: number) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to get count of Muslimun",
     await to(
       db.$count(
@@ -87,7 +87,7 @@ export async function getCountMuslimun(kelompokId: number) {
 }
 
 export async function createMuslimun(kelompokId: number, data: TNamaTanggal) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to create Muslimun",
     await to(
       db.insert(musyawarahMuslimunTable).values({
@@ -103,7 +103,7 @@ export async function updateMuslimun(
   kelompokId: number,
   data: TNamaTanggal
 ) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to update Muslimun",
     await to(
       db
@@ -120,7 +120,7 @@ export async function updateMuslimun(
 }
 
 export async function deleteMuslimun(kelompokId: number, id: number[]) {
-  return assertNoErr(
+  return await tryCatch(
     "Failed to delete Muslimun",
     await to(
       db

@@ -35,11 +35,11 @@ export async function getAllUser(
     .from(userTable)
     .where(and(...conditions));
 
-  const total = assertNoErr(
+  const total = await tryCatch(
     "Failed to get total user",
     await to(db.$count(query))
   );
-  const data = assertNoErr(
+  const data = await tryCatch(
     "Failed to get list user",
     await to(query.limit(limit).offset(offset))
   );
@@ -48,7 +48,7 @@ export async function getAllUser(
 }
 
 export async function updateUserWilayah(id: number, body: TWilayah) {
-  assertNoErr(
+  await tryCatch(
     "Failed to update user wilayah",
     await to(db.update(userTable).set(body).where(eq(userTable.id, id)))
   );

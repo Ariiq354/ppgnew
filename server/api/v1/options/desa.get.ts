@@ -1,5 +1,5 @@
 import { z } from "zod/mini";
-import { getOptionsDesa } from "~~/server/repository/desa.repo";
+import { getOptionsDesaService } from "~~/server/modules/desa";
 
 export default defineEventHandler(async (event) => {
   authGuard(event);
@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     return HttpResponse([]);
   }
 
-  const data = await getOptionsDesa(query.daerahId);
+  const data = await getOptionsDesaService(query.daerahId);
 
   return HttpResponse(data);
 });
