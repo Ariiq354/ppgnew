@@ -1,8 +1,30 @@
-import {
-  checkWilayahNameExist,
-  createDaerah,
-} from "~~/server/repository/daerah.repo";
 import { roles } from "~~/shared/permission";
+import { checkWilayahNameExistService } from "../daerah";
+import { createDaerah } from "../daerah/daerah.repo";
+import { getAllUser, updateUserWilayah } from "./user.repo";
+
+export async function getAllUserService(
+  daerahId: number,
+  query: TSearchPagination
+) {
+  const data = await getAllUser(daerahId, query);
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: data.data,
+    metadata,
+  };
+}
+
+export async function updateUserWilayahService(id: number, body: TWilayah) {
+  await updateUserWilayah(id, body);
+}
 
 export async function createDaerahWithUsersService(daerah: string) {
   const formatted = daerah
@@ -11,7 +33,7 @@ export async function createDaerahWithUsersService(daerah: string) {
     .join(" ");
   const nama = convertToNameFormat(formatted);
 
-  const exist = await checkWilayahNameExist(formatted);
+  const exist = await checkWilayahNameExistService(formatted);
   if (exist) throw createError({ statusCode: 400, message: "Nama sudah ada" });
 
   const [result] = await createDaerah({ name: formatted });

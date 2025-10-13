@@ -77,8 +77,8 @@ export async function createDesaService(body: TDesaCreate) {
   });
 }
 
-export async function updateDesaService(id: number, data: TDesaCreate) {
-  await updateDesa(id, data);
+export async function updateDesaService(id: number, body: TDesaCreate) {
+  await updateDesa(id, body);
 }
 
 export async function deleteDesaService(id: number[]) {

@@ -1,5 +1,7 @@
-import { createDaerahWithUsersService } from "~~/server/services/user.service";
-import { ORegister } from "./_dto";
+import {
+  createDaerahWithUsersService,
+  ORegister,
+} from "~~/server/modules/user";
 
 export default eventHandler(async (event) => {
   const formData = await readValidatedBody(event, (b) => ORegister.parse(b));

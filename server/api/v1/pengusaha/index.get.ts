@@ -1,4 +1,4 @@
-import { getAllPengusaha } from "~~/server/repository/pengusaha.repo";
+import { getAllPengusahaService } from "~~/server/modules/pengusaha";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { kemandirian: ["view"] });
@@ -7,13 +7,7 @@ export default defineEventHandler(async (event) => {
     OSearchPagination.parse(q)
   );
 
-  const data = await getAllPengusaha(user.daerahId, query);
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
+  const data = await getAllPengusahaService(user.daerahId, query);
 
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

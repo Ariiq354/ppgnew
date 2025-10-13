@@ -7,7 +7,7 @@ import {
 const paramsSchema = z.coerce.number();
 
 export default defineEventHandler(async (event) => {
-  permissionGuard(event, { kelompok: ["manage"] });
+  adminGuard(event);
   const result = await readValidatedBody(event, (b) =>
     OKelompokCreate.parse(b)
   );

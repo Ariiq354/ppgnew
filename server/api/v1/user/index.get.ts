@@ -1,4 +1,4 @@
-import { getAllUser } from "~~/server/repository/user.repo";
+import { getAllUserService } from "~~/server/modules/user";
 
 export default defineEventHandler(async (event) => {
   const user = adminGuard(event);
@@ -6,14 +6,7 @@ export default defineEventHandler(async (event) => {
     OSearchPagination.parse(query)
   );
 
-  const data = await getAllUser(user!.daerahId, query);
+  const data = await getAllUserService(user!.daerahId, query);
 
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

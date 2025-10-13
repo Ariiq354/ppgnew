@@ -1,7 +1,7 @@
 import { deleteKelompokService } from "~~/server/modules/kelompok";
 
 export default defineEventHandler(async (event) => {
-  permissionGuard(event, { kelompok: ["manage"] });
+  adminGuard(event);
   const body = await readValidatedBody(event, (b) => ODelete.parse(b));
 
   await deleteKelompokService(body.id);

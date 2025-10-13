@@ -2,7 +2,7 @@ import { ODaerahCreate, updateDaerahService } from "~~/server/modules/daerah";
 import { OParam } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {
-  permissionGuard(event, { daerah: ["manage"] });
+  adminGuard(event);
   const result = await readValidatedBody(event, (b) => ODaerahCreate.parse(b));
   const id = OParam.parse(getRouterParam(event, "id"));
 

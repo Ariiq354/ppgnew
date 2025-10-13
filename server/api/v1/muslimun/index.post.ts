@@ -1,11 +1,11 @@
-import { createMuslimun } from "~~/server/repository/muslimun.repo";
+import { createMuslimunService } from "~~/server/modules/muslimun";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });
 
   const body = await readValidatedBody(event, (b) => ONamaTanggal.parse(b));
 
-  await createMuslimun(user.kelompokId!, body);
+  await createMuslimunService(user.kelompokId!, body);
 
   return HttpResponse();
 });

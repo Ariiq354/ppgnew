@@ -1,5 +1,4 @@
-import { getAllProkerService } from "~~/server/services/proker.service";
-import { OProkerList } from "./_dto";
+import { getAllProkerService, OProkerList } from "~~/server/modules/proker";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);
@@ -8,12 +7,5 @@ export default defineEventHandler(async (event) => {
 
   const data = await getAllProkerService(user, query);
 
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

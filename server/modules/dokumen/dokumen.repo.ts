@@ -1,8 +1,8 @@
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { dokumenTable } from "~~/server/database/schema/dokumen";
 import type { TPagination } from "~~/server/utils/dto";
-import type { TDokumenCreate } from "../api/v1/dokumen/_dto";
+import type { TDokumenCreate } from "./dokumen.dto";
 
 export async function getAllDokumen(
   daerahId: number,
@@ -21,13 +21,10 @@ export async function getAllDokumen(
     .from(dokumenTable)
     .where(eq(dokumenTable.daerahId, daerahId));
 
-  const total = await tryCatch(
-    "Failed to get total dokumen",
-    await to(db.$count(query))
-  );
+  const total = await tryCatch("Failed to get total dokumen", db.$count(query));
   const data = await tryCatch(
     "Failed to get data dokumen",
-    await to(query.limit(limit).offset(offset))
+    query.limit(limit).offset(offset)
   );
 
   return { data, total };
@@ -36,24 +33,26 @@ export async function getAllDokumen(
 export async function getDokumenById(id: number) {
   return await tryCatch(
     "Failed to get Dokumen by id",
-    await to(
-      db.query.dokumenTable.findFirst({
-        where: eq(dokumenTable.id, id),
-      })
-    )
+    db.query.dokumenTable.findFirst({
+      where: eq(dokumenTable.id, id),
+    })
   );
 }
 
 export async function createDokumen(daerahId: number, data: TDokumenCreate) {
   await tryCatch(
     "Failed to create Dokumen",
-    await to(db.insert(dokumenTable).values({ ...data, daerahId }))
+    db.insert(dokumenTable).values({ ...data, daerahId })
   );
 }
 
-export async function deleteDokumen(id: number[]) {
+export async function deleteDokumen(daerahId: number, id: number[]) {
   await tryCatch(
     "Failed to delete Dokumen",
-    await to(db.delete(dokumenTable).where(inArray(dokumenTable.id, id)))
+    db
+      .delete(dokumenTable)
+      .where(
+        and(eq(dokumenTable.daerahId, daerahId), inArray(dokumenTable.id, id))
+      )
   );
 }

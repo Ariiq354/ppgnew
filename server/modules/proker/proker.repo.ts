@@ -2,7 +2,7 @@ import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { prokerTable } from "~~/server/database/schema/bidang";
 import type { roles } from "~~/shared/permission";
-import type { TProkerCreate, TProkerList } from "../api/v1/proker/_dto";
+import type { TProkerCreate, TProkerList } from "./proker.dto";
 
 export async function getAllProker(
   daerahId: number,
@@ -45,13 +45,10 @@ export async function getAllProker(
     .from(prokerTable)
     .where(and(...conditions));
 
-  const total = await tryCatch(
-    "Failed to count Proker",
-    await to(db.$count(query))
-  );
+  const total = await tryCatch("Failed to count Proker", db.$count(query));
   const data = await tryCatch(
     "Failed to get List Proker",
-    await to(query.limit(limit).offset(offset))
+    query.limit(limit).offset(offset)
   );
 
   return { data, total };
@@ -63,39 +60,32 @@ export async function getAllProkerExport(
 ) {
   return await tryCatch(
     "Failed to export Proker",
-    await to(
-      db
-        .select({
-          biaya: prokerTable.biaya,
-          bidang: prokerTable.bidang,
-          bulan: prokerTable.bulan,
-          kegiatan: prokerTable.kegiatan,
-          keterangan: prokerTable.keterangan,
-          mingguKe: prokerTable.mingguKe,
-          peserta: prokerTable.peserta,
-          tahun: prokerTable.tahun,
-          status: prokerTable.status,
-        })
-        .from(prokerTable)
-        .where(
-          and(
-            eq(prokerTable.daerahId, daerahId),
-            eq(prokerTable.bidang, bidang)
-          )
-        )
-    )
+    db
+      .select({
+        biaya: prokerTable.biaya,
+        bidang: prokerTable.bidang,
+        bulan: prokerTable.bulan,
+        kegiatan: prokerTable.kegiatan,
+        keterangan: prokerTable.keterangan,
+        mingguKe: prokerTable.mingguKe,
+        peserta: prokerTable.peserta,
+        tahun: prokerTable.tahun,
+        status: prokerTable.status,
+      })
+      .from(prokerTable)
+      .where(
+        and(eq(prokerTable.daerahId, daerahId), eq(prokerTable.bidang, bidang))
+      )
   );
 }
 
 export async function createProker(daerahId: number, data: TProkerCreate) {
   return await tryCatch(
     "Failed to create Proker",
-    await to(
-      db.insert(prokerTable).values({
-        ...data,
-        daerahId,
-      })
-    )
+    db.insert(prokerTable).values({
+      ...data,
+      daerahId,
+    })
   );
 }
 
@@ -106,12 +96,10 @@ export async function updateProker(
 ) {
   return await tryCatch(
     "Failed to update Proker",
-    await to(
-      db
-        .update(prokerTable)
-        .set(data)
-        .where(and(eq(prokerTable.id, id), eq(prokerTable.daerahId, daerahId)))
-    )
+    db
+      .update(prokerTable)
+      .set(data)
+      .where(and(eq(prokerTable.id, id), eq(prokerTable.daerahId, daerahId)))
   );
 }
 
@@ -122,16 +110,14 @@ export async function deleteProker(
 ) {
   return await tryCatch(
     "Failed to delete Proker",
-    await to(
-      db
-        .delete(prokerTable)
-        .where(
-          and(
-            inArray(prokerTable.id, id),
-            eq(prokerTable.daerahId, daerahId),
-            eq(prokerTable.bidang, bidang)
-          )
+    db
+      .delete(prokerTable)
+      .where(
+        and(
+          inArray(prokerTable.id, id),
+          eq(prokerTable.daerahId, daerahId),
+          eq(prokerTable.bidang, bidang)
         )
-    )
+      )
   );
 }

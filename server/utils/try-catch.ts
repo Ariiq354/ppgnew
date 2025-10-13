@@ -6,6 +6,6 @@ export async function tryCatch<T>(
     return await promise;
   } catch (err) {
     console.error(label, err);
-    throw InternalError;
+    throw InternalServerError;
   }
 }

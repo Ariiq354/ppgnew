@@ -1,5 +1,4 @@
-import { OJamaahCreate } from "~~/server/api/v1/jamaah/_dto";
-import { updateJamaah } from "~~/server/repository/jamaah.repo";
+import { OJamaahCreate, updateJamaahService } from "~~/server/modules/jamaah";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });
@@ -7,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   const body = await readValidatedBody(event, (b) => OJamaahCreate.parse(b));
 
-  await updateJamaah(id, user.kelompokId!, body);
+  await updateJamaahService(id, user.kelompokId!, body);
 
   return HttpResponse();
 });

@@ -1,5 +1,4 @@
-import { deleteProkerService } from "~~/server/services/proker.service";
-import { ODeleteBidang } from "~~/server/utils/dto";
+import { deleteProkerService } from "~~/server/modules/proker";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { musyawarah_bidang: ["manage"] });

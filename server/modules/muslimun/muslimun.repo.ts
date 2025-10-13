@@ -28,12 +28,12 @@ export async function getAllMuslimun(
 
   const total = await tryCatch(
     "Failed to get total count of Muslimun",
-    await to(db.$count(query))
+    db.$count(query)
   );
 
   const data = await tryCatch(
     "Failed to get list of Muslimun",
-    await to(query.limit(limit).offset(offset))
+    query.limit(limit).offset(offset)
   );
 
   return { data, total };
@@ -42,11 +42,9 @@ export async function getAllMuslimun(
 export async function getMuslimunById(id: number) {
   const data = await tryCatch(
     "Failed to get Muslimun by Id",
-    await to(
-      db.query.musyawarahMuslimunTable.findFirst({
-        where: eq(musyawarahMuslimunTable.id, id),
-      })
-    )
+    db.query.musyawarahMuslimunTable.findFirst({
+      where: eq(musyawarahMuslimunTable.id, id),
+    })
   );
 
   return { data };
@@ -59,16 +57,14 @@ export async function getAllMuslimunOptions(kelompokId: number) {
 
   const data = await tryCatch(
     "Failed to get all Muslimun options",
-    await to(
-      db
-        .select({
-          id: musyawarahMuslimunTable.id,
-          nama: musyawarahMuslimunTable.nama,
-          tanggal: musyawarahMuslimunTable.tanggal,
-        })
-        .from(musyawarahMuslimunTable)
-        .where(and(...conditions))
-    )
+    db
+      .select({
+        id: musyawarahMuslimunTable.id,
+        nama: musyawarahMuslimunTable.nama,
+        tanggal: musyawarahMuslimunTable.tanggal,
+      })
+      .from(musyawarahMuslimunTable)
+      .where(and(...conditions))
   );
 
   return { data };
@@ -77,11 +73,9 @@ export async function getAllMuslimunOptions(kelompokId: number) {
 export async function getCountMuslimun(kelompokId: number) {
   return await tryCatch(
     "Failed to get count of Muslimun",
-    await to(
-      db.$count(
-        musyawarahMuslimunTable,
-        eq(musyawarahMuslimunTable.kelompokId, kelompokId)
-      )
+    db.$count(
+      musyawarahMuslimunTable,
+      eq(musyawarahMuslimunTable.kelompokId, kelompokId)
     )
   );
 }
@@ -89,12 +83,10 @@ export async function getCountMuslimun(kelompokId: number) {
 export async function createMuslimun(kelompokId: number, data: TNamaTanggal) {
   return await tryCatch(
     "Failed to create Muslimun",
-    await to(
-      db.insert(musyawarahMuslimunTable).values({
-        ...data,
-        kelompokId,
-      })
-    )
+    db.insert(musyawarahMuslimunTable).values({
+      ...data,
+      kelompokId,
+    })
   );
 }
 
@@ -105,32 +97,28 @@ export async function updateMuslimun(
 ) {
   return await tryCatch(
     "Failed to update Muslimun",
-    await to(
-      db
-        .update(musyawarahMuslimunTable)
-        .set(data)
-        .where(
-          and(
-            eq(musyawarahMuslimunTable.id, id),
-            eq(musyawarahMuslimunTable.kelompokId, kelompokId)
-          )
+    db
+      .update(musyawarahMuslimunTable)
+      .set(data)
+      .where(
+        and(
+          eq(musyawarahMuslimunTable.id, id),
+          eq(musyawarahMuslimunTable.kelompokId, kelompokId)
         )
-    )
+      )
   );
 }
 
 export async function deleteMuslimun(kelompokId: number, id: number[]) {
   return await tryCatch(
     "Failed to delete Muslimun",
-    await to(
-      db
-        .delete(musyawarahMuslimunTable)
-        .where(
-          and(
-            inArray(musyawarahMuslimunTable.id, id),
-            eq(musyawarahMuslimunTable.kelompokId, kelompokId)
-          )
+    db
+      .delete(musyawarahMuslimunTable)
+      .where(
+        and(
+          inArray(musyawarahMuslimunTable.id, id),
+          eq(musyawarahMuslimunTable.kelompokId, kelompokId)
         )
-    )
+      )
   );
 }

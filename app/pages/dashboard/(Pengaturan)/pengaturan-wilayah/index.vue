@@ -165,9 +165,9 @@
     }
   }
 
-  const daerahManage = authStore.hasPermission({ daerah: ["manage"] });
-  const desaManage = authStore.hasPermission({ desa: ["manage"] });
-  const kelompokManage = authStore.hasPermission({ kelompok: ["manage"] });
+  const daerahManage = authStore.user?.role === "admin";
+  const desaManage = authStore.user?.role === "admin";
+  const kelompokManage = authStore.user?.role === "admin";
 
   const cardConfigs = [
     {

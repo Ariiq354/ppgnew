@@ -1,9 +1,9 @@
-import { getAllJamaahExport } from "~~/server/repository/jamaah.repo";
+import { getAllJamaahExportService } from "~~/server/modules/jamaah";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["view"] });
 
-  const data = await getAllJamaahExport(user.kelompokId!);
+  const data = await getAllJamaahExportService(user.kelompokId!);
 
   return exportToXlsx(event, "jamaah", data);
 });

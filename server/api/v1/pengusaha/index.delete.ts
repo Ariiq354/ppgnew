@@ -1,9 +1,9 @@
-import { deletePengusaha } from "~~/server/repository/pengusaha.repo";
+import { deletePengusahaService } from "~~/server/modules/pengusaha";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { kemandirian: ["manage"] });
   const body = await readValidatedBody(event, (b) => ODelete.parse(b));
 
-  await deletePengusaha(user.daerahId, body.id);
+  await deletePengusahaService(user.daerahId, body.id);
   return HttpResponse();
 });

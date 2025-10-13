@@ -1,5 +1,4 @@
-import { exportProkerService } from "~~/server/services/proker.service";
-import { OBidangSchema } from "~~/server/utils/dto";
+import { exportProkerService } from "~~/server/modules/proker";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { musyawarah_bidang: ["view"] });

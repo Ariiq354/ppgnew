@@ -1,5 +1,4 @@
-import { createProkerService } from "~~/server/services/proker.service";
-import { OProkerCreate } from "./_dto";
+import { createProkerService, OProkerCreate } from "~~/server/modules/proker";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { proker: ["manage"] });

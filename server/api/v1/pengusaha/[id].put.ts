@@ -1,5 +1,7 @@
-import { OPengusahaCreate } from "~~/server/api/v1/pengusaha/_dto";
-import { updatePengusaha } from "~~/server/repository/pengusaha.repo";
+import {
+  OPengusahaCreate,
+  updatePengusahaService,
+} from "~~/server/modules/pengusaha";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { kemandirian: ["manage"] });
@@ -7,7 +9,7 @@ export default defineEventHandler(async (event) => {
 
   const body = await readValidatedBody(event, (b) => OPengusahaCreate.parse(b));
 
-  await updatePengusaha(id, user.daerahId, body);
+  await updatePengusahaService(id, user.daerahId, body);
 
   return HttpResponse();
 });

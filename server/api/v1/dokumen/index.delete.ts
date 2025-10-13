@@ -1,25 +1,10 @@
-import {
-  deleteDokumen,
-  getDokumenById,
-} from "~~/server/repository/dokumen.repo";
+import { deleteDokumenService } from "~~/server/modules/dokumen";
 
 export default defineEventHandler(async (event) => {
-  adminGuard(event);
+  const user = adminGuard(event);
   const body = await readValidatedBody(event, (b) => ODelete.parse(b));
 
-  for (const id of body.id) {
-    const data = await getDokumenById(id);
-    if (!data) {
-      throw createError({
-        statusCode: 400,
-        message: "Item not found",
-      });
-    }
+  await deleteDokumenService(user.daerahId, body.id);
 
-    const publicId = getPublicIdFromUrl(data.url);
-    await deleteCloudinary(publicId, "raw");
-  }
-
-  await deleteDokumen(body.id);
   return HttpResponse();
 });

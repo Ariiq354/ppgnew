@@ -1,7 +1,7 @@
 import { deleteDesaService } from "~~/server/modules/desa";
 
 export default defineEventHandler(async (event) => {
-  permissionGuard(event, { desa: ["manage"] });
+  adminGuard(event);
   const body = await readValidatedBody(event, (b) => ODelete.parse(b));
 
   await deleteDesaService(body.id);

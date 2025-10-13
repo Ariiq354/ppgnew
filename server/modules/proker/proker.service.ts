@@ -4,19 +4,18 @@ import {
   getAllProker,
   getAllProkerExport,
   updateProker,
-} from "~~/server/repository/proker.repo";
-import type { UserWithId } from "../utils/auth";
-import type { TProkerCreate, TProkerList } from "../api/v1/proker/_dto";
+} from "./proker.repo";
 import { viewWhitelist } from "~~/shared/permission";
-import { exportToXlsx } from "../utils/export";
 import type { H3Event } from "h3";
+import type { TProkerCreate, TProkerList } from "./proker.dto";
+import { ForbiddenError } from "~~/server/utils/errors";
 
 export async function createProkerService(
   user: UserWithId,
   body: TProkerCreate
 ) {
   if (user.role !== "admin" && user.role !== body.bidang) {
-    throw createError({ statusCode: 403, statusMessage: "Unauthorized" });
+    throw ForbiddenError;
   }
 
   return await createProker(user.daerahId, body);
@@ -27,13 +26,21 @@ export async function getAllProkerService(
   query: TProkerList
 ) {
   if (!viewWhitelist.has(user.role!) && user.role !== query.bidang) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Unauthorized",
-    });
+    throw ForbiddenError;
   }
 
-  return await getAllProker(user.daerahId, query);
+  const data = await getAllProker(user.daerahId, query);
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: data.data,
+    metadata,
+  };
 }
 
 export async function deleteProkerService(
@@ -41,10 +48,7 @@ export async function deleteProkerService(
   body: TDeleteBidang
 ) {
   if (user.role !== "admin" && user.role !== body.bidang) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Unauthorized",
-    });
+    throw ForbiddenError;
   }
 
   return await deleteProker(user.daerahId, body.bidang, body.id);
@@ -56,10 +60,7 @@ export async function exportProkerService(
   query: TBidangSchema
 ) {
   if (!viewWhitelist.has(user.role!) && user.role !== query.bidang) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Unauthorized",
-    });
+    throw ForbiddenError;
   }
 
   const data = await getAllProkerExport(user.daerahId, query.bidang);
@@ -73,10 +74,7 @@ export async function updateProkerService(
   body: TProkerCreate
 ) {
   if (user.role !== "admin" && user.role !== body.bidang) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Unauthorized",
-    });
+    throw ForbiddenError;
   }
 
   await updateProker(id, user.daerahId, body);

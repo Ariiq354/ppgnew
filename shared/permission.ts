@@ -5,9 +5,6 @@ const statement = {
   ...defaultStatements,
   menu: ["daftar-user"],
   dokumen: ["upload", "download"],
-  daerah: ["manage"],
-  desa: ["manage"],
-  kelompok: ["manage"],
   proker: ["view", "manage"],
   musyawarah_bidang: ["view", "manage"],
   musyawarah_ppg: ["view", "manage"],
@@ -61,12 +58,9 @@ export const rolesDeclaration = {
     kegiatan_muda_mudi: ["view"],
     tahfidz: ["view"],
     media_publikasi: ["view"],
-    desa: ["manage"],
-    kelompok: ["manage"],
   }),
   desa: ac.newRole({
     pjp_desa: ["manage", "view"],
-    kelompok: ["manage"],
   }),
   kelompok: ac.newRole({
     pjp_kelompok: ["manage", "view"],
