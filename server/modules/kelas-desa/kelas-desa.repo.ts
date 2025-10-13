@@ -48,12 +48,12 @@ export async function getAllKelasDesa(
 
   const total = await tryCatch(
     "Failed to get total count of Kelas Desa",
-    await to(db.$count(query))
+    db.$count(query)
   );
 
   const data = await tryCatch(
     "Failed to get list of Kelas Desa",
-    await to(query.limit(limit).offset(offset))
+    query.limit(limit).offset(offset)
   );
 
   return { data, total };
@@ -62,26 +62,22 @@ export async function getAllKelasDesa(
 export async function getAllKelasDesaExport(desaId: number) {
   return await tryCatch(
     "Failed to export Kelas Desa data",
-    await to(
-      db
-        .select({
-          nama: kelasDesaTable.nama,
-          tanggal: kelasDesaTable.tanggal,
-        })
-        .from(kelasDesaTable)
-        .where(eq(kelasDesaTable.desaId, desaId))
-    )
+    db
+      .select({
+        nama: kelasDesaTable.nama,
+        tanggal: kelasDesaTable.tanggal,
+      })
+      .from(kelasDesaTable)
+      .where(eq(kelasDesaTable.desaId, desaId))
   );
 }
 
 export async function getKelasDesaById(id: number) {
   const data = await tryCatch(
     "Failed to get Kelas Desa By Id",
-    await to(
-      db.query.kelasDesaTable.findFirst({
-        where: eq(kelasDesaTable.id, id),
-      })
-    )
+    db.query.kelasDesaTable.findFirst({
+      where: eq(kelasDesaTable.id, id),
+    })
   );
 
   return { data };
@@ -90,15 +86,13 @@ export async function getKelasDesaById(id: number) {
 export async function getKelasByDesaId(desaId: number) {
   return await tryCatch(
     "Failed to get Kelas Desa By Desa Id",
-    await to(
-      db
-        .select({
-          id: kelasDesaTable.id,
-          nama: kelasDesaTable.nama,
-        })
-        .from(kelasDesaTable)
-        .where(eq(kelasDesaTable.desaId, desaId))
-    )
+    db
+      .select({
+        id: kelasDesaTable.id,
+        nama: kelasDesaTable.nama,
+      })
+      .from(kelasDesaTable)
+      .where(eq(kelasDesaTable.desaId, desaId))
   );
 }
 
@@ -116,16 +110,14 @@ export async function getAllKelasDesaOptions(
 
   const data = await tryCatch(
     "Failed to get all Kelas Desa options",
-    await to(
-      db
-        .select({
-          id: kelasDesaTable.id,
-          nama: kelasDesaTable.nama,
-          tanggal: kelasDesaTable.tanggal,
-        })
-        .from(kelasDesaTable)
-        .where(and(...conditions))
-    )
+    db
+      .select({
+        id: kelasDesaTable.id,
+        nama: kelasDesaTable.nama,
+        tanggal: kelasDesaTable.tanggal,
+      })
+      .from(kelasDesaTable)
+      .where(and(...conditions))
   );
 
   return { data };
@@ -137,13 +129,11 @@ export async function getCountKelasDesa(
 ) {
   return await tryCatch(
     "Failed to get count of Kelas Desa",
-    await to(
-      db.$count(
-        kelasDesaTable,
-        and(
-          eq(kelasDesaTable.desaId, desaId),
-          eq(kelasDesaTable.nama, kelasDesaPengajian)
-        )
+    db.$count(
+      kelasDesaTable,
+      and(
+        eq(kelasDesaTable.desaId, desaId),
+        eq(kelasDesaTable.nama, kelasDesaPengajian)
       )
     )
   );
@@ -152,12 +142,10 @@ export async function getCountKelasDesa(
 export async function createKelasDesa(desaId: number, data: TNamaTanggal) {
   return await tryCatch(
     "Failed to create Kelas Desa",
-    await to(
-      db.insert(kelasDesaTable).values({
-        ...data,
-        desaId,
-      })
-    )
+    db.insert(kelasDesaTable).values({
+      ...data,
+      desaId,
+    })
   );
 }
 
@@ -168,26 +156,20 @@ export async function updateKelasDesa(
 ) {
   return await tryCatch(
     "Failed to update Kelas Desa",
-    await to(
-      db
-        .update(kelasDesaTable)
-        .set(data)
-        .where(
-          and(eq(kelasDesaTable.id, id), eq(kelasDesaTable.desaId, desaId))
-        )
-    )
+    db
+      .update(kelasDesaTable)
+      .set(data)
+      .where(and(eq(kelasDesaTable.id, id), eq(kelasDesaTable.desaId, desaId)))
   );
 }
 
 export async function deleteKelasDesa(desaId: number, id: number[]) {
   return await tryCatch(
     "Failed to delete Kelas Desa",
-    await to(
-      db
-        .delete(kelasDesaTable)
-        .where(
-          and(inArray(kelasDesaTable.id, id), eq(kelasDesaTable.desaId, desaId))
-        )
-    )
+    db
+      .delete(kelasDesaTable)
+      .where(
+        and(inArray(kelasDesaTable.id, id), eq(kelasDesaTable.desaId, desaId))
+      )
   );
 }

@@ -1,4 +1,4 @@
-import { getAllPengajian } from "~~/server/repository/pengajian.repo";
+import { getAllPengajianService } from "~~/server/modules/pengajian";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["view"] });
@@ -7,13 +7,7 @@ export default defineEventHandler(async (event) => {
     OSearchPagination.parse(q)
   );
 
-  const data = await getAllPengajian(user.kelompokId!, query);
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
+  const data = await getAllPengajianService(user.kelompokId!, query);
 
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

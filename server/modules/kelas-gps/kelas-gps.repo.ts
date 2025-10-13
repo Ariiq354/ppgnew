@@ -40,12 +40,12 @@ export async function getAllKelasGps(
 
   const total = await tryCatch(
     "Failed to get total count of Kelas Gps",
-    await to(db.$count(query))
+    db.$count(query)
   );
 
   const data = await tryCatch(
     "Failed to get list of Kelas Gps",
-    await to(query.limit(limit).offset(offset))
+    query.limit(limit).offset(offset)
   );
 
   return { data, total };
@@ -54,26 +54,22 @@ export async function getAllKelasGps(
 export async function getAllKelasGpsExport(desaId: number) {
   return await tryCatch(
     "Failed to export Kelas Gps data",
-    await to(
-      db
-        .select({
-          nama: kelasGpsTable.nama,
-          tanggal: kelasGpsTable.tanggal,
-        })
-        .from(kelasGpsTable)
-        .where(eq(kelasGpsTable.desaId, desaId))
-    )
+    db
+      .select({
+        nama: kelasGpsTable.nama,
+        tanggal: kelasGpsTable.tanggal,
+      })
+      .from(kelasGpsTable)
+      .where(eq(kelasGpsTable.desaId, desaId))
   );
 }
 
 export async function getKelasGpsById(id: number) {
   const data = await tryCatch(
     "Failed to get Kelas Gps By Id",
-    await to(
-      db.query.kelasGpsTable.findFirst({
-        where: eq(kelasGpsTable.id, id),
-      })
-    )
+    db.query.kelasGpsTable.findFirst({
+      where: eq(kelasGpsTable.id, id),
+    })
   );
 
   return { data };
@@ -86,16 +82,14 @@ export async function getAllKelasGpsOptions(desaId: number) {
 
   const data = await tryCatch(
     "Failed to get all Kelas Gps options",
-    await to(
-      db
-        .select({
-          id: kelasGpsTable.id,
-          nama: kelasGpsTable.nama,
-          tanggal: kelasGpsTable.tanggal,
-        })
-        .from(kelasGpsTable)
-        .where(and(...conditions))
-    )
+    db
+      .select({
+        id: kelasGpsTable.id,
+        nama: kelasGpsTable.nama,
+        tanggal: kelasGpsTable.tanggal,
+      })
+      .from(kelasGpsTable)
+      .where(and(...conditions))
   );
 
   return { data };
@@ -107,13 +101,11 @@ export async function getCountKelasGps(
 ) {
   return await tryCatch(
     "Failed to get count of Kelas Gps",
-    await to(
-      db.$count(
-        kelasGpsTable,
-        and(
-          eq(kelasGpsTable.desaId, desaId),
-          eq(kelasGpsTable.nama, kelasGpsPengajian)
-        )
+    db.$count(
+      kelasGpsTable,
+      and(
+        eq(kelasGpsTable.desaId, desaId),
+        eq(kelasGpsTable.nama, kelasGpsPengajian)
       )
     )
   );
@@ -122,12 +114,10 @@ export async function getCountKelasGps(
 export async function createKelasGps(desaId: number, data: TNamaTanggal) {
   return await tryCatch(
     "Failed to create Kelas Gps",
-    await to(
-      db.insert(kelasGpsTable).values({
-        ...data,
-        desaId,
-      })
-    )
+    db.insert(kelasGpsTable).values({
+      ...data,
+      desaId,
+    })
   );
 }
 
@@ -138,24 +128,20 @@ export async function updateKelasGps(
 ) {
   return await tryCatch(
     "Failed to update Kelas Gps",
-    await to(
-      db
-        .update(kelasGpsTable)
-        .set(data)
-        .where(and(eq(kelasGpsTable.id, id), eq(kelasGpsTable.desaId, desaId)))
-    )
+    db
+      .update(kelasGpsTable)
+      .set(data)
+      .where(and(eq(kelasGpsTable.id, id), eq(kelasGpsTable.desaId, desaId)))
   );
 }
 
 export async function deleteKelasGps(desaId: number, id: number[]) {
   return await tryCatch(
     "Failed to delete Kelas Gps",
-    await to(
-      db
-        .delete(kelasGpsTable)
-        .where(
-          and(inArray(kelasGpsTable.id, id), eq(kelasGpsTable.desaId, desaId))
-        )
-    )
+    db
+      .delete(kelasGpsTable)
+      .where(
+        and(inArray(kelasGpsTable.id, id), eq(kelasGpsTable.desaId, desaId))
+      )
   );
 }

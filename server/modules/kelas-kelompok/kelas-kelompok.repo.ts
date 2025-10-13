@@ -48,12 +48,12 @@ export async function getAllKelas(
 
   const total = await tryCatch(
     "Failed to get total count of Kelas",
-    await to(db.$count(query))
+    db.$count(query)
   );
 
   const data = await tryCatch(
     "Failed to get list of Kelas",
-    await to(query.limit(limit).offset(offset))
+    query.limit(limit).offset(offset)
   );
 
   return { data, total };
@@ -62,26 +62,22 @@ export async function getAllKelas(
 export async function getAllKelasExport(kelompokId: number) {
   return await tryCatch(
     "Failed to export Kelas data",
-    await to(
-      db
-        .select({
-          nama: kelasTable.nama,
-          tanggal: kelasTable.tanggal,
-        })
-        .from(kelasTable)
-        .where(eq(kelasTable.kelompokId, kelompokId))
-    )
+    db
+      .select({
+        nama: kelasTable.nama,
+        tanggal: kelasTable.tanggal,
+      })
+      .from(kelasTable)
+      .where(eq(kelasTable.kelompokId, kelompokId))
   );
 }
 
 export async function getKelasById(id: number) {
   const data = await tryCatch(
     "Failed to get Kelas by ID",
-    await to(
-      db.query.kelasTable.findFirst({
-        where: eq(kelasTable.id, id),
-      })
-    )
+    db.query.kelasTable.findFirst({
+      where: eq(kelasTable.id, id),
+    })
   );
 
   return { data };
@@ -101,16 +97,14 @@ export async function getAllKelasOptions(
 
   const data = await tryCatch(
     "Failed to get all Kelas options",
-    await to(
-      db
-        .select({
-          id: kelasTable.id,
-          nama: kelasTable.nama,
-          tanggal: kelasTable.tanggal,
-        })
-        .from(kelasTable)
-        .where(and(...conditions))
-    )
+    db
+      .select({
+        id: kelasTable.id,
+        nama: kelasTable.nama,
+        tanggal: kelasTable.tanggal,
+      })
+      .from(kelasTable)
+      .where(and(...conditions))
   );
 
   return { data };
@@ -122,13 +116,11 @@ export async function getCountKelas(
 ) {
   return await tryCatch(
     "Failed to get count of Kelas",
-    await to(
-      db.$count(
-        kelasTable,
-        and(
-          eq(kelasTable.kelompokId, kelompokId),
-          eq(kelasTable.nama, kelasPengajian)
-        )
+    db.$count(
+      kelasTable,
+      and(
+        eq(kelasTable.kelompokId, kelompokId),
+        eq(kelasTable.nama, kelasPengajian)
       )
     )
   );
@@ -137,27 +129,23 @@ export async function getCountKelas(
 export async function getKelasByKelompokId(kelompokId: number) {
   return await tryCatch(
     "Failed to get Kelas by Kelompok ID",
-    await to(
-      db
-        .select({
-          id: kelasTable.id,
-          nama: kelasTable.nama,
-        })
-        .from(kelasTable)
-        .where(eq(kelasTable.kelompokId, kelompokId))
-    )
+    db
+      .select({
+        id: kelasTable.id,
+        nama: kelasTable.nama,
+      })
+      .from(kelasTable)
+      .where(eq(kelasTable.kelompokId, kelompokId))
   );
 }
 
 export async function createKelas(kelompokId: number, data: TNamaTanggal) {
   return await tryCatch(
     "Failed to create Kelas",
-    await to(
-      db.insert(kelasTable).values({
-        ...data,
-        kelompokId,
-      })
-    )
+    db.insert(kelasTable).values({
+      ...data,
+      kelompokId,
+    })
   );
 }
 
@@ -168,26 +156,20 @@ export async function updateKelas(
 ) {
   return await tryCatch(
     "Failed to update Kelas",
-    await to(
-      db
-        .update(kelasTable)
-        .set(data)
-        .where(
-          and(eq(kelasTable.id, id), eq(kelasTable.kelompokId, kelompokId))
-        )
-    )
+    db
+      .update(kelasTable)
+      .set(data)
+      .where(and(eq(kelasTable.id, id), eq(kelasTable.kelompokId, kelompokId)))
   );
 }
 
 export async function deleteKelas(kelompokId: number, id: number[]) {
   return await tryCatch(
     "Failed to delete Kelas",
-    await to(
-      db
-        .delete(kelasTable)
-        .where(
-          and(inArray(kelasTable.id, id), eq(kelasTable.kelompokId, kelompokId))
-        )
-    )
+    db
+      .delete(kelasTable)
+      .where(
+        and(inArray(kelasTable.id, id), eq(kelasTable.kelompokId, kelompokId))
+      )
   );
 }

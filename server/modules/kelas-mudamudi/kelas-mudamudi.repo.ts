@@ -48,12 +48,12 @@ export async function getAllKelasMudamudi(
 
   const total = await tryCatch(
     "Failed to get total count of Kelas",
-    await to(db.$count(query))
+    db.$count(query)
   );
 
   const data = await tryCatch(
     "Failed to get list of Kelas",
-    await to(query.limit(limit).offset(offset))
+    query.limit(limit).offset(offset)
   );
 
   return { data, total };
@@ -62,26 +62,22 @@ export async function getAllKelasMudamudi(
 export async function getAllKelasMudamudiExport(daerahId: number) {
   return await tryCatch(
     "Failed to export Kelas Mudamudi data",
-    await to(
-      db
-        .select({
-          nama: kelasMudaMudiTable.nama,
-          tanggal: kelasMudaMudiTable.tanggal,
-        })
-        .from(kelasMudaMudiTable)
-        .where(eq(kelasMudaMudiTable.daerahId, daerahId))
-    )
+    db
+      .select({
+        nama: kelasMudaMudiTable.nama,
+        tanggal: kelasMudaMudiTable.tanggal,
+      })
+      .from(kelasMudaMudiTable)
+      .where(eq(kelasMudaMudiTable.daerahId, daerahId))
   );
 }
 
 export async function getKelasMudamudiById(id: number) {
   const data = await tryCatch(
     "Failed to get Kelas Mudamudi By Id",
-    await to(
-      db.query.kelasMudaMudiTable.findFirst({
-        where: eq(kelasMudaMudiTable.id, id),
-      })
-    )
+    db.query.kelasMudaMudiTable.findFirst({
+      where: eq(kelasMudaMudiTable.id, id),
+    })
   );
 
   return { data };
@@ -101,16 +97,14 @@ export async function getAllKelasMudamudiOptions(
 
   const data = await tryCatch(
     "Failed to get all Kelas Mudamudi options",
-    await to(
-      db
-        .select({
-          id: kelasMudaMudiTable.id,
-          nama: kelasMudaMudiTable.nama,
-          tanggal: kelasMudaMudiTable.tanggal,
-        })
-        .from(kelasMudaMudiTable)
-        .where(and(...conditions))
-    )
+    db
+      .select({
+        id: kelasMudaMudiTable.id,
+        nama: kelasMudaMudiTable.nama,
+        tanggal: kelasMudaMudiTable.tanggal,
+      })
+      .from(kelasMudaMudiTable)
+      .where(and(...conditions))
   );
 
   return { data };
@@ -122,13 +116,11 @@ export async function getCountKelasMudamudi(
 ) {
   return await tryCatch(
     "Failed to get count of Kelas Mudamudi",
-    await to(
-      db.$count(
-        kelasMudaMudiTable,
-        and(
-          eq(kelasMudaMudiTable.daerahId, daerahId),
-          eq(kelasMudaMudiTable.nama, kelasPengajian)
-        )
+    db.$count(
+      kelasMudaMudiTable,
+      and(
+        eq(kelasMudaMudiTable.daerahId, daerahId),
+        eq(kelasMudaMudiTable.nama, kelasPengajian)
       )
     )
   );
@@ -140,12 +132,10 @@ export async function createKelasMudamudi(
 ) {
   return await tryCatch(
     "Failed to create Kelas Mudamudi",
-    await to(
-      db.insert(kelasMudaMudiTable).values({
-        ...data,
-        daerahId,
-      })
-    )
+    db.insert(kelasMudaMudiTable).values({
+      ...data,
+      daerahId,
+    })
   );
 }
 
@@ -156,32 +146,28 @@ export async function updateKelasMudamudi(
 ) {
   return await tryCatch(
     "Failed to update Kelas Mudamudi",
-    await to(
-      db
-        .update(kelasMudaMudiTable)
-        .set(data)
-        .where(
-          and(
-            eq(kelasMudaMudiTable.id, id),
-            eq(kelasMudaMudiTable.daerahId, daerahId)
-          )
+    db
+      .update(kelasMudaMudiTable)
+      .set(data)
+      .where(
+        and(
+          eq(kelasMudaMudiTable.id, id),
+          eq(kelasMudaMudiTable.daerahId, daerahId)
         )
-    )
+      )
   );
 }
 
 export async function deleteKelasMudamudi(daerahId: number, id: number[]) {
   return await tryCatch(
     "Failed to delete Kelas Mudamudi",
-    await to(
-      db
-        .delete(kelasMudaMudiTable)
-        .where(
-          and(
-            inArray(kelasMudaMudiTable.id, id),
-            eq(kelasMudaMudiTable.daerahId, daerahId)
-          )
+    db
+      .delete(kelasMudaMudiTable)
+      .where(
+        and(
+          inArray(kelasMudaMudiTable.id, id),
+          eq(kelasMudaMudiTable.daerahId, daerahId)
         )
-    )
+      )
   );
 }

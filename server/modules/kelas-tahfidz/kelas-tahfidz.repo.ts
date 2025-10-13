@@ -48,12 +48,12 @@ export async function getAllKelasTahfidz(
 
   const total = await tryCatch(
     "Failed to get total count of Kelas",
-    await to(db.$count(query))
+    db.$count(query)
   );
 
   const data = await tryCatch(
     "Failed to get list of Kelas",
-    await to(query.limit(limit).offset(offset))
+    query.limit(limit).offset(offset)
   );
 
   return { data, total };
@@ -62,26 +62,22 @@ export async function getAllKelasTahfidz(
 export async function getAllKelasTahfidzExport(daerahId: number) {
   return await tryCatch(
     "Failed to export Kelas Tahfidz data",
-    await to(
-      db
-        .select({
-          nama: kelasTahfidzTable.nama,
-          tanggal: kelasTahfidzTable.tanggal,
-        })
-        .from(kelasTahfidzTable)
-        .where(eq(kelasTahfidzTable.daerahId, daerahId))
-    )
+    db
+      .select({
+        nama: kelasTahfidzTable.nama,
+        tanggal: kelasTahfidzTable.tanggal,
+      })
+      .from(kelasTahfidzTable)
+      .where(eq(kelasTahfidzTable.daerahId, daerahId))
   );
 }
 
 export async function getKelasTahfidzById(id: number) {
   const data = await tryCatch(
     "Failed to get Kelas Tahfidz By Id",
-    await to(
-      db.query.kelasTahfidzTable.findFirst({
-        where: eq(kelasTahfidzTable.id, id),
-      })
-    )
+    db.query.kelasTahfidzTable.findFirst({
+      where: eq(kelasTahfidzTable.id, id),
+    })
   );
 
   return { data };
@@ -101,16 +97,14 @@ export async function getAllKelasTahfidzOptions(
 
   const data = await tryCatch(
     "Failed to get all Kelas Tahfidz options",
-    await to(
-      db
-        .select({
-          id: kelasTahfidzTable.id,
-          nama: kelasTahfidzTable.nama,
-          tanggal: kelasTahfidzTable.tanggal,
-        })
-        .from(kelasTahfidzTable)
-        .where(and(...conditions))
-    )
+    db
+      .select({
+        id: kelasTahfidzTable.id,
+        nama: kelasTahfidzTable.nama,
+        tanggal: kelasTahfidzTable.tanggal,
+      })
+      .from(kelasTahfidzTable)
+      .where(and(...conditions))
   );
 
   return { data };
@@ -122,13 +116,11 @@ export async function getCountKelasTahfidz(
 ) {
   return await tryCatch(
     "Failed to get count of Kelas Tahfidz",
-    await to(
-      db.$count(
-        kelasTahfidzTable,
-        and(
-          eq(kelasTahfidzTable.daerahId, daerahId),
-          eq(kelasTahfidzTable.nama, kelasPengajian)
-        )
+    db.$count(
+      kelasTahfidzTable,
+      and(
+        eq(kelasTahfidzTable.daerahId, daerahId),
+        eq(kelasTahfidzTable.nama, kelasPengajian)
       )
     )
   );
@@ -137,12 +129,10 @@ export async function getCountKelasTahfidz(
 export async function createKelasTahfidz(daerahId: number, data: TNamaTanggal) {
   return await tryCatch(
     "Failed to create Kelas Tahfidz",
-    await to(
-      db.insert(kelasTahfidzTable).values({
-        ...data,
-        daerahId,
-      })
-    )
+    db.insert(kelasTahfidzTable).values({
+      ...data,
+      daerahId,
+    })
   );
 }
 
@@ -153,32 +143,28 @@ export async function updateKelasTahfidz(
 ) {
   return await tryCatch(
     "Failed to update Kelas Tahfidz",
-    await to(
-      db
-        .update(kelasTahfidzTable)
-        .set(data)
-        .where(
-          and(
-            eq(kelasTahfidzTable.id, id),
-            eq(kelasTahfidzTable.daerahId, daerahId)
-          )
+    db
+      .update(kelasTahfidzTable)
+      .set(data)
+      .where(
+        and(
+          eq(kelasTahfidzTable.id, id),
+          eq(kelasTahfidzTable.daerahId, daerahId)
         )
-    )
+      )
   );
 }
 
 export async function deleteKelasTahfidz(daerahId: number, id: number[]) {
   return await tryCatch(
     "Failed to delete Kelas Tahfidz",
-    await to(
-      db
-        .delete(kelasTahfidzTable)
-        .where(
-          and(
-            inArray(kelasTahfidzTable.id, id),
-            eq(kelasTahfidzTable.daerahId, daerahId)
-          )
+    db
+      .delete(kelasTahfidzTable)
+      .where(
+        and(
+          inArray(kelasTahfidzTable.id, id),
+          eq(kelasTahfidzTable.daerahId, daerahId)
         )
-    )
+      )
   );
 }
