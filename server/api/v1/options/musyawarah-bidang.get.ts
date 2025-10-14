@@ -1,5 +1,4 @@
-import { getAllMusyawarahBidangOptionsService } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.service";
-import { OBidangSchema } from "~~/server/utils/dto";
+import { getAllMusyawarahBidangOptionsService } from "~~/server/modules/musyawarah-bidang";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { musyawarah_bidang: ["view"] });

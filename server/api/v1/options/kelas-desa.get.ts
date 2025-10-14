@@ -1,4 +1,4 @@
-import { getAllKelasDesaOptions } from "~~/server/repository/kelas-desa.repo";
+import { getAllKelasDesaOptionsService } from "~~/server/modules/kelas-desa";
 import { OKelasOptionsList } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     OKelasOptionsList.parse(q)
   );
 
-  const data = await getAllKelasDesaOptions(user.daerahId, query);
+  const data = await getAllKelasDesaOptionsService(user.daerahId, query);
 
   return HttpResponse(data.data);
 });

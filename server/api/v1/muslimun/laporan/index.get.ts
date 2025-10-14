@@ -1,5 +1,7 @@
-import { OLaporanMuslimunList } from "~~/server/services/laporan-muslimun/laporan-muslimun.dto";
-import { getLaporanMuslimunByMusyawarahId } from "~~/server/services/laporan-muslimun/laporan-muslimun.service";
+import {
+  getLaporanMuslimunByMusyawarahIdService,
+  OLaporanMuslimunList,
+} from "~~/server/modules/laporan-muslimun";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["view"] });
@@ -8,7 +10,10 @@ export default defineEventHandler(async (event) => {
     OLaporanMuslimunList.parse(q)
   );
 
-  const data = await getLaporanMuslimunByMusyawarahId(user.kelompokId!, query);
+  const data = await getLaporanMuslimunByMusyawarahIdService(
+    user.kelompokId!,
+    query
+  );
 
   return HttpResponse(data.data);
 });

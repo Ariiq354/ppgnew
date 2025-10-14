@@ -1,5 +1,7 @@
-import { OLaporanMuslimunDelete } from "~~/server/services/laporan-muslimun/laporan-muslimun.dto";
-import { deleteLaporanMuslimun } from "~~/server/services/laporan-muslimun/laporan-muslimun.service";
+import {
+  deleteLaporanMuslimunService,
+  OLaporanMuslimunDelete,
+} from "~~/server/modules/laporan-muslimun";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });
@@ -7,6 +9,7 @@ export default defineEventHandler(async (event) => {
     OLaporanMuslimunDelete.parse(b)
   );
 
-  await deleteLaporanMuslimun(body.id, body.musyawarahId, user.kelompokId!);
+  await deleteLaporanMuslimunService(user.kelompokId!, body);
+
   return HttpResponse();
 });

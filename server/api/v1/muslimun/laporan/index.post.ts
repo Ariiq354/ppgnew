@@ -1,6 +1,8 @@
 import sanitizeHtml from "sanitize-html";
-import { OLaporanMuslimunCreate } from "~~/server/services/laporan-muslimun/laporan-muslimun.dto";
-import { createLaporanMuslimun } from "~~/server/services/laporan-muslimun/laporan-muslimun.service";
+import {
+  createLaporanMuslimunService,
+  OLaporanMuslimunCreate,
+} from "~~/server/modules/laporan-muslimun";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });
@@ -11,7 +13,7 @@ export default defineEventHandler(async (event) => {
 
   body.keterangan = sanitizeHtml(body.keterangan);
 
-  await createLaporanMuslimun(user.kelompokId!, body);
+  await createLaporanMuslimunService(user.kelompokId!, body);
 
   return HttpResponse();
 });

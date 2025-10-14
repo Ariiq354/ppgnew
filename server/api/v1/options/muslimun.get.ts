@@ -1,9 +1,9 @@
-import { getAllMuslimunOptions } from "~~/server/repository/muslimun.repo";
+import { getAllMuslimunOptionsService } from "~~/server/modules/muslimun";
 
 export default defineEventHandler(async (event) => {
   const user = authGuard(event);
 
-  const data = await getAllMuslimunOptions(user.kelompokId!);
+  const data = await getAllMuslimunOptionsService(user.kelompokId!);
 
   return HttpResponse(data.data);
 });
