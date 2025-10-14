@@ -1,4 +1,4 @@
-import { getAllMusyawarah } from "~~/server/repository/musyawarah/musyawarah.repo";
+import { getAllMusyawarahService } from "~~/server/modules/musyawarah";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { sekretariat: ["view"] });
@@ -7,13 +7,7 @@ export default defineEventHandler(async (event) => {
     OSearchPagination.parse(q)
   );
 
-  const data = await getAllMusyawarah(user.daerahId, query);
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
+  const data = await getAllMusyawarahService(user.daerahId, query);
 
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

@@ -1,4 +1,4 @@
-import { getAllKelas } from "~~/server/repository/kelas-kelompok.repo";
+import { getAllKelasService } from "~~/server/modules/kelas-kelompok";
 import { OKegiatanWithNama } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {
@@ -8,13 +8,7 @@ export default defineEventHandler(async (event) => {
     OKegiatanWithNama.parse(q)
   );
 
-  const data = await getAllKelas(user.kelompokId!, query);
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
+  const data = await getAllKelasService(user.kelompokId!, query);
 
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

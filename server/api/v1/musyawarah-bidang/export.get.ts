@@ -1,4 +1,4 @@
-import { exportMusyawarahBidangService } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.service";
+import { exportMusyawarahBidangService } from "~~/server/modules/musyawarah-bidang";
 import { OBidangSchema } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {

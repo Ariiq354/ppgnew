@@ -1,5 +1,7 @@
-import { OPengajarList } from "~~/server/api/v1/pengajar/_dto";
-import { getAllPengajar } from "~~/server/repository/pengajar.repo";
+import {
+  getAllPengajarService,
+  OPengajarList,
+} from "~~/server/modules/pengajar";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["view"] });
@@ -8,13 +10,7 @@ export default defineEventHandler(async (event) => {
 
   query.desaId = user.desaId!;
 
-  const data = await getAllPengajar(user.daerahId, query);
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
+  const data = await getAllPengajarService(user.daerahId, query);
 
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

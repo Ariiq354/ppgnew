@@ -1,5 +1,7 @@
-import { OMusyawarahBidangCreate } from "~~/server/api/v1/musyawarah-bidang/_dto";
-import { updateMusyawarahBidangService } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.service";
+import {
+  OMusyawarahBidangCreate,
+  updateMusyawarahBidangService,
+} from "~~/server/modules/musyawarah-bidang";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { musyawarah_bidang: ["manage"] });

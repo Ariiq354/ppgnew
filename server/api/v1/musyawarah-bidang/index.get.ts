@@ -1,5 +1,7 @@
-import { OMusyawarahBidangList } from "~~/server/api/v1/musyawarah-bidang/_dto";
-import { getAllMusyawarahBidangService } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.service";
+import {
+  getAllMusyawarahBidangService,
+  OMusyawarahBidangList,
+} from "~~/server/modules/musyawarah-bidang";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { musyawarah_bidang: ["view"] });
@@ -10,12 +12,5 @@ export default defineEventHandler(async (event) => {
 
   const data = await getAllMusyawarahBidangService(user, query);
 
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

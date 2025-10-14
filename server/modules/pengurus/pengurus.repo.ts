@@ -5,7 +5,7 @@ import {
   pengurusTable,
 } from "~~/server/database/schema/pengurus";
 import type { TSearchPagination } from "~~/server/utils/dto";
-import type { TPengurusCreate } from "../api/v1/pengurus/_dto";
+import type { TPengurusCreate } from "./pengurus.dto";
 
 export async function getAllPengurus(
   daerahId: number,
@@ -42,11 +42,11 @@ export async function getAllPengurus(
 
   const total = await tryCatch(
     "Failed to get total Pengurus",
-    await to(db.$count(query))
+    db.$count(query)
   );
   const data = await tryCatch(
     "Failed to get data Pengurus",
-    await to(query.limit(limit).offset(offset))
+    query.limit(limit).offset(offset)
   );
 
   return { data, total };
@@ -55,19 +55,17 @@ export async function getAllPengurus(
 export async function getAllPengurusExport(daerahId: number) {
   return await tryCatch(
     "Failed to export pengurus",
-    await to(
-      db
-        .select({
-          nama: pengurusTable.nama,
-          pendidikan: pengurusTable.pendidikan,
-          bidang: pengurusTable.bidang,
-          foto: pengurusTable.foto,
-          tempatLahir: pengurusTable.tempatLahir,
-          tanggalLahir: pengurusTable.tanggalLahir,
-        })
-        .from(pengurusTable)
-        .where(eq(pengurusTable.daerahId, daerahId))
-    )
+    db
+      .select({
+        nama: pengurusTable.nama,
+        pendidikan: pengurusTable.pendidikan,
+        bidang: pengurusTable.bidang,
+        foto: pengurusTable.foto,
+        tempatLahir: pengurusTable.tempatLahir,
+        tanggalLahir: pengurusTable.tanggalLahir,
+      })
+      .from(pengurusTable)
+      .where(eq(pengurusTable.daerahId, daerahId))
   );
 }
 
@@ -109,11 +107,11 @@ export async function getAllPengurusAbsensi(
 
   const total = await tryCatch(
     "Failed to get total Pengurus",
-    await to(db.$count(query))
+    db.$count(query)
   );
   const data = await tryCatch(
     "Failed to get data Pengurus",
-    await to(query.limit(limit).offset(offset))
+    query.limit(limit).offset(offset)
   );
 
   return { data, total };
@@ -122,37 +120,33 @@ export async function getAllPengurusAbsensi(
 export async function getPengurusById(daerahId: number, id: number) {
   return await tryCatch(
     "Failed to get Pengurus by id",
-    await to(
-      db.query.pengurusTable.findFirst({
-        where: and(
-          eq(pengurusTable.daerahId, daerahId),
-          eq(pengurusTable.id, id)
-        ),
-        columns: {
-          id: true,
-          foto: true,
-        },
-      })
-    )
+    db.query.pengurusTable.findFirst({
+      where: and(
+        eq(pengurusTable.daerahId, daerahId),
+        eq(pengurusTable.id, id)
+      ),
+      columns: {
+        id: true,
+        foto: true,
+      },
+    })
   );
 }
 
 export async function getCountPengurus(daerahId: number) {
   return await tryCatch(
     "Failed to count Pengurus",
-    await to(db.$count(pengurusTable, eq(pengurusTable.daerahId, daerahId)))
+    db.$count(pengurusTable, eq(pengurusTable.daerahId, daerahId))
   );
 }
 
 export async function createPengurus(daerahId: number, data: TPengurusCreate) {
   await tryCatch(
     "Failed to create Pengurus",
-    await to(
-      db.insert(pengurusTable).values({
-        ...data,
-        daerahId,
-      })
-    )
+    db.insert(pengurusTable).values({
+      ...data,
+      daerahId,
+    })
   );
 }
 
@@ -163,29 +157,22 @@ export async function updatePengurus(
 ) {
   await tryCatch(
     "Failed to update Pengurus",
-    await to(
-      db
-        .update(pengurusTable)
-        .set(data)
-        .where(
-          and(eq(pengurusTable.id, id), eq(pengurusTable.daerahId, daerahId))
-        )
-    )
+    db
+      .update(pengurusTable)
+      .set(data)
+      .where(
+        and(eq(pengurusTable.id, id), eq(pengurusTable.daerahId, daerahId))
+      )
   );
 }
 
 export async function deletePengurus(daerahId: number, id: number[]) {
   await tryCatch(
     "Failed to delete Pengurus",
-    await to(
-      db
-        .delete(pengurusTable)
-        .where(
-          and(
-            inArray(pengurusTable.id, id),
-            eq(pengurusTable.daerahId, daerahId)
-          )
-        )
-    )
+    db
+      .delete(pengurusTable)
+      .where(
+        and(inArray(pengurusTable.id, id), eq(pengurusTable.daerahId, daerahId))
+      )
   );
 }

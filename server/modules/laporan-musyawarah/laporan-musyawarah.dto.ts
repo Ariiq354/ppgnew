@@ -20,6 +20,9 @@ export const OSummaryLaporanMusyawarahList = z.object({
 });
 
 export type TLaporanMusyawarahList = z.infer<typeof OLaporanMusyawarahList>;
+export type TLaporanMusyawarahSummaryList = z.infer<
+  typeof OSummaryLaporanMusyawarahList
+>;
 
 export const OLaporanMusyawarahDelete = z.object({
   ...ODelete.def.shape,

@@ -1,4 +1,4 @@
-import { deleteMusyawarahBidangService } from "~~/server/services/musyawarah-bidang/musyawarah-bidang.service";
+import { deleteMusyawarahBidangService } from "~~/server/modules/musyawarah-bidang";
 import { ODeleteBidang } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {

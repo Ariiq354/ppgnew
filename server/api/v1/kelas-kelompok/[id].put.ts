@@ -1,4 +1,4 @@
-import { updateKelas } from "~~/server/repository/kelas-kelompok.repo";
+import { updateKelasService } from "~~/server/modules/kelas-kelompok";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });
@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   const body = await readValidatedBody(event, (b) => ONamaTanggal.parse(b));
 
-  await updateKelas(id, user.kelompokId!, body);
+  await updateKelasService(id, user.kelompokId!, body);
 
   return HttpResponse();
 });

@@ -3,13 +3,14 @@ import type {
   TLaporanMusyawarahCreate,
   TLaporanMusyawarahDelete,
   TLaporanMusyawarahList,
-} from "~~/server/api/v1/musyawarah/laporan/_dto";
+  TLaporanMusyawarahSummaryList,
+} from "./laporan-musyawarah.dto";
 import {
   createLaporanMusyawarah,
   deleteLaporanMusyawarah,
   findMusyawarahByDaerah,
   getLaporanMusyawarahByMusyawarahId,
-} from "~~/server/repository/musyawarah/laporan-musyawarah.repo";
+} from "./laporan-musyawarah.repo";
 import { viewWhitelist } from "~~/shared/permission";
 
 export async function getLaporanMusyawarahByMusyawarahIdService(
@@ -24,6 +25,29 @@ export async function getLaporanMusyawarahByMusyawarahIdService(
   }
 
   return await getLaporanMusyawarahByMusyawarahId(user.daerahId, query);
+}
+
+export async function getLaporanMusyawarahSummaryService(
+  daerahId: number,
+  query: TLaporanMusyawarahSummaryList
+) {
+  const data = await getLaporanMusyawarahByMusyawarahId(daerahId, query);
+
+  const grouped = data.reduce(
+    (acc, item) => {
+      if (!acc[item.bidang]) {
+        acc[item.bidang] = [];
+      }
+      acc[item.bidang]!.push({
+        laporan: item.laporan,
+        keterangan: item.keterangan,
+      });
+      return acc;
+    },
+    {} as Record<string, { laporan: string; keterangan: string }[]>
+  );
+
+  return grouped;
 }
 
 export async function createLaporanMusyawarahService(

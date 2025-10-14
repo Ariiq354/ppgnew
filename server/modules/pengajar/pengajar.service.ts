@@ -1,17 +1,43 @@
-import { OPengajarCreate } from "~~/server/api/v1/pengajar/_dto";
+import { OPengajarCreate, type TPengajarList } from "./pengajar.dto";
 import {
   createPengajar,
   deletePengajar,
+  getAllPengajar,
+  getAllPengajarExport,
+  getAllPengajarExportDesa,
   getPengajarById,
   updatePengajar,
-} from "~~/server/repository/pengajar.repo";
+} from "./pengajar.repo";
 import ENV from "~~/shared/env";
 import type { MultiPartData } from "h3";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
-export async function createPengajarWithUpload(
+export async function getAllPengajarService(
+  daerahId: number,
+  query: TPengajarList
+) {
+  const { data, total } = await getAllPengajar(daerahId, query);
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total,
+    totalPage: Math.ceil(total / query.limit),
+  };
+  return { data, metadata };
+}
+
+export async function getAllPengajarExportService(daerahId: number) {
+  return await getAllPengajarExport(daerahId);
+}
+
+export async function getAllPengajarExportDesaService(desaId: number) {
+  return await getAllPengajarExportDesa(desaId);
+}
+
+export async function createPengajarService(
   user: UserWithId,
   formData: MultiPartData[] | undefined
 ) {
@@ -83,7 +109,7 @@ export async function deletePengajarService(user: UserWithId, body: TDelete) {
   await deletePengajar(user.kelompokId!, body.id);
 }
 
-export async function updatePengajarWithUpload(
+export async function updatePengajarService(
   id: number,
   user: UserWithId,
   formData: MultiPartData[] | undefined

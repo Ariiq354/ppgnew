@@ -28,12 +28,12 @@ export async function getAllMusyawarah(
 
   const total = await tryCatch(
     "Failed to get total count of Musyawarah",
-    await to(db.$count(query))
+    db.$count(query)
   );
 
   const data = await tryCatch(
     "Failed to get list of Musyawarah",
-    await to(query.limit(limit).offset(offset))
+    query.limit(limit).offset(offset)
   );
 
   return { data, total };
@@ -42,26 +42,22 @@ export async function getAllMusyawarah(
 export async function getAllMusyawarahExport(daerahId: number) {
   return await tryCatch(
     "Failed to export Musyawarah data",
-    await to(
-      db
-        .select({
-          nama: musyawarahTable.nama,
-          tanggal: musyawarahTable.tanggal,
-        })
-        .from(musyawarahTable)
-        .where(eq(musyawarahTable.daerahId, daerahId))
-    )
+    db
+      .select({
+        nama: musyawarahTable.nama,
+        tanggal: musyawarahTable.tanggal,
+      })
+      .from(musyawarahTable)
+      .where(eq(musyawarahTable.daerahId, daerahId))
   );
 }
 
 export async function getMusyawarahById(id: number) {
   const data = await tryCatch(
     "Failed to get Musyawarah by ID",
-    await to(
-      db.query.musyawarahTable.findFirst({
-        where: eq(musyawarahTable.id, id),
-      })
-    )
+    db.query.musyawarahTable.findFirst({
+      where: eq(musyawarahTable.id, id),
+    })
   );
 
   return { data };
@@ -74,16 +70,14 @@ export async function getAllMusyawarahOptions(daerahId: number) {
 
   const data = await tryCatch(
     "Failed to get all Musyawarah options",
-    await to(
-      db
-        .select({
-          id: musyawarahTable.id,
-          nama: musyawarahTable.nama,
-          tanggal: musyawarahTable.tanggal,
-        })
-        .from(musyawarahTable)
-        .where(and(...conditions))
-    )
+    db
+      .select({
+        id: musyawarahTable.id,
+        nama: musyawarahTable.nama,
+        tanggal: musyawarahTable.tanggal,
+      })
+      .from(musyawarahTable)
+      .where(and(...conditions))
   );
 
   return { data };
@@ -92,19 +86,17 @@ export async function getAllMusyawarahOptions(daerahId: number) {
 export async function getCountMusyawarah(daerahId: number) {
   return await tryCatch(
     "Failed to get count of Musyawarah",
-    await to(db.$count(musyawarahTable, eq(musyawarahTable.daerahId, daerahId)))
+    db.$count(musyawarahTable, eq(musyawarahTable.daerahId, daerahId))
   );
 }
 
 export async function createMusyawarah(daerahId: number, data: TNamaTanggal) {
   return await tryCatch(
     "Failed to create Musyawarah",
-    await to(
-      db.insert(musyawarahTable).values({
-        ...data,
-        daerahId,
-      })
-    )
+    db.insert(musyawarahTable).values({
+      ...data,
+      daerahId,
+    })
   );
 }
 
@@ -115,32 +107,25 @@ export async function updateMusyawarah(
 ) {
   return await tryCatch(
     "Failed to update Musyawarah",
-    await to(
-      db
-        .update(musyawarahTable)
-        .set(data)
-        .where(
-          and(
-            eq(musyawarahTable.id, id),
-            eq(musyawarahTable.daerahId, daerahId)
-          )
-        )
-    )
+    db
+      .update(musyawarahTable)
+      .set(data)
+      .where(
+        and(eq(musyawarahTable.id, id), eq(musyawarahTable.daerahId, daerahId))
+      )
   );
 }
 
 export async function deleteMusyawarah(daerahId: number, id: number[]) {
   return await tryCatch(
     "Failed to delete Musyawarah",
-    await to(
-      db
-        .delete(musyawarahTable)
-        .where(
-          and(
-            inArray(musyawarahTable.id, id),
-            eq(musyawarahTable.daerahId, daerahId)
-          )
+    db
+      .delete(musyawarahTable)
+      .where(
+        and(
+          inArray(musyawarahTable.id, id),
+          eq(musyawarahTable.daerahId, daerahId)
         )
-    )
+      )
   );
 }

@@ -1,4 +1,4 @@
-import { updatePengurusWithUpload } from "~~/server/services/pengurus.service";
+import { updatePengurusService } from "~~/server/modules/pengurus";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { sekretariat: ["manage"] });
@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const result = await readMultipartFormData(event);
   const id = OParam.parse(getRouterParam(event, "id"));
 
-  await updatePengurusWithUpload(id, user, result);
+  await updatePengurusService(id, user, result);
 
   return HttpResponse();
 });

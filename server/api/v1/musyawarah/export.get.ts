@@ -1,9 +1,9 @@
-import { getAllMusyawarahExport } from "~~/server/repository/musyawarah/musyawarah.repo";
+import { getAllMusyawarahExportService } from "~~/server/modules/musyawarah";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { sekretariat: ["view"] });
 
-  const data = await getAllMusyawarahExport(user.daerahId);
+  const data = await getAllMusyawarahExportService(user.daerahId);
 
   return exportToXlsx(event, "musyawarah", data);
 });

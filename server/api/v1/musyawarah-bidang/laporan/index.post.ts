@@ -1,5 +1,7 @@
-import { createLaporanMusyawarahBidangService } from "~~/server/services/musyawarah-bidang/laporan-musyawarah-bidang.service";
-import { OLaporanMusyawarahBidangCreate } from "./_dto";
+import {
+  createLaporanMusyawarahBidangService,
+  OLaporanMusyawarahBidangCreate,
+} from "~~/server/modules/laporan-musyawarah-bidang";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { musyawarah_bidang: ["manage"] });

@@ -1,4 +1,4 @@
-import { getAllKelasDesa } from "~~/server/repository/kelas-desa.repo";
+import { getAllKelasDesaService } from "~~/server/modules/kelas-desa";
 import { OKegiatanWithNama } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {
@@ -8,13 +8,7 @@ export default defineEventHandler(async (event) => {
     OKegiatanWithNama.parse(q)
   );
 
-  const data = await getAllKelasDesa(user.desaId!, query);
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
+  const data = await getAllKelasDesaService(user.desaId!, query);
 
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

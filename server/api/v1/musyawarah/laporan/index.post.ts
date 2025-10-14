@@ -1,5 +1,7 @@
-import { createLaporanMusyawarahService } from "~~/server/services/musyawarah/laporan-musyawarah.service";
-import { OLaporanMusyawarahCreate } from "./_dto";
+import {
+  createLaporanMusyawarahService,
+  OLaporanMusyawarahCreate,
+} from "~~/server/modules/laporan-musyawarah";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { musyawarah_ppg: ["manage"] });

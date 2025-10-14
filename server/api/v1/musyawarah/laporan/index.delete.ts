@@ -1,5 +1,7 @@
-import { deleteLaporanMusyawarahService } from "~~/server/services/musyawarah/laporan-musyawarah.service";
-import { OLaporanMusyawarahDelete } from "./_dto";
+import {
+  deleteLaporanMusyawarahService,
+  OLaporanMusyawarahDelete,
+} from "~~/server/modules/laporan-musyawarah";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { musyawarah_ppg: ["manage"] });

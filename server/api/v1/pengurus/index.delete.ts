@@ -1,4 +1,4 @@
-import { deletePengurusService } from "~~/server/services/pengurus.service";
+import { deletePengurusService } from "~~/server/modules/pengurus";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { sekretariat: ["manage"] });

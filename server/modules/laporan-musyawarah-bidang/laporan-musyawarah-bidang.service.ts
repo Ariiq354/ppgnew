@@ -2,13 +2,13 @@ import type {
   TLaporanMusyawarahBidangCreate,
   TLaporanMusyawarahBidangDelete,
   TLaporanMusyawarahBidangList,
-} from "~~/server/api/v1/musyawarah-bidang/laporan/_dto";
+} from "./laporan-musyawarah-bidang.dto";
 import {
   createLaporanMusyawarahBidang,
   deleteLaporanMusyawarahBidang,
   findMusyawarahBidangByDaerah,
   getLaporanMusyawarahBidangByMusyawarahId,
-} from "~~/server/repository/musyawarah-bidang/laporan-musyawarah-bidang.repo";
+} from "./laporan-musyawarah-bidang.repo";
 import { viewWhitelist } from "~~/shared/permission";
 
 export async function getLaporanMusyawarahBidangByMusyawarahIdService(

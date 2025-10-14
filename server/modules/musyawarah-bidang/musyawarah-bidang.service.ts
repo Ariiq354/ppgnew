@@ -3,7 +3,7 @@ import { viewWhitelist } from "~~/shared/permission";
 import type {
   TMusyawarahBidangCreate,
   TMusyawarahBidangList,
-} from "../../api/v1/musyawarah-bidang/_dto";
+} from "./musyawarah-bidang.dto";
 import {
   createMusyawarahBidang,
   deleteMusyawarahBidang,
@@ -11,7 +11,7 @@ import {
   getAllMusyawarahBidangExport,
   getAllMusyawarahBidangOptions,
   updateMusyawarahBidang,
-} from "../../repository/musyawarah-bidang/musyawarah-bidang.repo";
+} from "./musyawarah-bidang.repo";
 
 export async function getAllMusyawarahBidangOptionsService(
   user: UserWithId,
@@ -52,7 +52,14 @@ export async function getAllMusyawarahBidangService(
     });
   }
 
-  return await getAllMusyawarahBidang(user.daerahId, query);
+  const { data, total } = await getAllMusyawarahBidang(user.daerahId, query);
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: total,
+    totalPage: Math.ceil(total / query.limit),
+  };
+  return { data, metadata };
 }
 
 export async function deleteMusyawarahBidangService(

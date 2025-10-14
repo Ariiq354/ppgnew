@@ -1,11 +1,11 @@
-import { createKelas } from "~~/server/repository/kelas-kelompok.repo";
+import { createKelasService } from "~~/server/modules/kelas-kelompok";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });
 
   const body = await readValidatedBody(event, (b) => ONamaTanggal.parse(b));
 
-  await createKelas(user.kelompokId!, body);
+  await createKelasService(user.kelompokId!, body);
 
   return HttpResponse();
 });

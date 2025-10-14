@@ -2,7 +2,7 @@ import { and, eq, inArray, type SQL } from "drizzle-orm";
 import type {
   TLaporanMusyawarahBidangCreate,
   TLaporanMusyawarahBidangList,
-} from "~~/server/api/v1/musyawarah-bidang/laporan/_dto";
+} from "./laporan-musyawarah-bidang.dto";
 import { db } from "~~/server/database";
 import {
   laporanMusyawarahBidangTable,
@@ -17,15 +17,13 @@ export async function findMusyawarahBidangByDaerah(
 ) {
   return await tryCatch(
     "Failed to find musyawarah bidang by daerah",
-    await to(
-      db.query.musyawarahBidangTable.findFirst({
-        where: and(
-          eq(musyawarahBidangTable.id, musyawarahId),
-          eq(musyawarahBidangTable.daerahId, daerahId),
-          eq(musyawarahBidangTable.bidang, bidang)
-        ),
-      })
-    )
+    db.query.musyawarahBidangTable.findFirst({
+      where: and(
+        eq(musyawarahBidangTable.id, musyawarahId),
+        eq(musyawarahBidangTable.daerahId, daerahId),
+        eq(musyawarahBidangTable.bidang, bidang)
+      ),
+    })
   );
 }
 
@@ -41,24 +39,19 @@ export async function getLaporanMusyawarahBidangByMusyawarahId(
 
   const data = await tryCatch(
     "Failed to get Laporan Musyawarah Bidang",
-    await to(
-      db
-        .select({
-          id: laporanMusyawarahBidangTable.id,
-          musyawarahId: laporanMusyawarahBidangTable.musyawarahId,
-          laporan: laporanMusyawarahBidangTable.laporan,
-          keterangan: laporanMusyawarahBidangTable.keterangan,
-        })
-        .from(laporanMusyawarahBidangTable)
-        .leftJoin(
-          musyawarahBidangTable,
-          eq(
-            laporanMusyawarahBidangTable.musyawarahId,
-            musyawarahBidangTable.id
-          )
-        )
-        .where(and(...conditions))
-    )
+    db
+      .select({
+        id: laporanMusyawarahBidangTable.id,
+        musyawarahId: laporanMusyawarahBidangTable.musyawarahId,
+        laporan: laporanMusyawarahBidangTable.laporan,
+        keterangan: laporanMusyawarahBidangTable.keterangan,
+      })
+      .from(laporanMusyawarahBidangTable)
+      .leftJoin(
+        musyawarahBidangTable,
+        eq(laporanMusyawarahBidangTable.musyawarahId, musyawarahBidangTable.id)
+      )
+      .where(and(...conditions))
   );
 
   return data;
@@ -69,7 +62,7 @@ export async function createLaporanMusyawarahBidang(
 ) {
   return await tryCatch(
     "Failed to create Laporan Musyawarah Bidang",
-    await to(db.insert(laporanMusyawarahBidangTable).values(data))
+    db.insert(laporanMusyawarahBidangTable).values(data)
   );
 }
 
@@ -79,15 +72,13 @@ export async function deleteLaporanMusyawarahBidang(
 ) {
   return await tryCatch(
     "Failed to delete Laporan Musyawarah bidang",
-    await to(
-      db
-        .delete(laporanMusyawarahBidangTable)
-        .where(
-          and(
-            inArray(laporanMusyawarahBidangTable.id, id),
-            eq(laporanMusyawarahBidangTable.musyawarahId, musyawarahId)
-          )
+    db
+      .delete(laporanMusyawarahBidangTable)
+      .where(
+        and(
+          inArray(laporanMusyawarahBidangTable.id, id),
+          eq(laporanMusyawarahBidangTable.musyawarahId, musyawarahId)
         )
-    )
+      )
   );
 }

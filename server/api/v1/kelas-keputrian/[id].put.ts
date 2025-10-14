@@ -1,4 +1,4 @@
-import { updateKelasKeputrian } from "~~/server/repository/kelas-keputrian.repo";
+import { updateKelasKeputrianService } from "~~/server/modules/kelas-keputrian";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { keputrian: ["manage"] });
@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   const body = await readValidatedBody(event, (b) => ONamaTanggal.parse(b));
 
-  await updateKelasKeputrian(id, user.daerahId!, body);
+  await updateKelasKeputrianService(id, user.daerahId!, body);
 
   return HttpResponse();
 });

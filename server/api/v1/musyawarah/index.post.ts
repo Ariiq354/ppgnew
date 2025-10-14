@@ -1,11 +1,11 @@
-import { createMusyawarah } from "~~/server/repository/musyawarah/musyawarah.repo";
+import { createMusyawarahService } from "~~/server/modules/musyawarah";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { sekretariat: ["manage"] });
 
   const body = await readValidatedBody(event, (b) => ONamaTanggal.parse(b));
 
-  await createMusyawarah(user.daerahId, body);
+  await createMusyawarahService(user.daerahId, body);
 
   return HttpResponse();
 });

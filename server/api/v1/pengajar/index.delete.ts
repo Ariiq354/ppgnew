@@ -1,4 +1,4 @@
-import { deletePengajarService } from "~~/server/services/pengajar.service";
+import { deletePengajarService } from "~~/server/modules/pengajar";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["manage"] });

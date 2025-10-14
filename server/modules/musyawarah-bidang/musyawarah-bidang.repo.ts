@@ -5,7 +5,7 @@ import type { roles } from "~~/shared/permission";
 import type {
   TMusyawarahBidangCreate,
   TMusyawarahBidangList,
-} from "../../api/v1/musyawarah-bidang/_dto";
+} from "./musyawarah-bidang.dto";
 
 export async function getAllMusyawarahBidang(
   daerahId: number,
@@ -34,12 +34,12 @@ export async function getAllMusyawarahBidang(
 
   const total = await tryCatch(
     "Failed to get total count of MusyawarahBidang",
-    await to(db.$count(query))
+    db.$count(query)
   );
 
   const data = await tryCatch(
     "Failed to get list of MusyawarahBidang",
-    await to(query.limit(limit).offset(offset))
+    query.limit(limit).offset(offset)
   );
 
   return { data, total };
@@ -51,20 +51,18 @@ export async function getAllMusyawarahBidangExport(
 ) {
   return await tryCatch(
     "Failed to export MusyawarahBidang data",
-    await to(
-      db
-        .select({
-          nama: musyawarahBidangTable.nama,
-          tanggal: musyawarahBidangTable.tanggal,
-        })
-        .from(musyawarahBidangTable)
-        .where(
-          and(
-            eq(musyawarahBidangTable.daerahId, daerahId),
-            eq(musyawarahBidangTable.bidang, bidang)
-          )
+    db
+      .select({
+        nama: musyawarahBidangTable.nama,
+        tanggal: musyawarahBidangTable.tanggal,
+      })
+      .from(musyawarahBidangTable)
+      .where(
+        and(
+          eq(musyawarahBidangTable.daerahId, daerahId),
+          eq(musyawarahBidangTable.bidang, bidang)
         )
-    )
+      )
   );
 }
 
@@ -79,16 +77,14 @@ export async function getAllMusyawarahBidangOptions(
 
   const data = await tryCatch(
     "Failed to get all MusyawarahBidang options",
-    await to(
-      db
-        .select({
-          id: musyawarahBidangTable.id,
-          nama: musyawarahBidangTable.nama,
-          tanggal: musyawarahBidangTable.tanggal,
-        })
-        .from(musyawarahBidangTable)
-        .where(and(...conditions))
-    )
+    db
+      .select({
+        id: musyawarahBidangTable.id,
+        nama: musyawarahBidangTable.nama,
+        tanggal: musyawarahBidangTable.tanggal,
+      })
+      .from(musyawarahBidangTable)
+      .where(and(...conditions))
   );
 
   return { data };
@@ -100,12 +96,10 @@ export async function createMusyawarahBidang(
 ) {
   return await tryCatch(
     "Failed to create MusyawarahBidang",
-    await to(
-      db.insert(musyawarahBidangTable).values({
-        ...data,
-        daerahId,
-      })
-    )
+    db.insert(musyawarahBidangTable).values({
+      ...data,
+      daerahId,
+    })
   );
 }
 
@@ -116,17 +110,15 @@ export async function updateMusyawarahBidang(
 ) {
   return await tryCatch(
     "Failed to Update MusyawarahBidang",
-    await to(
-      db
-        .update(musyawarahBidangTable)
-        .set(data)
-        .where(
-          and(
-            eq(musyawarahBidangTable.id, id),
-            eq(musyawarahBidangTable.daerahId, daerahId)
-          )
+    db
+      .update(musyawarahBidangTable)
+      .set(data)
+      .where(
+        and(
+          eq(musyawarahBidangTable.id, id),
+          eq(musyawarahBidangTable.daerahId, daerahId)
         )
-    )
+      )
   );
 }
 
@@ -137,16 +129,14 @@ export async function deleteMusyawarahBidang(
 ) {
   return await tryCatch(
     "Failed to delete MusyawarahBidang",
-    await to(
-      db
-        .delete(musyawarahBidangTable)
-        .where(
-          and(
-            inArray(musyawarahBidangTable.id, id),
-            eq(musyawarahBidangTable.daerahId, daerahId),
-            eq(musyawarahBidangTable.bidang, bidang)
-          )
+    db
+      .delete(musyawarahBidangTable)
+      .where(
+        and(
+          inArray(musyawarahBidangTable.id, id),
+          eq(musyawarahBidangTable.daerahId, daerahId),
+          eq(musyawarahBidangTable.bidang, bidang)
         )
-    )
+      )
   );
 }

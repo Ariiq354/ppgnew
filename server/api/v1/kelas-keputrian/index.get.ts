@@ -1,4 +1,4 @@
-import { getAllKelasKeputrian } from "~~/server/repository/kelas-keputrian.repo";
+import { getAllKelasKeputrianService } from "~~/server/modules/kelas-keputrian";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { keputrian: ["view"] });
@@ -7,13 +7,7 @@ export default defineEventHandler(async (event) => {
     OKegiatanWithNama.parse(q)
   );
 
-  const data = await getAllKelasKeputrian(user.daerahId, query);
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
+  const data = await getAllKelasKeputrianService(user.daerahId, query);
 
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

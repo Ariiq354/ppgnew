@@ -1,4 +1,4 @@
-import { updateMusyawarah } from "~~/server/repository/musyawarah/musyawarah.repo";
+import { updateMusyawarahService } from "~~/server/modules/musyawarah";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { sekretariat: ["manage"] });
@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   const body = await readValidatedBody(event, (b) => ONamaTanggal.parse(b));
 
-  await updateMusyawarah(id, user.daerahId, body);
+  await updateMusyawarahService(id, user.daerahId, body);
 
   return HttpResponse();
 });

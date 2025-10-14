@@ -1,4 +1,4 @@
-import { updateKelasGps } from "~~/server/repository/kelas-gps.repo";
+import { updateKelasGpsService } from "~~/server/modules/kelas-gps";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["manage"] });
@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   const body = await readValidatedBody(event, (b) => ONamaTanggal.parse(b));
 
-  await updateKelasGps(id, user.desaId!, body);
+  await updateKelasGpsService(id, user.desaId!, body);
 
   return HttpResponse();
 });

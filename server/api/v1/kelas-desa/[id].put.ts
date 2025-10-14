@@ -1,4 +1,4 @@
-import { updateKelasDesa } from "~~/server/repository/kelas-desa.repo";
+import { updateKelasDesaService } from "~~/server/modules/kelas-desa";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["manage"] });
@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   const body = await readValidatedBody(event, (b) => ONamaTanggal.parse(b));
 
-  await updateKelasDesa(id, user.desaId!, body);
+  await updateKelasDesaService(id, user.desaId!, body);
 
   return HttpResponse();
 });

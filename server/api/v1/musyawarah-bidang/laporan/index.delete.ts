@@ -1,5 +1,7 @@
-import { deleteLaporanMusyawarahBidangService } from "~~/server/services/musyawarah-bidang/laporan-musyawarah-bidang.service";
-import { OLaporanMusyawarahBidangDelete } from "./_dto";
+import {
+  deleteLaporanMusyawarahBidangService,
+  OLaporanMusyawarahBidangDelete,
+} from "~~/server/modules/laporan-musyawarah-bidang";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { musyawarah_bidang: ["manage"] });

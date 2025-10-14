@@ -1,17 +1,38 @@
 import type { MultiPartData } from "h3";
-import { OPengurusCreate } from "~~/server/api/v1/pengurus/_dto";
+import { OPengurusCreate } from "./pengurus.dto";
 import {
   createPengurus,
   deletePengurus,
+  getAllPengurus,
+  getAllPengurusExport,
   getPengurusById,
   updatePengurus,
-} from "~~/server/repository/pengurus.repo";
+} from "./pengurus.repo";
 import ENV from "~~/shared/env";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
-export async function createPengurusWithUpload(
+export async function getAllPengurusService(
+  daerahId: number,
+  query: TSearchPagination
+) {
+  const { data, total } = await getAllPengurus(daerahId, query);
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total,
+    totalPage: Math.ceil(total / query.limit),
+  };
+  return { data, metadata };
+}
+
+export async function getAllPengurusExportService(daerahId: number) {
+  return await getAllPengurusExport(daerahId);
+}
+
+export async function createPengurusService(
   user: UserWithId,
   formData: MultiPartData[] | undefined
 ) {
@@ -73,7 +94,7 @@ export async function deletePengurusService(user: UserWithId, body: TDelete) {
   await deletePengurus(user.daerahId, body.id);
 }
 
-export async function updatePengurusWithUpload(
+export async function updatePengurusService(
   id: number,
   user: UserWithId,
   formData: MultiPartData[] | undefined
