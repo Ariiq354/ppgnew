@@ -105,9 +105,7 @@ export async function getAbsensiGenerusDesaByKelasId(
       )
   );
 
-  return {
-    data,
-  };
+  return data;
 }
 
 export async function getCountAbsensiGenerusDesa(

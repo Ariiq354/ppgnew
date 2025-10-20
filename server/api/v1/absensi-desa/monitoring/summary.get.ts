@@ -1,8 +1,4 @@
-import {
-  getCountAbsensiGenerusDesa,
-  getCountGenerusDesaAbsensi,
-} from "~~/server/services/absensi-desa/absensi-desa.service";
-import { getCountKelasDesa } from "~~/server/repository/kelas-desa.repo";
+import { getAbsensiDesaMonitoringSummaryService } from "~~/server/modules/absensi-desa";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["view"] });
@@ -11,27 +7,10 @@ export default defineEventHandler(async (event) => {
     OAbsensiKelasPengajianList.parse(q)
   );
 
-  const countGenerus = await getCountGenerusDesaAbsensi(
+  const data = await getAbsensiDesaMonitoringSummaryService(
     user.desaId!,
-    query.kelasPengajian
+    query
   );
-  const countKelas = await getCountKelasDesa(
-    user.desaId!,
-    query.kelasPengajian
-  );
-  const countAbsensi = await getCountAbsensiGenerusDesa(
-    user.desaId!,
-    query.kelasPengajian
-  );
-
-  const denominator = countGenerus * countKelas;
-  const kehadiran =
-    denominator > 0 ? Math.round((countAbsensi * 100) / denominator) : 0;
-
-  const data = {
-    countGenerus,
-    kehadiran,
-  };
 
   return HttpResponse(data);
 });

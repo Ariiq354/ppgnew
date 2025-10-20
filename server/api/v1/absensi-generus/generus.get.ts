@@ -1,4 +1,4 @@
-import { getAllGenerusExclude } from "~~/server/services/absensi-generus/absensi-generus.service";
+import { getAllGenerusExcludeService } from "~~/server/modules/absensi-generus";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["view"] });
@@ -7,14 +7,7 @@ export default defineEventHandler(async (event) => {
     OGenerusAbsensiList.parse(q)
   );
 
-  const data = await getAllGenerusExclude(user.kelompokId!, query);
+  const data = await getAllGenerusExcludeService(user.kelompokId!, query);
 
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

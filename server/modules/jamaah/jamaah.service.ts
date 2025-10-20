@@ -32,14 +32,7 @@ export async function getAllJamaahAbsensiService(
   kelompokId: number,
   query: TSearchPagination
 ) {
-  const data = await getAllJamaahAbsensi(kelompokId, query);
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-  return { data: data.data, metadata };
+  return await getAllJamaahAbsensi(kelompokId, query);
 }
 
 export async function getCountJamaahService(kelompokId: number) {

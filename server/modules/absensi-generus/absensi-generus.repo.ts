@@ -100,9 +100,7 @@ export async function getAbsensiGenerusByKelasId(
       )
   );
 
-  return {
-    data,
-  };
+  return data;
 }
 
 export async function getAbsensiGenerusByKelompokId(kelompokId: number) {

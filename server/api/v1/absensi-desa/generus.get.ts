@@ -1,5 +1,7 @@
-import { getAllGenerusDesaExclude } from "~~/server/services/absensi-desa/absensi-desa.service";
-import { OGenerusDesaAbsensiList } from "~~/server/services/absensi-desa/absensi.desa.dto";
+import {
+  getAllGenerusDesaExcludeService,
+  OGenerusDesaAbsensiList,
+} from "~~/server/modules/absensi-desa";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["view"] });
@@ -8,14 +10,7 @@ export default defineEventHandler(async (event) => {
     OGenerusDesaAbsensiList.parse(q)
   );
 
-  const data = await getAllGenerusDesaExclude(user.desaId!, query);
+  const data = await getAllGenerusDesaExcludeService(user.desaId!, query);
 
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

@@ -4,6 +4,8 @@ import {
   getAllMusyawarah,
   getAllMusyawarahExport,
   getAllMusyawarahOptions,
+  getCountMusyawarah,
+  getMusyawarahById,
   updateMusyawarah,
 } from "./musyawarah.repo";
 
@@ -46,4 +48,16 @@ export async function updateMusyawarahService(
 
 export async function getAllMusyawarahExportService(daerahId: number) {
   return await getAllMusyawarahExport(daerahId);
+}
+
+export async function getAllMusyawarahOptionsService(daerahId: number) {
+  return await getAllMusyawarahOptions(daerahId);
+}
+
+export async function getCountMusyawarahService(daerahId: number) {
+  return await getCountMusyawarah(daerahId);
+}
+
+export async function getMusyawarahByIdService(id: number) {
+  return await getMusyawarahById(id);
 }

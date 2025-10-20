@@ -8,7 +8,15 @@ export const OGenerusAbsensiKelompokList = z.object({
   kelasPengajian: z.string(),
 });
 
+export type TGenerusAbsensiKelompokList = z.infer<
+  typeof OGenerusAbsensiKelompokList
+>;
+
 export const OAbsensiKelasPengajianKelompokList = z.object({
   kelompokId: z.coerce.number(),
   kelasPengajian: z.string(),
 });
+
+export type TAbsensiKelasPengajianKelompokList = z.infer<
+  typeof OAbsensiKelasPengajianKelompokList
+>;

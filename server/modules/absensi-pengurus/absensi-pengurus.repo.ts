@@ -6,8 +6,6 @@ import {
 } from "~~/server/database/schema/pengurus";
 import type { TAbsensiPengurusCreate } from "./absensi-pengurus.dto";
 
-// NOTE: tryCatch and InternalError are assumed to be defined and imported from a utility file.
-
 export async function getAbsensiPengurusByMusyawarahId(
   daerahId: number,
   musyawarahId: number

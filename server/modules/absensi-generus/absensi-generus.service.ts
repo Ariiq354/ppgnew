@@ -1,2 +1,163 @@
-// absensi-generus service
-export function createAbsensigenerus() {}
+import {
+  getAllKelasOptionsService,
+  getCountKelasService,
+  getKelasByIdService,
+} from "../kelas-kelompok";
+import type { TGenerusAbsensiKelompokList } from "./absensi-generus.dto";
+import {
+  createAbsensiGenerus,
+  deleteAbsensiGenerus,
+  getAbsensiGenerusByKelasId,
+  getAllGenerusExclude,
+  getAllGenerusSummary,
+  getCountAbsensiGenerus,
+  getCountGenerusAbsensi,
+  updateAbsensiGenerus,
+} from "./absensi-generus.repo";
+
+export async function getAbsensiGenerusMonitoringService(
+  kelompokId: number,
+  query: TGenerusAbsensiList
+) {
+  const data = await getAllGenerusSummary(kelompokId, query);
+  const kelas = await getAllKelasOptionsService(kelompokId, {
+    nama: query.kelasPengajian,
+  });
+
+  data.data = data.data.map((i) => {
+    const total = kelas.data.length;
+    return {
+      ...i,
+      tanpaKeterangan: total - i.hadir - i.izin,
+      kehadiran: total > 0 ? ((i.hadir + i.izin) * 100) / total : 0,
+    };
+  });
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data,
+    metadata,
+  };
+}
+
+export async function getAbsensiGenerusSummaryService(
+  kelompokId: number,
+  query: TAbsensiKelasPengajianList
+) {
+  const countGenerus = await getCountGenerusAbsensi(
+    kelompokId,
+    query.kelasPengajian
+  );
+  const countKelas = await getCountKelasService(
+    kelompokId,
+    query.kelasPengajian
+  );
+  const countAbsensi = await getCountAbsensiGenerus(
+    kelompokId,
+    query.kelasPengajian
+  );
+
+  const denominator = countGenerus * countKelas;
+  const kehadiran =
+    denominator > 0 ? Math.round((countAbsensi * 100) / denominator) : 0;
+
+  const data = {
+    countGenerus,
+    kehadiran,
+  };
+
+  return data;
+}
+
+export async function getAbsensiGenerusByKelasIdService(
+  kelompokId: number,
+  kelasId: number
+) {
+  const check = await getKelasByIdService(kelasId);
+  if (check.data?.kelompokId !== kelompokId) {
+    throw createError({
+      statusCode: 403,
+      message: "Anda tidak punya akses ke kelompok ini",
+    });
+  }
+
+  return await getAbsensiGenerusByKelasId(kelompokId, kelasId);
+}
+
+export async function getAllGenerusExcludeService(
+  kelompokId: number,
+  query: TGenerusAbsensiList
+) {
+  const data = await getAllGenerusExclude(kelompokId, query);
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data,
+    metadata,
+  };
+}
+
+export async function createAbsensiGenerusService(
+  kelompokId: number,
+  kelasId: number,
+  query: TAbsensiGenerusCreate[]
+) {
+  const check = await getKelasByIdService(kelasId);
+  if (check.data?.kelompokId !== kelompokId) {
+    throw createError({
+      statusCode: 403,
+      message: "Anda tidak punya akses ke kelompok ini",
+    });
+  }
+
+  for (const item of query) {
+    if (item.id) {
+      if (item.keterangan === "Tanpa Keterangan") {
+        await deleteAbsensiGenerus([item.id], kelasId);
+      } else {
+        updateAbsensiGenerus(
+          item.id,
+          kelasId,
+          kelompokId,
+          check.data!.nama,
+          item
+        );
+      }
+    } else {
+      await createAbsensiGenerus(kelasId, kelompokId, check.data!.nama, item);
+    }
+  }
+}
+
+export async function getAllGenerusSummaryService(
+  kelompokId: number,
+  query: TGenerusAbsensiKelompokList
+) {
+  return await getAllGenerusSummary(kelompokId, query);
+}
+
+export async function getCountGenerusAbsensiService(
+  kelompokId: number,
+  kelasPengajian: string
+) {
+  return await getCountGenerusAbsensi(kelompokId, kelasPengajian);
+}
+
+export async function getCountAbsensiGenerusService(
+  kelompokId: number,
+  kelasPengajian: string
+) {
+  return await getCountAbsensiGenerus(kelompokId, kelasPengajian);
+}

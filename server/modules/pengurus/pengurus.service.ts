@@ -4,7 +4,9 @@ import {
   createPengurus,
   deletePengurus,
   getAllPengurus,
+  getAllPengurusAbsensi,
   getAllPengurusExport,
+  getCountPengurus,
   getPengurusById,
   updatePengurus,
 } from "./pengurus.repo";
@@ -30,6 +32,13 @@ export async function getAllPengurusService(
 
 export async function getAllPengurusExportService(daerahId: number) {
   return await getAllPengurusExport(daerahId);
+}
+
+export async function getAllPengurusAbsensiService(
+  daerahId: number,
+  query: TSearchPagination
+) {
+  return await getAllPengurusAbsensi(daerahId, query);
 }
 
 export async function createPengurusService(
@@ -144,4 +153,8 @@ export async function updatePengurusService(
   }
 
   await updatePengurus(id, user.daerahId, parsed);
+}
+
+export async function getCountPengurusService(daerahId: number) {
+  return await getCountPengurus(daerahId);
 }
