@@ -1,5 +1,4 @@
-import { getAllKeputrianSummary } from "~~/server/services/absensi-keputrian/absensi-keputrian.service";
-import { getAllKelasKeputrianOptions } from "~~/server/repository/kelas-keputrian.repo";
+import { getAbsensiKeputrianMonitoringService } from "~~/server/modules/absensi-keputrian";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { keputrian: ["view"] });
@@ -8,26 +7,7 @@ export default defineEventHandler(async (event) => {
     OGenerusAbsensiList.parse(q)
   );
 
-  const data = await getAllKeputrianSummary(user.daerahId, query);
-  const kelas = await getAllKelasKeputrianOptions(user.daerahId, {
-    nama: query.kelasPengajian,
-  });
+  const data = await getAbsensiKeputrianMonitoringService(user.daerahId, query);
 
-  data.data = data.data.map((i) => {
-    const total = kelas.data.length;
-    return {
-      ...i,
-      tanpaKeterangan: total - i.hadir - i.izin,
-      kehadiran: total > 0 ? ((i.hadir + i.izin) * 100) / total : 0,
-    };
-  });
-
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

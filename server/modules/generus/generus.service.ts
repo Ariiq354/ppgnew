@@ -3,6 +3,7 @@ import {
   createGenerus,
   deleteGenerus,
   getGenerusById,
+  getGenerusOptionsKelompok,
   updateGenerus,
 } from "./generus.repo";
 import ENV from "~~/shared/env";
@@ -156,4 +157,8 @@ export async function updateGenerusService(
   }
 
   await updateGenerus(id, user.kelompokId!, parsed);
+}
+
+export async function getGenerusOptionsKelompokService(kelompokId: number) {
+  return getGenerusOptionsKelompok(kelompokId);
 }

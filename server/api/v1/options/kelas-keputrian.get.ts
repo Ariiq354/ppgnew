@@ -1,9 +1,13 @@
-import { getAllKelasGpsOptions } from "~~/server/repository/kelas-gps.repo";
+import { getAllKelasKeputrianOptionsService } from "~~/server/modules/kelas-keputrian";
 
 export default defineEventHandler(async (event) => {
-  const user = await permissionGuard(event, { pjp_desa: ["view"] });
+  const user = await permissionGuard(event, { keputrian: ["view"] });
 
-  const data = await getAllKelasGpsOptions(user.desaId!);
+  const query = await getValidatedQuery(event, (q) =>
+    OKelasOptionsList.parse(q)
+  );
+
+  const data = await getAllKelasKeputrianOptionsService(user.daerahId, query);
 
   return HttpResponse(data.data);
 });

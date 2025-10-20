@@ -1,4 +1,4 @@
-import { getAllGpsExclude } from "~~/server/services/absensi-gps/absensi-gps.service";
+import { getAllGpsExcludeService } from "~~/server/modules/absensi-gps";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["view"] });
@@ -7,14 +7,7 @@ export default defineEventHandler(async (event) => {
     OGenerusAbsensiList.parse(q)
   );
 
-  const data = await getAllGpsExclude(user.desaId!, query);
+  const data = await getAllGpsExcludeService(user.desaId!, query);
 
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

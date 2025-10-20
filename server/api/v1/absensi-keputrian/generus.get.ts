@@ -1,4 +1,4 @@
-import { getAllKeputrianExclude } from "~~/server/services/absensi-keputrian/absensi-keputrian.service";
+import { getAllKeputrianExcludeService } from "~~/server/modules/absensi-keputrian";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { keputrian: ["view"] });
@@ -7,14 +7,7 @@ export default defineEventHandler(async (event) => {
     OGenerusAbsensiList.parse(q)
   );
 
-  const data = await getAllKeputrianExclude(user.daerahId, query);
+  const data = await getAllKeputrianExcludeService(user.daerahId, query);
 
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return HttpResponse(data.data, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

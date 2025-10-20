@@ -1,4 +1,4 @@
-import { getAllKelasOptions } from "~~/server/repository/kelas-kelompok.repo";
+import { getAllKelasOptionsService } from "~~/server/modules/kelas-kelompok";
 import { OKelasOptionsList } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     OKelasOptionsList.parse(q)
   );
 
-  const data = await getAllKelasOptions(user.kelompokId!, query);
+  const data = await getAllKelasOptionsService(user.kelompokId!, query);
 
   return HttpResponse(data.data);
 });

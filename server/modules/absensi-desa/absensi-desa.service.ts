@@ -228,3 +228,24 @@ export async function createAbsensiDesaService(
     }
   }
 }
+
+export async function getAllGenerusDesaSummaryService(
+  desaId: number,
+  query: TGenerusDesaAbsensiList
+) {
+  return getAllGenerusDesaSummary(desaId, query);
+}
+
+export async function getCountGenerusDesaAbsensiService(
+  desaId: number,
+  kelasPengajian: string
+) {
+  return getCountGenerusDesaAbsensi(desaId, kelasPengajian);
+}
+
+export async function getCountAbsensiGenerusDesaService(
+  desaId: number,
+  kelasPengajian: string
+) {
+  return getCountAbsensiGenerusDesa(desaId, kelasPengajian);
+}

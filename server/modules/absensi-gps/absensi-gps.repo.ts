@@ -86,9 +86,7 @@ export async function getAbsensiGpsByKelasId(desaId: number, kelasId: number) {
       )
   );
 
-  return {
-    data,
-  };
+  return data;
 }
 
 export async function getCountAbsensiGps(

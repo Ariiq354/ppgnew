@@ -100,9 +100,7 @@ export async function getAbsensiKeputrianByKelasId(
       )
   );
 
-  return {
-    data,
-  };
+  return data;
 }
 
 export async function getCountAbsensiKeputrian(
