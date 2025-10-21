@@ -42,7 +42,7 @@ export async function getAbsensiGpsMonitoringService(
   };
 
   return {
-    data,
+    data: data.data,
     metadata,
   };
 }
@@ -107,7 +107,7 @@ export async function getAllGpsExcludeService(
   };
 
   return {
-    data,
+    data: data.data,
     metadata,
   };
 }

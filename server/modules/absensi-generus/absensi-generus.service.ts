@@ -8,6 +8,7 @@ import {
   createAbsensiGenerus,
   deleteAbsensiGenerus,
   getAbsensiGenerusByKelasId,
+  getAbsensiGenerusByKelompokId,
   getAllGenerusExclude,
   getAllGenerusSummary,
   getCountAbsensiGenerus,
@@ -41,7 +42,7 @@ export async function getAbsensiGenerusMonitoringService(
   };
 
   return {
-    data,
+    data: data.data,
     metadata,
   };
 }
@@ -104,7 +105,7 @@ export async function getAllGenerusExcludeService(
   };
 
   return {
-    data,
+    data: data.data,
     metadata,
   };
 }
@@ -160,4 +161,8 @@ export async function getCountAbsensiGenerusService(
   kelasPengajian: string
 ) {
   return await getCountAbsensiGenerus(kelompokId, kelasPengajian);
+}
+
+export async function getAbsensiGenerusByKelompokIdService(kelompokId: number) {
+  return await getAbsensiGenerusByKelompokId(kelompokId);
 }

@@ -37,7 +37,7 @@ export async function getAbsensiJamaahMonitoringService(
   };
 
   return {
-    data,
+    data: data.data,
     metadata,
   };
 }

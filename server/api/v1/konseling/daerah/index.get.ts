@@ -1,4 +1,4 @@
-import { getAllKonselingDaerah } from "~~/server/services/konseling/konseling.service";
+import { getAllKonselingDaerahService } from "~~/server/modules/konseling";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { bimbingan_konseling: ["view"] });
@@ -7,19 +7,7 @@ export default defineEventHandler(async (event) => {
     OSearchPagination.parse(q)
   );
 
-  const data = await getAllKonselingDaerah(user.daerahId, query);
+  const data = await getAllKonselingDaerahService(user.daerahId, query);
 
-  const newData = data.data.map(({ tanggalMasukKelas, ...rest }) => ({
-    ...rest,
-    kelasSekolah: getCurrentKelas(rest.kelasSekolah!, tanggalMasukKelas!),
-  }));
-
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return HttpResponse(newData, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

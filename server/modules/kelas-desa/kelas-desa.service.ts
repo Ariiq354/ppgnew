@@ -5,6 +5,7 @@ import {
   getAllKelasDesaExport,
   getAllKelasDesaOptions,
   getCountKelasDesa,
+  getKelasByDesaId,
   getKelasDesaById,
   updateKelasDesa,
 } from "./kelas-desa.repo";
@@ -25,6 +26,10 @@ export async function getAllKelasDesaService(
 
 export async function getAllKelasDesaExportService(desaId: number) {
   return await getAllKelasDesaExport(desaId);
+}
+
+export async function getKelasByDesaIdService(desaId: number) {
+  return await getKelasByDesaId(desaId);
 }
 
 export async function getKelasDesaByIdService(id: number) {

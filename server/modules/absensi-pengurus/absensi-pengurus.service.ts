@@ -40,7 +40,7 @@ export async function getAbsensiPengurusMonitoringService(
   };
 
   return {
-    data,
+    data: data.data,
     metadata,
   };
 }

@@ -1,14 +1,9 @@
-import { getAllGenerusExport } from "~~/server/repository/generus.repo";
+import { getAllGenerusExportService } from "~~/server/modules/generus";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_kelompok: ["view"] });
 
-  const data = await getAllGenerusExport(user.kelompokId!);
+  const data = await getAllGenerusExportService(user.kelompokId!);
 
-  const newData = data.map(({ tanggalMasukKelas, ...rest }) => ({
-    ...rest,
-    kelasSekolah: getCurrentKelas(rest.kelasSekolah, tanggalMasukKelas),
-  }));
-
-  return exportToXlsx(event, "generus", newData);
+  return exportToXlsx(event, "generus", data);
 });

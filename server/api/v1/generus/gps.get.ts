@@ -1,6 +1,7 @@
-import { OGenerusBaseList } from "~~/server/api/v1/generus/_dto";
-import { getAllGenerusGPS } from "~~/server/repository/generus.repo";
-import { getCurrentKelas } from "~~/server/utils/common";
+import {
+  getAllGenerusGpsService,
+  OGenerusBaseList,
+} from "~~/server/modules/generus";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["view"] });
@@ -11,19 +12,7 @@ export default defineEventHandler(async (event) => {
 
   query.desaId = user.desaId!;
 
-  const data = await getAllGenerusGPS(user.daerahId, query);
+  const data = await getAllGenerusGpsService(user.daerahId, query);
 
-  const newData = data.data.map(({ tanggalMasukKelas, ...rest }) => ({
-    ...rest,
-    kelasSekolah: getCurrentKelas(rest.kelasSekolah, tanggalMasukKelas),
-  }));
-
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return HttpResponse(newData, metadata);
+  return HttpResponse(data.data, data.metadata);
 });

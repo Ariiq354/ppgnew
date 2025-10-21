@@ -19,6 +19,7 @@ import type { TGenerusDesaAbsensiList } from "./absensi-desa.dto";
 import {
   createAbsensiGenerusDesa,
   deleteAbsensiGenerusDesa,
+  getAbsensiGenerusByDesaId,
   getAbsensiGenerusDesaByKelasId,
   getAllGenerusDesaExclude,
   getAllGenerusDesaSummary,
@@ -61,7 +62,7 @@ export async function getAbsensiDesaKelompokService(
   };
 
   return {
-    data,
+    data: data.data,
     metadata,
   };
 }
@@ -129,7 +130,7 @@ export async function getAbsensiDesaMonitoringService(
   };
 
   return {
-    data,
+    data: data.data,
     metadata,
   };
 }
@@ -182,13 +183,13 @@ export async function getAllGenerusDesaExcludeService(
   desaId: number,
   query: TGenerusDesaAbsensiList
 ) {
-  const data = await getAllGenerusDesaExclude(desaId, query);
+  const { data, total } = await getAllGenerusDesaExclude(desaId, query);
 
   const metadata = {
     page: query.page,
     itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
+    total: total,
+    totalPage: Math.ceil(total / query.limit),
   };
 
   return {
@@ -248,4 +249,8 @@ export async function getCountAbsensiGenerusDesaService(
   kelasPengajian: string
 ) {
   return getCountAbsensiGenerusDesa(desaId, kelasPengajian);
+}
+
+export async function getAbsensiGenerusByDesaIdService(desaId: number) {
+  return getAbsensiGenerusByDesaId(desaId);
 }

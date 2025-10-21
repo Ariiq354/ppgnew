@@ -1,4 +1,5 @@
 import { z } from "zod/mini";
+import { ODelete } from "~~/server/utils/dto";
 import { roles } from "~~/shared/permission";
 
 export const OLaporanMusyawarahCreate = z.object({

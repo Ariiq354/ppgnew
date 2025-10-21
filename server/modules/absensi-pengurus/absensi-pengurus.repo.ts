@@ -32,9 +32,7 @@ export async function getAbsensiPengurusByMusyawarahId(
       )
   );
 
-  return {
-    data,
-  };
+  return data;
 }
 
 export async function getCountAbsensiPengurus(daerahId: number) {

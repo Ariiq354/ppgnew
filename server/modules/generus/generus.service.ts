@@ -1,7 +1,18 @@
-import { OGenerusCreate } from "./generus.dto";
+import {
+  OGenerusCreate,
+  type TGenerusBaseList,
+  type TGenerusList,
+} from "./generus.dto";
 import {
   createGenerus,
   deleteGenerus,
+  getAllGenerus,
+  getAllGenerus69,
+  getAllGenerusChart,
+  getAllGenerusExport,
+  getAllGenerusExportDesa,
+  getAllGenerusGPS,
+  getCountGenerus,
   getGenerusById,
   getGenerusOptionsKelompok,
   updateGenerus,
@@ -11,6 +22,96 @@ import type { MultiPartData } from "h3";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+export async function getAllGenerusService(
+  daerahId: number,
+  query: TGenerusList
+) {
+  const data = await getAllGenerus(daerahId, query);
+
+  const newData = data.data.map(({ tanggalMasukKelas, ...rest }) => ({
+    ...rest,
+    kelasSekolah: getCurrentKelas(rest.kelasSekolah, tanggalMasukKelas),
+  }));
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: newData,
+    metadata,
+  };
+}
+
+export async function getAllGenerusGpsService(
+  daerahId: number,
+  query: TGenerusBaseList
+) {
+  const data = await getAllGenerusGPS(daerahId, query);
+
+  const newData = data.data.map(({ tanggalMasukKelas, ...rest }) => ({
+    ...rest,
+    kelasSekolah: getCurrentKelas(rest.kelasSekolah, tanggalMasukKelas),
+  }));
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: newData,
+    metadata,
+  };
+}
+
+export async function getAllGenerusExportDesaService(desaId: number) {
+  const data = await getAllGenerusExportDesa(desaId);
+
+  const newData = data.map(({ tanggalMasukKelas, ...rest }) => ({
+    ...rest,
+    kelasSekolah: getCurrentKelas(rest.kelasSekolah, tanggalMasukKelas),
+  }));
+
+  return newData;
+}
+
+export async function getAllGenerusExportService(kelompokId: number) {
+  const data = await getAllGenerusExport(kelompokId);
+
+  const newData = data.map(({ tanggalMasukKelas, ...rest }) => ({
+    ...rest,
+    kelasSekolah: getCurrentKelas(rest.kelasSekolah, tanggalMasukKelas),
+  }));
+
+  return newData;
+}
+
+export async function getCountGenerusService(
+  daerahId: number,
+  desaId?: number,
+  kelompokId?: number
+) {
+  return getCountGenerus(daerahId, desaId, kelompokId);
+}
+
+export async function getAllGenerusChartService(
+  daerahId: number,
+  desaId?: number,
+  kelompokId?: number
+) {
+  return getAllGenerusChart(daerahId, desaId, kelompokId);
+}
+
+export async function getAllGenerus69Service(daerahId: number) {
+  return getAllGenerus69(daerahId);
+}
 
 export async function createGenerusService(
   user: UserWithId,

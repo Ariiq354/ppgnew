@@ -40,7 +40,7 @@ export async function getAbsensiKeputrianMonitoringService(
   };
 
   return {
-    data,
+    data: data.data,
     metadata,
   };
 }
@@ -105,7 +105,7 @@ export async function getAllKeputrianExcludeService(
   };
 
   return {
-    data,
+    data: data.data,
     metadata,
   };
 }

@@ -1,17 +1,17 @@
-import { z } from "zod/mini";
-import { OKonselingUpdate } from "~~/server/services/konseling/dto/konseling.dto";
-import { updateKonselingDaerah } from "~~/server/services/konseling/konseling.service";
+import {
+  OKonselingUpdate,
+  updateKonselingDaerahService,
+} from "~~/server/modules/konseling";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, {
     bimbingan_konseling: ["manage"],
   });
-  const id = getRouterParam(event, "id");
-  const parsed = z.coerce.number().parse(id);
+  const id = OParam.parse(getRouterParam(event, "id"));
 
   const body = await readValidatedBody(event, (b) => OKonselingUpdate.parse(b));
 
-  await updateKonselingDaerah(parsed, user.daerahId, body);
+  await updateKonselingDaerahService(id, user.daerahId, body);
 
   return HttpResponse();
 });

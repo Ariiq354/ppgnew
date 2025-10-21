@@ -43,6 +43,25 @@ export async function getAllProkerService(
   };
 }
 
+export async function getAllProkerDaerahService(
+  daerahId: number,
+  query: TProkerList
+) {
+  const { data, total } = await getAllProker(daerahId, query);
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: total,
+    totalPage: Math.ceil(total / query.limit),
+  };
+
+  return {
+    data,
+    metadata,
+  };
+}
+
 export async function deleteProkerService(
   user: UserWithId,
   body: TDeleteBidang
