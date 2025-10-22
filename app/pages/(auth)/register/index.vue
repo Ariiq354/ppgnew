@@ -57,7 +57,7 @@
           </div>
           <div class="mt-1 text-(--ui-text-muted)">
             Sudah punya akun?
-            <NuxtLink to="/" class="font-medium text-(--ui-primary)">
+            <NuxtLink to="/" class="text-primary font-medium">
               Masuk.
             </NuxtLink>
           </div>

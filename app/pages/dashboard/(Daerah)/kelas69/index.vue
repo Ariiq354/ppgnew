@@ -3,56 +3,26 @@
   import { APIBASE } from "~/utils";
 
   const constantStore = useConstantStore();
-  constantStore.setTitle("Dashboard / Preview Kelas 6 & 9");
+  constantStore.setTitle("Dashboard / Data Kelas 6 & 9");
 
   const { data } = await useFetch(`${APIBASE}/home/kelas69`);
 
-  const content = ref();
-  const isLoading = ref(false);
-  async function downloadPDF2() {
-    if (content.value) {
-      isLoading.value = true;
-
-      const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
-        import("html2canvas-oklch"),
-        import("jspdf"),
-      ]);
-
-      const canvas = await html2canvas(content.value, {
-        scale: 2,
-      });
-      const data = canvas.toDataURL("image/png");
-
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "px",
-        format: "a4",
-      });
-
-      const imgProperties = pdf.getImageProperties(data);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
-
-      pdf.addImage(data, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save("example.pdf");
-      isLoading.value = false;
-    }
+  async function getPdf() {
+    window.open(`${APIBASE}/home/kelas69Pdf`, "_blank");
   }
 </script>
 
 <template>
-  <Title>Dashboard | Preview Kelas 6 & 9</Title>
+  <Title>Dashboard | Data Kelas 6 & 9</Title>
   <main>
     <UCard class="mb-4">
-      <UButton :loading="isLoading" size="xl" @click="downloadPDF2">
-        Download PDF
-      </UButton>
+      <UButton size="xl" @click="getPdf"> Download PDF </UButton>
     </UCard>
     <UCard>
       <div class="flex justify-center">
         <div ref="content" class="content w-fit px-38 py-12">
           <div
-            class="mx-auto mb-4 w-full max-w-[30rem] text-center text-xl font-bold"
+            class="mx-auto mb-4 w-full max-w-120 text-center text-xl font-bold"
           >
             PENDATAAN SISWA KELAS 6 SD dan KELAS 9 SMP PPDB TA 2024/2025 PPPM
             DAARUL HUFFADZ
@@ -76,12 +46,7 @@
             <tbody>
               <template v-for="(item, index) in data?.data.desa" :key="index">
                 <tr>
-                  <td colspan="2" class="font-bold">{{ item.name }}</td>
-                  <td />
-                  <td />
-                  <td />
-                  <td />
-                  <td />
+                  <td colspan="7" class="font-bold">{{ item.name }}</td>
                 </tr>
                 <tr
                   v-for="(item2, index2) in data?.data.kelompok.filter(
@@ -116,8 +81,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td />
-                  <td class="text-center font-bold">Subtotal</td>
+                  <td colspan="2" class="text-center font-bold">Subtotal</td>
                   <td class="text-center font-bold">
                     {{ data?.data.desaCounts[item.id]?.countLaki6 ?? 0 }}
                   </td>
@@ -140,8 +104,9 @@
                 </tr>
               </template>
               <tr>
-                <td rowspan="2" />
-                <td rowspan="2" class="text-center font-bold">GRAND TOTAL</td>
+                <td rowspan="2" colspan="2" class="text-center font-bold">
+                  GRAND TOTAL
+                </td>
                 <td class="text-center font-bold">
                   {{ data?.data.grandTotal.countLaki6 }}
                 </td>

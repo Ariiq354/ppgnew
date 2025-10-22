@@ -5,5 +5,5 @@ export default defineEventHandler(async (event) => {
 
   const data = await getAllKelasGpsExportService(user.desaId!);
 
-  return exportToXlsx(event, "kelas-gps", data);
+  return await exportToXlsx(event, "kelas-gps", data);
 });

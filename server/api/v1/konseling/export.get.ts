@@ -8,5 +8,5 @@ export default defineEventHandler(async (event) => {
     user.kelompokId!
   );
 
-  return exportToXlsx(event, "konseling", data);
+  return await exportToXlsx(event, "konseling", data);
 });

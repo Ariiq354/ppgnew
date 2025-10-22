@@ -105,5 +105,5 @@ export async function exportMusyawarahBidangService(
 
   const data = await getAllMusyawarahBidangExport(user.daerahId, query.bidang);
 
-  return exportToXlsx(event, "musyawarah-bidang", data);
+  return await exportToXlsx(event, "musyawarah-bidang", data);
 }

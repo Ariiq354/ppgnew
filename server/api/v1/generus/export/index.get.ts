@@ -5,5 +5,5 @@ export default defineEventHandler(async (event) => {
 
   const data = await getAllGenerusExportService(user.kelompokId!);
 
-  return exportToXlsx(event, "generus", data);
+  return await exportToXlsx(event, "generus", data);
 });

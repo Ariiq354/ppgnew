@@ -149,7 +149,7 @@
   </LazyUModal>
   <main>
     <UCard>
-      <div class="mb-6 flex flex-col gap-4 lg:flex-row">
+      <div class="mb-4 flex gap-2 md:mb-6 md:gap-4">
         <UInput
           class="flex-5"
           leading-icon="i-lucide-search"

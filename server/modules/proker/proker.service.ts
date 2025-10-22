@@ -47,7 +47,12 @@ export async function getAllProkerDaerahService(
   daerahId: number,
   query: TProkerList
 ) {
-  const { data, total } = await getAllProker(daerahId, query);
+  const { data, total, totalBiaya } = await getAllProker(daerahId, query);
+
+  const newData = data.map((i) => ({
+    ...i,
+    totalBiaya,
+  }));
 
   const metadata = {
     page: query.page,
@@ -57,7 +62,7 @@ export async function getAllProkerDaerahService(
   };
 
   return {
-    data,
+    data: newData,
     metadata,
   };
 }
@@ -84,7 +89,7 @@ export async function exportProkerService(
 
   const data = await getAllProkerExport(user.daerahId, query.bidang);
 
-  return exportToXlsx(event, "proker", data);
+  return await exportToXlsx(event, "proker", data);
 }
 
 export async function updateProkerService(

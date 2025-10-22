@@ -1,12 +1,21 @@
-import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
 import type { H3Event } from "h3";
 
-export function exportToXlsx(event: H3Event, title: string, data: object[]) {
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+export async function exportToXlsx(
+  event: H3Event,
+  title: string,
+  data: object[]
+) {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Sheet1");
 
-  const buf = XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
+  worksheet.columns = Object.keys(data[0] || {}).map((key) => ({
+    header: key,
+    key,
+  }));
+  worksheet.addRows(data);
+
+  const buf = await workbook.xlsx.writeBuffer();
 
   setHeader(
     event,

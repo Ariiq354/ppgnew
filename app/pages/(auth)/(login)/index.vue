@@ -29,7 +29,7 @@
           </div>
           <div class="mt-1 text-(--ui-text-muted)">
             Belum punya akun?
-            <NuxtLink to="/register" class="font-medium text-(--ui-primary)">
+            <NuxtLink to="/register" class="text-primary font-medium">
               Daftar.
             </NuxtLink>
           </div>

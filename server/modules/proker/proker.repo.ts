@@ -1,4 +1,4 @@
-import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
+import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { prokerTable } from "~~/server/database/schema/bidang";
 import type { roles } from "~~/shared/permission";
@@ -51,7 +51,16 @@ export async function getAllProker(
     query.limit(limit).offset(offset)
   );
 
-  return { data, total };
+  const totalBiaya = await tryCatch(
+    "Failed to get total biaya",
+    db
+      .select({ totalBiaya: sql<number>`SUM(${prokerTable.biaya})` })
+      .from(prokerTable)
+      .where(and(...conditions))
+      .then((res) => res[0]?.totalBiaya ?? 0)
+  );
+
+  return { data, total, totalBiaya };
 }
 
 export async function getAllProkerExport(

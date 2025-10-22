@@ -52,7 +52,7 @@
       },
       {
         label: "Tenaga Pengajar",
-        icon: "i-lucide-users",
+        icon: "i-lucide-presentation",
         to: "/dashboard/pengajar",
         onSelect: () => {
           if (!isDesktop.value) {
@@ -1442,7 +1442,7 @@
     class="fixed top-0 z-20 hidden h-full w-72 overflow-auto border-r border-gray-200 bg-white shadow-xl transition-all duration-200 md:block dark:border-gray-700 dark:bg-gray-900"
     :class="constantStore.sidebarShow ? 'left-0' : '-left-72'"
   >
-    <div class="flex items-center justify-center pt-8 pb-6 text-(--ui-primary)">
+    <div class="text-primary) flex items-center justify-center pt-8 pb-6">
       <div class="flex items-center text-2xl tracking-widest">
         <NuxtImg src="/ppg.webp" class="h-14 w-14" />
         <span>PPG</span>
@@ -1454,7 +1454,7 @@
         :items="sidebarItems"
         class="w-full"
         :ui="{
-          label: 'text-sm uppercase text-(--ui-primary) mb-2',
+          label: 'text-sm uppercase text-primary mb-2',
           link: 'text-base py-2',
           root: 'px-4',
           separator: 'h-0',
@@ -1476,7 +1476,7 @@
             :items="sidebarItems"
             class="w-full"
             :ui="{
-              label: 'text-sm uppercase text-(--ui-primary) mb-2',
+              label: 'text-sm uppercase text-primary mb-2',
               link: 'text-base py-2',
               separator: 'h-0',
             }"

@@ -46,7 +46,7 @@ type Generus = {
   gender: string;
 };
 
-type GenerusCount = {
+export type GenerusCount = {
   countLaki6: number;
   countPerempuan6: number;
   countLaki9: number;

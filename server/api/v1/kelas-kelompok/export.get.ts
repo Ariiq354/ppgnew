@@ -5,5 +5,5 @@ export default defineEventHandler(async (event) => {
 
   const data = await getAllKelasExportService(user.kelompokId!);
 
-  return exportToXlsx(event, "kelas-kelompok", data);
+  return await exportToXlsx(event, "kelas-kelompok", data);
 });

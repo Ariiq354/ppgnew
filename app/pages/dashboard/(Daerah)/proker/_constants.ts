@@ -52,11 +52,22 @@ export const columns: TableColumn<any>[] = [
   {
     accessorKey: "biaya",
     header: "Biaya",
-    footer: () => {
+    cell: ({ row }) => {
       const formatted = new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
-      }).format(2000);
+      }).format(row.getValue("biaya"));
+
+      return formatted;
+    },
+    footer: ({ table }) => {
+      const rows = table.getRowModel().rows;
+      const totalBiaya = rows.length ? Number(rows[0]?.original.totalBiaya) : 0;
+
+      const formatted = new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+      }).format(totalBiaya);
 
       return `Total: ${formatted}`;
     },

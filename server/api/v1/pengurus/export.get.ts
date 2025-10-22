@@ -5,5 +5,5 @@ export default defineEventHandler(async (event) => {
 
   const data = await getAllPengurusExportService(user.daerahId);
 
-  return exportToXlsx(event, "pengurus", data);
+  return await exportToXlsx(event, "pengurus", data);
 });

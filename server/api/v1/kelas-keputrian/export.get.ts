@@ -5,5 +5,5 @@ export default defineEventHandler(async (event) => {
 
   const data = await getAllKelasKeputrianExportService(user.daerahId);
 
-  return exportToXlsx(event, "kelas-keputrian", data);
+  return await exportToXlsx(event, "kelas-keputrian", data);
 });
