@@ -27,7 +27,7 @@
           <div class="text-2xl font-bold text-(--ui-text-highlighted)">
             Assalamualaikum
           </div>
-          <div class="mt-1 text-(--ui-text-muted)">
+          <div class="text-muted mt-1">
             Belum punya akun?
             <NuxtLink to="/register" class="text-primary font-medium">
               Daftar.

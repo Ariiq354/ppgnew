@@ -55,7 +55,7 @@
           <div class="text-2xl font-bold text-(--ui-text-highlighted)">
             Daftar akun
           </div>
-          <div class="mt-1 text-(--ui-text-muted)">
+          <div class="text-muted mt-1">
             Sudah punya akun?
             <NuxtLink to="/" class="text-primary font-medium">
               Masuk.

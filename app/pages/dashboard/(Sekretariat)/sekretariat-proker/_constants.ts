@@ -21,6 +21,14 @@ export const columns: TableColumn<any>[] = [
   {
     accessorKey: "biaya",
     header: "Biaya",
+    cell: ({ row }) => {
+      const formatted = new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+      }).format(row.getValue("biaya"));
+
+      return formatted;
+    },
   },
   {
     accessorKey: "mingguKe",

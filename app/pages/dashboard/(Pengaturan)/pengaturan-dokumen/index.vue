@@ -129,7 +129,7 @@
             <div>{{ formatFileSize(item.size) }}</div>
           </div>
         </div>
-        <div class="my-3 text-(--ui-text-muted)">
+        <div class="text-muted my-3">
           <span>Uploaded {{ formatDate(item.createdAt) }}</span>
         </div>
         <hr class="border-t-gray-300" />

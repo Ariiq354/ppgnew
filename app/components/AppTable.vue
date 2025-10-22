@@ -175,7 +175,7 @@
     </div>
     <UTable
       v-model:row-selection="rowSelection"
-      class="rounded-lg border border-(--ui-border-accented)"
+      class="border-accented rounded-lg border"
       :data="data"
       :columns="newColumns"
       :loading="loading"
@@ -194,7 +194,7 @@
     </UTable>
 
     <div class="mt-2 flex items-center justify-center md:justify-between">
-      <p class="hidden px-2 text-sm text-(--ui-text-muted) md:block">
+      <p class="text-muted hidden px-2 text-sm md:block">
         Showing {{ (page - 1) * 10 + 1 }} to
         {{ Math.min((page - 1) * 10 + 10, total) }} of {{ total }} items
       </p>

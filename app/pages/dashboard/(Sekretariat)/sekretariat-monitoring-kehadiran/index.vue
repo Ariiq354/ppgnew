@@ -45,7 +45,7 @@
       </UCard>
     </div>
     <UCard>
-      <div class="mb-6 flex gap-2 md:gap-4">
+      <div class="mb-4 flex gap-2 md:mb-6 md:gap-4">
         <UInput
           size="xl"
           class="flex-5"
