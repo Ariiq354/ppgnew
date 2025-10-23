@@ -22,7 +22,7 @@ export async function permissionGuard(event: H3Event, permission: TStatement) {
     },
   });
 
-  if (!res) {
+  if (!res.success) {
     throw createError({
       statusCode: 403,
       message: "Unauthorized",

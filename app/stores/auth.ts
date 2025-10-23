@@ -60,8 +60,8 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         onError: (body) => {
           useToastError("Login Failed", body.error.message);
         },
-        onSuccess: () => {
-          window.location.href = "/dashboard";
+        onSuccess: async () => {
+          await navigateTo("/dashboard");
         },
       },
     });
@@ -92,8 +92,8 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         onError: (body) => {
           useToastError("Logout Failed", body.error.message);
         },
-        onSuccess: () => {
-          window.location.href = "/dashboard";
+        onSuccess: async () => {
+          await navigateTo("/");
         },
       },
     });
