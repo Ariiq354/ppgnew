@@ -2,21 +2,7 @@ import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 import { roles } from "../../../shared/permission";
 import { createdUpdated } from "./common";
 import { daerahTable } from "./wilayah";
-
-const bulanOptions = [
-  "Januari",
-  "Februari",
-  "Maret",
-  "April",
-  "Mei",
-  "Juni",
-  "Juli",
-  "Agustus",
-  "September",
-  "Oktober",
-  "November",
-  "Desember",
-] as const;
+import { bulanOptions } from "~~/shared/contants";
 
 export const prokerTable = pgTable("proker", {
   id: serial().primaryKey(),

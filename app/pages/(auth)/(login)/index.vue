@@ -24,9 +24,7 @@
       <div class="space-y-6">
         <div class="flex flex-col items-center text-center">
           <NuxtImg src="/ppg.webp" width="200" height="200" alt="logo ppg" />
-          <div class="text-2xl font-bold text-(--ui-text-highlighted)">
-            Assalamualaikum
-          </div>
+          <div class="text-highlighted text-2xl font-bold">Assalamualaikum</div>
           <div class="text-muted mt-1">
             Belum punya akun?
             <NuxtLink to="/register" class="text-primary font-medium">

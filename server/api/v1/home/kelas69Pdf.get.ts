@@ -5,7 +5,7 @@ import { type GenerusCount, getKelas69 } from "~~/server/modules/dashboard";
 
 const MARGIN = 30;
 const ROW_HEIGHT = 20;
-const COL_WIDTHS = [40, 200, 50, 50, 50, 50, 100];
+const COL_WIDTHS = [40, 200, 50, 50, 50, 50, 100] as const;
 const START_X = 30;
 const FONT_NORMAL = "Helvetica";
 const FONT_BOLD = "Helvetica-Bold";

@@ -28,7 +28,7 @@
     search: "",
     page: 1,
     tahun: "",
-    bulan: "",
+    bulan: "Januari",
     nama: "",
   });
   const searchDebounced = useDebounceFn((v) => {
@@ -160,7 +160,7 @@
           v-model="query.bulan"
           placeholder="Bulan"
           class="hidden flex-1 md:flex"
-          :items="bulanOptions"
+          :items="[...bulanOptions]"
           label-key="name"
           value-key="value"
         />

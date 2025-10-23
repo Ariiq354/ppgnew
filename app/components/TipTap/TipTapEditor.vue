@@ -28,9 +28,7 @@
 </script>
 
 <template>
-  <div
-    class="ring-accented mb-2 flex divide-x-1 rounded-md p-2 ring ring-inset"
-  >
+  <div class="ring-accented mb-2 flex divide-x rounded-md p-2 ring ring-inset">
     <div class="flex gap-2 pl-2">
       <UTooltip text="Heading 1">
         <button

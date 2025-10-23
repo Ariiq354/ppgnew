@@ -1,19 +1,14 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "#ui/types";
   import { APIBASE, type ExtractObjectType } from "~/utils";
-  import {
-    bulanOptions,
-    columns,
-    getInitialFormData,
-    schema,
-    statusOptions,
-  } from "./_constants";
+  import { columns, getInitialFormData, schema } from "./_constants";
   import type { Schema } from "./_constants";
   import { useConstantStore } from "~/stores/constant";
   import { useAuthStore } from "~/stores/auth";
   import { useSubmit } from "~/composables/function";
   import { useToastError } from "~/composables/toast";
   import { openConfirmModal } from "~/composables/modal";
+  import { bulanOptions, statusOptions } from "~~/shared/contants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -105,7 +100,7 @@
             <USelectMenu
               v-model="state.bulan"
               placeholder="Pilih bulan"
-              :items="bulanOptions"
+              :items="[...bulanOptions]"
               :disabled="isLoading || !prokerEdit || viewStatus"
             />
           </UFormField>

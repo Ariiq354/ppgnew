@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import { useConstantStore } from "~/stores/constant";
   import {
-    bulanOptions,
     columns,
     mingguOptions,
     tahunOptions,
     bidangOptions,
   } from "./_constants";
   import { APIBASE } from "~/utils";
+  import { bulanOptions } from "~~/shared/contants";
 
   const constantStore = useConstantStore();
   constantStore.setTitle("Dashboard / Program Kerja");
@@ -16,7 +16,7 @@
   const query = reactive({
     search: "",
     page: 1,
-    bulan: "",
+    bulan: "Januari",
     tahun: "",
     mingguKe: "",
     bidang: "",
@@ -62,7 +62,7 @@
         <ClearableSelectMenu
           v-model="query.bulan"
           placeholder="Bulan"
-          :items="bulanOptions"
+          :items="[...bulanOptions]"
         />
         <ClearableSelectMenu
           v-model="query.mingguKe"
@@ -99,7 +99,7 @@
           v-model="query.bulan"
           placeholder="Bulan"
           class="hidden flex-1 md:flex"
-          :items="bulanOptions"
+          :items="[...bulanOptions]"
         />
         <ClearableSelectMenu
           v-model="query.mingguKe"

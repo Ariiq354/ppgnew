@@ -52,9 +52,7 @@
       <div class="space-y-6">
         <div class="flex flex-col items-center text-center">
           <NuxtImg src="/ppg.webp" width="200" height="200" alt="logo ppg" />
-          <div class="text-2xl font-bold text-(--ui-text-highlighted)">
-            Daftar akun
-          </div>
+          <div class="text-highlighted text-2xl font-bold">Daftar akun</div>
           <div class="text-muted mt-1">
             Sudah punya akun?
             <NuxtLink to="/" class="text-primary font-medium">

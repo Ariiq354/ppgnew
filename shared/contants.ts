@@ -12,3 +12,5 @@ export const bulanOptions = [
   "November",
   "Desember",
 ] as const;
+
+export const statusOptions = ["Pending", "Aktif", "Terlaksana"];

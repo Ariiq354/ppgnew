@@ -115,7 +115,7 @@
           </template>
         </USelectMenu>
       </UFormField>
-      <hr class="my-8 border-t-2 border-(--ui-border)" />
+      <hr class="border-default my-8 border-t-2" />
       <UForm
         id="laporan-form"
         :schema="schema"

@@ -2,6 +2,7 @@ import { z } from "zod/mini";
 import { roles } from "~~/shared/permission";
 import { UBadge } from "#components";
 import type { TableColumn } from "@nuxt/ui";
+import { bulanOptions } from "~~/shared/contants";
 
 const statusMap = {
   Pending: { label: "pending", color: "warning" as const },
@@ -52,29 +53,12 @@ export const columns: TableColumn<any>[] = [
   },
 ];
 
-export const bulanOptions = [
-  "Januari",
-  "Februari",
-  "Maret",
-  "April",
-  "Mei",
-  "Juni",
-  "Juli",
-  "Agustus",
-  "September",
-  "Oktober",
-  "November",
-  "Desember",
-];
-
-export const statusOptions = ["Pending", "Aktif", "Terlaksana"];
-
 export const schema = z.object({
   id: z.optional(z.number()),
   kegiatan: z.string().check(z.minLength(1, "Required")),
   peserta: z.string().check(z.minLength(1, "Required")),
   tahun: z.number().check(z.minimum(1, "Required")),
-  bulan: z.string().check(z.minLength(1, "Required")),
+  bulan: z.enum(bulanOptions),
   mingguKe: z
     .number()
     .check(z.minimum(1, "Minngu minimal 1"), z.maximum(5, "Minggu maximal 5")),
@@ -88,7 +72,7 @@ export const getInitialFormData = (): Schema => ({
   id: undefined,
   biaya: 0,
   bidang: "keputrian",
-  bulan: "",
+  bulan: "Januari",
   kegiatan: "",
   keterangan: "",
   peserta: "",

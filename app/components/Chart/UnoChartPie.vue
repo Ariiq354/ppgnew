@@ -43,7 +43,7 @@
 <template>
   <ClientOnly>
     <template #fallback>
-      <USkeleton class="aspect-1/1 w-full" />
+      <USkeleton class="aspect-square w-full" />
     </template>
     <VisSingleContainer :data>
       <VisDonut
