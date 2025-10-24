@@ -2,8 +2,6 @@
   import { useConstantStore } from "~/stores/constant";
 
   const constantStore = useConstantStore();
-  const authStore = useAuthStore();
-  await authStore.init();
 </script>
 
 <template>

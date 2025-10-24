@@ -9,6 +9,7 @@
 
   type ChartDatum = Record<string, string | number>;
   type ChartProps = {
+    title: string;
     data: ChartDatum[];
     index: string;
     category: string;
@@ -41,19 +42,23 @@
 </script>
 
 <template>
-  <ClientOnly>
-    <template #fallback>
-      <USkeleton class="aspect-square w-full" />
-    </template>
-    <VisSingleContainer :data>
-      <VisDonut
-        :value
-        :central-label="count"
-        central-sub-label="Generus"
-        :arc-width="60"
-      />
-      <VisTooltip :triggers="triggers" />
-    </VisSingleContainer>
-    <VisBulletLegend :items="items" />
-  </ClientOnly>
+  <div class="flex flex-col gap-4 text-center">
+    <p class="text-xl font-bold">{{ title }}</p>
+
+    <ClientOnly>
+      <template #fallback>
+        <USkeleton class="h-[500px] w-full" />
+      </template>
+      <VisSingleContainer :data class="mt-8">
+        <VisDonut
+          :value
+          :central-label="count"
+          central-sub-label="Generus"
+          :arc-width="60"
+        />
+        <VisTooltip :triggers="triggers" />
+      </VisSingleContainer>
+      <VisBulletLegend :items="items" />
+    </ClientOnly>
+  </div>
 </template>

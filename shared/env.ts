@@ -26,7 +26,6 @@ function tryParseEnv<T extends ZodRawShape>(
     EnvSchema.parse(buildEnv);
   } catch (error) {
     if (error instanceof z.core.$ZodError) {
-      console.log("check3");
       let message = "Missing required values in .env:\n";
       error.issues.forEach((issue) => {
         message += `${String(issue.path[0])}\n`;

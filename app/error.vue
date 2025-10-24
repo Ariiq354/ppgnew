@@ -34,6 +34,8 @@
         "Uh-oh! Ada yang salah di sistem kami. Kami sedang bekerja keras untuk memperbaikinya. Silakan coba lagi nanti.",
     },
   };
+
+  const authStore = useAuthStore();
 </script>
 
 <template>
@@ -56,7 +58,7 @@
     </p>
 
     <UButton
-      to="/"
+      :to="authStore.user ? '/dashboard' : '/'"
       size="lg"
       class="mt-10 flex items-center justify-center gap-x-6"
     >

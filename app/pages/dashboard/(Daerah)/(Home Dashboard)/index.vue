@@ -13,96 +13,64 @@
 
   <main class="grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-8">
     <NuxtLink to="/dashboard/pengaturan-wilayah">
-      <UCard>
-        <div class="flex items-center gap-4">
-          <UIcon name="i-lucide-landmark" size="100" />
-          <div
-            class="flex w-full flex-col items-end justify-center gap-2 text-right"
-          >
-            <p class="text-2xl font-bold">{{ data?.data.countDesa }}</p>
-            <p class="text-lg">Desa</p>
-          </div>
-        </div>
-      </UCard>
+      <CountCard
+        title="Desa"
+        :count="data!.data.countDesa"
+        icon="i-lucide-landmark"
+      />
     </NuxtLink>
     <NuxtLink to="/dashboard/pengaturan-wilayah">
-      <UCard>
-        <div class="flex items-center gap-4">
-          <UIcon name="i-lucide-layers" size="100" />
-          <div
-            class="flex w-full flex-col items-end justify-center gap-2 text-right"
-          >
-            <p class="text-2xl font-bold">{{ data?.data.countKelompok }}</p>
-            <p class="text-lg">Kelompok</p>
-          </div>
-        </div>
-      </UCard>
+      <CountCard
+        title="Kelompok"
+        :count="data!.data.countKelompok"
+        icon="i-lucide-layers"
+      />
     </NuxtLink>
     <NuxtLink to="/dashboard/generus">
-      <UCard>
-        <div class="flex items-center gap-4">
-          <UIcon name="i-lucide-user" size="100" />
-          <div
-            class="flex w-full flex-col items-end justify-center gap-2 text-right"
-          >
-            <p class="text-2xl font-bold">{{ data?.data.countGenerus }}</p>
-            <p class="text-lg">Generus</p>
-          </div>
-        </div>
-      </UCard>
+      <CountCard
+        title="Generus"
+        :count="data!.data.countGenerus"
+        icon="i-lucide-user"
+      />
     </NuxtLink>
     <NuxtLink to="/dashboard/pengajar">
-      <UCard>
-        <div class="flex items-center gap-4">
-          <UIcon name="i-lucide-graduation-cap" size="100" />
-          <div
-            class="flex w-full flex-col items-end justify-center gap-2 text-right"
-          >
-            <p class="text-2xl font-bold">{{ data?.data.countPengajar }}</p>
-            <p class="text-lg">Pengajar</p>
-          </div>
-        </div>
-      </UCard>
+      <CountCard
+        title="Pengajar"
+        :count="data!.data.countPengajar"
+        icon="i-lucide-graduation-cap"
+      />
     </NuxtLink>
     <UCard class="md:col-span-3">
-      <div class="flex flex-col gap-4 text-center">
-        <p class="text-xl font-bold">Daftar Generus</p>
-        <UnoChartBar
-          :data="data!.data.generusDatasets"
-          index="name"
-          :categories="['Laki-laki', 'Perempuan']"
-        />
-      </div>
+      <UnoChartBar
+        title="Daftar Generus"
+        :data="data!.data.generusDatasets"
+        index="name"
+        :categories="['Laki-laki', 'Perempuan']"
+      />
     </UCard>
     <UCard>
-      <div class="flex flex-col gap-12 text-center">
-        <p class="text-xl font-bold">Daftar Generus By Grup</p>
-        <UnoChartPie
-          :data="data!.data.generusGroupDatasets"
-          index="name"
-          category="value"
-        />
-      </div>
+      <UnoChartPie
+        title="Daftar Generus By Grup"
+        :data="data!.data.generusGroupDatasets"
+        index="name"
+        category="value"
+      />
     </UCard>
     <UCard>
-      <div class="flex flex-col gap-12 text-center">
-        <p class="text-xl font-bold">Daftar Pengajar By Grup</p>
-        <UnoChartPie
-          :data="data!.data.pengajarGroupDatasets"
-          index="name"
-          category="value"
-        />
-      </div>
+      <UnoChartPie
+        title="Daftar Pengajar By Grup"
+        :data="data!.data.pengajarGroupDatasets"
+        index="name"
+        category="value"
+      />
     </UCard>
     <UCard class="md:col-span-3">
-      <div class="flex flex-col gap-4 text-center">
-        <p class="text-xl font-bold">Daftar Pengajar</p>
-        <UnoChartBar
-          :data="data!.data.pengajarDatasets"
-          index="name"
-          :categories="['Laki-laki', 'Perempuan']"
-        />
-      </div>
+      <UnoChartBar
+        title="Daftar Pengajar"
+        :data="data!.data.pengajarDatasets"
+        index="name"
+        :categories="['Laki-laki', 'Perempuan']"
+      />
     </UCard>
   </main>
 </template>

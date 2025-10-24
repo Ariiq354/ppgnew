@@ -10,6 +10,7 @@
 
   type BarChartDatum = Record<string, string | number>;
   type BarChartProps = {
+    title: string;
     data: BarChartDatum[];
     index: string;
     categories: string[];
@@ -51,40 +52,48 @@
 </script>
 
 <template>
-  <ClientOnly>
-    <template #fallback>
-      <USkeleton class="h-[500px] w-full" />
-    </template>
-    <VisBulletLegend :items="items" />
-    <VisXYContainer v-if="isDesktop" :data="data" :height="500">
-      <VisGroupedBar :x="x" :y="y" :rounded-corners="10" :bar-padding="0.02" />
-      <VisTooltip :triggers="triggers" />
-      <VisAxis
-        type="x"
-        :grid-line="false"
-        :tick-format="tickFormat"
-        :tick-values="[0, 1, 2, 3, 4, 5]"
-      />
-      <VisAxis type="y" />
-    </VisXYContainer>
-    <VisXYContainer v-else :data="data" :height="400">
-      <VisGroupedBar
-        :x="x"
-        :y="y"
-        :rounded-corners="10"
-        orientation="horizontal"
-        :bar-padding="0.02"
-      />
-      <VisTooltip :triggers="triggers" />
-      <VisAxis
-        type="y"
-        :tick-format="tickFormat"
-        :tick-values="[0, 1, 2, 3, 4, 5]"
-        :grid-line="false"
-      />
-      <VisAxis type="x" />
-    </VisXYContainer>
-  </ClientOnly>
+  <div class="flex flex-col gap-4 text-center">
+    <p class="text-xl font-bold">{{ title }}</p>
+    <ClientOnly>
+      <template #fallback>
+        <USkeleton class="h-[500px] w-full" />
+      </template>
+      <VisBulletLegend :items="items" />
+      <VisXYContainer v-if="isDesktop" :data="data" :height="500">
+        <VisGroupedBar
+          :x="x"
+          :y="y"
+          :rounded-corners="10"
+          :bar-padding="0.02"
+        />
+        <VisTooltip :triggers="triggers" />
+        <VisAxis
+          type="x"
+          :grid-line="false"
+          :tick-format="tickFormat"
+          :tick-values="[0, 1, 2, 3, 4, 5]"
+        />
+        <VisAxis type="y" />
+      </VisXYContainer>
+      <VisXYContainer v-else :data="data" :height="400">
+        <VisGroupedBar
+          :x="x"
+          :y="y"
+          :rounded-corners="10"
+          orientation="horizontal"
+          :bar-padding="0.02"
+        />
+        <VisTooltip :triggers="triggers" />
+        <VisAxis
+          type="y"
+          :tick-format="tickFormat"
+          :tick-values="[0, 1, 2, 3, 4, 5]"
+          :grid-line="false"
+        />
+        <VisAxis type="x" />
+      </VisXYContainer>
+    </ClientOnly>
+  </div>
 </template>
 
 <style>

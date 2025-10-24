@@ -16,7 +16,7 @@
   const query = reactive({
     search: "",
     page: 1,
-    bulan: "Januari",
+    bulan: "",
     tahun: "",
     mingguKe: "",
     bidang: "",

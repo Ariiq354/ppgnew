@@ -28,7 +28,7 @@
     search: "",
     page: 1,
     tahun: "",
-    bulan: "Januari",
+    bulan: "",
     nama: "",
   });
   const searchDebounced = useDebounceFn((v) => {
