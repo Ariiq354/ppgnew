@@ -34,8 +34,16 @@ export const columns: TableColumn<any>[] = [
   },
 ];
 
-export const statusOptions = [
-  "Mubalig Tugasan",
-  "Mubalig Setempat",
-  "Asisten Pengajar",
-];
+export type PengajarReturnType = {
+  id: number;
+  nama: string;
+  tempatLahir: string;
+  tanggalLahir: string;
+  pendidikan: string;
+  gender: string;
+  noTelepon: string;
+  status: string;
+  tanggalTugas: string;
+  foto: string;
+  namaKelompok: string | null;
+};

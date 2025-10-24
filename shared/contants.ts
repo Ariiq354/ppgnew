@@ -14,3 +14,18 @@ export const bulanOptions = [
 ] as const;
 
 export const statusOptions = ["Pending", "Aktif", "Terlaksana"];
+
+export const statusPengajarOptions = [
+  "Mubalig Tugasan",
+  "Mubalig Setempat",
+  "Asisten Pengajar",
+];
+
+export const pengajianOptions = [
+  "PAUD",
+  "Cabe Rawit",
+  "Praremaja",
+  "Remaja",
+  "Pranikah",
+  "Usia Mandiri",
+];
