@@ -28,16 +28,16 @@
 <template>
   <Title>PJP Kelompok | Monitoring Kehadiran Pengajian</Title>
   <main class="flex flex-col gap-4">
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
       <UCard>
-        <p class="flex items-center gap-4 text-4xl font-bold">
+        <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
           <UIcon name="i-lucide-users" />
           {{ summary?.data.countJamaah }}
         </p>
         <p class="text-muted">Total Jamaah</p>
       </UCard>
       <UCard>
-        <p class="flex items-center gap-4 text-4xl font-bold">
+        <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
           <UIcon name="i-lucide-trending-up" />
           {{ summary?.data.kehadiran }}%
         </p>

@@ -37,15 +37,15 @@ export const OKegiatanWithNama = z.object({
   ...OPagination.def.shape,
   search: z.string(),
   nama: z.string(),
-  tahun: z.string(),
-  bulan: z.string(),
+  tahun: z.coerce.number(),
+  bulan: z.coerce.number(),
 });
 
 export const OKegiatan = z.object({
   ...OPagination.def.shape,
   search: z.string(),
-  tahun: z.string(),
-  bulan: z.string(),
+  tahun: z.coerce.number(),
+  bulan: z.coerce.number(),
 });
 
 export const OBidangSchema = z.object({

@@ -32,10 +32,6 @@ export const columns: TableColumn<any>[] = [
     header: "Umur",
     cell: ({ row }) => getAge(row.original.tanggalLahir),
   },
-  {
-    accessorKey: "namaKelompok",
-    header: "Kelompok",
-  },
 ];
 
 export const pengajianOptions = [

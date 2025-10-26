@@ -127,7 +127,7 @@
       <p class="text-muted mb-8 text-sm sm:text-base">
         Silahkan pilih Kelas untuk absensi
       </p>
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <UFormField label="Kelas" size="xl">
           <USelectMenu
             v-model="kelasId"

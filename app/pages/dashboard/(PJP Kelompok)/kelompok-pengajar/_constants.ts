@@ -36,13 +36,6 @@ export const columns: TableColumn<any>[] = [
   },
 ];
 
-export const genderOptions = ["Laki-laki", "Perempuan"];
-export const statusOptions = [
-  "Mubalig Tugasan",
-  "Mubalig Setempat",
-  "Asisten Pengajar",
-];
-
 export const schema = z.object({
   id: z.optional(z.number()),
   foto: z.string(),

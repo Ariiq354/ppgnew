@@ -35,15 +35,6 @@ export const columns: TableColumn<any>[] = [
   },
 ];
 
-export const genderOptions = ["Laki-laki", "Perempuan"];
-export const pengajianOptions = [
-  "PAUD",
-  "Cabe Rawit",
-  "Praremaja",
-  "Remaja",
-  "Pranikah",
-  "Usia Mandiri",
-];
 export const kelasOptions = [
   "PAUD/TK",
   "SD 1",

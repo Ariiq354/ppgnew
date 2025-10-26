@@ -8,18 +8,14 @@
   import { useSubmit } from "~/composables/function";
   import { useToastError } from "~/composables/toast";
   import { openConfirmModal } from "~/composables/modal";
-  import {
-    pengajianOptions,
-    tahunOptions,
-    bulanFilterOptions,
-  } from "~~/shared/contants";
+  import { tahunOptions, bulanFilterOptions } from "~~/shared/contants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
-  const kelompokEdit = authStore.hasPermission({
-    pjp_kelompok: ["manage"],
+  const desaEdit = authStore.hasPermission({
+    pjp_desa: ["manage"],
   });
-  constantStore.setTitle("PJP Kelompok / Daftar Kelas");
+  constantStore.setTitle("PJP Desa / Daftar Kelas GPS");
 
   const state = ref(getInitialFormData());
   const query = reactive({
@@ -27,24 +23,20 @@
     page: 1,
     tahun: "",
     bulan: "",
-    nama: "",
   });
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
   }, 300);
-  const { data, status, refresh } = await useFetch(
-    `${APIBASE}/kelas-kelompok`,
-    {
-      query,
-    }
-  );
+  const { data, status, refresh } = await useFetch(`${APIBASE}/kelas-gps`, {
+    query,
+  });
 
   const filterModal = ref(false);
   const viewStatus = ref(false);
   const modalOpen = ref(false);
   const { isLoading, execute } = useSubmit();
   async function onSubmit(event: FormSubmitEvent<Schema>) {
-    const basePath = `${APIBASE}/kelas-kelompok`;
+    const basePath = `${APIBASE}/kelas-gps`;
     await execute({
       path: state.value.id ? `${basePath}/${state.value.id}` : basePath,
       body: event.data,
@@ -66,7 +58,7 @@
   }
 
   async function clickDelete(ids: number[]) {
-    openConfirmModal("/kelas-kelompok", { id: ids }, refresh);
+    openConfirmModal("/kelas-gps", { id: ids }, refresh);
   }
 
   function clickUpdate(itemData: ExtractObjectType<typeof data.value>) {
@@ -76,7 +68,7 @@
   }
 
   watch(
-    () => [query.search, query.tahun, query.bulan, query.nama],
+    () => [query.search, query.tahun, query.bulan],
     () => {
       query.page = 1;
     }
@@ -84,7 +76,7 @@
 </script>
 
 <template>
-  <Title>PJP Kelompok | Daftar Kelas</Title>
+  <Title>PJP Desa | Daftar Kelas GPS</Title>
   <main>
     <LazyUModal
       v-model:open="modalOpen"
@@ -95,23 +87,22 @@
     >
       <template #body>
         <UForm
-          id="kelas-kelompok-form"
+          id="kelas-gps-form"
           :schema="schema"
           :state="state"
           class="space-y-4"
           @submit="onSubmit"
         >
           <UFormField label="Kelas Pengajian" name="nama">
-            <USelectMenu
+            <UInput
               v-model="state.nama"
-              :disabled="isLoading || !kelompokEdit || viewStatus"
-              :items="pengajianOptions"
+              :disabled="isLoading || !desaEdit || viewStatus"
             />
           </UFormField>
           <UFormField label="Tanggal" name="tanggal">
             <UInput
               v-model="state.tanggal"
-              :disabled="isLoading || !kelompokEdit || viewStatus"
+              :disabled="isLoading || !desaEdit || viewStatus"
               type="date"
             />
           </UFormField>
@@ -131,7 +122,7 @@
           type="submit"
           icon="i-lucide-check"
           :loading="isLoading"
-          form="kelas-kelompok-form"
+          form="kelas-gps-form"
         >
           Simpan
         </UButton>
@@ -140,11 +131,6 @@
     <LazyUModal v-model:open="filterModal" title="Filter">
       <template #body>
         <div class="flex flex-col gap-4">
-          <ClearableSelectMenu
-            v-model="query.nama"
-            placeholder="Kelas Pengajian"
-            :items="pengajianOptions"
-          />
           <ClearableSelectMenu
             v-model="query.tahun"
             placeholder="Tahun"
@@ -170,12 +156,6 @@
           @update:model-value="searchDebounced"
         />
         <ClearableSelectMenu
-          v-model="query.nama"
-          placeholder="Kelas Pengajian"
-          class="hidden flex-1 md:flex"
-          :items="pengajianOptions"
-        />
-        <ClearableSelectMenu
           v-model="query.tahun"
           placeholder="Tahun"
           class="hidden flex-1 md:flex"
@@ -196,9 +176,9 @@
           @click="filterModal = true"
         />
         <AppTambahExport
-          :add-permission="kelompokEdit"
+          :add-permission="desaEdit"
           :add-function="clickAdd"
-          path="kelas-kelompok/export"
+          path="kelas-gps/export"
         />
       </div>
       <AppTable
@@ -208,8 +188,8 @@
         :loading="status === 'pending'"
         :total="data?.metadata.total"
         enumerate
-        :deletable="kelompokEdit"
-        :editable="kelompokEdit"
+        :deletable="desaEdit"
+        :editable="desaEdit"
         viewable
         selectable
         pagination

@@ -3,10 +3,8 @@
   import { APIBASE, type ExtractObjectType } from "~/utils";
   import {
     columns,
-    genderOptions,
     getInitialFormData,
     kelasOptions,
-    pengajianOptions,
     schema,
     statusOptions,
   } from "./_constants";
@@ -16,6 +14,7 @@
   import { useSubmit } from "~/composables/function";
   import { useToastError } from "~/composables/toast";
   import { openConfirmModal } from "~/composables/modal";
+  import { genderOptions, pengajianOptions } from "~~/shared/contants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();

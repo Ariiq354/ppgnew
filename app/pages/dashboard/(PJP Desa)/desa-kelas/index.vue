@@ -1,20 +1,18 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "#ui/types";
   import { APIBASE, type ExtractObjectType } from "~/utils";
-  import {
-    columns,
-    getInitialFormData,
-    schema,
-    pengajianOptions,
-    tahunOptions,
-    bulanOptions,
-  } from "./_constants";
+  import { columns, getInitialFormData, schema } from "./_constants";
   import type { Schema } from "./_constants";
   import { useConstantStore } from "~/stores/constant";
   import { useAuthStore } from "~/stores/auth";
   import { useSubmit } from "~/composables/function";
   import { useToastError } from "~/composables/toast";
   import { openConfirmModal } from "~/composables/modal";
+  import {
+    pengajianOptions,
+    tahunOptions,
+    bulanFilterOptions,
+  } from "~~/shared/contants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -38,6 +36,7 @@
     query,
   });
 
+  const filterModal = ref(false);
   const viewStatus = ref(false);
   const modalOpen = ref(false);
   const { isLoading, execute } = useSubmit();
@@ -135,6 +134,29 @@
         </UButton>
       </template>
     </LazyUModal>
+    <LazyUModal v-model:open="filterModal" title="Filter">
+      <template #body>
+        <div class="flex flex-col gap-4">
+          <ClearableSelectMenu
+            v-model="query.nama"
+            placeholder="Kelas Pengajian"
+            :items="pengajianOptions"
+          />
+          <ClearableSelectMenu
+            v-model="query.tahun"
+            placeholder="Tahun"
+            :items="tahunOptions"
+          />
+          <ClearableSelectMenu
+            v-model="query.bulan"
+            placeholder="Bulan"
+            :items="bulanFilterOptions"
+            label-key="name"
+            value-key="value"
+          />
+        </div>
+      </template>
+    </LazyUModal>
     <UCard>
       <div class="mb-4 flex gap-2 md:mb-6 md:gap-4">
         <UInput
@@ -160,9 +182,15 @@
           v-model="query.bulan"
           placeholder="Bulan"
           class="hidden flex-1 md:flex"
-          :items="[...bulanOptions]"
+          :items="bulanFilterOptions"
           label-key="name"
           value-key="value"
+        />
+        <UButton
+          variant="subtle"
+          icon="i-lucide-filter"
+          class="md:hidden"
+          @click="filterModal = true"
         />
         <AppTambahExport
           :add-permission="desaEdit"

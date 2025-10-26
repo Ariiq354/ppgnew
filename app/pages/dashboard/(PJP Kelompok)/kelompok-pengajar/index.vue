@@ -1,19 +1,14 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from "#ui/types";
   import { APIBASE, type ExtractObjectType } from "~/utils";
-  import {
-    columns,
-    genderOptions,
-    getInitialFormData,
-    schema,
-    statusOptions,
-  } from "./_constants";
+  import { columns, getInitialFormData, schema } from "./_constants";
   import type { Schema } from "./_constants";
   import { useConstantStore } from "~/stores/constant";
   import { useAuthStore } from "~/stores/auth";
   import { useSubmit } from "~/composables/function";
   import { useToastError } from "~/composables/toast";
   import { openConfirmModal } from "~/composables/modal";
+  import { genderOptions, statusPengajarOptions } from "~~/shared/contants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -142,7 +137,7 @@
             <USelectMenu
               v-model="state.status"
               :disabled="isLoading || !pengajarEdit || viewStatus"
-              :items="statusOptions"
+              :items="statusPengajarOptions"
             />
           </UFormField>
           <UFormField label="Tempat Lahir" name="tempatLahir">
@@ -193,7 +188,7 @@
           <ClearableSelectMenu
             v-model="query.status"
             placeholder="Status"
-            :items="statusOptions"
+            :items="statusPengajarOptions"
           />
         </div>
       </template>
@@ -211,7 +206,7 @@
           v-model="query.status"
           placeholder="Status"
           class="hidden flex-1 md:flex"
-          :items="statusOptions"
+          :items="statusPengajarOptions"
         />
         <UButton
           variant="subtle"
