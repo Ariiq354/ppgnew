@@ -41,8 +41,8 @@
     });
   }
 
-  async function handleDelete(id: number) {
-    openConfirmModal("/dokumen", [id], refresh);
+  async function handleDelete(ids: number) {
+    openConfirmModal("/dokumen", { id: [ids] }, refresh);
   }
 
   function clickAdd() {
@@ -104,17 +104,17 @@
     </template>
   </LazyUModal>
   <div>
-    <UCard v-if="canUpload" class="mb-12">
+    <UCard v-if="canUpload" class="mb-4 md:mb-6">
       <UButton size="xl" icon="i-lucide-file-plus-2" @click="clickAdd">
         Upload Dokumen
       </UButton>
     </UCard>
-    <UCard v-if="data?.data.length === 0" class="py-12">
+    <UCard v-if="data?.data.length === 0" class="py-24">
       <div class="flex w-full flex-col items-center">
         <UIcon name="i-lucide-file-text" class="mb-4 h-12 w-12" />
-        <h3 class="mb-2 text-lg font-semibold">No documents yet</h3>
+        <h3 class="mb-2 text-lg font-semibold">Belum ada dokumen</h3>
         <p class="text-muted-foreground mb-4">
-          Upload your first document to get started
+          Silahkan Upload dokumen pertama untuk memulai
         </p>
       </div>
     </UCard>

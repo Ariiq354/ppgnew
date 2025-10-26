@@ -1,5 +1,5 @@
 import { checkWilayahNameExistService } from "../daerah";
-import type { TDesaCreate } from "./desa.dto";
+import type { TDesaCreate, TDesaList } from "./desa.dto";
 import {
   createDesa,
   deleteDesa,
@@ -11,7 +11,7 @@ import {
   updateDesa,
 } from "./desa.repo";
 
-export async function getAllDesaService(query: TPagination) {
+export async function getAllDesaService(query: TDesaList) {
   const data = await getAllDesa(query);
 
   const metadata = {

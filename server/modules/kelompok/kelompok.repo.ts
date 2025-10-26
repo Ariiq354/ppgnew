@@ -1,10 +1,9 @@
 import { eq, inArray } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { desaTable, kelompokTable } from "~~/server/database/schema/wilayah";
-import type { TPagination } from "~~/server/utils/dto";
-import type { TKelompokCreate } from "./kelompok.dto";
+import type { TKelompokCreate, TKelompokList } from "./kelompok.dto";
 
-export async function getAllKelompok({ limit, page }: TPagination) {
+export async function getAllKelompok({ limit, page, desaId }: TKelompokList) {
   const offset = (page - 1) * limit;
   const query = db
     .select({
@@ -12,7 +11,8 @@ export async function getAllKelompok({ limit, page }: TPagination) {
       name: kelompokTable.name,
       desaId: kelompokTable.desaId,
     })
-    .from(kelompokTable);
+    .from(kelompokTable)
+    .where(eq(kelompokTable.desaId, desaId));
 
   const total = await tryCatch(
     "Failed to get total kelompok",

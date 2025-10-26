@@ -37,3 +37,12 @@ export const columns: TableColumn<any>[] = [
     header: "Kelompok",
   },
 ];
+
+export const pengajianOptions = [
+  "PAUD",
+  "Cabe Rawit",
+  "Praremaja",
+  "Remaja",
+  "Pranikah",
+  "Usia Mandiri",
+];

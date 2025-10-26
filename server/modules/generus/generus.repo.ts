@@ -296,7 +296,7 @@ export async function getAllGenerusTahfidz(
 
 export async function getAllGenerusExport(kelompokId: number) {
   return await tryCatch(
-    "Failed to export Generus data",
+    "Failed to export Generus data by kelompok",
     db
       .select({
         id: generusTable.id,
@@ -340,6 +340,37 @@ export async function getAllGenerusExportDesa(desaId: number) {
       })
       .from(generusTable)
       .where(eq(generusTable.desaId, desaId))
+      .leftJoin(kelompokTable, eq(generusTable.kelompokId, kelompokTable.id))
+  );
+}
+
+export async function getAllGenerusExportGps(desaId: number) {
+  return await tryCatch(
+    "Failed to export Generus GPS data by Desa",
+    db
+      .select({
+        id: generusTable.id,
+        nama: generusTable.nama,
+        tempatLahir: generusTable.tempatLahir,
+        tanggalLahir: generusTable.tanggalLahir,
+        kelasSekolah: generusTable.kelasSekolah,
+        gender: generusTable.gender,
+        noTelepon: generusTable.noTelepon,
+        status: generusTable.status,
+        kelasPengajian: generusTable.kelasPengajian,
+        namaOrtu: generusTable.namaOrtu,
+        noTeleponOrtu: generusTable.noTeleponOrtu,
+        tanggalMasukKelas: generusTable.tanggalMasukKelas,
+        foto: generusTable.foto,
+        namaKelompok: kelompokTable.name,
+      })
+      .from(generusTable)
+      .where(
+        and(
+          eq(generusTable.desaId, desaId),
+          sql`(${generusTable.status} ?| ${new Param(["GPS"])})`
+        )
+      )
       .leftJoin(kelompokTable, eq(generusTable.kelompokId, kelompokTable.id))
   );
 }

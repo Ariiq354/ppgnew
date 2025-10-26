@@ -270,7 +270,7 @@
           }"
           :data="config.data.value?.data || []"
           :loading="config.loading.value === 'pending'"
-          @select="(row) => onSelect(config.type, row)"
+          @select="(_, row) => onSelect(config.type, row)"
         >
           <template #actions-header="{ column }">
             <div class="text-center">{{ column.columnDef.header }}</div>

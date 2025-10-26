@@ -1,6 +1,6 @@
 import { checkWilayahNameExistService } from "../daerah";
 import { getDesaByIdService } from "../desa";
-import type { TKelompokCreate } from "./kelompok.dto";
+import type { TKelompokCreate, TKelompokList } from "./kelompok.dto";
 import {
   createKelompok,
   deleteKelompok,
@@ -12,7 +12,7 @@ import {
   updateKelompok,
 } from "./kelompok.repo";
 
-export async function getAllKelompokService(query: TPagination) {
+export async function getAllKelompokService(query: TKelompokList) {
   const data = await getAllKelompok(query);
 
   const metadata = {

@@ -1,10 +1,9 @@
 import { eq, inArray } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { desaTable } from "~~/server/database/schema/wilayah";
-import type { TPagination } from "~~/server/utils/dto";
-import type { TDesaCreate } from "./desa.dto";
+import type { TDesaCreate, TDesaList } from "./desa.dto";
 
-export async function getAllDesa({ limit, page }: TPagination) {
+export async function getAllDesa({ limit, page, daerahId }: TDesaList) {
   const offset = (page - 1) * limit;
   const query = db
     .select({
@@ -12,7 +11,8 @@ export async function getAllDesa({ limit, page }: TPagination) {
       name: desaTable.name,
       daerahId: desaTable.daerahId,
     })
-    .from(desaTable);
+    .from(desaTable)
+    .where(eq(desaTable.daerahId, daerahId));
 
   const total = await tryCatch("Failed to get total desa", db.$count(query));
   const data = await tryCatch(

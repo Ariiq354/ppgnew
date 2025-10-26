@@ -11,6 +11,7 @@ import {
   getAllGenerusChart,
   getAllGenerusExport,
   getAllGenerusExportDesa,
+  getAllGenerusExportGps,
   getAllGenerusGPS,
   getCountGenerus,
   getGenerusById,
@@ -69,6 +70,17 @@ export async function getAllGenerusGpsService(
     data: newData,
     metadata,
   };
+}
+
+export async function getAllGenerusExportGpsService(desaId: number) {
+  const data = await getAllGenerusExportGps(desaId);
+
+  const newData = data.map(({ tanggalMasukKelas, ...rest }) => ({
+    ...rest,
+    kelasSekolah: getCurrentKelas(rest.kelasSekolah, tanggalMasukKelas),
+  }));
+
+  return newData;
 }
 
 export async function getAllGenerusExportDesaService(desaId: number) {

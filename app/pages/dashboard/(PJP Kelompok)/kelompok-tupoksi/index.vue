@@ -10,7 +10,7 @@
   <main>
     <UCard class="p-4">
       <div>
-        <h1 class="mb-4 text-center text-2xl font-bold">
+        <h1 class="mb-4 text-center text-lg font-bold md:text-2xl">
           URAIAN TUGAS AMAL SHOLIH DAN CONTOH KEGIATAN
         </h1>
         <table>
