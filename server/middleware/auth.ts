@@ -63,7 +63,6 @@ export default defineEventHandler(async (event) => {
       { route: "/dashboard/kemandirian", bidang: "kemandirian" },
       { route: "/dashboard/keputrian", bidang: "keputrian" },
       { route: "/dashboard/kurikulum", bidang: "kurikulum" },
-      { route: "/dashboard/media", bidang: "media_publikasi" },
       { route: "/dashboard/olahraga", bidang: "olahraga_seni" },
       { route: "/dashboard/dana", bidang: "penggalang_dana" },
       { route: "/dashboard/sarana", bidang: "sarana_prasarana" },

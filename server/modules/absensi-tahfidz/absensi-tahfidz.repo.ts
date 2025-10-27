@@ -17,6 +17,7 @@ import {
   kelasTahfidzTable,
 } from "~~/server/database/schema/tahfidz";
 import type { TSearchPagination } from "~~/server/utils/dto";
+import { exclude } from "~~/shared/contants";
 
 export async function getAllTahfidzExclude(
   daerahId: number,
@@ -26,6 +27,7 @@ export async function getAllTahfidzExclude(
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(generusTable.daerahId, daerahId),
     sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
+    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
   ];
 
   if (search) {
@@ -82,7 +84,8 @@ export async function getAbsensiTahfidzByKelasId(
         and(
           eq(absensiGenerusTahfidzTable.kelasId, kelasId),
           eq(kelasTahfidzTable.daerahId, daerahId),
-          sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`
+          sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
+          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
         )
       )
   );
@@ -111,7 +114,8 @@ export async function getCountAbsensiTahfidz(daerahId: number) {
       .where(
         and(
           eq(kelasTahfidzTable.daerahId, daerahId),
-          sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`
+          sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
+          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
         )
       )
   );
@@ -126,7 +130,8 @@ export async function getCountTahfidz(daerahId: number) {
       generusTable,
       and(
         eq(generusTable.daerahId, daerahId),
-        sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`
+        sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
+        sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
       )
     )
   );
@@ -185,7 +190,8 @@ export async function getCountTahfidzAbsensi(daerahId: number) {
       generusTable,
       and(
         eq(generusTable.daerahId, daerahId),
-        sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`
+        sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
+        sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
       )
     )
   );

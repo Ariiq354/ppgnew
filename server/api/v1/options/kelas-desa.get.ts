@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     OKelasOptionsList.parse(q)
   );
 
-  const data = await getAllKelasDesaOptionsService(user.daerahId, query);
+  const data = await getAllKelasDesaOptionsService(user.desaId!, query);
 
   return HttpResponse(data.data);
 });

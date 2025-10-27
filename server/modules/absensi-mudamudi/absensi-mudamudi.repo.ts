@@ -19,8 +19,7 @@ import type {
   TAbsensiGenerusCreate,
   TGenerusAbsensiList,
 } from "~~/server/utils/dto";
-
-const exclude = ["Pindah", "Mondok", "Tugas"];
+import { exclude } from "~~/shared/contants";
 
 export async function getAllMudamudiExclude(
   daerahId: number,
@@ -206,16 +205,22 @@ export async function getCountMudamudiAbsensi(
   daerahId: number,
   kelasPengajian: string
 ) {
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(generusTable.daerahId, daerahId),
+    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+  ];
+
+  if (kelasPengajian === "Usia Mandiri") {
+    conditions.push(eq(generusTable.kelasPengajian, "Usia Mandiri"));
+  } else {
+    conditions.push(
+      inArray(generusTable.kelasPengajian, ["Remaja", "Pranikah"])
+    );
+  }
+
   return await tryCatch(
     "Failed to get Count Generus",
-    db.$count(
-      generusTable,
-      and(
-        eq(generusTable.daerahId, daerahId),
-        eq(generusTable.kelasPengajian, kelasPengajian),
-        sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
-      )
-    )
+    db.$count(generusTable, and(...conditions))
   );
 }
 

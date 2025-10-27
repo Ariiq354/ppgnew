@@ -5,34 +5,24 @@
   import { APIBASE, type ExtractObjectType } from "~/utils";
   import { useSubmit } from "~/composables/function";
   import { useToastError, useToastSuccess } from "~/composables/toast";
-  import { pengajianOptions } from "~~/shared/contants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
   const absensiManage = authStore.hasPermission({
     pjp_kelompok: ["manage"],
   });
-  constantStore.setTitle("PJP Desa / Absensi Generus");
+  constantStore.setTitle("PJP Desa / Absensi Generus GPS");
 
   const kelasId = ref<number>();
-  const namaKelas = ref<string>("PAUD");
-  watch(namaKelas, () => {
-    kelasId.value = undefined;
-  });
   const { data: kelasOption, status: statusKelas } = await useFetch(
-    `${APIBASE}/options/kelas-desa`,
-    {
-      query: {
-        nama: namaKelas,
-      },
-    }
+    `${APIBASE}/options/kelas-gps`
   );
   const state = ref<ExtractObjectType<typeof absensi.value>[]>([]);
   const {
     data: absensi,
     status: statusAbsensi,
     refresh,
-  } = await useFetch(() => `${APIBASE}/absensi-desa/${kelasId.value}`, {
+  } = await useFetch(() => `${APIBASE}/absensi-gps/${kelasId.value}`, {
     immediate: false,
     watch: false,
   });
@@ -60,31 +50,21 @@
     generusCount.value = data.value ? data.value.metadata.total : 0;
   });
 
-  const { data: datakelompok } = await useFetch(`${APIBASE}/options/kelompok`, {
-    query: {
-      desaId: authStore.user?.desaId,
-    },
-  });
-
-  const filterModal = ref(false);
-
   const query = reactive({
     search: "",
     page: 1,
-    kelompokId: "",
-    kelasPengajian: namaKelas,
   });
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
   }, 300);
-  const { data, status } = await useFetch(`${APIBASE}/absensi-desa/generus`, {
+  const { data, status } = await useFetch(`${APIBASE}/absensi-gps/generus`, {
     query,
   });
 
   const { isLoading, execute } = useSubmit();
   async function onSubmit() {
     await execute({
-      path: `${APIBASE}/absensi-desa`,
+      path: `${APIBASE}/absensi-gps`,
       body: {
         kelasId: kelasId.value,
         absen: state.value,
@@ -119,7 +99,7 @@
   }
 
   watch(
-    () => [query.search, query.kelasPengajian],
+    () => [query.search],
     () => {
       query.page = 1;
     }
@@ -128,26 +108,13 @@
 
 <template>
   <Title>PJP Desa | Absensi Generus</Title>
-  <LazyUModal v-model:open="filterModal" title="Filter">
-    <template #body>
-      <div class="flex flex-col gap-4">
-        <ClearableSelectMenu
-          v-model="query.kelompokId"
-          placeholder="Kelompok"
-          :items="datakelompok?.data"
-          value-key="id"
-          label-key="name"
-        />
-      </div>
-    </template>
-  </LazyUModal>
   <main class="flex flex-col gap-4">
     <UCard>
       <h1 class="text-2xl font-bold sm:text-3xl">Pilih Kelas</h1>
       <p class="text-muted mb-8 text-sm sm:text-base">
         Silahkan pilih Kelas untuk absensi
       </p>
-      <div class="grid grid-cols-2 gap-4">
+      <div>
         <UFormField label="Kelas" size="xl">
           <USelectMenu
             v-model="kelasId"
@@ -163,14 +130,6 @@
               </div>
             </template>
           </USelectMenu>
-        </UFormField>
-        <UFormField label="Pengajian" size="xl">
-          <USelectMenu
-            v-model="namaKelas"
-            :items="pengajianOptions"
-            :disabled="statusKelas === 'pending'"
-            placeholder="Pilih Pengajian"
-          />
         </UFormField>
       </div>
     </UCard>
@@ -212,20 +171,6 @@
             leading-icon="i-lucide-search"
             placeholder="Search..."
             @update:model-value="searchDebounced"
-          />
-          <ClearableSelectMenu
-            v-model="query.kelompokId"
-            placeholder="Kelompok"
-            class="hidden flex-1 md:flex"
-            :items="datakelompok?.data"
-            value-key="id"
-            label-key="name"
-          />
-          <UButton
-            variant="subtle"
-            icon="i-lucide-filter"
-            class="md:hidden"
-            @click="filterModal = true"
           />
           <UButton
             v-if="absensiManage"

@@ -28,9 +28,6 @@
     kegiatan_muda_mudi: ["view"],
   });
   const tahfidz = authStore.hasPermission({ tahfidz: ["view"] });
-  const media_publikasi = authStore.hasPermission({
-    media_publikasi: ["view"],
-  });
   const pjp_desa = authStore.hasPermission({ pjp_desa: ["view"] });
   const pjp_kelompok = authStore.hasPermission({ pjp_kelompok: ["view"] });
 
@@ -1045,59 +1042,6 @@
             },
           ]
         : []),
-
-      ...(media_publikasi
-        ? [
-            {
-              label: "Media & Publikasi",
-              icon: "i-lucide-camera",
-              children: [
-                {
-                  label: "Proker",
-                  to: "/dashboard/media-proker",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
-                },
-                {
-                  label: "Laporan Musyawarah PPG",
-                  to: "/dashboard/media-laporan",
-                  onSelect: () => {
-                    if (!isDesktop.value) {
-                      constantStore.toggleSidebar();
-                    }
-                  },
-                },
-                {
-                  label: "Musyawarah Bidang",
-                  children: [
-                    {
-                      label: "Musyawarah",
-                      to: "/dashboard/media-musyawarah-bidang",
-                      onSelect: () => {
-                        if (!isDesktop.value) {
-                          constantStore.toggleSidebar();
-                        }
-                      },
-                    },
-                    {
-                      label: "Laporan",
-                      to: "/dashboard/media-laporan-bidang",
-                      onSelect: () => {
-                        if (!isDesktop.value) {
-                          constantStore.toggleSidebar();
-                        }
-                      },
-                    },
-                  ],
-                },
-              ],
-            },
-          ]
-        : []),
-
       ...(pjp_desa
         ? [
             {

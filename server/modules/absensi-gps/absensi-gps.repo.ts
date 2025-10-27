@@ -19,6 +19,7 @@ import type {
   TAbsensiGenerusCreate,
   TSearchPagination,
 } from "~~/server/utils/dto";
+import { exclude } from "~~/shared/contants";
 
 export async function getAllGpsExclude(
   desaId: number,
@@ -28,6 +29,7 @@ export async function getAllGpsExclude(
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(generusTable.desaId, desaId),
     sql`(${generusTable.status} ?| ${new Param(["GPS"])})`,
+    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
   ];
 
   if (search) {
@@ -81,7 +83,8 @@ export async function getAbsensiGpsByKelasId(desaId: number, kelasId: number) {
         and(
           eq(absensiGenerusGpsTable.kelasId, kelasId),
           eq(kelasGpsTable.desaId, desaId),
-          sql`NOT (${generusTable.status} ?| ${new Param(["GPS"])})`
+          sql`(${generusTable.status} ?| ${new Param(["GPS"])})`,
+          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
         )
       )
   );
@@ -89,10 +92,7 @@ export async function getAbsensiGpsByKelasId(desaId: number, kelasId: number) {
   return data;
 }
 
-export async function getCountAbsensiGps(
-  desaId: number,
-  kelasPengajian: string
-) {
+export async function getCountAbsensiGps(desaId: number) {
   const [data] = await tryCatch(
     "Failed to get Count Absensi",
     db
@@ -111,8 +111,8 @@ export async function getCountAbsensiGps(
       .where(
         and(
           eq(kelasGpsTable.desaId, desaId),
-          sql`NOT (${generusTable.status} ?| ${new Param(["GPS"])})`,
-          eq(kelasGpsTable.nama, kelasPengajian)
+          sql`(${generusTable.status} ?| ${new Param(["GPS"])})`,
+          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
         )
       )
   );
@@ -127,7 +127,8 @@ export async function getCountGps(desaId: number) {
       generusTable,
       and(
         eq(generusTable.desaId, desaId),
-        sql`NOT (${generusTable.status} ?| ${new Param(["GPS"])})`
+        sql`(${generusTable.status} ?| ${new Param(["GPS"])})`,
+        sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
       )
     )
   );
@@ -140,7 +141,8 @@ export async function getAllGpsSummary(
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(generusTable.desaId, desaId),
-    sql`NOT (${generusTable.status} ?| ${new Param(["GPS"])})`,
+    sql`(${generusTable.status} ?| ${new Param(["GPS"])})`,
+    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
   ];
 
   if (search) {
@@ -190,7 +192,8 @@ export async function getCountGpsAbsensi(
       and(
         eq(generusTable.desaId, desaId),
         eq(generusTable.kelasPengajian, kelasPengajian),
-        sql`NOT (${generusTable.status} ?| ${new Param(["GPS"])})`
+        sql`(${generusTable.status} ?| ${new Param(["GPS"])})`,
+        sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
       )
     )
   );

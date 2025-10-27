@@ -15,7 +15,6 @@ const statement = {
   kemandirian: ["view", "manage"],
   keputrian: ["view", "manage"],
   kurikulum: ["view", "manage"],
-  media_publikasi: ["view", "manage"],
   olahraga_seni: ["view", "manage"],
   penggalang_dana: ["view", "manage"],
   sarana_prasarana: ["view", "manage"],
@@ -57,7 +56,6 @@ export const rolesDeclaration = {
     olahraga_seni: ["view"],
     kegiatan_muda_mudi: ["view"],
     tahfidz: ["view"],
-    media_publikasi: ["view"],
   }),
   desa: ac.newRole({
     pjp_desa: ["manage", "view"],
@@ -133,12 +131,6 @@ export const rolesDeclaration = {
     musyawarah_ppg: ["view", "manage"],
     tahfidz: ["manage", "view"],
   }),
-  media_publikasi: ac.newRole({
-    proker: ["view", "manage"],
-    musyawarah_bidang: ["view", "manage"],
-    musyawarah_ppg: ["view", "manage"],
-    media_publikasi: ["manage", "view"],
-  }),
 };
 
 export const roles = [
@@ -153,7 +145,6 @@ export const roles = [
   "olahraga_seni",
   "kegiatan_muda_mudi",
   "tahfidz",
-  "media_publikasi",
 ] as const;
 
 export const viewWhitelist = new Set(["admin", "daerah"]);
@@ -170,5 +161,4 @@ export enum BidangDisplay {
   olahraga_seni = "Olahraga & Seni",
   kegiatan_muda_mudi = "Kegiatan Muda Mudi",
   tahfidz = "Tahfidz",
-  media_publikasi = "Media Publikasi",
 }

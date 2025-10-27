@@ -53,3 +53,5 @@ export const tahunOptions = [
   String(currentYear),
   String(currentYear + 1),
 ];
+
+export const exclude = ["Pindah", "Mondok", "Tugas"];

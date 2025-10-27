@@ -88,7 +88,11 @@ export async function getAbsensiGenerusByKelasIdService(
     });
   }
 
-  return await getAbsensiGenerusByKelasId(kelompokId, kelasId);
+  return await getAbsensiGenerusByKelasId(
+    kelompokId,
+    kelasId,
+    check.data.nama!
+  );
 }
 
 export async function getAllGenerusExcludeService(

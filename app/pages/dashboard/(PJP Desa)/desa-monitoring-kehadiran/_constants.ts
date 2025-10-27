@@ -23,10 +23,3 @@ export const columns: TableColumn<any>[] = [
     header: "Tanpa Keterangan",
   },
 ];
-
-export const pengajianOptions = [
-  "PAUD",
-  "Cabe Rawit",
-  "Praremaja",
-  "Muda-mudi",
-];

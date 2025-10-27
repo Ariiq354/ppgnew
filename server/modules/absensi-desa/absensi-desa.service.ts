@@ -176,7 +176,11 @@ export async function getAbsensiGenerusDesaByKelasIdService(
     });
   }
 
-  return await getAbsensiGenerusDesaByKelasId(desaId!, kelasId);
+  return await getAbsensiGenerusDesaByKelasId(
+    desaId!,
+    kelasId,
+    check.data.nama
+  );
 }
 
 export async function getAllGenerusDesaExcludeService(

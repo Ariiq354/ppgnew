@@ -95,19 +95,10 @@ export async function getAllKelasGpsOptions(desaId: number) {
   return { data };
 }
 
-export async function getCountKelasGps(
-  desaId: number,
-  kelasGpsPengajian: string
-) {
+export async function getCountKelasGps(desaId: number) {
   return await tryCatch(
     "Failed to get count of Kelas Gps",
-    db.$count(
-      kelasGpsTable,
-      and(
-        eq(kelasGpsTable.desaId, desaId),
-        eq(kelasGpsTable.nama, kelasGpsPengajian)
-      )
-    )
+    db.$count(kelasGpsTable, and(eq(kelasGpsTable.desaId, desaId)))
   );
 }
 

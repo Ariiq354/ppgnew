@@ -86,7 +86,11 @@ export async function getAbsensiKeputrianByKelasIdService(
     });
   }
 
-  const data = await getAbsensiKeputrianByKelasId(daerahId, kelasId);
+  const data = await getAbsensiKeputrianByKelasId(
+    daerahId,
+    kelasId,
+    check.data.nama
+  );
 
   return data;
 }

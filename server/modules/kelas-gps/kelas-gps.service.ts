@@ -35,11 +35,8 @@ export async function getAllKelasGpsOptionsService(desaId: number) {
   return await getAllKelasGpsOptions(desaId);
 }
 
-export async function getCountKelasGpsService(
-  desaId: number,
-  kelasDesaPengajian: string
-) {
-  return await getCountKelasGps(desaId, kelasDesaPengajian);
+export async function getCountKelasGpsService(desaId: number) {
+  return await getCountKelasGps(desaId);
 }
 
 export async function createKelasGpsService(

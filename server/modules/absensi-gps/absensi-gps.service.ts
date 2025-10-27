@@ -1,29 +1,25 @@
 import {
-  getAllGenerusDesaSummaryService,
-  getCountAbsensiGenerusDesaService,
-  getCountGenerusDesaAbsensiService,
-} from "../absensi-desa";
-import {
-  getAllKelasDesaOptionsService,
-  getCountKelasDesaService,
-} from "../kelas-desa";
-import { getKelasGpsByIdService } from "../kelas-gps";
+  getAllKelasGpsOptionsService,
+  getCountKelasGpsService,
+  getKelasGpsByIdService,
+} from "../kelas-gps";
 import {
   createAbsensiGps,
   deleteAbsensiGps,
   getAbsensiGpsByKelasId,
   getAllGpsExclude,
+  getAllGpsSummary,
+  getCountAbsensiGps,
+  getCountGps,
   updateAbsensiGps,
 } from "./absensi-gps.repo";
 
 export async function getAbsensiGpsMonitoringService(
   desaId: number,
-  query: TGenerusAbsensiList
+  query: TSearchPagination
 ) {
-  const data = await getAllGenerusDesaSummaryService(desaId, query);
-  const kelas = await getAllKelasDesaOptionsService(desaId, {
-    nama: query.kelasPengajian,
-  });
+  const data = await getAllGpsSummary(desaId, query);
+  const kelas = await getAllKelasGpsOptionsService(desaId);
 
   data.data = data.data.map((i) => {
     const total = kelas.data.length;
@@ -47,22 +43,10 @@ export async function getAbsensiGpsMonitoringService(
   };
 }
 
-export async function getAbsensiGpsMonitoringSummaryService(
-  desaId: number,
-  query: TAbsensiKelasPengajianList
-) {
-  const countGenerus = await getCountGenerusDesaAbsensiService(
-    desaId,
-    query.kelasPengajian
-  );
-  const countKelas = await getCountKelasDesaService(
-    desaId,
-    query.kelasPengajian
-  );
-  const countAbsensi = await getCountAbsensiGenerusDesaService(
-    desaId,
-    query.kelasPengajian
-  );
+export async function getAbsensiGpsMonitoringSummaryService(desaId: number) {
+  const countGenerus = await getCountGps(desaId);
+  const countKelas = await getCountKelasGpsService(desaId);
+  const countAbsensi = await getCountAbsensiGps(desaId);
 
   const denominator = countGenerus * countKelas;
   const kehadiran =
@@ -95,7 +79,7 @@ export async function getAbsensiGpsByKelasIdService(
 
 export async function getAllGpsExcludeService(
   desaId: number,
-  query: TGenerusAbsensiList
+  query: TSearchPagination
 ) {
   const data = await getAllGpsExclude(desaId, query);
 

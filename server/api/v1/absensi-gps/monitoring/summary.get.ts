@@ -3,11 +3,7 @@ import { getAbsensiGpsMonitoringSummaryService } from "~~/server/modules/absensi
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["view"] });
 
-  const query = await getValidatedQuery(event, (q) =>
-    OAbsensiKelasPengajianList.parse(q)
-  );
-
-  const data = await getAbsensiGpsMonitoringSummaryService(user.desaId!, query);
+  const data = await getAbsensiGpsMonitoringSummaryService(user.desaId!);
 
   return HttpResponse(data);
 });
