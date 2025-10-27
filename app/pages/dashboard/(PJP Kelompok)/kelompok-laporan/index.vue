@@ -2,7 +2,12 @@
   import { useAuthStore } from "~/stores/auth";
   import { useConstantStore } from "~/stores/constant";
   import { APIBASE } from "~/utils";
-  import { schema, getInitialFormData } from "./_constants";
+  import {
+    getInitialFormData,
+    laporanTemplate,
+    schema,
+    templateString,
+  } from "./_constants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -40,8 +45,8 @@
         ...state.value,
       },
       onSuccess() {
-        state.value.laporan = "";
-        state.value.keterangan = "";
+        state.value.laporan = laporanTemplate;
+        state.value.keterangan = templateString;
         state.value.id = undefined;
         modalOpen.value = false;
         refresh();
@@ -118,10 +123,7 @@
       >
         <div class="flex flex-col gap-4">
           <UFormField label="Judul" name="laporan" size="xl">
-            <UInput
-              v-model="state.laporan"
-              placeholder="Masukkan judul untuk laporan ini"
-            />
+            <UInput v-model="state.laporan" disabled />
           </UFormField>
           <UFormField label="Keterangan" name="keterangan" size="xl">
             <TipTapEditor v-model="state.keterangan" />

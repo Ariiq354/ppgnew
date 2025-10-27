@@ -1,16 +1,14 @@
-import { getAllGenerusGpsService } from "~~/server/modules/generus-gps";
+import { getAllGenerusTahfidzService } from "~~/server/modules/generus-tahfidz";
 import { OGenerusBaseList } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {
-  const user = await permissionGuard(event, { pjp_desa: ["view"] });
+  const user = await permissionGuard(event, { tahfidz: ["view"] });
 
   const query = await getValidatedQuery(event, (q) =>
     OGenerusBaseList.parse(q)
   );
 
-  query.desaId = user.desaId!;
-
-  const data = await getAllGenerusGpsService(user.daerahId, query);
+  const data = await getAllGenerusTahfidzService(user.daerahId, query);
 
   return HttpResponse(data.data, data.metadata);
 });

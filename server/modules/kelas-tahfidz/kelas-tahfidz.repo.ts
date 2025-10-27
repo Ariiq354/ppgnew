@@ -1,15 +1,11 @@
 import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { kelasTahfidzTable } from "~~/server/database/schema/tahfidz";
-import type {
-  TKelasList,
-  TKelasOptionsList,
-  TNamaTanggal,
-} from "~~/server/utils/dto";
+import type { TKelasOptionsList, TNamaTanggal } from "~~/server/utils/dto";
 
 export async function getAllKelasTahfidz(
   daerahId: number,
-  { limit, page, search, bulan, tahun, nama }: TKelasList
+  { limit, page, search, bulan, tahun }: TKelasBaseList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -19,10 +15,6 @@ export async function getAllKelasTahfidz(
   if (search) {
     const searchCondition = `%${search}%`;
     conditions.push(or(like(kelasTahfidzTable.nama, searchCondition)));
-  }
-
-  if (nama) {
-    conditions.push(eq(kelasTahfidzTable.nama, nama));
   }
 
   if (bulan) {

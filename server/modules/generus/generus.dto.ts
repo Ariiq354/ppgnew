@@ -1,5 +1,4 @@
 import { z } from "zod/mini";
-import { OPagination } from "~~/server/utils/dto";
 
 export const OGenerusCreate = z.object({
   nama: z.string(),
@@ -16,22 +15,3 @@ export const OGenerusCreate = z.object({
 });
 
 export type TGenerusCreate = z.infer<typeof OGenerusCreate>;
-
-export const OGenerusList = z.object({
-  ...OPagination.def.shape,
-  search: z.string(),
-  kelasPengajian: z.string(),
-  desaId: z.optional(z.coerce.number()),
-  kelompokId: z.optional(z.coerce.number()),
-});
-
-export type TGenerusList = z.infer<typeof OGenerusList>;
-
-export const OGenerusBaseList = z.object({
-  ...OPagination.def.shape,
-  search: z.string(),
-  desaId: z.optional(z.coerce.number()),
-  kelompokId: z.optional(z.coerce.number()),
-});
-
-export type TGenerusBaseList = z.infer<typeof OGenerusBaseList>;

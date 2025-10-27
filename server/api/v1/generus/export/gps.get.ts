@@ -1,4 +1,4 @@
-import { getAllGenerusExportGpsService } from "~~/server/modules/generus";
+import { getAllGenerusExportGpsService } from "~~/server/modules/generus-gps";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["view"] });

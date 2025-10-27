@@ -88,6 +88,25 @@ export type TAbsensiKelasPengajianList = z.infer<
   typeof OAbsensiKelasPengajianList
 >;
 
+export const OGenerusBaseList = z.object({
+  ...OPagination.def.shape,
+  search: z.string(),
+  desaId: z.optional(z.coerce.number()),
+  kelompokId: z.optional(z.coerce.number()),
+});
+
+export const OGenerusList = z.object({
+  ...OPagination.def.shape,
+  search: z.string(),
+  kelasPengajian: z.string(),
+  desaId: z.optional(z.coerce.number()),
+  kelompokId: z.optional(z.coerce.number()),
+});
+
+export type TGenerusList = z.infer<typeof OGenerusList>;
+
+export type TGenerusBaseList = z.infer<typeof OGenerusBaseList>;
+
 export type TDelete = z.infer<typeof ODelete>;
 
 export type TDeleteBidang = z.infer<typeof ODeleteBidang>;

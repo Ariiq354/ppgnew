@@ -1,8 +1,7 @@
-import {
-  OGenerusCreate,
-  type TGenerusBaseList,
-  type TGenerusList,
-} from "./generus.dto";
+import type { MultiPartData } from "h3";
+import type { TGenerusList } from "~~/server/utils/dto";
+import ENV from "~~/shared/env";
+import { OGenerusCreate } from "./generus.dto";
 import {
   createGenerus,
   deleteGenerus,
@@ -11,15 +10,11 @@ import {
   getAllGenerusChart,
   getAllGenerusExport,
   getAllGenerusExportDesa,
-  getAllGenerusExportGps,
-  getAllGenerusGPS,
   getCountGenerus,
   getGenerusById,
   getGenerusOptionsKelompok,
   updateGenerus,
 } from "./generus.repo";
-import ENV from "~~/shared/env";
-import type { MultiPartData } from "h3";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -46,41 +41,6 @@ export async function getAllGenerusService(
     data: newData,
     metadata,
   };
-}
-
-export async function getAllGenerusGpsService(
-  daerahId: number,
-  query: TGenerusBaseList
-) {
-  const data = await getAllGenerusGPS(daerahId, query);
-
-  const newData = data.data.map(({ tanggalMasukKelas, ...rest }) => ({
-    ...rest,
-    kelasSekolah: getCurrentKelas(rest.kelasSekolah, tanggalMasukKelas),
-  }));
-
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return {
-    data: newData,
-    metadata,
-  };
-}
-
-export async function getAllGenerusExportGpsService(desaId: number) {
-  const data = await getAllGenerusExportGps(desaId);
-
-  const newData = data.map(({ tanggalMasukKelas, ...rest }) => ({
-    ...rest,
-    kelasSekolah: getCurrentKelas(rest.kelasSekolah, tanggalMasukKelas),
-  }));
-
-  return newData;
 }
 
 export async function getAllGenerusExportDesaService(desaId: number) {

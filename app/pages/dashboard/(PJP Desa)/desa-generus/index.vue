@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import { useConstantStore } from "~/stores/constant";
   import { APIBASE, type ExtractObjectType } from "~/utils";
-  import { columns, pengajianOptions } from "./_constants";
+  import { pengajianOptions } from "~~/shared/contants";
+  import { columns } from "./_constants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();

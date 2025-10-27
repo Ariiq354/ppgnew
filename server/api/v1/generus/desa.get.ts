@@ -1,4 +1,4 @@
-import { getAllGenerusService, OGenerusList } from "~~/server/modules/generus";
+import { getAllGenerusService } from "~~/server/modules/generus";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["view"] });
