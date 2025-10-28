@@ -69,8 +69,23 @@ export async function getAllMudamudiExclude(
 
 export async function getAbsensiMudamudiByKelasId(
   daerahId: number,
-  kelasId: number
+  kelasId: number,
+  kelasPengajian: string
 ) {
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(absensiGenerusMudaMudiTable.kelasId, kelasId),
+    eq(kelasMudaMudiTable.daerahId, daerahId),
+    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+  ];
+
+  if (kelasPengajian === "Usia Mandiri") {
+    conditions.push(eq(generusTable.kelasPengajian, "Usia Mandiri"));
+  } else {
+    conditions.push(
+      inArray(generusTable.kelasPengajian, ["Remaja", "Pranikah"])
+    );
+  }
+
   const data = await tryCatch(
     "Failed to get Absensi Mudamudi",
     db
@@ -89,13 +104,7 @@ export async function getAbsensiMudamudiByKelasId(
         generusTable,
         eq(generusTable.id, absensiGenerusMudaMudiTable.generusId)
       )
-      .where(
-        and(
-          eq(absensiGenerusMudaMudiTable.kelasId, kelasId),
-          eq(kelasMudaMudiTable.daerahId, daerahId),
-          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
-        )
-      )
+      .where(and(...conditions))
   );
 
   return {
@@ -107,6 +116,20 @@ export async function getCountAbsensiMudamudi(
   daerahId: number,
   kelasPengajian: string
 ) {
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(kelasMudaMudiTable.daerahId, daerahId),
+    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    eq(kelasMudaMudiTable.nama, kelasPengajian),
+  ];
+
+  if (kelasPengajian === "Usia Mandiri") {
+    conditions.push(eq(generusTable.kelasPengajian, "Usia Mandiri"));
+  } else {
+    conditions.push(
+      inArray(generusTable.kelasPengajian, ["Remaja", "Pranikah"])
+    );
+  }
+
   const [data] = await tryCatch(
     "Failed to get Count Absensi",
     db
@@ -122,13 +145,7 @@ export async function getCountAbsensiMudamudi(
         generusTable,
         eq(generusTable.id, absensiGenerusMudaMudiTable.generusId)
       )
-      .where(
-        and(
-          eq(kelasMudaMudiTable.daerahId, daerahId),
-          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
-          eq(kelasMudaMudiTable.nama, kelasPengajian)
-        )
-      )
+      .where(and(...conditions))
   );
 
   return data!.count;
@@ -219,7 +236,7 @@ export async function getCountMudamudiAbsensi(
   }
 
   return await tryCatch(
-    "Failed to get Count Generus",
+    "Failed to get Count mudamudi",
     db.$count(generusTable, and(...conditions))
   );
 }

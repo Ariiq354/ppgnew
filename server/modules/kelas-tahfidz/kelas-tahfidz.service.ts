@@ -31,18 +31,12 @@ export async function getKelasTahfidzByIdService(id: number) {
   return await getKelasTahfidzById(id);
 }
 
-export async function getAllKelasTahfidzOptionsService(
-  daerahId: number,
-  query: TKelasOptionsList
-) {
-  return await getAllKelasTahfidzOptions(daerahId, query);
+export async function getAllKelasTahfidzOptionsService(daerahId: number) {
+  return await getAllKelasTahfidzOptions(daerahId);
 }
 
-export async function getCountKelasTahfidzService(
-  daerahId: number,
-  kelasDesaPengajian: string
-) {
-  return await getCountKelasTahfidz(daerahId, kelasDesaPengajian);
+export async function getCountKelasTahfidzService(daerahId: number) {
+  return await getCountKelasTahfidz(daerahId);
 }
 
 export async function createKelasTahfidzService(

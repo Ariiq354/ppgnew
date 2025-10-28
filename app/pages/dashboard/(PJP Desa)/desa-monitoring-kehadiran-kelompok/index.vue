@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import { useConstantStore } from "~/stores/constant";
-  import { columns } from "./_constants";
   import { APIBASE } from "~/utils";
   import { pengajianOptions } from "~~/shared/contants";
+  import { columns } from "./_constants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
-  constantStore.setTitle("PJP Kelompok / Monitoring Kehadiran");
+  constantStore.setTitle("PJP Desa / Monitoring Kehadiran Kelompok");
 
   const namaKelas = ref("PAUD");
   const kelompokId = ref<number>();
@@ -52,7 +52,7 @@
 </script>
 
 <template>
-  <Title>PJP Kelompok | Monitoring Kehadiran</Title>
+  <Title>PJP Desa | Monitoring Kehadiran Kelompok</Title>
   <LazyUModal v-model:open="filterModal" title="Filter">
     <template #body>
       <div class="flex flex-col gap-4">

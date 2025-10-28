@@ -11,12 +11,14 @@ import {
 } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { generusTable } from "~~/server/database/schema/generus";
-import type { TAbsensiTahfidzCreate } from "./absensi-tahfidz.dto";
 import {
   absensiGenerusTahfidzTable,
   kelasTahfidzTable,
 } from "~~/server/database/schema/tahfidz";
-import type { TSearchPagination } from "~~/server/utils/dto";
+import type {
+  TAbsensiGenerusCreate,
+  TSearchPagination,
+} from "~~/server/utils/dto";
 import { exclude } from "~~/shared/contants";
 
 export async function getAllTahfidzExclude(
@@ -44,11 +46,11 @@ export async function getAllTahfidzExclude(
     .where(and(...conditions));
 
   const total = await tryCatch(
-    "Failed to get total count of Tahfidz Absensi",
+    "Failed to get total count of TAHFIDZ Absensi",
     db.$count(query)
   );
   const data = await tryCatch(
-    "Failed to get list of Tahfidz Absensi",
+    "Failed to get list of TAHFIDZ Absensi",
     query.limit(limit).offset(offset)
   );
 
@@ -90,9 +92,7 @@ export async function getAbsensiTahfidzByKelasId(
       )
   );
 
-  return {
-    data,
-  };
+  return data;
 }
 
 export async function getCountAbsensiTahfidz(daerahId: number) {
@@ -145,6 +145,7 @@ export async function getAllTahfidzSummary(
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(generusTable.daerahId, daerahId),
     sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
+    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
   ];
 
   if (search) {
@@ -183,13 +184,17 @@ export async function getAllTahfidzSummary(
   };
 }
 
-export async function getCountTahfidzAbsensi(daerahId: number) {
+export async function getCountTahfidzAbsensi(
+  daerahId: number,
+  kelasPengajian: string
+) {
   return await tryCatch(
     "Failed to get Count Generus",
     db.$count(
       generusTable,
       and(
         eq(generusTable.daerahId, daerahId),
+        eq(generusTable.kelasPengajian, kelasPengajian),
         sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
         sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
       )
@@ -200,7 +205,7 @@ export async function getCountTahfidzAbsensi(daerahId: number) {
 export async function createAbsensiTahfidz(
   kelasId: number,
   daerahId: number,
-  data: TAbsensiTahfidzCreate
+  data: TAbsensiGenerusCreate
 ) {
   const generus = await tryCatch(
     "Failed to find Generus for Absensi creation",
@@ -229,7 +234,7 @@ export async function updateAbsensiTahfidz(
   id: number,
   kelasId: number,
   daerahId: number,
-  data: TAbsensiTahfidzCreate
+  data: TAbsensiGenerusCreate
 ) {
   const generus = await tryCatch(
     "Failed to find Generus for Absensi update",

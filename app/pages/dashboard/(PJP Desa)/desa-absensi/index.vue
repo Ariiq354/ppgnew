@@ -1,16 +1,16 @@
 <script setup lang="ts">
-  import { useConstantStore } from "~/stores/constant";
-  import { columns } from "./_constants";
-  import { useAuthStore } from "~/stores/auth";
-  import { APIBASE, type ExtractObjectType } from "~/utils";
   import { useSubmit } from "~/composables/function";
   import { useToastError, useToastSuccess } from "~/composables/toast";
+  import { useAuthStore } from "~/stores/auth";
+  import { useConstantStore } from "~/stores/constant";
+  import { APIBASE, type ExtractObjectType } from "~/utils";
   import { pengajianOptions } from "~~/shared/contants";
+  import { columns } from "./_constants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
   const absensiManage = authStore.hasPermission({
-    pjp_kelompok: ["manage"],
+    pjp_desa: ["manage"],
   });
   constantStore.setTitle("PJP Desa / Absensi Generus");
 

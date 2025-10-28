@@ -9,20 +9,20 @@
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
   const absensiManage = authStore.hasPermission({
-    pjp_desa: ["manage"],
+    tahfidz: ["manage"],
   });
-  constantStore.setTitle("PJP Desa / Absensi Generus GPS");
+  constantStore.setTitle("Tahfidz / Absensi Generus");
 
   const kelasId = ref<number>();
   const { data: kelasOption, status: statusKelas } = await useFetch(
-    `${APIBASE}/options/kelas-gps`
+    `${APIBASE}/options/kelas-tahfidz`
   );
   const state = ref<ExtractObjectType<typeof absensi.value>[]>([]);
   const {
     data: absensi,
     status: statusAbsensi,
     refresh,
-  } = await useFetch(() => `${APIBASE}/absensi-gps/${kelasId.value}`, {
+  } = await useFetch(() => `${APIBASE}/absensi-tahfidz/${kelasId.value}`, {
     immediate: false,
     watch: false,
   });
@@ -57,14 +57,17 @@
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
   }, 300);
-  const { data, status } = await useFetch(`${APIBASE}/absensi-gps/generus`, {
-    query,
-  });
+  const { data, status } = await useFetch(
+    `${APIBASE}/absensi-tahfidz/generus`,
+    {
+      query,
+    }
+  );
 
   const { isLoading, execute } = useSubmit();
   async function onSubmit() {
     await execute({
-      path: `${APIBASE}/absensi-gps`,
+      path: `${APIBASE}/absensi-tahfidz`,
       body: {
         kelasId: kelasId.value,
         absen: state.value,
@@ -107,7 +110,7 @@
 </script>
 
 <template>
-  <Title>PJP Desa | Absensi Generus</Title>
+  <Title>Tahfidz | Absensi Generus</Title>
   <main class="flex flex-col gap-4">
     <UCard>
       <h1 class="text-2xl font-bold sm:text-3xl">Pilih Kelas</h1>

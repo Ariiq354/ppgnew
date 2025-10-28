@@ -1,7 +1,7 @@
 import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { kelasTahfidzTable } from "~~/server/database/schema/tahfidz";
-import type { TKelasOptionsList, TNamaTanggal } from "~~/server/utils/dto";
+import type { TNamaTanggal } from "~~/server/utils/dto";
 
 export async function getAllKelasTahfidz(
   daerahId: number,
@@ -75,17 +75,10 @@ export async function getKelasTahfidzById(id: number) {
   return { data };
 }
 
-export async function getAllKelasTahfidzOptions(
-  daerahId: number,
-  query: TKelasOptionsList
-) {
+export async function getAllKelasTahfidzOptions(daerahId: number) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(kelasTahfidzTable.daerahId, daerahId),
   ];
-
-  if (query.nama) {
-    conditions.push(eq(kelasTahfidzTable.nama, query.nama));
-  }
 
   const data = await tryCatch(
     "Failed to get all Kelas Tahfidz options",
@@ -102,19 +95,10 @@ export async function getAllKelasTahfidzOptions(
   return { data };
 }
 
-export async function getCountKelasTahfidz(
-  daerahId: number,
-  kelasPengajian: string
-) {
+export async function getCountKelasTahfidz(daerahId: number) {
   return await tryCatch(
     "Failed to get count of Kelas Tahfidz",
-    db.$count(
-      kelasTahfidzTable,
-      and(
-        eq(kelasTahfidzTable.daerahId, daerahId),
-        eq(kelasTahfidzTable.nama, kelasPengajian)
-      )
-    )
+    db.$count(kelasTahfidzTable, and(eq(kelasTahfidzTable.daerahId, daerahId)))
   );
 }
 

@@ -4,10 +4,10 @@
   import { columns } from "./_constants";
 
   const constantStore = useConstantStore();
-  constantStore.setTitle("PJP Desa / Monitoring Kehadiran GPS");
+  constantStore.setTitle("Tahfidz / Monitoring Kehadiran Tahfidz");
 
   const { data: summary } = await useFetch(
-    `${APIBASE}/absensi-gps/monitoring/summary`
+    `${APIBASE}/absensi-tahfidz/monitoring/summary`
   );
 
   const query = reactive({
@@ -17,13 +17,16 @@
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
   }, 300);
-  const { data, status } = await useFetch(`${APIBASE}/absensi-gps/monitoring`, {
-    query,
-  });
+  const { data, status } = await useFetch(
+    `${APIBASE}/absensi-tahfidz/monitoring`,
+    {
+      query,
+    }
+  );
 </script>
 
 <template>
-  <Title>PJP Desa | Monitoring Kehadiran GPS</Title>
+  <Title>Tahfidz | Monitoring Kehadiran Tahfidz</Title>
   <main class="flex flex-col gap-4">
     <div class="grid grid-cols-2 gap-4">
       <UCard>
