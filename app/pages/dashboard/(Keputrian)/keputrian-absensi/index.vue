@@ -1,26 +1,26 @@
 <script setup lang="ts">
-  import { useConstantStore } from "~/stores/constant";
-  import { columns } from "./_constants";
-  import { useAuthStore } from "~/stores/auth";
-  import { APIBASE, type ExtractObjectType } from "~/utils";
   import { useSubmit } from "~/composables/function";
   import { useToastError, useToastSuccess } from "~/composables/toast";
-  import { pengajianOptions } from "~~/shared/contants";
+  import { useAuthStore } from "~/stores/auth";
+  import { useConstantStore } from "~/stores/constant";
+  import { APIBASE, type ExtractObjectType } from "~/utils";
+  import { columns } from "./_constants";
+  import { daerahKelas } from "~~/shared/contants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
   const absensiManage = authStore.hasPermission({
-    pjp_kelompok: ["manage"],
+    keputrian: ["manage"],
   });
-  constantStore.setTitle("PJP Kelompok / Absensi Generus");
+  constantStore.setTitle("Keputrian / Absensi Generus Keputrian");
 
-  const kelasId = ref<number>();
-  const namaKelas = ref<string>("PAUD");
+  const namaKelas = ref("Muda-mudi");
   watch(namaKelas, () => {
     kelasId.value = undefined;
   });
+  const kelasId = ref<number>();
   const { data: kelasOption, status: statusKelas } = await useFetch(
-    `${APIBASE}/options/kelas`,
+    `${APIBASE}/options/kelas-keputrian`,
     {
       query: {
         nama: namaKelas,
@@ -32,7 +32,7 @@
     data: absensi,
     status: statusAbsensi,
     refresh,
-  } = await useFetch(() => `${APIBASE}/absensi-generus/${kelasId.value}`, {
+  } = await useFetch(() => `${APIBASE}/absensi-keputrian/${kelasId.value}`, {
     immediate: false,
     watch: false,
   });
@@ -69,7 +69,7 @@
     query.search = v;
   }, 300);
   const { data, status } = await useFetch(
-    `${APIBASE}/absensi-generus/generus`,
+    `${APIBASE}/absensi-keputrian/generus`,
     {
       query,
     }
@@ -78,7 +78,7 @@
   const { isLoading, execute } = useSubmit();
   async function onSubmit() {
     await execute({
-      path: `${APIBASE}/absensi-generus`,
+      path: `${APIBASE}/absensi-keputrian`,
       body: {
         kelasId: kelasId.value,
         absen: state.value,
@@ -113,7 +113,7 @@
   }
 
   watch(
-    () => [query.search, query.kelasPengajian],
+    () => [query.search],
     () => {
       query.page = 1;
     }
@@ -121,7 +121,7 @@
 </script>
 
 <template>
-  <Title>PJP Kelompok | Absensi Generus</Title>
+  <Title>Keputrian | Absensi Generus</Title>
   <main class="flex flex-col gap-4">
     <UCard>
       <h1 class="text-2xl font-bold sm:text-3xl">Pilih Kelas</h1>
@@ -148,7 +148,7 @@
         <UFormField label="Pengajian" size="xl">
           <USelectMenu
             v-model="namaKelas"
-            :items="pengajianOptions"
+            :items="daerahKelas"
             :disabled="statusKelas === 'pending'"
             placeholder="Pilih Pengajian"
           />

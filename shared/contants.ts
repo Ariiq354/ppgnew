@@ -55,3 +55,5 @@ export const tahunOptions = [
 ];
 
 export const exclude = ["Pindah", "Mondok", "Tugas"];
+
+export const daerahKelas = ["Muda-mudi", "Usia Mandiri"];

@@ -2,14 +2,14 @@
   import { useConstantStore } from "~/stores/constant";
   import { columns } from "./_constants";
   import { APIBASE } from "~/utils";
-  import { pengajianOptions } from "~~/shared/contants";
+  import { daerahKelas } from "~~/shared/contants";
 
   const constantStore = useConstantStore();
-  constantStore.setTitle("PJP Kelompok / Monitoring Kehadiran");
+  constantStore.setTitle("Kegiatan Muda-mudi / Monitoring Kehadiran");
 
-  const namaKelas = ref("PAUD");
+  const namaKelas = ref("Muda-mudi");
   const { data: summary } = await useFetch(
-    `${APIBASE}/absensi-generus/monitoring/summary`,
+    `${APIBASE}/absensi-mudamudi/monitoring/summary`,
     {
       query: {
         kelasPengajian: namaKelas,
@@ -26,7 +26,7 @@
     query.search = v;
   }, 300);
   const { data, status } = await useFetch(
-    `${APIBASE}/absensi-generus/monitoring`,
+    `${APIBASE}/absensi-mudamudi/monitoring`,
     {
       query,
     }
@@ -34,13 +34,13 @@
 </script>
 
 <template>
-  <Title>PJP Kelompok | Monitoring Kehadiran</Title>
+  <Title>Kegiatan Muda-mudi | Monitoring Kehadiran</Title>
   <main class="flex flex-col gap-4">
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
       <UCard>
         <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
           <UIcon name="i-lucide-users" />
-          {{ summary?.data.countGenerus }}
+          {{ summary?.data.countMudamudi }}
         </p>
         <p class="text-muted">Total Generus</p>
       </UCard>
@@ -64,7 +64,7 @@
         <USelectMenu
           v-model="namaKelas"
           class="flex-1"
-          :items="pengajianOptions"
+          :items="daerahKelas"
           :disabled="status === 'pending'"
           placeholder="Pilih Pengajian"
         />

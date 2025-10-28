@@ -107,9 +107,7 @@ export async function getAbsensiMudamudiByKelasId(
       .where(and(...conditions))
   );
 
-  return {
-    data,
-  };
+  return data;
 }
 
 export async function getCountAbsensiMudamudi(
