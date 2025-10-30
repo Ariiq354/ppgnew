@@ -5,6 +5,7 @@ import {
   getAllKelasMudamudiExport,
   getAllKelasMudamudiOptions,
   getCountKelasMudamudi,
+  getKelasMudamudiByDaerahId,
   getKelasMudamudiById,
   updateKelasMudamudi,
 } from "./kelas-mudamudi.repo";
@@ -65,4 +66,8 @@ export async function deleteKelasMudamudiService(
   id: number[]
 ) {
   return await deleteKelasMudamudi(daerahId, id);
+}
+
+export async function getKelasMudamudiByDaerahIdService(daerahId: number) {
+  return getKelasMudamudiByDaerahId(daerahId);
 }

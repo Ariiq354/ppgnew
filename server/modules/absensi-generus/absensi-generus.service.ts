@@ -13,6 +13,7 @@ import {
   getAllGenerusSummary,
   getCountAbsensiGenerus,
   getCountGenerusAbsensi,
+  getGenerusAbsensiExclude,
   updateAbsensiGenerus,
 } from "./absensi-generus.repo";
 
@@ -112,6 +113,10 @@ export async function getAllGenerusExcludeService(
     data: data.data,
     metadata,
   };
+}
+
+export async function getGenerusAbsensiExcludeService(kelompokId: number) {
+  return getGenerusAbsensiExclude(kelompokId);
 }
 
 export async function createAbsensiGenerusService(

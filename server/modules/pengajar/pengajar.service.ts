@@ -1,3 +1,5 @@
+import type { MultiPartData } from "h3";
+import ENV from "~~/shared/env";
 import { OPengajarCreate, type TPengajarList } from "./pengajar.dto";
 import {
   createPengajar,
@@ -6,12 +8,9 @@ import {
   getAllPengajarChart,
   getAllPengajarExport,
   getAllPengajarExportDesa,
-  getCountPengajar,
   getPengajarById,
   updatePengajar,
 } from "./pengajar.repo";
-import ENV from "~~/shared/env";
-import type { MultiPartData } from "h3";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -37,14 +36,6 @@ export async function getAllPengajarExportService(daerahId: number) {
 
 export async function getAllPengajarExportDesaService(desaId: number) {
   return await getAllPengajarExportDesa(desaId);
-}
-
-export async function getCountPengajarService(
-  daerahId: number,
-  desaId?: number,
-  kelompokId?: number
-) {
-  return getCountPengajar(daerahId, desaId, kelompokId);
 }
 
 export async function getAllPengajarChartService(

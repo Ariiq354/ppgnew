@@ -1,8 +1,9 @@
-import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
+import { and, eq, inArray, like, or, Param, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { generusTable } from "~~/server/database/schema/generus";
 import { kelompokTable } from "~~/server/database/schema/wilayah";
 import type { TGenerusList } from "~~/server/utils/dto";
+import { exclude } from "~~/shared/contants";
 
 export async function getAllGenerusKeputrian(
   daerahId: number,
@@ -98,5 +99,52 @@ export async function getAllGenerusExportKeputrian(daerahId: number) {
         )
       )
       .leftJoin(kelompokTable, eq(generusTable.kelompokId, kelompokTable.id))
+  );
+}
+
+export async function getGenerusKeputrianAbsensiExclude(daerahId: number) {
+  return await tryCatch(
+    "Failed to get Generus Absensi Exclude",
+    db
+      .select({
+        id: generusTable.id,
+        kelasPengajian: generusTable.kelasPengajian,
+      })
+      .from(generusTable)
+      .where(
+        and(
+          eq(generusTable.daerahId, daerahId),
+          inArray(generusTable.kelasPengajian, [
+            "Remaja",
+            "Pranikah",
+            "Usia Mandiri",
+          ]),
+          eq(generusTable.gender, "Perempuan"),
+          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
+        )
+      )
+  );
+}
+
+export async function getAllKeputrianChart(daerahId: number) {
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(generusTable.daerahId, daerahId),
+    eq(generusTable.gender, "Perempuan"),
+    inArray(generusTable.kelasPengajian, [
+      "Remaja",
+      "Pranikah",
+      "Usia Mandiri",
+    ]),
+  ];
+
+  return await tryCatch(
+    "Failed to get Keputrian chart data",
+    db
+      .select({
+        gender: generusTable.gender,
+        kelasPengajian: generusTable.kelasPengajian,
+      })
+      .from(generusTable)
+      .where(and(...conditions))
   );
 }

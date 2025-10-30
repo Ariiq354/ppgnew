@@ -6,6 +6,7 @@ import {
 import {
   createAbsensiKeputrian,
   deleteAbsensiKeputrian,
+  getAbsensiKeputrianByDaerahId,
   getAbsensiKeputrianByKelasId,
   getAllKeputrianExclude,
   getAllKeputrianSummary,
@@ -144,4 +145,8 @@ export async function createAbsensiKeputrianService(
       await createAbsensiKeputrian(kelasId, daerahId, check.data!.nama, item);
     }
   }
+}
+
+export async function getAbsensiKeputrianByDaerahIdService(daerahId: number) {
+  return getAbsensiKeputrianByDaerahId(daerahId);
 }

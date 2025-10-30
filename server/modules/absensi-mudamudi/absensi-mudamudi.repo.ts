@@ -110,6 +110,40 @@ export async function getAbsensiMudamudiByKelasId(
   return data;
 }
 
+export async function getAbsensiMudamudiByDaerahId(daerahId: number) {
+  return await tryCatch(
+    "Failed to get Absensi Generus By Kelompok Id",
+    db
+      .select({
+        id: absensiGenerusMudaMudiTable.id,
+        generusId: absensiGenerusMudaMudiTable.generusId,
+        kelasPengajian: generusTable.kelasPengajian,
+        detail: absensiGenerusMudaMudiTable.detail,
+        keterangan: absensiGenerusMudaMudiTable.keterangan,
+      })
+      .from(absensiGenerusMudaMudiTable)
+      .leftJoin(
+        kelasMudaMudiTable,
+        eq(absensiGenerusMudaMudiTable.kelasId, kelasMudaMudiTable.id)
+      )
+      .leftJoin(
+        generusTable,
+        eq(generusTable.id, absensiGenerusMudaMudiTable.generusId)
+      )
+      .where(
+        and(
+          eq(kelasMudaMudiTable.daerahId, daerahId),
+          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+          inArray(generusTable.kelasPengajian, [
+            "Remaja",
+            "Pranikah",
+            "Usia Mandiri",
+          ])
+        )
+      )
+  );
+}
+
 export async function getCountAbsensiMudamudi(
   daerahId: number,
   kelasPengajian: string
@@ -147,19 +181,6 @@ export async function getCountAbsensiMudamudi(
   );
 
   return data!.count;
-}
-
-export async function getCountMudamudi(daerahId: number) {
-  return await tryCatch(
-    "Failed to get Count Mudamudi",
-    db.$count(
-      generusTable,
-      and(
-        eq(generusTable.daerahId, daerahId),
-        sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
-      )
-    )
-  );
 }
 
 export async function getAllMudamudiSummary(
@@ -214,6 +235,29 @@ export async function getAllMudamudiSummary(
     data,
     total,
   };
+}
+
+export async function getGenerusMudamudiAbsensiExclude(daerahId: number) {
+  return await tryCatch(
+    "Failed to get Generus Absensi Exclude",
+    db
+      .select({
+        id: generusTable.id,
+        kelasPengajian: generusTable.kelasPengajian,
+      })
+      .from(generusTable)
+      .where(
+        and(
+          eq(generusTable.daerahId, daerahId),
+          inArray(generusTable.kelasPengajian, [
+            "Remaja",
+            "Pranikah",
+            "Usia Mandiri",
+          ]),
+          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
+        )
+      )
+  );
 }
 
 export async function getCountMudamudiAbsensi(

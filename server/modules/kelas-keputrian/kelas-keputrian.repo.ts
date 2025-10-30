@@ -110,6 +110,20 @@ export async function getAllKelasKeputrianOptions(
   return { data };
 }
 
+export async function getKelasKeputrianByDaerahId(daerahId: number) {
+  return await tryCatch(
+    "Failed to get all Kelas Keputrian options",
+    db
+      .select({
+        id: kelasKeputrianTable.id,
+        nama: kelasKeputrianTable.nama,
+        tanggal: kelasKeputrianTable.tanggal,
+      })
+      .from(kelasKeputrianTable)
+      .where(eq(kelasKeputrianTable.daerahId, daerahId))
+  );
+}
+
 export async function getCountKelasKeputrian(
   daerahId: number,
   kelasPengajian: string

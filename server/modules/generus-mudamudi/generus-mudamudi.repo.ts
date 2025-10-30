@@ -98,3 +98,41 @@ export async function getAllGenerusExportMudamudi(daerahId: number) {
       .leftJoin(kelompokTable, eq(generusTable.kelompokId, kelompokTable.id))
   );
 }
+
+export async function getCountMudamudi(daerahId: number) {
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(generusTable.daerahId, daerahId),
+    inArray(generusTable.kelasPengajian, [
+      "Remaja",
+      "Pranikah",
+      "Usia Mandiri",
+    ]),
+  ];
+
+  return await tryCatch(
+    "Failed to get count of Mudamudi",
+    db.$count(generusTable, and(...conditions))
+  );
+}
+
+export async function getAllMudamudiChart(daerahId: number) {
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(generusTable.daerahId, daerahId),
+    inArray(generusTable.kelasPengajian, [
+      "Remaja",
+      "Pranikah",
+      "Usia Mandiri",
+    ]),
+  ];
+
+  return await tryCatch(
+    "Failed to get Mudamudi chart data",
+    db
+      .select({
+        gender: generusTable.gender,
+        kelasPengajian: generusTable.kelasPengajian,
+      })
+      .from(generusTable)
+      .where(and(...conditions))
+  );
+}

@@ -5,6 +5,7 @@ import {
   getAllKelasKeputrianExport,
   getAllKelasKeputrianOptions,
   getCountKelasKeputrian,
+  getKelasKeputrianByDaerahId,
   getKelasKeputrianById,
   updateKelasKeputrian,
 } from "./kelas-keputrian.repo";
@@ -36,6 +37,10 @@ export async function getAllKelasKeputrianOptionsService(
   query: TKelasOptionsList
 ) {
   return await getAllKelasKeputrianOptions(daerahId, query);
+}
+
+export async function getKelasKeputrianByDaerahIdService(daerahId: number) {
+  return await getKelasKeputrianByDaerahId(daerahId);
 }
 
 export async function getCountKelasKeputrianService(

@@ -2,6 +2,8 @@ import type { TGenerusBaseList } from "~~/server/utils/dto";
 import {
   getAllGenerusExportTahfidz,
   getAllGenerusTahfidz,
+  getAllTahfidzChart,
+  getCountTahfidz,
 } from "./generus-tahfidz.repo";
 
 export async function getAllGenerusTahfidzService(
@@ -37,4 +39,12 @@ export async function getAllGenerusExportTahfidzService(daerahId: number) {
   }));
 
   return newData;
+}
+
+export async function getCountTahfidzService(daerahId: number) {
+  return await getCountTahfidz(daerahId);
+}
+
+export async function getAllTahfidzChartService(daerahId: number) {
+  return await getAllTahfidzChart(daerahId);
 }

@@ -25,6 +25,7 @@ import {
   getAllGenerusDesaSummary,
   getCountAbsensiGenerusDesa,
   getCountGenerusDesaAbsensi,
+  getGenerusDesaAbsensiExclude,
   updateAbsensiGenerusDesa,
 } from "./absensi-desa.repo";
 
@@ -133,6 +134,10 @@ export async function getAbsensiDesaMonitoringService(
     data: data.data,
     metadata,
   };
+}
+
+export async function getGenerusDesaAbsensiExcludeService(desaId: number) {
+  return getGenerusDesaAbsensiExclude(desaId);
 }
 
 export async function getAbsensiDesaMonitoringSummaryService(

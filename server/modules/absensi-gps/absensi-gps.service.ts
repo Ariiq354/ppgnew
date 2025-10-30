@@ -10,7 +10,7 @@ import {
   getAllGpsExclude,
   getAllGpsSummary,
   getCountAbsensiGps,
-  getCountGps,
+  getCountGpsAbsensi,
   updateAbsensiGps,
 } from "./absensi-gps.repo";
 
@@ -44,7 +44,7 @@ export async function getAbsensiGpsMonitoringService(
 }
 
 export async function getAbsensiGpsMonitoringSummaryService(desaId: number) {
-  const countGenerus = await getCountGps(desaId);
+  const countGenerus = await getCountGpsAbsensi(desaId);
   const countKelas = await getCountKelasGpsService(desaId);
   const countAbsensi = await getCountAbsensiGps(desaId);
 

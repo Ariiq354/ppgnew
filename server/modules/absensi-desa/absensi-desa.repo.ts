@@ -163,19 +163,6 @@ export async function getCountAbsensiGenerusDesa(
   return data!.count;
 }
 
-export async function getCountGenerusDesa(desaId: number) {
-  return await tryCatch(
-    "Failed to get Count Generus",
-    db.$count(
-      generusTable,
-      and(
-        eq(generusTable.desaId, desaId),
-        sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
-      )
-    )
-  );
-}
-
 export async function getAllGenerusDesaSummary(
   desaId: number,
   { limit, page, search, kelasPengajian, kelompokId }: TGenerusDesaAbsensiList
@@ -242,6 +229,24 @@ export async function getAllGenerusDesaSummary(
   };
 }
 
+export async function getGenerusDesaAbsensiExclude(desaId: number) {
+  return await tryCatch(
+    "Failed to get Generus Absensi Exclude",
+    db
+      .select({
+        id: generusTable.id,
+        kelasPengajian: generusTable.kelasPengajian,
+      })
+      .from(generusTable)
+      .where(
+        and(
+          eq(generusTable.desaId, desaId),
+          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
+        )
+      )
+  );
+}
+
 export async function getCountGenerusDesaAbsensi(
   desaId: number,
   kelasPengajian: string
@@ -276,7 +281,8 @@ export async function getAbsensiGenerusByDesaId(desaId: number) {
       .select({
         id: absensiGenerusDesaTable.id,
         generusId: absensiGenerusDesaTable.generusId,
-        kelasPengajian: generusTable.kelasPengajian,
+        kelasPengajian: kelasDesaTable.nama,
+        kelasPengajianGenerus: generusTable.kelasPengajian,
         detail: absensiGenerusDesaTable.detail,
         keterangan: absensiGenerusDesaTable.keterangan,
       })

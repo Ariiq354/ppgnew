@@ -150,17 +150,38 @@ export async function getCountAbsensiKeputrian(
   return data!.count;
 }
 
-export async function getCountKeputrian(daerahId: number) {
+export async function getAbsensiKeputrianByDaerahId(daerahId: number) {
   return await tryCatch(
-    "Failed to get Count Keputrian",
-    db.$count(
-      generusTable,
-      and(
-        eq(generusTable.daerahId, daerahId),
-        eq(generusTable.gender, "Perempuan"),
-        sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
+    "Failed to get Absensi Generus By Kelompok Id",
+    db
+      .select({
+        id: absensiGenerusKeputrianTable.id,
+        generusId: absensiGenerusKeputrianTable.generusId,
+        kelasPengajian: generusTable.kelasPengajian,
+        detail: absensiGenerusKeputrianTable.detail,
+        keterangan: absensiGenerusKeputrianTable.keterangan,
+      })
+      .from(absensiGenerusKeputrianTable)
+      .leftJoin(
+        kelasKeputrianTable,
+        eq(absensiGenerusKeputrianTable.kelasId, kelasKeputrianTable.id)
       )
-    )
+      .leftJoin(
+        generusTable,
+        eq(generusTable.id, absensiGenerusKeputrianTable.generusId)
+      )
+      .where(
+        and(
+          eq(kelasKeputrianTable.daerahId, daerahId),
+          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+          eq(generusTable.gender, "Perempuan"),
+          inArray(generusTable.kelasPengajian, [
+            "Remaja",
+            "Pranikah",
+            "Usia Mandiri",
+          ])
+        )
+      )
   );
 }
 

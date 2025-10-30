@@ -2,6 +2,8 @@ import type { TGenerusList } from "~~/server/utils/dto";
 import {
   getAllGenerusExportKeputrian,
   getAllGenerusKeputrian,
+  getAllKeputrianChart,
+  getGenerusKeputrianAbsensiExclude,
 } from "./generus-keputrian.repo";
 
 export async function getAllGenerusKeputrianService(
@@ -37,4 +39,14 @@ export async function getAllGenerusExportKeputrianService(daerahId: number) {
   }));
 
   return newData;
+}
+
+export async function getAllKeputrianChartService(daerahId: number) {
+  return await getAllKeputrianChart(daerahId);
+}
+
+export async function getGenerusKeputrianAbsensiExcludeService(
+  daerahId: number
+) {
+  return getGenerusKeputrianAbsensiExclude(daerahId);
 }

@@ -6,11 +6,13 @@ import {
 import {
   createAbsensiTahfidz,
   deleteAbsensiTahfidz,
+  getAbsensiTahfidzByDaerahId,
   getAbsensiTahfidzByKelasId,
   getAllTahfidzExclude,
   getAllTahfidzSummary,
   getCountAbsensiTahfidz,
-  getCountTahfidz,
+  getCountTahfidzAbsensi,
+  getGenerusTahfidzAbsensiExclude,
   updateAbsensiTahfidz,
 } from "./absensi-tahfidz.repo";
 
@@ -46,7 +48,7 @@ export async function getAbsensiTahfidzMonitoringService(
 export async function getAbsensiTahfidzMonitoringSummaryService(
   daerahId: number
 ) {
-  const countGenerus = await getCountTahfidz(daerahId);
+  const countGenerus = await getCountTahfidzAbsensi(daerahId);
   const countKelas = await getCountKelasTahfidzService(daerahId);
   const countAbsensi = await getCountAbsensiTahfidz(daerahId);
 
@@ -122,4 +124,12 @@ export async function createAbsensiTahfidzService(
       await createAbsensiTahfidz(kelasId, daerahId!, item);
     }
   }
+}
+
+export async function getAbsensiTahfidzByDaerahIdService(daerahId: number) {
+  return getAbsensiTahfidzByDaerahId(daerahId);
+}
+
+export async function getGenerusTahfidzAbsensiExcludeService(daerahId: number) {
+  return getGenerusTahfidzAbsensiExclude(daerahId);
 }

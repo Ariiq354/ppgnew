@@ -6,11 +6,13 @@ import {
 import {
   createAbsensiMudamudi,
   deleteAbsensiMudamudi,
+  getAbsensiMudamudiByDaerahId,
   getAbsensiMudamudiByKelasId,
   getAllMudamudiExclude,
   getAllMudamudiSummary,
   getCountAbsensiMudamudi,
   getCountMudamudiAbsensi,
+  getGenerusMudamudiAbsensiExclude,
   updateAbsensiMudamudi,
 } from "./absensi-mudamudi.repo";
 
@@ -93,6 +95,16 @@ export async function getAbsensiMudamudiByKelasIdService(
   );
 
   return data;
+}
+
+export async function getGenerusMudamudiAbsensiExcludeService(
+  daerahId: number
+) {
+  return getGenerusMudamudiAbsensiExclude(daerahId);
+}
+
+export async function getAbsensiMudamudiByDaerahIdService(daerahId: number) {
+  return getAbsensiMudamudiByDaerahId(daerahId);
 }
 
 export async function getAllMudamudiExcludeService(

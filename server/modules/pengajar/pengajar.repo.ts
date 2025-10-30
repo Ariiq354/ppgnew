@@ -110,29 +110,6 @@ export async function getAllPengajarExportDesa(desaId: number) {
   );
 }
 
-export async function getCountPengajar(
-  daerahId: number,
-  desaId?: number,
-  kelompokId?: number
-) {
-  const conditions: (SQL<unknown> | undefined)[] = [
-    eq(pengajarTable.daerahId, daerahId),
-  ];
-
-  if (desaId) {
-    conditions.push(eq(pengajarTable.desaId, desaId));
-  }
-
-  if (kelompokId) {
-    conditions.push(eq(pengajarTable.kelompokId, kelompokId));
-  }
-
-  return await tryCatch(
-    "Failed to get count of Pengajar",
-    db.$count(pengajarTable, and(...conditions))
-  );
-}
-
 export async function getAllPengajarChart(
   daerahId: number,
   desaId?: number,

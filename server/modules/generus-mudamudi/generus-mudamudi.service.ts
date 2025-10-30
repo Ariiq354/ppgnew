@@ -2,6 +2,8 @@ import type { TGenerusList } from "~~/server/utils/dto";
 import {
   getAllGenerusExportMudamudi,
   getAllGenerusMudamudi,
+  getAllMudamudiChart,
+  getCountMudamudi,
 } from "./generus-mudamudi.repo";
 
 export async function getAllGenerusMudamudiService(
@@ -37,4 +39,12 @@ export async function getAllGenerusExportMudamudiService(daerahId: number) {
   }));
 
   return newData;
+}
+
+export async function getCountMudamudiService(daerahId: number) {
+  return await getCountMudamudi(daerahId);
+}
+
+export async function getAllMudamudiChartService(daerahId: number) {
+  return await getAllMudamudiChart(daerahId);
 }

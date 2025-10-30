@@ -72,6 +72,20 @@ export async function getAllKelasMudamudiExport(daerahId: number) {
   );
 }
 
+export async function getKelasMudamudiByDaerahId(daerahId: number) {
+  return await tryCatch(
+    "Failed to get all Kelas Mudamudi options",
+    db
+      .select({
+        id: kelasMudaMudiTable.id,
+        nama: kelasMudaMudiTable.nama,
+        tanggal: kelasMudaMudiTable.tanggal,
+      })
+      .from(kelasMudaMudiTable)
+      .where(eq(kelasMudaMudiTable.daerahId, daerahId))
+  );
+}
+
 export async function getKelasMudamudiById(id: number) {
   const data = await tryCatch(
     "Failed to get Kelas Mudamudi By Id",

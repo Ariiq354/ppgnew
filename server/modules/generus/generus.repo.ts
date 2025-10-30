@@ -182,29 +182,6 @@ export async function getAllGenerusChart(
   );
 }
 
-export async function getCountGenerus(
-  daerahId: number,
-  desaId?: number,
-  kelompokId?: number
-) {
-  const conditions: (SQL<unknown> | undefined)[] = [
-    eq(generusTable.daerahId, daerahId),
-  ];
-
-  if (desaId) {
-    conditions.push(eq(generusTable.desaId, desaId));
-  }
-
-  if (kelompokId) {
-    conditions.push(eq(generusTable.kelompokId, kelompokId));
-  }
-
-  return await tryCatch(
-    "Failed to get count of Generus",
-    db.$count(generusTable, and(...conditions))
-  );
-}
-
 export async function getGenerusById(kelompokId: number, id: number) {
   return await tryCatch(
     "Failed to get Generus by ID",

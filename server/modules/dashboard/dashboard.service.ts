@@ -1,21 +1,38 @@
-import { getAbsensiGenerusByDesaIdService } from "../absensi-desa";
-import { getAbsensiGenerusByKelompokIdService } from "../absensi-generus";
-import { getCountDesaService, getDesaByDaerahIdService } from "../desa";
 import {
-  getAllGenerus69Service,
-  getAllGenerusChartService,
-  getCountGenerusService,
-} from "../generus";
+  getAbsensiGenerusByDesaIdService,
+  getGenerusDesaAbsensiExcludeService,
+} from "../absensi-desa";
+import {
+  getAbsensiGenerusByKelompokIdService,
+  getGenerusAbsensiExcludeService,
+} from "../absensi-generus";
+import { getAbsensiKeputrianByDaerahIdService } from "../absensi-keputrian";
+import {
+  getAbsensiMudamudiByDaerahIdService,
+  getGenerusMudamudiAbsensiExcludeService,
+} from "../absensi-mudamudi";
+import { getAbsensiTahfidzByDaerahIdService } from "../absensi-tahfidz";
+import { getCountDesaService, getDesaByDaerahIdService } from "../desa";
+import { getAllGenerus69Service, getAllGenerusChartService } from "../generus";
+import {
+  getAllKeputrianChartService,
+  getGenerusKeputrianAbsensiExcludeService,
+} from "../generus-keputrian";
+import { getAllMudamudiChartService } from "../generus-mudamudi";
+import {
+  getAllTahfidzChartService,
+  getCountTahfidzService,
+} from "../generus-tahfidz";
 import { getKelasByDesaIdService } from "../kelas-desa";
 import { getKelasByKelompokIdService } from "../kelas-kelompok";
+import { getKelasKeputrianByDaerahIdService } from "../kelas-keputrian";
+import { getKelasMudamudiByDaerahIdService } from "../kelas-mudamudi";
+import { getAllKelasTahfidzOptionsService } from "../kelas-tahfidz";
 import {
   getCountKelompokService,
   getKelompokByDaerahIdService,
 } from "../kelompok";
-import {
-  getAllPengajarChartService,
-  getCountPengajarService,
-} from "../pengajar";
+import { getAllPengajarChartService } from "../pengajar";
 
 const pengajianOptions = [
   "PAUD",
@@ -25,6 +42,7 @@ const pengajianOptions = [
   "Pranikah",
   "Usia Mandiri",
 ];
+
 const statusOptions = [
   "Mubalig Tugasan",
   "Mubalig Setempat",
@@ -32,6 +50,7 @@ const statusOptions = [
 ];
 
 const MudaMudiKelas = ["Remaja", "Pranikah", "Usia Mandiri"];
+const RemajaKelas = ["Remaja", "Pranikah"];
 
 type GroupData = {
   gender: string;
@@ -120,19 +139,24 @@ function groupByField(
   return result;
 }
 
-function getPercent(
+function getPercentCombined(
   kelasName: string,
   absensi: any[],
   dataGenerus: any[],
   kelas: any[],
-  isGroup: boolean = false
+  groupKelas: string[],
+  isGroup = false
 ): string {
-  const absensiCount = isGroup
-    ? absensi.filter((i) => MudaMudiKelas.includes(i.kelasPengajian)).length
-    : absensi.filter((i) => i.kelasPengajian === kelasName).length;
+  const absensiCount = absensi.filter(
+    (i) =>
+      i.kelasPengajian === kelasName &&
+      (isGroup
+        ? groupKelas.includes(i.kelasPengajianGenerus)
+        : i.kelasPengajianGenerus === kelasName)
+  ).length;
 
   const generusCount = isGroup
-    ? dataGenerus.filter((i) => MudaMudiKelas.includes(i.kelasPengajian)).length
+    ? dataGenerus.filter((i) => groupKelas.includes(i.kelasPengajian)).length
     : dataGenerus.filter((i) => i.kelasPengajian === kelasName).length;
 
   const kelasCount = kelas.filter((i) => i.nama === kelasName).length;
@@ -145,11 +169,12 @@ function getPercent(
 export async function getDashboard(daerahId: number) {
   const countKelompok = await getCountKelompokService(daerahId);
   const countDesa = await getCountDesaService(daerahId);
-  const countGenerus = await getCountGenerusService(daerahId);
-  const countPengajar = await getCountPengajarService(daerahId);
 
   const dataGenerus = await getAllGenerusChartService(daerahId);
   const dataPengajar = await getAllPengajarChartService(daerahId);
+
+  const countGenerus = dataGenerus.length;
+  const countPengajar = dataPengajar.length;
 
   const generusDatasets = groupByField(
     dataGenerus,
@@ -181,29 +206,57 @@ export async function getDashboard(daerahId: number) {
   return data;
 }
 
-export async function getDashboardDesa(daerahId: number, desaId: number) {
-  const countGenerus = await getCountGenerusService(daerahId, desaId);
-  const countPengajar = await getCountPengajarService(daerahId, desaId);
+export async function getDashboardKelompok(
+  daerahId: number,
+  desaId: number,
+  kelompokId: number
+) {
+  const dataGenerus = await getAllGenerusChartService(
+    daerahId,
+    desaId,
+    kelompokId
+  );
+  const dataPengajar = await getAllPengajarChartService(
+    daerahId,
+    desaId,
+    kelompokId
+  );
 
-  const dataGenerus = await getAllGenerusChartService(daerahId, desaId);
-  const dataPengajar = await getAllPengajarChartService(daerahId, desaId);
+  const countGenerus = dataGenerus.length;
+  const countPengajar = dataPengajar.length;
 
-  const absensi = await getAbsensiGenerusByDesaIdService(desaId);
-  const kelas = await getKelasByDesaIdService(desaId);
+  const dataGenerusExclude = await getGenerusAbsensiExcludeService(kelompokId);
 
-  const percentPaud = getPercent("PAUD", absensi, dataGenerus, kelas);
-  const percentCabeRawit = getPercent(
+  const absensi = await getAbsensiGenerusByKelompokIdService(kelompokId);
+  const kelas = await getKelasByKelompokIdService(kelompokId);
+
+  const percentPaud = getPercentCombined(
+    "PAUD",
+    absensi,
+    dataGenerusExclude,
+    kelas,
+    MudaMudiKelas
+  );
+  const percentCabeRawit = getPercentCombined(
     "Cabe Rawit",
     absensi,
-    dataGenerus,
-    kelas
+    dataGenerusExclude,
+    kelas,
+    MudaMudiKelas
   );
-  const percentPraremaja = getPercent("Praremaja", absensi, dataGenerus, kelas);
-  const percentMudamudi = getPercent(
+  const percentPraremaja = getPercentCombined(
+    "Praremaja",
+    absensi,
+    dataGenerusExclude,
+    kelas,
+    MudaMudiKelas
+  );
+  const percentMudamudi = getPercentCombined(
     "Muda-mudi",
     absensi,
-    dataGenerus,
+    dataGenerusExclude,
     kelas,
+    MudaMudiKelas,
     true
   );
 
@@ -239,49 +292,45 @@ export async function getDashboardDesa(daerahId: number, desaId: number) {
   return data;
 }
 
-export async function getDashboardKelompok(
-  daerahId: number,
-  desaId: number,
-  kelompokId: number
-) {
-  const countGenerus = await getCountGenerusService(
-    daerahId,
-    desaId,
-    kelompokId
-  );
-  const countPengajar = await getCountPengajarService(
-    daerahId,
-    desaId,
-    kelompokId
-  );
+export async function getDashboardDesa(daerahId: number, desaId: number) {
+  const dataGenerus = await getAllGenerusChartService(daerahId, desaId);
+  const dataPengajar = await getAllPengajarChartService(daerahId, desaId);
 
-  const dataGenerus = await getAllGenerusChartService(
-    daerahId,
-    desaId,
-    kelompokId
-  );
-  const dataPengajar = await getAllPengajarChartService(
-    daerahId,
-    desaId,
-    kelompokId
-  );
+  const countGenerus = dataGenerus.length;
+  const countPengajar = dataPengajar.length;
 
-  const absensi = await getAbsensiGenerusByKelompokIdService(kelompokId);
-  const kelas = await getKelasByKelompokIdService(kelompokId);
+  const dataExclude = await getGenerusDesaAbsensiExcludeService(desaId);
 
-  const percentPaud = getPercent("PAUD", absensi, dataGenerus, kelas);
-  const percentCabeRawit = getPercent(
+  const absensi = await getAbsensiGenerusByDesaIdService(desaId);
+  const kelas = await getKelasByDesaIdService(desaId);
+
+  const percentPaud = getPercentCombined(
+    "PAUD",
+    absensi,
+    dataExclude,
+    kelas,
+    MudaMudiKelas
+  );
+  const percentCabeRawit = getPercentCombined(
     "Cabe Rawit",
     absensi,
-    dataGenerus,
-    kelas
+    dataExclude,
+    kelas,
+    MudaMudiKelas
   );
-  const percentPraremaja = getPercent("Praremaja", absensi, dataGenerus, kelas);
-  const percentMudamudi = getPercent(
+  const percentPraremaja = getPercentCombined(
+    "Praremaja",
+    absensi,
+    dataExclude,
+    kelas,
+    MudaMudiKelas
+  );
+  const percentMudamudi = getPercentCombined(
     "Muda-mudi",
     absensi,
-    dataGenerus,
+    dataExclude,
     kelas,
+    MudaMudiKelas,
     true
   );
 
@@ -312,6 +361,139 @@ export async function getDashboardKelompok(
     generusGroupDatasets,
     pengajarDatasets,
     pengajarGroupDatasets,
+  };
+
+  return data;
+}
+
+export async function getDashboardTahfidz(daerahId: number) {
+  const countGenerus = await getCountTahfidzService(daerahId);
+
+  const dataGenerus = await getAllTahfidzChartService(daerahId);
+
+  const absensi = await getAbsensiTahfidzByDaerahIdService(daerahId);
+  const kelas = await getAllKelasTahfidzOptionsService(daerahId);
+
+  const percentAbsensi =
+    countGenerus && kelas.data.length > 0
+      ? (
+          (absensi.length * 100) /
+          (dataGenerus.length * kelas.data.length)
+        ).toFixed(2)
+      : "0";
+
+  const generusDatasets = groupByField(
+    dataGenerus,
+    "kelasPengajian",
+    pengajianOptions
+  );
+
+  const generusGroupDatasets = generusDatasets.map((i) => ({
+    name: i.name,
+    value: i["Laki-laki"] + i.Perempuan,
+  }));
+
+  const data = {
+    percentAbsensi,
+    countGenerus,
+    generusDatasets,
+    generusGroupDatasets,
+  };
+
+  return data;
+}
+
+export async function getDashboardKeputrian(daerahId: number) {
+  const dataGenerus = await getAllKeputrianChartService(daerahId);
+
+  const countGenerus = dataGenerus.length;
+
+  const dataExclude = await getGenerusKeputrianAbsensiExcludeService(daerahId);
+
+  const absensi = await getAbsensiKeputrianByDaerahIdService(daerahId);
+  const kelas = await getKelasKeputrianByDaerahIdService(daerahId);
+
+  const percentMudamudi = getPercentCombined(
+    "Muda-mudi",
+    absensi,
+    dataExclude,
+    kelas,
+    RemajaKelas,
+    true
+  );
+  const percentUsiaMandiri = getPercentCombined(
+    "Usia Mandiri",
+    absensi,
+    dataExclude,
+    kelas,
+    RemajaKelas
+  );
+
+  const generusDatasets = groupByField(
+    dataGenerus,
+    "kelasPengajian",
+    pengajianOptions
+  );
+
+  const generusGroupDatasets = generusDatasets.map((i) => ({
+    name: i.name,
+    value: i["Laki-laki"] + i.Perempuan,
+  }));
+
+  const data = {
+    percentUsiaMandiri,
+    percentMudamudi,
+    countGenerus,
+    generusDatasets,
+    generusGroupDatasets,
+  };
+
+  return data;
+}
+
+export async function getDashboardMudamudi(daerahId: number) {
+  const dataGenerus = await getAllMudamudiChartService(daerahId);
+
+  const countGenerus = dataGenerus.length;
+
+  const dataExclude = await getGenerusMudamudiAbsensiExcludeService(daerahId);
+
+  const absensi = await getAbsensiMudamudiByDaerahIdService(daerahId);
+  const kelas = await getKelasMudamudiByDaerahIdService(daerahId);
+
+  const percentMudamudi = getPercentCombined(
+    "Muda-mudi",
+    absensi,
+    dataExclude,
+    kelas,
+    RemajaKelas,
+    true
+  );
+  const percentUsiaMandiri = getPercentCombined(
+    "Usia Mandiri",
+    absensi,
+    dataExclude,
+    kelas,
+    RemajaKelas
+  );
+
+  const generusDatasets = groupByField(
+    dataGenerus,
+    "kelasPengajian",
+    pengajianOptions
+  );
+
+  const generusGroupDatasets = generusDatasets.map((i) => ({
+    name: i.name,
+    value: i["Laki-laki"] + i.Perempuan,
+  }));
+
+  const data = {
+    percentUsiaMandiri,
+    percentMudamudi,
+    countGenerus,
+    generusDatasets,
+    generusGroupDatasets,
   };
 
   return data;

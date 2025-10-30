@@ -87,3 +87,33 @@ export async function getAllGenerusExportTahfidz(daerahId: number) {
       .leftJoin(kelompokTable, eq(generusTable.kelompokId, kelompokTable.id))
   );
 }
+
+export async function getCountTahfidz(daerahId: number) {
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(generusTable.daerahId, daerahId),
+    sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
+  ];
+
+  return await tryCatch(
+    "Failed to get count of Tahfidz",
+    db.$count(generusTable, and(...conditions))
+  );
+}
+
+export async function getAllTahfidzChart(daerahId: number) {
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(generusTable.daerahId, daerahId),
+    sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
+  ];
+
+  return await tryCatch(
+    "Failed to get Tahfidz chart data",
+    db
+      .select({
+        gender: generusTable.gender,
+        kelasPengajian: generusTable.kelasPengajian,
+      })
+      .from(generusTable)
+      .where(and(...conditions))
+  );
+}

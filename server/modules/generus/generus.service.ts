@@ -10,7 +10,6 @@ import {
   getAllGenerusChart,
   getAllGenerusExport,
   getAllGenerusExportDesa,
-  getCountGenerus,
   getGenerusById,
   getGenerusOptionsKelompok,
   updateGenerus,
@@ -63,14 +62,6 @@ export async function getAllGenerusExportService(kelompokId: number) {
   }));
 
   return newData;
-}
-
-export async function getCountGenerusService(
-  daerahId: number,
-  desaId?: number,
-  kelompokId?: number
-) {
-  return getCountGenerus(daerahId, desaId, kelompokId);
 }
 
 export async function getAllGenerusChartService(

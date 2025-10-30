@@ -120,20 +120,6 @@ export async function getCountAbsensiGps(desaId: number) {
   return data!.count;
 }
 
-export async function getCountGps(desaId: number) {
-  return await tryCatch(
-    "Failed to get Count Gps",
-    db.$count(
-      generusTable,
-      and(
-        eq(generusTable.desaId, desaId),
-        sql`(${generusTable.status} ?| ${new Param(["GPS"])})`,
-        sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
-      )
-    )
-  );
-}
-
 export async function getAllGpsSummary(
   desaId: number,
   { limit, page, search }: TSearchPagination
@@ -181,17 +167,13 @@ export async function getAllGpsSummary(
   };
 }
 
-export async function getCountGpsAbsensi(
-  desaId: number,
-  kelasPengajian: string
-) {
+export async function getCountGpsAbsensi(desaId: number) {
   return await tryCatch(
     "Failed to get Count Generus",
     db.$count(
       generusTable,
       and(
         eq(generusTable.desaId, desaId),
-        eq(generusTable.kelasPengajian, kelasPengajian),
         sql`(${generusTable.status} ?| ${new Param(["GPS"])})`,
         sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
       )
