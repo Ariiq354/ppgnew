@@ -6,12 +6,12 @@ import type {
 import {
   createLaporanMusyawarahBidang,
   deleteLaporanMusyawarahBidang,
-  findMusyawarahBidangByDaerah,
-  getLaporanMusyawarahBidangByMusyawarahId,
+  getMusyawarahBidangByid,
+  getLaporanMusyawarahBidang,
 } from "./laporan-musyawarah-bidang.repo";
 import { viewWhitelist } from "~~/shared/permission";
 
-export async function getLaporanMusyawarahBidangByMusyawarahIdService(
+export async function getLaporanMusyawarahBidangService(
   user: UserWithId,
   query: TLaporanMusyawarahBidangList
 ) {
@@ -22,7 +22,7 @@ export async function getLaporanMusyawarahBidangByMusyawarahIdService(
     });
   }
 
-  return await getLaporanMusyawarahBidangByMusyawarahId(user.daerahId, query);
+  return await getLaporanMusyawarahBidang(user.daerahId, query);
 }
 
 export async function createLaporanMusyawarahBidangService(
@@ -36,7 +36,7 @@ export async function createLaporanMusyawarahBidangService(
     });
   }
 
-  const exist = await findMusyawarahBidangByDaerah(
+  const exist = await getMusyawarahBidangByid(
     body.musyawarahId,
     user.daerahId,
     body.bidang
@@ -63,7 +63,7 @@ export async function deleteLaporanMusyawarahBidangService(
     });
   }
 
-  const exist = await findMusyawarahBidangByDaerah(
+  const exist = await getMusyawarahBidangByid(
     body.musyawarahId,
     user.daerahId,
     body.bidang

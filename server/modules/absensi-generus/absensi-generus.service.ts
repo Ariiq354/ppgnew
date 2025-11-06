@@ -3,7 +3,11 @@ import {
   getCountKelasService,
   getKelasByIdService,
 } from "../kelas-kelompok";
-import type { TGenerusAbsensiKelompokList } from "./absensi-generus.dto";
+import { getKelompokByDesaIdService } from "../kelompok";
+import type {
+  TAbsensiKelasPengajianKelompokList,
+  TGenerusAbsensiKelompokList,
+} from "./absensi-generus.dto";
 import {
   createAbsensiGenerus,
   deleteAbsensiGenerus,
@@ -62,6 +66,82 @@ export async function getAbsensiGenerusSummaryService(
   );
   const countAbsensi = await getCountAbsensiGenerus(
     kelompokId,
+    query.kelasPengajian
+  );
+
+  const denominator = countGenerus * countKelas;
+  const kehadiran =
+    denominator > 0 ? Math.round((countAbsensi * 100) / denominator) : 0;
+
+  const data = {
+    countGenerus,
+    kehadiran,
+  };
+
+  return data;
+}
+
+export async function getAbsensiGenerusUntukDesaMonitoringService(
+  desaId: number,
+  query: TGenerusAbsensiKelompokList
+) {
+  const desa = await getKelompokByDesaIdService(desaId);
+  if (!desa.find((i) => i.id === query.kelompokId)) {
+    throw createError({
+      statusCode: 403,
+      message: "There is no kelompok in your deaa",
+    });
+  }
+
+  const data = await getAllGenerusSummary(query.kelompokId, query);
+  const kelas = await getAllKelasOptionsService(query.kelompokId, {
+    nama: query.kelasPengajian,
+  });
+
+  data.data = data.data.map((i) => {
+    const total = kelas.data.length;
+    return {
+      ...i,
+      tanpaKeterangan: total - i.hadir - i.izin,
+      kehadiran: total > 0 ? ((i.hadir + i.izin) * 100) / total : 0,
+    };
+  });
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: data.data,
+    metadata,
+  };
+}
+
+export async function getAbsensiGenerusUntukDesaSummaryService(
+  desaId: number,
+  query: TAbsensiKelasPengajianKelompokList
+) {
+  const desa = await getKelompokByDesaIdService(desaId!);
+  if (!desa.find((i) => i.id === query.kelompokId)) {
+    throw createError({
+      statusCode: 403,
+      message: "There is no kelompok in your deaa",
+    });
+  }
+
+  const countGenerus = await getCountGenerusAbsensiService(
+    query.kelompokId,
+    query.kelasPengajian
+  );
+  const countKelas = await getCountKelasService(
+    query.kelompokId,
+    query.kelasPengajian
+  );
+  const countAbsensi = await getCountAbsensiGenerusService(
+    query.kelompokId,
     query.kelasPengajian
   );
 
@@ -149,13 +229,6 @@ export async function createAbsensiGenerusService(
       await createAbsensiGenerus(kelasId, kelompokId, check.data!.nama, item);
     }
   }
-}
-
-export async function getAllGenerusSummaryService(
-  kelompokId: number,
-  query: TGenerusAbsensiKelompokList
-) {
-  return await getAllGenerusSummary(kelompokId, query);
 }
 
 export async function getCountGenerusAbsensiService(

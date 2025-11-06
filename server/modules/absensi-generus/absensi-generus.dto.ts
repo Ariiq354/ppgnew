@@ -12,6 +12,18 @@ export type TGenerusAbsensiKelompokList = z.infer<
   typeof OGenerusAbsensiKelompokList
 >;
 
+export const OGenerusAbsensiKelompokDaerahList = z.object({
+  ...OPagination.def.shape,
+  search: z.string(),
+  kelompokId: z.optional(z.coerce.number()),
+  desaId: z.optional(z.coerce.number()),
+  kelasPengajian: z.string(),
+});
+
+export type OGenerusAbsensiKelompokDaerahList = z.infer<
+  typeof OGenerusAbsensiKelompokList
+>;
+
 export const OAbsensiKelasPengajianKelompokList = z.object({
   kelompokId: z.coerce.number(),
   kelasPengajian: z.string(),

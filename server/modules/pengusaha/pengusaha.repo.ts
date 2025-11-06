@@ -64,13 +64,6 @@ export async function getAllPengusahaExport(daerahId: number) {
   );
 }
 
-export async function getCountPengusaha(daerahId: number) {
-  return await tryCatch(
-    "Failed to get count pengusaha",
-    db.$count(pengusahaTable, eq(pengusahaTable.daerahId, daerahId))
-  );
-}
-
 export async function createPengusaha(
   daerahId: number,
   data: TPengusahaCreate

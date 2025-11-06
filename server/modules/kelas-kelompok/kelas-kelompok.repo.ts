@@ -110,6 +110,19 @@ export async function getAllKelasOptions(
   return { data };
 }
 
+export async function getKelasByKelompokId(kelompokId: number) {
+  return await tryCatch(
+    "Failed to get Kelas by Kelompok ID",
+    db
+      .select({
+        id: kelasTable.id,
+        nama: kelasTable.nama,
+      })
+      .from(kelasTable)
+      .where(eq(kelasTable.kelompokId, kelompokId))
+  );
+}
+
 export async function getCountKelas(
   kelompokId: number,
   kelasPengajian: string
@@ -123,19 +136,6 @@ export async function getCountKelas(
         eq(kelasTable.nama, kelasPengajian)
       )
     )
-  );
-}
-
-export async function getKelasByKelompokId(kelompokId: number) {
-  return await tryCatch(
-    "Failed to get Kelas by Kelompok ID",
-    db
-      .select({
-        id: kelasTable.id,
-        nama: kelasTable.nama,
-      })
-      .from(kelasTable)
-      .where(eq(kelasTable.kelompokId, kelompokId))
   );
 }
 

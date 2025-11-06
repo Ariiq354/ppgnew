@@ -1,16 +1,15 @@
 import type { MultiPartData } from "h3";
+import ENV from "~~/shared/env";
 import { OPengurusCreate } from "./pengurus.dto";
 import {
   createPengurus,
   deletePengurus,
   getAllPengurus,
-  getAllPengurusAbsensi,
   getAllPengurusExport,
   getCountPengurus,
   getPengurusById,
   updatePengurus,
 } from "./pengurus.repo";
-import ENV from "~~/shared/env";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -34,11 +33,8 @@ export async function getAllPengurusExportService(daerahId: number) {
   return await getAllPengurusExport(daerahId);
 }
 
-export async function getAllPengurusAbsensiService(
-  daerahId: number,
-  query: TSearchPagination
-) {
-  return await getAllPengurusAbsensi(daerahId, query);
+export async function getCountPengurusService(daerahId: number) {
+  return await getCountPengurus(daerahId);
 }
 
 export async function createPengurusService(
@@ -153,8 +149,4 @@ export async function updatePengurusService(
   }
 
   await updatePengurus(id, user.daerahId, parsed);
-}
-
-export async function getCountPengurusService(daerahId: number) {
-  return await getCountPengurus(daerahId);
 }

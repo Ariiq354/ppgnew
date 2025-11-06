@@ -52,6 +52,7 @@ export async function getAllPengajianExport(kelompokId: number) {
   );
 }
 
+// Untuk Absensi Pengajian
 export async function getPengajianById(id: number) {
   const data = await tryCatch(
     "Failed to get Pengajian By Id",
@@ -82,6 +83,7 @@ export async function getAllPengajianOptions(kelompokId: number) {
   return { data };
 }
 
+// Untuk Summary Absensi
 export async function getCountPengajian(kelompokId: number) {
   return await tryCatch(
     "Failed to get count of Pengajian",

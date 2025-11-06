@@ -32,6 +32,13 @@ export const pengajianOptions = [
   "Usia Mandiri",
 ];
 
+export const pengajianKelasOptions = [
+  "PAUD",
+  "Cabe Rawit",
+  "Praremaja",
+  "Muda-mudi",
+];
+
 export const bulanFilterOptions = [
   { name: "Januari", value: 1 },
   { name: "Februari", value: 2 },

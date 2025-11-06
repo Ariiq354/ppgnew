@@ -66,66 +66,47 @@ export async function getAllPengajar(
   return { data, total };
 }
 
-export async function getAllPengajarExport(kelompokId: number) {
-  return await tryCatch(
-    "Failed to get all Pengajar for export",
-    db
-      .select({
-        id: pengajarTable.id,
-        nama: pengajarTable.nama,
-        tempatLahir: pengajarTable.tempatLahir,
-        tanggalLahir: pengajarTable.tanggalLahir,
-        pendidikan: pengajarTable.pendidikan,
-        gender: pengajarTable.gender,
-        noTelepon: pengajarTable.noTelepon,
-        status: pengajarTable.status,
-        tanggalTugas: pengajarTable.tanggalTugas,
-        foto: pengajarTable.foto,
-      })
-      .from(pengajarTable)
-      .where(eq(pengajarTable.kelompokId, kelompokId))
-  );
+export async function getAllPengajarExport(params: {
+  kelompokId?: number;
+  desaId?: number;
+}) {
+  const baseQuery = db
+    .select({
+      id: pengajarTable.id,
+      nama: pengajarTable.nama,
+      tempatLahir: pengajarTable.tempatLahir,
+      tanggalLahir: pengajarTable.tanggalLahir,
+      pendidikan: pengajarTable.pendidikan,
+      gender: pengajarTable.gender,
+      noTelepon: pengajarTable.noTelepon,
+      status: pengajarTable.status,
+      tanggalTugas: pengajarTable.tanggalTugas,
+      foto: pengajarTable.foto,
+      namaKelompok: kelompokTable.name,
+    })
+    .from(pengajarTable)
+    .leftJoin(kelompokTable, eq(kelompokTable.id, pengajarTable.kelompokId));
+
+  if (params.kelompokId)
+    baseQuery.where(eq(pengajarTable.kelompokId, params.kelompokId));
+  else if (params.desaId)
+    baseQuery.where(eq(pengajarTable.desaId, params.desaId));
+
+  return await tryCatch("Failed to get all Pengajar for export", baseQuery);
 }
 
-export async function getAllPengajarExportDesa(desaId: number) {
-  return await tryCatch(
-    "Failed to get Pengajar for export by Desa",
-    db
-      .select({
-        id: pengajarTable.id,
-        nama: pengajarTable.nama,
-        tempatLahir: pengajarTable.tempatLahir,
-        tanggalLahir: pengajarTable.tanggalLahir,
-        pendidikan: pengajarTable.pendidikan,
-        gender: pengajarTable.gender,
-        noTelepon: pengajarTable.noTelepon,
-        status: pengajarTable.status,
-        tanggalTugas: pengajarTable.tanggalTugas,
-        foto: pengajarTable.foto,
-        namaKelompok: kelompokTable.name,
-      })
-      .from(pengajarTable)
-      .where(eq(pengajarTable.desaId, desaId))
-      .leftJoin(kelompokTable, eq(kelompokTable.id, pengajarTable.kelompokId))
-  );
-}
+export async function getAllPengajarChart(params: {
+  daerahId?: number;
+  desaId?: number;
+  kelompokId?: number;
+}) {
+  const { daerahId, desaId, kelompokId } = params;
 
-export async function getAllPengajarChart(
-  daerahId: number,
-  desaId?: number,
-  kelompokId?: number
-) {
-  const conditions: (SQL<unknown> | undefined)[] = [
-    eq(pengajarTable.daerahId, daerahId),
-  ];
+  const conditions: (SQL<unknown> | undefined)[] = [];
 
-  if (desaId) {
-    conditions.push(eq(pengajarTable.desaId, desaId));
-  }
-
-  if (kelompokId) {
-    conditions.push(eq(pengajarTable.kelompokId, kelompokId));
-  }
+  if (daerahId) conditions.push(eq(pengajarTable.daerahId, daerahId));
+  if (desaId) conditions.push(eq(pengajarTable.desaId, desaId));
+  if (kelompokId) conditions.push(eq(pengajarTable.kelompokId, kelompokId));
 
   return await tryCatch(
     "Failed to get Pengajar for chart",
@@ -139,6 +120,7 @@ export async function getAllPengajarChart(
   );
 }
 
+// Untuk delete foro
 export async function getPengajarById(kelompokId: number, id: number) {
   return await tryCatch(
     "Failed to get Pengajar by Id",

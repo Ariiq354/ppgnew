@@ -7,7 +7,6 @@ import {
   getAllPengajar,
   getAllPengajarChart,
   getAllPengajarExport,
-  getAllPengajarExportDesa,
   getPengajarById,
   updatePengajar,
 } from "./pengajar.repo";
@@ -30,20 +29,22 @@ export async function getAllPengajarService(
   return { data, metadata };
 }
 
-export async function getAllPengajarExportService(daerahId: number) {
-  return await getAllPengajarExport(daerahId);
+export async function getAllPengajarExportKelompokService(kelompokId: number) {
+  return await getAllPengajarExport({ kelompokId });
 }
 
 export async function getAllPengajarExportDesaService(desaId: number) {
-  return await getAllPengajarExportDesa(desaId);
+  return await getAllPengajarExport({ desaId });
 }
 
-export async function getAllPengajarChartService(
-  daerahId: number,
-  desaId?: number,
-  kelompokId?: number
-) {
-  return getAllPengajarChart(daerahId, desaId, kelompokId);
+export async function getAllPengajarChartDaerahService(daerahId: number) {
+  return getAllPengajarChart({ daerahId });
+}
+export async function getAllPengajarChartDesaService(desaId: number) {
+  return getAllPengajarChart({ desaId });
+}
+export async function getAllPengajarChartKelompokService(kelompokId: number) {
+  return getAllPengajarChart({ kelompokId });
 }
 
 export async function createPengajarService(

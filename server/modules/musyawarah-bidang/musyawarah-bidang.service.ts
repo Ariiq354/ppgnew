@@ -27,20 +27,6 @@ export async function getAllMusyawarahBidangOptionsService(
   return await getAllMusyawarahBidangOptions(user.daerahId, query.bidang);
 }
 
-export async function createMusyawarahBidangService(
-  user: UserWithId,
-  body: TMusyawarahBidangCreate
-) {
-  if (user.role !== "admin" && user.role !== body.bidang) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Unauthorized",
-    });
-  }
-
-  await createMusyawarahBidang(user.daerahId, body);
-}
-
 export async function getAllMusyawarahBidangService(
   user: UserWithId,
   query: TMusyawarahBidangList
@@ -60,6 +46,37 @@ export async function getAllMusyawarahBidangService(
     totalPage: Math.ceil(total / query.limit),
   };
   return { data, metadata };
+}
+
+export async function exportMusyawarahBidangService(
+  event: H3Event,
+  user: UserWithId,
+  query: TBidangSchema
+) {
+  if (!viewWhitelist.has(user.role!) && user.role !== query.bidang) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Unauthorized",
+    });
+  }
+
+  const data = await getAllMusyawarahBidangExport(user.daerahId, query.bidang);
+
+  return await exportToXlsx(event, "musyawarah-bidang", data);
+}
+
+export async function createMusyawarahBidangService(
+  user: UserWithId,
+  body: TMusyawarahBidangCreate
+) {
+  if (user.role !== "admin" && user.role !== body.bidang) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Unauthorized",
+    });
+  }
+
+  await createMusyawarahBidang(user.daerahId, body);
 }
 
 export async function deleteMusyawarahBidangService(
@@ -89,21 +106,4 @@ export async function updateMusyawarahBidangService(
   }
 
   await updateMusyawarahBidang(id, user.daerahId, body);
-}
-
-export async function exportMusyawarahBidangService(
-  event: H3Event,
-  user: UserWithId,
-  query: TBidangSchema
-) {
-  if (!viewWhitelist.has(user.role!) && user.role !== query.bidang) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: "Unauthorized",
-    });
-  }
-
-  const data = await getAllMusyawarahBidangExport(user.daerahId, query.bidang);
-
-  return await exportToXlsx(event, "musyawarah-bidang", data);
 }

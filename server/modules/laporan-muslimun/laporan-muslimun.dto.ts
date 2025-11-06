@@ -11,6 +11,7 @@ export type TLaporanMuslimunCreate = z.infer<typeof OLaporanMuslimunCreate>;
 
 export const OLaporanMuslimunList = z.object({
   musyawarahId: z.coerce.number(),
+  kelompokId: z.coerce.number(),
 });
 
 export type TLaporanMuslimunList = z.infer<typeof OLaporanMuslimunList>;

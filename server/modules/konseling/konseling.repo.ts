@@ -4,15 +4,16 @@ import { generusTable } from "~~/server/database/schema/generus";
 import { generusKonselingTable } from "~~/server/database/schema/kelompok";
 import type { TSearchPagination } from "~~/server/utils/dto";
 import type { TKonselingCreate, TKonselingUpdate } from "./konseling.dto";
+import { desaTable, kelompokTable } from "~~/server/database/schema/wilayah";
 
 export async function getAllKonseling(
-  kelompokId: number,
+  params: { kelompokId?: number; daerahId?: number; desaId?: number },
   { limit, page, search }: TSearchPagination
 ) {
+  const { daerahId, desaId, kelompokId } = params;
+
   const offset = (page - 1) * limit;
-  const conditions: (SQL<unknown> | undefined)[] = [
-    eq(generusTable.kelompokId, kelompokId),
-  ];
+  const conditions: (SQL<unknown> | undefined)[] = [];
 
   if (search) {
     const searchCondition = `%${search}%`;
@@ -20,50 +21,9 @@ export async function getAllKonseling(
     conditions.push(or(like(generusTable.nama, searchCondition)));
   }
 
-  const query = db
-    .select({
-      id: generusKonselingTable.id,
-      generusId: generusKonselingTable.generusId,
-      nama: generusTable.nama,
-      keterangan: generusKonselingTable.keterangan,
-      status: generusKonselingTable.status,
-    })
-    .from(generusKonselingTable)
-    .leftJoin(
-      generusTable,
-      eq(generusKonselingTable.generusId, generusTable.id)
-    )
-    .where(and(...conditions));
-
-  const total = await tryCatch(
-    "Failed to get total count of Konseling",
-    db.$count(query)
-  );
-  const data = await tryCatch(
-    "Failed to get list of Konseling",
-    query.limit(limit).offset(offset)
-  );
-
-  return {
-    data,
-    total,
-  };
-}
-
-export async function getAllKonselingDaerah(
-  daerahId: number,
-  { limit, page, search }: TSearchPagination
-) {
-  const offset = (page - 1) * limit;
-  const conditions: (SQL<unknown> | undefined)[] = [
-    eq(generusKonselingTable.daerahId, daerahId),
-  ];
-
-  if (search) {
-    const searchCondition = `%${search}%`;
-
-    conditions.push(or(like(generusTable.nama, searchCondition)));
-  }
+  if (daerahId) conditions.push(eq(generusTable.daerahId, daerahId));
+  if (desaId) conditions.push(eq(generusTable.desaId, desaId));
+  if (kelompokId) conditions.push(eq(generusTable.kelompokId, kelompokId));
 
   const query = db
     .select({
@@ -90,11 +50,11 @@ export async function getAllKonselingDaerah(
     .where(and(...conditions));
 
   const total = await tryCatch(
-    "Failed to get total count of Konseling Daerah",
+    "Failed to get total count of Konseling",
     db.$count(query)
   );
   const data = await tryCatch(
-    "Failed to get list of Konseling Daerah",
+    "Failed to get list of Konseling",
     query.limit(limit).offset(offset)
   );
 
@@ -104,17 +64,10 @@ export async function getAllKonselingDaerah(
   };
 }
 
-export async function getAllKonselingExport(
-  daerahId: number,
-  kelompokId?: number
-) {
+export async function getAllKonselingExport(kelompokId: number) {
   const conditions: (SQL<unknown> | undefined)[] = [
-    eq(generusKonselingTable.daerahId, daerahId),
+    eq(generusKonselingTable.kelompokId, kelompokId),
   ];
-
-  if (kelompokId) {
-    conditions.push(eq(generusTable.kelompokId, kelompokId));
-  }
 
   return await tryCatch(
     "Failed to export Konseling data",
@@ -133,33 +86,34 @@ export async function getAllKonselingExport(
   );
 }
 
+export async function getKonselingByDaerahId(id: number, daerahId: number) {
+  return await tryCatch(
+    "Failed to get Konseling by daerah id",
+    db
+      .select({
+        id: generusKonselingTable.id,
+      })
+      .from(generusKonselingTable)
+      .leftJoin(
+        kelompokTable,
+        eq(kelompokTable.id, generusKonselingTable.kelompokId)
+      )
+      .leftJoin(desaTable, eq(kelompokTable.desaId, desaTable.id))
+      .where(
+        and(eq(generusKonselingTable.id, id), eq(desaTable.daerahId, daerahId))
+      )
+  );
+}
+
 export async function createKonseling(
-  daerahId: number,
   kelompokId: number,
   data: TKonselingCreate
 ) {
-  const generus = await tryCatch(
-    "Failed to find Generus for Konseling creation",
-    db.query.generusTable.findFirst({
-      where: and(
-        eq(generusTable.daerahId, daerahId),
-        eq(generusTable.kelompokId, kelompokId)
-      ),
-    })
-  );
-
-  if (!generus) {
-    throw createError({
-      status: 403,
-      message: "Generus tidak ada di kelompok ini",
-    });
-  }
-
   return await tryCatch(
     "Failed to create Konseling",
     db.insert(generusKonselingTable).values({
       ...data,
-      daerahId,
+      kelompokId,
       status: "Baru",
     })
   );
@@ -167,27 +121,9 @@ export async function createKonseling(
 
 export async function updateKonseling(
   id: number,
-  daerahId: number,
   kelompokId: number,
   data: TKonselingCreate
 ) {
-  const generus = await tryCatch(
-    "Failed to find Generus for Konseling update",
-    db.query.generusTable.findFirst({
-      where: and(
-        eq(generusTable.daerahId, daerahId),
-        eq(generusTable.kelompokId, kelompokId)
-      ),
-    })
-  );
-
-  if (!generus) {
-    throw createError({
-      status: 403,
-      message: "Generus tidak ada di kelompok ini",
-    });
-  }
-
   return await tryCatch(
     "Failed to Update Konseling",
     db
@@ -196,7 +132,7 @@ export async function updateKonseling(
       .where(
         and(
           eq(generusKonselingTable.id, id),
-          eq(generusKonselingTable.daerahId, daerahId)
+          eq(generusKonselingTable.kelompokId, kelompokId)
         )
       )
   );
@@ -204,7 +140,6 @@ export async function updateKonseling(
 
 export async function updateKonselingDaerah(
   id: number,
-  daerahId: number,
   data: TKonselingUpdate
 ) {
   return await tryCatch(
@@ -212,37 +147,11 @@ export async function updateKonselingDaerah(
     db
       .update(generusKonselingTable)
       .set(data)
-      .where(
-        and(
-          eq(generusKonselingTable.id, id),
-          eq(generusKonselingTable.daerahId, daerahId)
-        )
-      )
+      .where(and(eq(generusKonselingTable.id, id)))
   );
 }
 
-export async function deleteKonseling(
-  daerahId: number,
-  kelompokId: number,
-  id: number[]
-) {
-  const generus = await tryCatch(
-    "Failed to find Generus for Konseling deletion",
-    db.query.generusTable.findFirst({
-      where: and(
-        eq(generusTable.daerahId, daerahId),
-        eq(generusTable.kelompokId, kelompokId)
-      ),
-    })
-  );
-
-  if (!generus) {
-    throw createError({
-      status: 403,
-      message: "Generus tidak ada di kelompok ini",
-    });
-  }
-
+export async function deleteKonseling(kelompokId: number, id: number[]) {
   return await tryCatch(
     "Failed to delete Konseling",
     db
@@ -250,7 +159,7 @@ export async function deleteKonseling(
       .where(
         and(
           inArray(generusKonselingTable.id, id),
-          eq(generusKonselingTable.daerahId, daerahId)
+          eq(generusKonselingTable.kelompokId, kelompokId)
         )
       )
   );

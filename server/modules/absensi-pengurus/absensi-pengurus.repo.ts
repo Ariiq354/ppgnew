@@ -35,6 +35,54 @@ export async function getAbsensiPengurusByMusyawarahId(
   return data;
 }
 
+export async function getAllPengurusAbsensi(
+  daerahId: number,
+  { limit, page, search }: TSearchPagination
+) {
+  const offset = (page - 1) * limit;
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(pengurusTable.daerahId, daerahId),
+  ];
+
+  if (search) {
+    const searchCondition = `%${search}%`;
+
+    conditions.push(
+      or(
+        like(pengurusTable.nama, searchCondition),
+        like(pengurusTable.pendidikan, searchCondition)
+      )
+    );
+  }
+
+  const query = db
+    .select({
+      id: pengurusTable.id,
+      nama: pengurusTable.nama,
+      bidang: pengurusTable.bidang,
+      hadir: sql<number>`CAST(SUM(CASE WHEN ${absensiPengurusTable.keterangan} = 'Hadir' THEN 1 ELSE 0 END) AS INT)`,
+      izin: sql<number>`CAST(SUM(CASE WHEN ${absensiPengurusTable.keterangan} = 'Izin' THEN 1 ELSE 0 END) AS INT)`,
+    })
+    .from(pengurusTable)
+    .where(and(...conditions))
+    .leftJoin(
+      absensiPengurusTable,
+      eq(pengurusTable.id, absensiPengurusTable.pengurusId)
+    )
+    .groupBy(pengurusTable.id, pengurusTable.nama, pengurusTable.bidang);
+
+  const total = await tryCatch(
+    "Failed to get total Pengurus",
+    db.$count(query)
+  );
+  const data = await tryCatch(
+    "Failed to get data Pengurus",
+    query.limit(limit).offset(offset)
+  );
+
+  return { data, total };
+}
+
 export async function getCountAbsensiPengurus(daerahId: number) {
   const [data] = await tryCatch(
     "Failed to get Count Absensi",

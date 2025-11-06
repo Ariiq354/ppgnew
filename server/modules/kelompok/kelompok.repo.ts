@@ -1,4 +1,4 @@
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, inArray, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { desaTable, kelompokTable } from "~~/server/database/schema/wilayah";
 import type { TKelompokCreate, TKelompokList } from "./kelompok.dto";
@@ -39,9 +39,19 @@ export async function getOptionsKelompok(desaId: number) {
   );
 }
 
-export async function getKelompokByDaerahId(daerahId: number) {
+export async function getKelompok(params: {
+  daerahId?: number;
+  desaId?: number;
+}) {
+  const { daerahId, desaId } = params;
+
+  const conditions: (SQL<unknown> | undefined)[] = [];
+
+  if (daerahId) conditions.push(eq(desaTable.daerahId, daerahId));
+  if (desaId) conditions.push(eq(kelompokTable.desaId, desaId));
+
   return await tryCatch(
-    "Failed to get kelompok by daerah id",
+    "Failed to get Laporan Muslimun",
     db
       .select({
         id: kelompokTable.id,
@@ -50,21 +60,14 @@ export async function getKelompokByDaerahId(daerahId: number) {
       })
       .from(kelompokTable)
       .leftJoin(desaTable, eq(kelompokTable.desaId, desaTable.id))
-      .where(eq(desaTable.daerahId, daerahId))
+      .where(and(...conditions))
   );
 }
 
-export async function getKelompokByDesaId(desaId: number) {
+export async function getCountKelompok(desaId: number) {
   return await tryCatch(
-    "Failed to get kelompok by desa id",
-    db
-      .select({
-        id: kelompokTable.id,
-        name: kelompokTable.name,
-        desaId: kelompokTable.desaId,
-      })
-      .from(kelompokTable)
-      .where(eq(kelompokTable.desaId, desaId))
+    "Failed get count kelompok",
+    db.$count(kelompokTable, eq(kelompokTable.desaId, desaId))
   );
 }
 
@@ -89,12 +92,5 @@ export async function deleteKelompok(id: number[]) {
   await tryCatch(
     "Failed to delete kelompok",
     db.delete(kelompokTable).where(inArray(kelompokTable.id, id))
-  );
-}
-
-export async function getCountKelompok(desaId: number) {
-  return await tryCatch(
-    "Failed get count kelompok",
-    db.$count(kelompokTable, eq(kelompokTable.desaId, desaId))
   );
 }

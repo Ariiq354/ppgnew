@@ -1,9 +1,6 @@
-import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
+import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
-import {
-  absensiPengurusTable,
-  pengurusTable,
-} from "~~/server/database/schema/pengurus";
+import { pengurusTable } from "~~/server/database/schema/pengurus";
 import type { TSearchPagination } from "~~/server/utils/dto";
 import type { TPengurusCreate } from "./pengurus.dto";
 
@@ -69,54 +66,7 @@ export async function getAllPengurusExport(daerahId: number) {
   );
 }
 
-export async function getAllPengurusAbsensi(
-  daerahId: number,
-  { limit, page, search }: TSearchPagination
-) {
-  const offset = (page - 1) * limit;
-  const conditions: (SQL<unknown> | undefined)[] = [
-    eq(pengurusTable.daerahId, daerahId),
-  ];
-
-  if (search) {
-    const searchCondition = `%${search}%`;
-
-    conditions.push(
-      or(
-        like(pengurusTable.nama, searchCondition),
-        like(pengurusTable.pendidikan, searchCondition)
-      )
-    );
-  }
-
-  const query = db
-    .select({
-      id: pengurusTable.id,
-      nama: pengurusTable.nama,
-      bidang: pengurusTable.bidang,
-      hadir: sql<number>`CAST(SUM(CASE WHEN ${absensiPengurusTable.keterangan} = 'Hadir' THEN 1 ELSE 0 END) AS INT)`,
-      izin: sql<number>`CAST(SUM(CASE WHEN ${absensiPengurusTable.keterangan} = 'Izin' THEN 1 ELSE 0 END) AS INT)`,
-    })
-    .from(pengurusTable)
-    .where(and(...conditions))
-    .leftJoin(
-      absensiPengurusTable,
-      eq(pengurusTable.id, absensiPengurusTable.pengurusId)
-    )
-    .groupBy(pengurusTable.id, pengurusTable.nama, pengurusTable.bidang);
-
-  const total = await tryCatch(
-    "Failed to get total Pengurus",
-    db.$count(query)
-  );
-  const data = await tryCatch(
-    "Failed to get data Pengurus",
-    query.limit(limit).offset(offset)
-  );
-
-  return { data, total };
-}
-
+// Untuk delete foto
 export async function getPengurusById(daerahId: number, id: number) {
   return await tryCatch(
     "Failed to get Pengurus by id",
@@ -133,6 +83,7 @@ export async function getPengurusById(daerahId: number, id: number) {
   );
 }
 
+// Untuk absensi
 export async function getCountPengurus(daerahId: number) {
   return await tryCatch(
     "Failed to count Pengurus",

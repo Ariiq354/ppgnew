@@ -9,7 +9,7 @@
   import { useToastError } from "~/composables/toast";
   import { openConfirmModal } from "~/composables/modal";
   import {
-    pengajianOptions,
+    pengajianKelasOptions,
     tahunOptions,
     bulanFilterOptions,
   } from "~~/shared/contants";
@@ -102,7 +102,7 @@
             <USelectMenu
               v-model="state.nama"
               :disabled="isLoading || !desaEdit || viewStatus"
-              :items="pengajianOptions"
+              :items="pengajianKelasOptions"
             />
           </UFormField>
           <UFormField label="Tanggal" name="tanggal">
@@ -140,7 +140,7 @@
           <ClearableSelectMenu
             v-model="query.nama"
             placeholder="Kelas Pengajian"
-            :items="pengajianOptions"
+            :items="pengajianKelasOptions"
           />
           <ClearableSelectMenu
             v-model="query.tahun"
@@ -170,7 +170,7 @@
           v-model="query.nama"
           placeholder="Kelas Pengajian"
           class="hidden flex-1 md:flex"
-          :items="pengajianOptions"
+          :items="pengajianKelasOptions"
         />
         <ClearableSelectMenu
           v-model="query.tahun"

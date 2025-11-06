@@ -6,8 +6,7 @@ import {
   deleteKelompok,
   getAllKelompok,
   getCountKelompok,
-  getKelompokByDaerahId,
-  getKelompokByDesaId,
+  getKelompok,
   getOptionsKelompok,
   updateKelompok,
 } from "./kelompok.repo";
@@ -33,11 +32,15 @@ export async function getOptionsKelompokService(desaId: number) {
 }
 
 export async function getKelompokByDaerahIdService(daerahId: number) {
-  return await getKelompokByDaerahId(daerahId);
+  return await getKelompok({ daerahId });
 }
 
 export async function getKelompokByDesaIdService(desaId: number) {
-  return await getKelompokByDesaId(desaId);
+  return await getKelompok({ desaId });
+}
+
+export async function getCountKelompokService(desaId: number) {
+  return await getCountKelompok(desaId);
 }
 
 export async function createKelompokService(body: TKelompokCreate) {
@@ -93,8 +96,4 @@ export async function updateKelompokService(id: number, data: TKelompokCreate) {
 
 export async function deleteKelompokService(id: number[]) {
   await deleteKelompok(id);
-}
-
-export async function getCountKelompokService(desaId: number) {
-  return await getCountKelompok(desaId);
 }

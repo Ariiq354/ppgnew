@@ -4,7 +4,7 @@
   import { useAuthStore } from "~/stores/auth";
   import { useConstantStore } from "~/stores/constant";
   import { APIBASE, type ExtractObjectType } from "~/utils";
-  import { pengajianOptions } from "~~/shared/contants";
+  import { pengajianKelasOptions } from "~~/shared/contants";
   import { columns } from "./_constants";
 
   const constantStore = useConstantStore();
@@ -167,7 +167,7 @@
         <UFormField label="Pengajian" size="xl">
           <USelectMenu
             v-model="namaKelas"
-            :items="pengajianOptions"
+            :items="pengajianKelasOptions"
             :disabled="statusKelas === 'pending'"
             placeholder="Pilih Pengajian"
           />

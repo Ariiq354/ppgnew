@@ -5,7 +5,7 @@
   import { APIBASE, type ExtractObjectType } from "~/utils";
   import { useSubmit } from "~/composables/function";
   import { useToastError, useToastSuccess } from "~/composables/toast";
-  import { pengajianOptions } from "~~/shared/contants";
+  import { pengajianKelasOptions } from "~~/shared/contants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -148,7 +148,7 @@
         <UFormField label="Pengajian" size="xl">
           <USelectMenu
             v-model="namaKelas"
-            :items="pengajianOptions"
+            :items="pengajianKelasOptions"
             :disabled="statusKelas === 'pending'"
             placeholder="Pilih Pengajian"
           />

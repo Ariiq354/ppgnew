@@ -1,13 +1,12 @@
-import {
-  getAllPengusaha,
-  getAllPengusahaExport,
-  getCountPengusaha,
-  createPengusaha,
-  updatePengusaha,
-  deletePengusaha,
-} from "./pengusaha.repo";
 import type { TSearchPagination } from "~~/server/utils/dto";
 import type { TPengusahaCreate } from "./pengusaha.dto";
+import {
+  createPengusaha,
+  deletePengusaha,
+  getAllPengusaha,
+  getAllPengusahaExport,
+  updatePengusaha,
+} from "./pengusaha.repo";
 
 export async function getAllPengusahaService(
   daerahId: number,
@@ -30,10 +29,6 @@ export async function getAllPengusahaService(
 
 export async function getAllPengusahaExportService(daerahId: number) {
   return await getAllPengusahaExport(daerahId);
-}
-
-export async function getCountPengusahaService(daerahId: number) {
-  return await getCountPengusaha(daerahId);
 }
 
 export async function createPengusahaService(

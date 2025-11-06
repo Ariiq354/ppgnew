@@ -4,12 +4,10 @@ import {
   laporanMusyawarahMuslimunTable,
   musyawarahMuslimunTable,
 } from "~~/server/database/schema/kelompok";
-import type {
-  TLaporanMuslimunCreate,
-  TLaporanMuslimunList,
-} from "./laporan-muslimun.dto";
+import type { TLaporanMuslimunCreate } from "./laporan-muslimun.dto";
+import { kelompokTable } from "~~/server/database/schema/wilayah";
 
-export async function findMuslimunByKelompok(
+export async function getMuslimunByKelompokId(
   musyawarahId: number,
   kelompokId: number
 ) {
@@ -24,14 +22,21 @@ export async function findMuslimunByKelompok(
   );
 }
 
-export async function getLaporanMuslimunByMusyawarahId(
-  kelompokId: number,
-  query: TLaporanMuslimunList
+export async function getLaporanMuslimun(
+  desaId: number,
+  query: {
+    musyawarahId: number;
+    kelompokId?: number;
+  }
 ) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(laporanMusyawarahMuslimunTable.musyawarahId, query.musyawarahId),
-    eq(musyawarahMuslimunTable.kelompokId, kelompokId),
+    eq(kelompokTable.desaId, desaId),
   ];
+
+  if (query.kelompokId) {
+    conditions.push(eq(musyawarahMuslimunTable.kelompokId, query.kelompokId));
+  }
 
   const data = await tryCatch(
     "Failed to get Laporan Muslimun",
@@ -39,6 +44,7 @@ export async function getLaporanMuslimunByMusyawarahId(
       .select({
         id: laporanMusyawarahMuslimunTable.id,
         musyawarahId: laporanMusyawarahMuslimunTable.musyawarahId,
+        kelompokName: kelompokTable.name,
         laporan: laporanMusyawarahMuslimunTable.laporan,
         keterangan: laporanMusyawarahMuslimunTable.keterangan,
       })
@@ -50,12 +56,14 @@ export async function getLaporanMuslimunByMusyawarahId(
           musyawarahMuslimunTable.id
         )
       )
+      .leftJoin(
+        kelompokTable,
+        eq(musyawarahMuslimunTable.kelompokId, kelompokTable.id)
+      )
       .where(and(...conditions))
   );
 
-  return {
-    data,
-  };
+  return data;
 }
 
 export async function createLaporanMuslimun(data: TLaporanMuslimunCreate) {

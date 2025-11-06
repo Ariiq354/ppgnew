@@ -1,16 +1,13 @@
 import { and, eq, inArray, type SQL } from "drizzle-orm";
-import type {
-  TLaporanMusyawarahCreate,
-  TLaporanMusyawarahList,
-} from "./laporan-musyawarah.dto";
 import { db } from "~~/server/database";
 import {
   laporanMusyawarahTable,
   musyawarahTable,
 } from "~~/server/database/schema/pengurus";
 import type { roles } from "~~/shared/permission";
+import type { TLaporanMusyawarahCreate } from "./laporan-musyawarah.dto";
 
-export async function findMusyawarahByDaerah(
+export async function getMusyawarahByDaerahId(
   musyawarahId: number,
   daerahId: number
 ) {
@@ -25,9 +22,12 @@ export async function findMusyawarahByDaerah(
   );
 }
 
-export async function getLaporanMusyawarahByMusyawarahId(
+export async function getLaporanMusyawarah(
   daerahId: number,
-  query: TLaporanMusyawarahList
+  query: {
+    musyawarahId: number;
+    bidang?: (typeof roles)[number];
+  }
 ) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(laporanMusyawarahTable.musyawarahId, query.musyawarahId),

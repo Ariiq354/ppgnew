@@ -52,6 +52,7 @@ export async function getAllMusyawarahExport(daerahId: number) {
   );
 }
 
+// Untuk Absensi
 export async function getMusyawarahById(id: number) {
   const data = await tryCatch(
     "Failed to get Musyawarah by ID",
@@ -83,6 +84,7 @@ export async function getAllMusyawarahOptions(daerahId: number) {
   return { data };
 }
 
+// Untuk Absensi
 export async function getCountMusyawarah(daerahId: number) {
   return await tryCatch(
     "Failed to get count of Musyawarah",

@@ -3,9 +3,8 @@ import {
   createMuslimun,
   deleteMuslimun,
   getAllMuslimun,
+  getAllMuslimunExport,
   getAllMuslimunOptions,
-  getCountMuslimun,
-  getMuslimunById,
   updateMuslimun,
 } from "./muslimun.repo";
 
@@ -28,16 +27,12 @@ export async function getAllMuslimunService(
   };
 }
 
-export async function getMuslimunByIdService(id: number) {
-  return await getMuslimunById(id);
+export async function getAllMuslimunExportService(kelompokId: number) {
+  return await getAllMuslimunExport(kelompokId);
 }
 
 export async function getAllMuslimunOptionsService(kelompokId: number) {
   return await getAllMuslimunOptions(kelompokId);
-}
-
-export async function getCountMuslimunService(kelompokId: number) {
-  return await getCountMuslimun(kelompokId);
 }
 
 export async function createMuslimunService(

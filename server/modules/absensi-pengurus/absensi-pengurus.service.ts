@@ -3,10 +3,7 @@ import {
   getCountMusyawarahService,
   getMusyawarahByIdService,
 } from "../musyawarah";
-import {
-  getAllPengurusAbsensiService,
-  getCountPengurusService,
-} from "../pengurus";
+import { getAllPengurusAbsensiService } from "../pengurus";
 import type { TAbsensiPengurusCreate } from "./absensi-pengurus.dto";
 import {
   createAbsensiPengurus,

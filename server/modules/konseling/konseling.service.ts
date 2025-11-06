@@ -1,10 +1,11 @@
+import { getGenerusByIdService } from "../generus";
 import type { TKonselingCreate, TKonselingUpdate } from "./konseling.dto";
 import {
   createKonseling,
   deleteKonseling,
   getAllKonseling,
-  getAllKonselingDaerah,
   getAllKonselingExport,
+  getKonselingByDaerahId,
   updateKonseling,
   updateKonselingDaerah,
 } from "./konseling.repo";
@@ -13,62 +14,7 @@ export async function getAllKonselingService(
   kelompokId: number,
   query: TSearchPagination
 ) {
-  const data = await getAllKonseling(kelompokId, query);
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return { data: data.data, metadata };
-}
-
-export async function createKonselingService(
-  daerahId: number,
-  kelompokId: number,
-  body: TKonselingCreate
-) {
-  await createKonseling(daerahId, kelompokId, body);
-}
-
-export async function updateKonselingDaerahService(
-  id: number,
-  daerahId: number,
-  body: TKonselingUpdate
-) {
-  await updateKonselingDaerah(id, daerahId, body);
-}
-
-export async function updateKonselingService(
-  id: number,
-  daerahId: number,
-  kelompokId: number,
-  body: TKonselingCreate
-) {
-  await updateKonseling(id, daerahId, kelompokId, body);
-}
-
-export async function deleteKonselingService(
-  daerahId: number,
-  kelompokId: number,
-  id: number[]
-) {
-  await deleteKonseling(daerahId, kelompokId, id);
-}
-
-export async function getAllKonselingExportService(
-  daerahId: number,
-  kelompokId?: number
-) {
-  return await getAllKonselingExport(daerahId, kelompokId);
-}
-
-export async function getAllKonselingDaerahService(
-  daerahId: number,
-  query: TSearchPagination
-) {
-  const data = await getAllKonselingDaerah(daerahId, query);
+  const data = await getAllKonseling({ kelompokId }, query);
 
   const newData = data.data.map(({ tanggalMasukKelas, ...rest }) => ({
     ...rest,
@@ -82,8 +28,98 @@ export async function getAllKonselingDaerahService(
     totalPage: Math.ceil(data.total / query.limit),
   };
 
-  return {
-    data: newData,
-    metadata,
+  return { data: newData, metadata };
+}
+
+export async function getAllKonselingDaerahService(
+  daerahId: number,
+  query: TSearchPagination
+) {
+  const data = await getAllKonseling({ daerahId }, query);
+
+  const newData = data.data.map(({ tanggalMasukKelas, ...rest }) => ({
+    ...rest,
+    kelasSekolah: getCurrentKelas(rest.kelasSekolah!, tanggalMasukKelas!),
+  }));
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
   };
+
+  return { data: newData, metadata };
+}
+
+export async function getAllKonselingExportService(kelompokId: number) {
+  return await getAllKonselingExport(kelompokId);
+}
+
+export async function createKonselingService(
+  kelompokId: number,
+  body: TKonselingCreate
+) {
+  const generus = await getGenerusByIdService(kelompokId, body.generusId);
+
+  if (!generus) {
+    throw createError({
+      status: 403,
+      message: "Generus tidak ada di kelompok ini",
+    });
+  }
+
+  await createKonseling(kelompokId, body);
+}
+
+export async function updateKonselingDaerahService(
+  id: number,
+  daerahId: number,
+  body: TKonselingUpdate
+) {
+  const generus = await getKonselingByDaerahId(id, daerahId);
+
+  if (!generus) {
+    throw createError({
+      status: 403,
+      message: "Generus tidak ada di daerah ini",
+    });
+  }
+
+  await updateKonselingDaerah(id, body);
+}
+
+export async function updateKonselingService(
+  id: number,
+  kelompokId: number,
+  body: TKonselingCreate
+) {
+  const generus = await getGenerusByIdService(kelompokId, id);
+
+  if (!generus) {
+    throw createError({
+      status: 403,
+      message: "Generus tidak ada di kelompok ini",
+    });
+  }
+
+  await updateKonseling(id, kelompokId, body);
+}
+
+export async function deleteKonselingService(
+  kelompokId: number,
+  ids: number[]
+) {
+  for (const id of ids) {
+    const generus = await getGenerusByIdService(kelompokId, id);
+
+    if (!generus) {
+      throw createError({
+        status: 403,
+        message: "Generus tidak ada di kelompok ini",
+      });
+    }
+  }
+
+  await deleteKonseling(kelompokId, ids);
 }

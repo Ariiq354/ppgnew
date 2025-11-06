@@ -1,8 +1,8 @@
 import { and, eq, inArray, type SQL } from "drizzle-orm";
 import type {
-  TLaporanMusyawarahBidangCreate,
-  TLaporanMusyawarahBidangList,
-} from "./laporan-musyawarah-bidang.dto";
+  TLaporanMusyawarahCreate,
+  TLaporanMusyawarahList,
+} from "../laporan-musyawarah";
 import { db } from "~~/server/database";
 import {
   laporanMusyawarahBidangTable,
@@ -10,7 +10,7 @@ import {
 } from "~~/server/database/schema/bidang";
 import type { roles } from "~~/shared/permission";
 
-export async function findMusyawarahBidangByDaerah(
+export async function getMusyawarahBidangByid(
   musyawarahId: number,
   daerahId: number,
   bidang: (typeof roles)[number]
@@ -27,9 +27,9 @@ export async function findMusyawarahBidangByDaerah(
   );
 }
 
-export async function getLaporanMusyawarahBidangByMusyawarahId(
+export async function getLaporanMusyawarahBidang(
   daerahId: number,
-  query: TLaporanMusyawarahBidangList
+  query: TLaporanMusyawarahList
 ) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(laporanMusyawarahBidangTable.musyawarahId, query.musyawarahId),
@@ -58,7 +58,7 @@ export async function getLaporanMusyawarahBidangByMusyawarahId(
 }
 
 export async function createLaporanMusyawarahBidang(
-  data: TLaporanMusyawarahBidangCreate
+  data: TLaporanMusyawarahCreate
 ) {
   return await tryCatch(
     "Failed to create Laporan Musyawarah Bidang",

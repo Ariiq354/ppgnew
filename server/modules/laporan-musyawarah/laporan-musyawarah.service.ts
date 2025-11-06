@@ -1,4 +1,5 @@
 import sanitizeHtml from "sanitize-html";
+import { viewWhitelist } from "~~/shared/permission";
 import type {
   TLaporanMusyawarahCreate,
   TLaporanMusyawarahDelete,
@@ -8,12 +9,11 @@ import type {
 import {
   createLaporanMusyawarah,
   deleteLaporanMusyawarah,
-  findMusyawarahByDaerah,
-  getLaporanMusyawarahByMusyawarahId,
+  getLaporanMusyawarah,
+  getMusyawarahByDaerahId,
 } from "./laporan-musyawarah.repo";
-import { viewWhitelist } from "~~/shared/permission";
 
-export async function getLaporanMusyawarahByMusyawarahIdService(
+export async function getLaporanMusyawarahService(
   user: UserWithId,
   query: TLaporanMusyawarahList
 ) {
@@ -24,14 +24,14 @@ export async function getLaporanMusyawarahByMusyawarahIdService(
     });
   }
 
-  return await getLaporanMusyawarahByMusyawarahId(user.daerahId, query);
+  return await getLaporanMusyawarah(user.daerahId, query);
 }
 
 export async function getLaporanMusyawarahSummaryService(
   daerahId: number,
   query: TLaporanMusyawarahSummaryList
 ) {
-  const data = await getLaporanMusyawarahByMusyawarahId(daerahId, query);
+  const data = await getLaporanMusyawarah(daerahId, query);
 
   const grouped = data.reduce(
     (acc, item) => {
@@ -61,7 +61,7 @@ export async function createLaporanMusyawarahService(
     });
   }
 
-  const exist = await findMusyawarahByDaerah(body.musyawarahId, user.daerahId);
+  const exist = await getMusyawarahByDaerahId(body.musyawarahId, user.daerahId);
 
   if (!exist) {
     throw createError({
@@ -86,7 +86,7 @@ export async function deleteLaporanMusyawarahService(
     });
   }
 
-  const exist = await findMusyawarahByDaerah(body.musyawarahId, user.daerahId);
+  const exist = await getMusyawarahByDaerahId(body.musyawarahId, user.daerahId);
 
   if (!exist) {
     throw createError({

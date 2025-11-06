@@ -1,3 +1,4 @@
+import type { TLaporanMusyawarahSummaryList } from "../laporan-musyawarah";
 import type {
   TLaporanMuslimunCreate,
   TLaporanMuslimunDelete,
@@ -6,22 +7,45 @@ import type {
 import {
   createLaporanMuslimun,
   deleteLaporanMuslimun,
-  findMuslimunByKelompok,
-  getLaporanMuslimunByMusyawarahId,
+  getLaporanMuslimun,
+  getMuslimunByKelompokId,
 } from "./laporan-muslimun.repo";
 
-export async function getLaporanMuslimunByMusyawarahIdService(
-  kelompokId: number,
+export async function getLaporanMuslimunService(
+  desaId: number,
   query: TLaporanMuslimunList
 ) {
-  return await getLaporanMuslimunByMusyawarahId(kelompokId, query);
+  return await getLaporanMuslimun(desaId, query);
+}
+
+export async function getLaporanMuslimunSummaryService(
+  desaId: number,
+  query: TLaporanMusyawarahSummaryList
+) {
+  const data = await getLaporanMuslimun(desaId, query);
+
+  const grouped = data.reduce(
+    (acc, item) => {
+      if (!acc[item.kelompokName!]) {
+        acc[item.kelompokName!] = [];
+      }
+      acc[item.kelompokName!]!.push({
+        laporan: item.laporan,
+        keterangan: item.keterangan,
+      });
+      return acc;
+    },
+    {} as Record<string, { laporan: string; keterangan: string }[]>
+  );
+
+  return grouped;
 }
 
 export async function createLaporanMuslimunService(
   kelompokId: number,
   body: TLaporanMuslimunCreate
 ) {
-  const exist = await findMuslimunByKelompok(body.musyawarahId, kelompokId);
+  const exist = await getMuslimunByKelompokId(body.musyawarahId, kelompokId);
 
   if (!exist) {
     throw createError({
@@ -37,7 +61,7 @@ export async function deleteLaporanMuslimunService(
   kelompokId: number,
   body: TLaporanMuslimunDelete
 ) {
-  const exist = await findMuslimunByKelompok(body.musyawarahId, kelompokId);
+  const exist = await getMuslimunByKelompokId(body.musyawarahId, kelompokId);
 
   if (!exist) {
     throw createError({

@@ -2,7 +2,7 @@ import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 import { roles } from "../../../shared/permission";
 import { createdUpdated } from "./common";
 import { daerahTable } from "./wilayah";
-import { bulanOptions } from "~~/shared/contants";
+import { bulanOptions } from "../../../shared/contants";
 
 export const prokerTable = pgTable("proker", {
   id: serial().primaryKey(),

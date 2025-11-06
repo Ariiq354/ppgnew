@@ -33,12 +33,3 @@ export const columns: TableColumn<any>[] = [
     cell: ({ row }) => getAge(row.original.tanggalLahir),
   },
 ];
-
-export const pengajianOptions = [
-  "PAUD",
-  "Cabe Rawit",
-  "Praremaja",
-  "Remaja",
-  "Pranikah",
-  "Usia Mandiri",
-];

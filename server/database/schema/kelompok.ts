@@ -73,8 +73,8 @@ export const generusKonselingTable = pgTable("generus_konseling", {
     .references(() => generusTable.id, { onDelete: "cascade" }),
   keterangan: text().notNull(),
   status: text({ enum: ["Baru", "Diproses", "Selesai"] }).notNull(),
-  daerahId: integer()
+  kelompokId: integer()
     .notNull()
-    .references(() => daerahTable.id, { onDelete: "cascade" }),
+    .references(() => kelompokTable.id, { onDelete: "cascade" }),
   ...createdUpdated,
 });

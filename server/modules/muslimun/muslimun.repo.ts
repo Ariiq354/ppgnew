@@ -39,15 +39,17 @@ export async function getAllMuslimun(
   return { data, total };
 }
 
-export async function getMuslimunById(id: number) {
-  const data = await tryCatch(
-    "Failed to get Muslimun by Id",
-    db.query.musyawarahMuslimunTable.findFirst({
-      where: eq(musyawarahMuslimunTable.id, id),
-    })
+export async function getAllMuslimunExport(kelompokId: number) {
+  return await tryCatch(
+    "Failed to export Musyawarah data",
+    db
+      .select({
+        nama: musyawarahMuslimunTable.nama,
+        tanggal: musyawarahMuslimunTable.tanggal,
+      })
+      .from(musyawarahMuslimunTable)
+      .where(eq(musyawarahMuslimunTable.kelompokId, kelompokId))
   );
-
-  return { data };
 }
 
 export async function getAllMuslimunOptions(kelompokId: number) {
@@ -68,16 +70,6 @@ export async function getAllMuslimunOptions(kelompokId: number) {
   );
 
   return { data };
-}
-
-export async function getCountMuslimun(kelompokId: number) {
-  return await tryCatch(
-    "Failed to get count of Muslimun",
-    db.$count(
-      musyawarahMuslimunTable,
-      eq(musyawarahMuslimunTable.kelompokId, kelompokId)
-    )
-  );
 }
 
 export async function createMuslimun(kelompokId: number, data: TNamaTanggal) {

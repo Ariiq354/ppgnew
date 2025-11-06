@@ -2,7 +2,7 @@
   import { useConstantStore } from "~/stores/constant";
   import { columns } from "./_constants";
   import { APIBASE } from "~/utils";
-  import { pengajianOptions } from "~~/shared/contants";
+  import { pengajianKelasOptions } from "~~/shared/contants";
 
   const constantStore = useConstantStore();
   constantStore.setTitle("PJP Kelompok / Monitoring Kehadiran");
@@ -64,7 +64,7 @@
         <USelectMenu
           v-model="namaKelas"
           class="flex-1"
-          :items="pengajianOptions"
+          :items="pengajianKelasOptions"
           :disabled="status === 'pending'"
           placeholder="Pilih Pengajian"
         />

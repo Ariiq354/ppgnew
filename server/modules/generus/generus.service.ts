@@ -226,3 +226,7 @@ export async function updateGenerusService(
 export async function getGenerusOptionsKelompokService(kelompokId: number) {
   return getGenerusOptionsKelompok(kelompokId);
 }
+
+export async function getGenerusByIdService(id: number, daerahId: number) {
+  return getGenerusById(id, daerahId);
+}
