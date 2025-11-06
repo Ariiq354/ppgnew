@@ -1,6 +1,7 @@
-import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
+import { and, count, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { kelasTable } from "~~/server/database/schema/generus";
+import { desaTable, kelompokTable } from "~~/server/database/schema/wilayah";
 import type {
   TKelasList,
   TKelasOptionsList,
@@ -124,19 +125,35 @@ export async function getKelasByKelompokId(kelompokId: number) {
 }
 
 export async function getCountKelas(
-  kelompokId: number,
+  params: {
+    kelompokId?: number;
+    desaId?: number;
+    daerahId?: number;
+  },
   kelasPengajian: string
 ) {
-  return await tryCatch(
+  const { daerahId, desaId, kelompokId } = params;
+
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(kelasTable.nama, kelasPengajian),
+  ];
+
+  if (daerahId) conditions.push(eq(desaTable.daerahId, daerahId));
+  if (desaId) conditions.push(eq(kelompokTable.desaId, desaId));
+  if (kelompokId) conditions.push(eq(kelasTable.kelompokId, kelompokId));
+
+  const [data] = await tryCatch(
     "Failed to get count of Kelas",
-    db.$count(
-      kelasTable,
-      and(
-        eq(kelasTable.kelompokId, kelompokId),
-        eq(kelasTable.nama, kelasPengajian)
-      )
-    )
+    db
+      .select({
+        count: count(),
+      })
+      .from(kelasTable)
+      .leftJoin(kelompokTable, eq(kelasTable.kelompokId, kelasTable.id))
+      .leftJoin(desaTable, eq(desaTable.id, kelompokTable.desaId))
   );
+
+  return data!.count;
 }
 
 export async function createKelas(kelompokId: number, data: TNamaTanggal) {

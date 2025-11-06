@@ -1,19 +1,19 @@
-import {
-  getAllKelas,
-  getAllKelasExport,
-  getKelasById,
-  getAllKelasOptions,
-  getCountKelas,
-  getKelasByKelompokId,
-  createKelas,
-  updateKelas,
-  deleteKelas,
-} from "./kelas-kelompok.repo";
 import type {
   TKelasList,
   TKelasOptionsList,
   TNamaTanggal,
 } from "~~/server/utils/dto";
+import {
+  createKelas,
+  deleteKelas,
+  getAllKelas,
+  getAllKelasExport,
+  getAllKelasOptions,
+  getCountKelas,
+  getKelasById,
+  getKelasByKelompokId,
+  updateKelas,
+} from "./kelas-kelompok.repo";
 
 export async function getAllKelasService(
   kelompokId: number,
@@ -45,10 +45,14 @@ export async function getAllKelasOptionsService(
 }
 
 export async function getCountKelasService(
-  kelompokId: number,
+  params: {
+    kelompokId?: number;
+    desaId?: number;
+    daerahId?: number;
+  },
   kelasPengajian: string
 ) {
-  return await getCountKelas(kelompokId, kelasPengajian);
+  return await getCountKelas(params, kelasPengajian);
 }
 
 export async function getKelasByKelompokIdService(kelompokId: number) {

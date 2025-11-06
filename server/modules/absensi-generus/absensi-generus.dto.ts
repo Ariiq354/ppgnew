@@ -1,34 +1,40 @@
 import { z } from "zod/mini";
 import { OPagination } from "~~/server/utils/dto";
 
-export const OGenerusAbsensiKelompokList = z.object({
-  ...OPagination.def.shape,
-  search: z.string(),
-  kelompokId: z.coerce.number(),
-  kelasPengajian: z.string(),
-});
-
-export type TGenerusAbsensiKelompokList = z.infer<
-  typeof OGenerusAbsensiKelompokList
->;
-
-export const OGenerusAbsensiKelompokDaerahList = z.object({
+export const OGenerusAbsensiForDesaList = z.object({
   ...OPagination.def.shape,
   search: z.string(),
   kelompokId: z.optional(z.coerce.number()),
-  desaId: z.optional(z.coerce.number()),
   kelasPengajian: z.string(),
 });
 
-export type OGenerusAbsensiKelompokDaerahList = z.infer<
-  typeof OGenerusAbsensiKelompokList
+export type TGenerusAbsensiForDesaList = z.infer<
+  typeof OGenerusAbsensiForDesaList
 >;
 
-export const OAbsensiKelasPengajianKelompokList = z.object({
-  kelompokId: z.coerce.number(),
+export const OGenerusAbsensiForDaerahList = z.object({
+  ...OGenerusAbsensiForDesaList.def.shape,
+  desaId: z.optional(z.coerce.number()),
+});
+
+export type TGenerusAbsensiForDaerahList = z.infer<
+  typeof OGenerusAbsensiForDaerahList
+>;
+
+export const OAbsensiKelasPengajianForDesaList = z.object({
+  kelompokId: z.optional(z.coerce.number()),
   kelasPengajian: z.string(),
 });
 
-export type TAbsensiKelasPengajianKelompokList = z.infer<
-  typeof OAbsensiKelasPengajianKelompokList
+export type TAbsensiKelasPengajianForDesaList = z.infer<
+  typeof OAbsensiKelasPengajianForDesaList
+>;
+
+export const OAbsensiKelasPengajianForDaerahList = z.object({
+  ...OAbsensiKelasPengajianForDesaList.def.shape,
+  desaId: z.optional(z.coerce.number()),
+});
+
+export type TAbsensiKelasPengajianForDaerahList = z.infer<
+  typeof OAbsensiKelasPengajianForDaerahList
 >;

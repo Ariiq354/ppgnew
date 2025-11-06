@@ -20,60 +20,7 @@ import type {
   TGenerusAbsensiList,
 } from "~~/server/utils/dto";
 import { exclude } from "~~/shared/contants";
-import type { TGenerusDesaAbsensiList } from "../absensi-desa";
 
-// For Absensi
-export async function getAllGenerusExclude(
-  kelompokId: number,
-  { limit, page, search, kelasPengajian }: TGenerusAbsensiList
-) {
-  const offset = (page - 1) * limit;
-  const conditions: (SQL<unknown> | undefined)[] = [
-    eq(generusTable.kelompokId, kelompokId),
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
-  ];
-
-  if (search) {
-    const searchCondition = `%${search}%`;
-    conditions.push(or(like(generusTable.nama, searchCondition)));
-  }
-
-  if (kelasPengajian === "Muda-mudi") {
-    conditions.push(
-      inArray(generusTable.kelasPengajian, [
-        "Remaja",
-        "Pranikah",
-        "Usia Mandiri",
-      ])
-    );
-  } else {
-    conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
-  }
-
-  const query = db
-    .select({
-      id: generusTable.id,
-      nama: generusTable.nama,
-    })
-    .from(generusTable)
-    .where(and(...conditions));
-
-  const total = await tryCatch(
-    "Failed to get total count of Generus Absensi",
-    db.$count(query)
-  );
-  const data = await tryCatch(
-    "Failed to get list of Generus Absensi",
-    query.limit(limit).offset(offset)
-  );
-
-  return {
-    data,
-    total,
-  };
-}
-
-// For Absensi
 export async function getAbsensiGenerusByKelasId(
   kelompokId: number,
   kelasId: number,
@@ -118,7 +65,6 @@ export async function getAbsensiGenerusByKelasId(
   return data;
 }
 
-// For Dashboard
 export async function getAbsensiGenerusByKelompokId(kelompokId: number) {
   return await tryCatch(
     "Failed to get Absensi Generus By Kelompok Id",
@@ -146,31 +92,17 @@ export async function getAbsensiGenerusByKelompokId(kelompokId: number) {
   );
 }
 
-// For Dashboard
-export async function getGenerusAbsensiExclude(kelompokId: number) {
-  return await tryCatch(
-    "Failed to get Generus Absensi Exclude",
-    db
-      .select({
-        id: generusTable.id,
-        kelasPengajian: generusTable.kelasPengajian,
-      })
-      .from(generusTable)
-      .where(
-        and(
-          eq(generusTable.kelompokId, kelompokId),
-          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
-        )
-      )
-  );
-}
-
 export async function getCountAbsensiGenerus(
-  kelompokId: number,
+  params: {
+    kelompokId?: number;
+    desaId?: number;
+    daerahId?: number;
+  },
   kelasPengajian: string
 ) {
+  const { daerahId, desaId, kelompokId } = params;
+
   const conditions: (SQL<unknown> | undefined)[] = [
-    eq(kelasTable.kelompokId, kelompokId),
     sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
     eq(kelasTable.nama, kelasPengajian),
   ];
@@ -186,6 +118,10 @@ export async function getCountAbsensiGenerus(
   } else {
     conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
   }
+
+  if (daerahId) conditions.push(eq(generusTable.daerahId, daerahId));
+  if (desaId) conditions.push(eq(generusTable.desaId, desaId));
+  if (kelompokId) conditions.push(eq(generusTable.kelompokId, kelompokId));
 
   const [data] = await tryCatch(
     "Failed to get Count Absensi",
@@ -206,12 +142,17 @@ export async function getCountAbsensiGenerus(
 }
 
 export async function getAllGenerusSummary(
-  kelompokId: number,
+  params: {
+    daerahId?: number;
+    desaId?: number;
+    kelompokId?: number;
+  },
   { limit, page, search, kelasPengajian }: TGenerusAbsensiList
 ) {
+  const { daerahId, desaId, kelompokId } = params;
+
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
-    eq(generusTable.kelompokId, kelompokId),
     sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
   ];
 
@@ -220,6 +161,10 @@ export async function getAllGenerusSummary(
 
     conditions.push(or(like(generusTable.nama, searchCondition)));
   }
+
+  if (kelompokId) conditions.push(eq(generusTable.kelompokId, kelompokId));
+  if (desaId) conditions.push(eq(generusTable.desaId, desaId));
+  if (daerahId) conditions.push(eq(generusTable.daerahId, daerahId));
 
   if (kelasPengajian === "Muda-mudi") {
     conditions.push(
@@ -262,159 +207,6 @@ export async function getAllGenerusSummary(
     data,
     total,
   };
-}
-
-export async function getAllGenerusDesaSummary(
-  desaId: number,
-  { limit, page, search, kelasPengajian, kelompokId }: TGenerusDesaAbsensiList
-) {
-  const offset = (page - 1) * limit;
-  const conditions: (SQL<unknown> | undefined)[] = [
-    eq(generusTable.kelompokId, desaId),
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
-  ];
-
-  if (search) {
-    const searchCondition = `%${search}%`;
-
-    conditions.push(or(like(generusTable.nama, searchCondition)));
-  }
-
-  if (kelompokId) {
-    conditions.push();
-  }
-
-  if (kelasPengajian === "Muda-mudi") {
-    conditions.push(
-      inArray(generusTable.kelasPengajian, [
-        "Remaja",
-        "Pranikah",
-        "Usia Mandiri",
-      ])
-    );
-  } else {
-    conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
-  }
-
-  const query = db
-    .select({
-      id: generusTable.id,
-      nama: generusTable.nama,
-      hadir: sql<number>`CAST(SUM(CASE WHEN ${absensiGenerusTable.keterangan} = 'Hadir' AND ${kelasTable.nama} = ${kelasPengajian} THEN 1 ELSE 0 END) AS INT)`,
-      izin: sql<number>`CAST(SUM(CASE WHEN ${absensiGenerusTable.keterangan} = 'Izin' AND ${kelasTable.nama} = ${kelasPengajian} THEN 1 ELSE 0 END) AS INT)`,
-    })
-    .from(generusTable)
-    .where(and(...conditions))
-    .leftJoin(
-      absensiGenerusTable,
-      eq(generusTable.id, absensiGenerusTable.generusId)
-    )
-    .leftJoin(kelasTable, eq(absensiGenerusTable.kelasId, kelasTable.id))
-    .groupBy(generusTable.id, generusTable.nama);
-
-  const total = await tryCatch(
-    "Failed to get total count of Generus Absensi",
-    db.$count(query)
-  );
-  const data = await tryCatch(
-    "Failed to get list of Generus Absensi",
-    query.limit(limit).offset(offset)
-  );
-
-  return {
-    data,
-    total,
-  };
-}
-
-export async function getAllGenerusDaerahSummary(
-  desaId: number,
-  { limit, page, search, kelasPengajian, kelompokId }: TGenerusDesaAbsensiList
-) {
-  const offset = (page - 1) * limit;
-  const conditions: (SQL<unknown> | undefined)[] = [
-    eq(generusTable.kelompokId, desaId),
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
-  ];
-
-  if (search) {
-    const searchCondition = `%${search}%`;
-
-    conditions.push(or(like(generusTable.nama, searchCondition)));
-  }
-
-  if (kelompokId) {
-    conditions.push();
-  }
-
-  if (kelasPengajian === "Muda-mudi") {
-    conditions.push(
-      inArray(generusTable.kelasPengajian, [
-        "Remaja",
-        "Pranikah",
-        "Usia Mandiri",
-      ])
-    );
-  } else {
-    conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
-  }
-
-  const query = db
-    .select({
-      id: generusTable.id,
-      nama: generusTable.nama,
-      hadir: sql<number>`CAST(SUM(CASE WHEN ${absensiGenerusTable.keterangan} = 'Hadir' AND ${kelasTable.nama} = ${kelasPengajian} THEN 1 ELSE 0 END) AS INT)`,
-      izin: sql<number>`CAST(SUM(CASE WHEN ${absensiGenerusTable.keterangan} = 'Izin' AND ${kelasTable.nama} = ${kelasPengajian} THEN 1 ELSE 0 END) AS INT)`,
-    })
-    .from(generusTable)
-    .where(and(...conditions))
-    .leftJoin(
-      absensiGenerusTable,
-      eq(generusTable.id, absensiGenerusTable.generusId)
-    )
-    .leftJoin(kelasTable, eq(absensiGenerusTable.kelasId, kelasTable.id))
-    .groupBy(generusTable.id, generusTable.nama);
-
-  const total = await tryCatch(
-    "Failed to get total count of Generus Absensi",
-    db.$count(query)
-  );
-  const data = await tryCatch(
-    "Failed to get list of Generus Absensi",
-    query.limit(limit).offset(offset)
-  );
-
-  return {
-    data,
-    total,
-  };
-}
-
-export async function getCountGenerusAbsensi(
-  kelompokId: number,
-  kelasPengajian: string
-) {
-  const conditions: (SQL<unknown> | undefined)[] = [
-    eq(generusTable.kelompokId, kelompokId),
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
-  ];
-
-  if (kelasPengajian === "Muda-mudi") {
-    conditions.push(
-      inArray(generusTable.kelasPengajian, [
-        "Remaja",
-        "Pranikah",
-        "Usia Mandiri",
-      ])
-    );
-  } else {
-    conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
-  }
-
-  return await tryCatch(
-    "Failed to get Count Generus",
-    db.$count(generusTable, and(...conditions))
-  );
 }
 
 export async function createAbsensiGenerus(

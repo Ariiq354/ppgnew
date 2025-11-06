@@ -1,8 +1,8 @@
 import type {
-  TLaporanMusyawarahBidangCreate,
-  TLaporanMusyawarahBidangDelete,
-  TLaporanMusyawarahBidangList,
-} from "./laporan-musyawarah-bidang.dto";
+  TLaporanMusyawarahCreate,
+  TLaporanMusyawarahDelete,
+  TLaporanMusyawarahList,
+} from "../laporan-musyawarah";
 import {
   createLaporanMusyawarahBidang,
   deleteLaporanMusyawarahBidang,
@@ -13,7 +13,7 @@ import { viewWhitelist } from "~~/shared/permission";
 
 export async function getLaporanMusyawarahBidangService(
   user: UserWithId,
-  query: TLaporanMusyawarahBidangList
+  query: TLaporanMusyawarahList
 ) {
   if (!viewWhitelist.has(user.role!) && user.role !== query.bidang) {
     throw createError({
@@ -27,7 +27,7 @@ export async function getLaporanMusyawarahBidangService(
 
 export async function createLaporanMusyawarahBidangService(
   user: UserWithId,
-  body: TLaporanMusyawarahBidangCreate
+  body: TLaporanMusyawarahCreate
 ) {
   if (user.role !== "admin" && user.role !== body.bidang) {
     throw createError({
@@ -54,7 +54,7 @@ export async function createLaporanMusyawarahBidangService(
 
 export async function deleteLaporanMusyawarahBidangService(
   user: UserWithId,
-  body: TLaporanMusyawarahBidangDelete
+  body: TLaporanMusyawarahDelete
 ) {
   if (user.role !== "admin" && user.role !== body.bidang) {
     throw createError({

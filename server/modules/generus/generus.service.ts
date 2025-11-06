@@ -1,28 +1,120 @@
 import type { MultiPartData } from "h3";
-import type { TGenerusList } from "~~/server/utils/dto";
+import type { TGenerusAbsensiList } from "~~/server/utils/dto";
 import ENV from "~~/shared/env";
-import { OGenerusCreate } from "./generus.dto";
+import {
+  OGenerusCreate,
+  type TGenerusListForDaerah,
+  type TGenerusListForDesa,
+} from "./generus.dto";
 import {
   createGenerus,
   deleteGenerus,
   getAllGenerus,
   getAllGenerus69,
   getAllGenerusChart,
+  getAllGenerusExclude,
   getAllGenerusExport,
-  getAllGenerusExportDesa,
+  getCountGenerusExclude,
   getGenerusById,
   getGenerusOptionsKelompok,
   updateGenerus,
 } from "./generus.repo";
+import {
+  getKelompokByDaerahIdService,
+  getKelompokByDesaIdService,
+} from "../kelompok";
+import { getDesaByDaerahIdService } from "../desa";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 export async function getAllGenerusService(
-  daerahId: number,
-  query: TGenerusList
+  kelompokId: number,
+  query: TGenerusAbsensiList
 ) {
-  const data = await getAllGenerus(daerahId, query);
+  const data = await getAllGenerus({ kelompokId }, query);
+
+  const newData = data.data.map(({ tanggalMasukKelas, ...rest }) => ({
+    ...rest,
+    kelasSekolah: getCurrentKelas(rest.kelasSekolah, tanggalMasukKelas),
+  }));
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: newData,
+    metadata,
+  };
+}
+
+export async function getAllGenerusForDesaService(
+  desaId: number,
+  query: TGenerusListForDesa
+) {
+  const desa = await getKelompokByDesaIdService(desaId);
+  if (query.kelompokId && !desa.find((i) => i.id === query.kelompokId)) {
+    throw createError({
+      statusCode: 403,
+      message: "There is no kelompok in your deaa",
+    });
+  }
+
+  const data = await getAllGenerus(
+    { desaId, kelompokId: query.kelompokId },
+    query
+  );
+
+  const newData = data.data.map(({ tanggalMasukKelas, ...rest }) => ({
+    ...rest,
+    kelasSekolah: getCurrentKelas(rest.kelasSekolah, tanggalMasukKelas),
+  }));
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: newData,
+    metadata,
+  };
+}
+
+export async function getAllGenerusForDaerahService(
+  daerahId: number,
+  query: TGenerusListForDaerah
+) {
+  if (query.desaId) {
+    const desa = await getDesaByDaerahIdService(daerahId);
+    if (!desa.find((i) => i.id === query.desaId)) {
+      throw createError({
+        statusCode: 403,
+        message: "There is no desa in your daerah",
+      });
+    }
+  }
+
+  if (query.kelompokId) {
+    const kelompok = await getKelompokByDaerahIdService(daerahId);
+    if (!kelompok.find((i) => i.id === query.kelompokId)) {
+      throw createError({
+        statusCode: 403,
+        message: "There is no kelompok in your desa",
+      });
+    }
+  }
+
+  const data = await getAllGenerus(
+    { daerahId, desaId: query.desaId, kelompokId: query.kelompokId },
+    query
+  );
 
   const newData = data.data.map(({ tanggalMasukKelas, ...rest }) => ({
     ...rest,
@@ -43,7 +135,7 @@ export async function getAllGenerusService(
 }
 
 export async function getAllGenerusExportDesaService(desaId: number) {
-  const data = await getAllGenerusExportDesa(desaId);
+  const data = await getAllGenerusExport({ desaId });
 
   const newData = data.map(({ tanggalMasukKelas, ...rest }) => ({
     ...rest,
@@ -54,7 +146,7 @@ export async function getAllGenerusExportDesaService(desaId: number) {
 }
 
 export async function getAllGenerusExportService(kelompokId: number) {
-  const data = await getAllGenerusExport(kelompokId);
+  const data = await getAllGenerusExport({ kelompokId });
 
   const newData = data.map(({ tanggalMasukKelas, ...rest }) => ({
     ...rest,
@@ -64,12 +156,12 @@ export async function getAllGenerusExportService(kelompokId: number) {
   return newData;
 }
 
-export async function getAllGenerusChartService(
-  daerahId: number,
-  desaId?: number,
-  kelompokId?: number
-) {
-  return getAllGenerusChart(daerahId, desaId, kelompokId);
+export async function getAllGenerusChartService(params: {
+  kelompokId?: number;
+  desaId?: number;
+  daerahId?: number;
+}) {
+  return getAllGenerusChart(params);
 }
 
 export async function getAllGenerus69Service(daerahId: number) {
@@ -229,4 +321,64 @@ export async function getGenerusOptionsKelompokService(kelompokId: number) {
 
 export async function getGenerusByIdService(id: number, daerahId: number) {
   return getGenerusById(id, daerahId);
+}
+
+export async function getCountGenerusExcludeService(
+  params: {
+    kelompokId?: number;
+    desaId?: number;
+    daerahId?: number;
+  },
+  kelasPengajian: string
+) {
+  return getCountGenerusExclude(params, kelasPengajian);
+}
+
+export async function getAllGenerusExcludeService(
+  kelompokId: number,
+  query: TGenerusAbsensiList
+) {
+  const data = await getAllGenerusExclude({ kelompokId }, query);
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: data.data,
+    metadata,
+  };
+}
+
+export async function getAllGenerusExcludeForDesaService(
+  desaId: number,
+  query: TGenerusListForDesa
+) {
+  const desa = await getKelompokByDesaIdService(desaId);
+  if (query.kelompokId && !desa.find((i) => i.id === query.kelompokId)) {
+    throw createError({
+      statusCode: 403,
+      message: "There is no kelompok in your deaa",
+    });
+  }
+
+  const data = await getAllGenerusExclude(
+    { desaId, kelompokId: query.kelompokId },
+    query
+  );
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: data.data,
+    metadata,
+  };
 }

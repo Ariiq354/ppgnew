@@ -21,75 +21,6 @@ import type {
 } from "~~/server/utils/dto";
 import { exclude } from "~~/shared/contants";
 
-export async function getAllTahfidzExclude(
-  daerahId: number,
-  { limit, page, search }: TSearchPagination
-) {
-  const offset = (page - 1) * limit;
-  const conditions: (SQL<unknown> | undefined)[] = [
-    eq(generusTable.daerahId, daerahId),
-    sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
-  ];
-
-  if (search) {
-    const searchCondition = `%${search}%`;
-    conditions.push(or(like(generusTable.nama, searchCondition)));
-  }
-
-  const query = db
-    .select({
-      id: generusTable.id,
-      nama: generusTable.nama,
-    })
-    .from(generusTable)
-    .where(and(...conditions));
-
-  const total = await tryCatch(
-    "Failed to get total count of TAHFIDZ Absensi",
-    db.$count(query)
-  );
-  const data = await tryCatch(
-    "Failed to get list of TAHFIDZ Absensi",
-    query.limit(limit).offset(offset)
-  );
-
-  return {
-    data,
-    total,
-  };
-}
-
-export async function getAbsensiTahfidzByDaerahId(daerahId: number) {
-  return await tryCatch(
-    "Failed to get Absensi Generus By Kelompok Id",
-    db
-      .select({
-        id: absensiGenerusTahfidzTable.id,
-        generusId: absensiGenerusTahfidzTable.generusId,
-        kelasPengajian: generusTable.kelasPengajian,
-        detail: absensiGenerusTahfidzTable.detail,
-        keterangan: absensiGenerusTahfidzTable.keterangan,
-      })
-      .from(absensiGenerusTahfidzTable)
-      .leftJoin(
-        kelasTahfidzTable,
-        eq(absensiGenerusTahfidzTable.kelasId, kelasTahfidzTable.id)
-      )
-      .leftJoin(
-        generusTable,
-        eq(generusTable.id, absensiGenerusTahfidzTable.generusId)
-      )
-      .where(
-        and(
-          eq(kelasTahfidzTable.daerahId, daerahId),
-          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
-          sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`
-        )
-      )
-  );
-}
-
 export async function getAbsensiTahfidzByKelasId(
   daerahId: number,
   kelasId: number
@@ -198,38 +129,6 @@ export async function getAllTahfidzSummary(
     data,
     total,
   };
-}
-
-export async function getCountTahfidzAbsensi(daerahId: number) {
-  return await tryCatch(
-    "Failed to get Count Generus",
-    db.$count(
-      generusTable,
-      and(
-        eq(generusTable.daerahId, daerahId),
-        sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
-        sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
-      )
-    )
-  );
-}
-
-export async function getGenerusTahfidzAbsensiExclude(daerahId: number) {
-  return await tryCatch(
-    "Failed to get Generus Absensi Exclude",
-    db
-      .select({
-        id: generusTable.id,
-        kelasPengajian: generusTable.kelasPengajian,
-      })
-      .from(generusTable)
-      .where(
-        and(
-          eq(generusTable.daerahId, daerahId),
-          sql`(${generusTable.status} ?| ${new Param("Tahfidz")})`
-        )
-      )
-  );
 }
 
 export async function createAbsensiTahfidz(

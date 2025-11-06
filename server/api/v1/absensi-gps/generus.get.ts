@@ -1,4 +1,4 @@
-import { getAllGpsExcludeService } from "~~/server/modules/absensi-gps";
+import { getAllGpsExcludeService } from "~~/server/modules/generus-gps";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["view"] });

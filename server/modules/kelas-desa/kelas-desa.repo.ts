@@ -1,6 +1,7 @@
-import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
+import { and, count, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { kelasDesaTable } from "~~/server/database/schema/desa";
+import { desaTable } from "~~/server/database/schema/wilayah";
 import type {
   TKelasList,
   TKelasOptionsList,
@@ -124,19 +125,32 @@ export async function getAllKelasDesaOptions(
 }
 
 export async function getCountKelasDesa(
-  desaId: number,
-  kelasDesaPengajian: string
+  params: {
+    desaId?: number;
+    daerahId?: number;
+  },
+  kelasPengajian: string
 ) {
-  return await tryCatch(
-    "Failed to get count of Kelas Desa",
-    db.$count(
-      kelasDesaTable,
-      and(
-        eq(kelasDesaTable.desaId, desaId),
-        eq(kelasDesaTable.nama, kelasDesaPengajian)
-      )
-    )
+  const { daerahId, desaId } = params;
+
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(kelasDesaTable.nama, kelasPengajian),
+  ];
+
+  if (daerahId) conditions.push(eq(desaTable.daerahId, daerahId));
+  if (desaId) conditions.push(eq(kelasDesaTable.desaId, desaId));
+
+  const [data] = await tryCatch(
+    "Failed to get count of Kelas",
+    db
+      .select({
+        count: count(),
+      })
+      .from(kelasDesaTable)
+      .leftJoin(desaTable, eq(desaTable.id, kelasDesaTable.desaId))
   );
+
+  return data!.count;
 }
 
 export async function createKelasDesa(desaId: number, data: TNamaTanggal) {

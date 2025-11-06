@@ -21,45 +21,6 @@ import type {
 } from "~~/server/utils/dto";
 import { exclude } from "~~/shared/contants";
 
-export async function getAllGpsExclude(
-  desaId: number,
-  { limit, page, search }: TSearchPagination
-) {
-  const offset = (page - 1) * limit;
-  const conditions: (SQL<unknown> | undefined)[] = [
-    eq(generusTable.desaId, desaId),
-    sql`(${generusTable.status} ?| ${new Param(["GPS"])})`,
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
-  ];
-
-  if (search) {
-    const searchCondition = `%${search}%`;
-    conditions.push(or(like(generusTable.nama, searchCondition)));
-  }
-
-  const query = db
-    .select({
-      id: generusTable.id,
-      nama: generusTable.nama,
-    })
-    .from(generusTable)
-    .where(and(...conditions));
-
-  const total = await tryCatch(
-    "Failed to get total count of GPS Absensi",
-    db.$count(query)
-  );
-  const data = await tryCatch(
-    "Failed to get list of GPS Absensi",
-    query.limit(limit).offset(offset)
-  );
-
-  return {
-    data,
-    total,
-  };
-}
-
 export async function getAbsensiGpsByKelasId(desaId: number, kelasId: number) {
   const data = await tryCatch(
     "Failed to get Absensi Gps",
@@ -165,20 +126,6 @@ export async function getAllGpsSummary(
     data,
     total,
   };
-}
-
-export async function getCountGpsAbsensi(desaId: number) {
-  return await tryCatch(
-    "Failed to get Count Generus",
-    db.$count(
-      generusTable,
-      and(
-        eq(generusTable.desaId, desaId),
-        sql`(${generusTable.status} ?| ${new Param(["GPS"])})`,
-        sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
-      )
-    )
-  );
 }
 
 export async function createAbsensiGps(

@@ -1,3 +1,4 @@
+import { getCountGpsExcludeService } from "../generus-gps";
 import {
   getAllKelasGpsOptionsService,
   getCountKelasGpsService,
@@ -7,10 +8,8 @@ import {
   createAbsensiGps,
   deleteAbsensiGps,
   getAbsensiGpsByKelasId,
-  getAllGpsExclude,
   getAllGpsSummary,
   getCountAbsensiGps,
-  getCountGpsAbsensi,
   updateAbsensiGps,
 } from "./absensi-gps.repo";
 
@@ -44,7 +43,7 @@ export async function getAbsensiGpsMonitoringService(
 }
 
 export async function getAbsensiGpsMonitoringSummaryService(desaId: number) {
-  const countGenerus = await getCountGpsAbsensi(desaId);
+  const countGenerus = await getCountGpsExcludeService(desaId);
   const countKelas = await getCountKelasGpsService(desaId);
   const countAbsensi = await getCountAbsensiGps(desaId);
 
@@ -75,25 +74,6 @@ export async function getAbsensiGpsByKelasIdService(
   const data = await getAbsensiGpsByKelasId(desaId, kelasId);
 
   return data;
-}
-
-export async function getAllGpsExcludeService(
-  desaId: number,
-  query: TSearchPagination
-) {
-  const data = await getAllGpsExclude(desaId, query);
-
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return {
-    data: data.data,
-    metadata,
-  };
 }
 
 export async function createAbsensiGpsService(

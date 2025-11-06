@@ -21,52 +21,6 @@ import type {
 } from "~~/server/utils/dto";
 import { exclude } from "~~/shared/contants";
 
-export async function getAllMudamudiExclude(
-  daerahId: number,
-  { limit, page, search, kelasPengajian }: TGenerusAbsensiList
-) {
-  const offset = (page - 1) * limit;
-  const conditions: (SQL<unknown> | undefined)[] = [
-    eq(generusTable.daerahId, daerahId),
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
-  ];
-
-  if (search) {
-    const searchCondition = `%${search}%`;
-    conditions.push(or(like(generusTable.nama, searchCondition)));
-  }
-
-  if (kelasPengajian === "Usia Mandiri") {
-    conditions.push(eq(generusTable.kelasPengajian, "Usia Mandiri"));
-  } else {
-    conditions.push(
-      inArray(generusTable.kelasPengajian, ["Remaja", "Pranikah"])
-    );
-  }
-
-  const query = db
-    .select({
-      id: generusTable.id,
-      nama: generusTable.nama,
-    })
-    .from(generusTable)
-    .where(and(...conditions));
-
-  const total = await tryCatch(
-    "Failed to get total count of Mudamudi Absensi",
-    db.$count(query)
-  );
-  const data = await tryCatch(
-    "Failed to get list of Mudamudi Absensi",
-    query.limit(limit).offset(offset)
-  );
-
-  return {
-    data,
-    total,
-  };
-}
-
 export async function getAbsensiMudamudiByKelasId(
   daerahId: number,
   kelasId: number,
@@ -116,10 +70,8 @@ export async function getAbsensiMudamudiByDaerahId(daerahId: number) {
     db
       .select({
         id: absensiGenerusMudaMudiTable.id,
-        generusId: absensiGenerusMudaMudiTable.generusId,
-        kelasPengajian: generusTable.kelasPengajian,
-        detail: absensiGenerusMudaMudiTable.detail,
-        keterangan: absensiGenerusMudaMudiTable.keterangan,
+        kelasPengajian: kelasMudaMudiTable.nama,
+        kelasPengajianGenerus: generusTable.kelasPengajian,
       })
       .from(absensiGenerusMudaMudiTable)
       .leftJoin(
@@ -237,52 +189,6 @@ export async function getAllMudamudiSummary(
   };
 }
 
-export async function getGenerusMudamudiAbsensiExclude(daerahId: number) {
-  return await tryCatch(
-    "Failed to get Generus Absensi Exclude",
-    db
-      .select({
-        id: generusTable.id,
-        kelasPengajian: generusTable.kelasPengajian,
-      })
-      .from(generusTable)
-      .where(
-        and(
-          eq(generusTable.daerahId, daerahId),
-          inArray(generusTable.kelasPengajian, [
-            "Remaja",
-            "Pranikah",
-            "Usia Mandiri",
-          ]),
-          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
-        )
-      )
-  );
-}
-
-export async function getCountMudamudiAbsensi(
-  daerahId: number,
-  kelasPengajian: string
-) {
-  const conditions: (SQL<unknown> | undefined)[] = [
-    eq(generusTable.daerahId, daerahId),
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
-  ];
-
-  if (kelasPengajian === "Usia Mandiri") {
-    conditions.push(eq(generusTable.kelasPengajian, "Usia Mandiri"));
-  } else {
-    conditions.push(
-      inArray(generusTable.kelasPengajian, ["Remaja", "Pranikah"])
-    );
-  }
-
-  return await tryCatch(
-    "Failed to get Count mudamudi",
-    db.$count(generusTable, and(...conditions))
-  );
-}
-
 export async function createAbsensiMudamudi(
   kelasId: number,
   daerahId: number,
@@ -366,6 +272,7 @@ export async function updateAbsensiMudamudi(
       )
   );
 }
+
 export async function deleteAbsensiMudamudi(id: number[], kelasId: number) {
   return await tryCatch(
     "Failed to delete Absensi Mudamudi",

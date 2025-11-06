@@ -1,5 +1,5 @@
 import {
-  getLaporanMuslimunByMusyawarahIdService,
+  getLaporanMuslimunService,
   OLaporanMuslimunList,
 } from "~~/server/modules/laporan-muslimun";
 
@@ -10,10 +10,7 @@ export default defineEventHandler(async (event) => {
     OLaporanMuslimunList.parse(q)
   );
 
-  const data = await getLaporanMuslimunByMusyawarahIdService(
-    user.kelompokId!,
-    query
-  );
+  const data = await getLaporanMuslimunService(user.kelompokId!, query);
 
-  return HttpResponse(data.data);
+  return HttpResponse(data);
 });

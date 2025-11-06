@@ -1,8 +1,9 @@
-import { and, count, eq, inArray } from "drizzle-orm";
+import { and, count, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
   absensiPengurusTable,
   musyawarahTable,
+  pengurusTable,
 } from "~~/server/database/schema/pengurus";
 import type { TAbsensiPengurusCreate } from "./absensi-pengurus.dto";
 

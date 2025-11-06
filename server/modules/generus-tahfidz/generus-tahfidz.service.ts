@@ -3,7 +3,8 @@ import {
   getAllGenerusExportTahfidz,
   getAllGenerusTahfidz,
   getAllTahfidzChart,
-  getGenerusTahfidzAbsensiExclude,
+  getAllTahfidzExclude,
+  getCountGenerusTahfidzExclude,
 } from "./generus-tahfidz.repo";
 
 export async function getAllGenerusTahfidzService(
@@ -45,6 +46,25 @@ export async function getAllTahfidzChartService(daerahId: number) {
   return await getAllTahfidzChart(daerahId);
 }
 
-export async function getGenerusTahfidzAbsensiExcludeService(daerahId: number) {
-  return getGenerusTahfidzAbsensiExclude(daerahId);
+export async function getCountGenerusTahfidzExcludeService(daerahId: number) {
+  return getCountGenerusTahfidzExclude(daerahId);
+}
+
+export async function getAllTahfidzExcludeService(
+  daerahId: number,
+  query: TSearchPagination
+) {
+  const data = await getAllTahfidzExclude(daerahId, query);
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: data.data,
+    metadata,
+  };
 }

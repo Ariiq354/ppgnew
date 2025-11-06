@@ -44,10 +44,13 @@ export async function getAllKelasDesaOptionsService(
 }
 
 export async function getCountKelasDesaService(
-  desaId: number,
+  params: {
+    desaId?: number;
+    daerahId?: number;
+  },
   kelasDesaPengajian: string
 ) {
-  return await getCountKelasDesa(desaId, kelasDesaPengajian);
+  return await getCountKelasDesa(params, kelasDesaPengajian);
 }
 
 export async function createKelasDesaService(

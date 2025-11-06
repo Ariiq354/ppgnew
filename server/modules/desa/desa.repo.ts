@@ -57,6 +57,13 @@ export async function getDesaByDaerahId(daerahId: number) {
   );
 }
 
+export async function getCountDesa(daerahId: number) {
+  return await tryCatch(
+    "Failed get count desa",
+    db.$count(desaTable, eq(desaTable.daerahId, daerahId))
+  );
+}
+
 export async function createDesa(data: TDesaCreate) {
   return await tryCatch(
     "Failed to create desa",
@@ -75,12 +82,5 @@ export async function deleteDesa(id: number[]) {
   await tryCatch(
     "Failed to delete desa",
     db.delete(desaTable).where(inArray(desaTable.id, id))
-  );
-}
-
-export async function getCountDesa(daerahId: number) {
-  return await tryCatch(
-    "Failed get count desa",
-    db.$count(desaTable, eq(desaTable.daerahId, daerahId))
   );
 }

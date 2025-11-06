@@ -1,4 +1,4 @@
-import { and, count, eq, inArray } from "drizzle-orm";
+import { and, count, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
   absensiJamaahKelompokTable,
@@ -36,6 +36,48 @@ export async function getAbsensiJamaahByPengajianId(
   return {
     data,
   };
+}
+
+export async function getAllJamaahAbsensi(
+  kelompokId: number,
+  { limit, page, search }: TSearchPagination
+) {
+  const offset = (page - 1) * limit;
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(jamaahTable.kelompokId, kelompokId),
+  ];
+
+  if (search) {
+    const searchCondition = `%${search}%`;
+    conditions.push(or(like(jamaahTable.nama, searchCondition)));
+  }
+
+  const query = db
+    .select({
+      id: jamaahTable.id,
+      nama: jamaahTable.nama,
+      hadir: sql<number>`CAST(SUM(CASE WHEN ${absensiJamaahKelompokTable.keterangan} = 'Hadir' THEN 1 ELSE 0 END) AS INT)`,
+      izin: sql<number>`CAST(SUM(CASE WHEN ${absensiJamaahKelompokTable.keterangan} = 'Izin' THEN 1 ELSE 0 END) AS INT)`,
+    })
+    .from(jamaahTable)
+    .where(and(...conditions))
+    .leftJoin(
+      absensiJamaahKelompokTable,
+      eq(jamaahTable.id, absensiJamaahKelompokTable.jamaahId)
+    )
+    .groupBy(jamaahTable.id, jamaahTable.nama);
+
+  const total = await tryCatch(
+    "Failed to get total count of Jamaah Absensi",
+    db.$count(query)
+  );
+
+  const data = await tryCatch(
+    "Failed to get list of Jamaah Absensi",
+    query.limit(limit).offset(offset)
+  );
+
+  return { data, total };
 }
 
 export async function getCountAbsensiJamaah(kelompokId: number) {

@@ -3,7 +3,9 @@ import {
   getAllGenerusExportKeputrian,
   getAllGenerusKeputrian,
   getAllKeputrianChart,
-  getGenerusKeputrianAbsensiExclude,
+  getAllKeputrianExclude,
+  getCountKeputrianByKelasPengajian,
+  getGenerusKeputrianKelasPengajianExclude,
 } from "./generus-keputrian.repo";
 
 export async function getAllGenerusKeputrianService(
@@ -45,8 +47,34 @@ export async function getAllKeputrianChartService(daerahId: number) {
   return await getAllKeputrianChart(daerahId);
 }
 
-export async function getGenerusKeputrianAbsensiExcludeService(
+export async function getGenerusKeputrianKelasPengajianExcludeService(
   daerahId: number
 ) {
-  return getGenerusKeputrianAbsensiExclude(daerahId);
+  return getGenerusKeputrianKelasPengajianExclude(daerahId);
+}
+
+export async function getCountKeputrianByKelasPengajianService(
+  daerahId: number,
+  kelasPengajian: string
+) {
+  return getCountKeputrianByKelasPengajian(daerahId, kelasPengajian);
+}
+
+export async function getAllKeputrianExcludeService(
+  daerahId: number,
+  query: TGenerusAbsensiList
+) {
+  const data = await getAllKeputrianExclude(daerahId, query);
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: data.data,
+    metadata,
+  };
 }

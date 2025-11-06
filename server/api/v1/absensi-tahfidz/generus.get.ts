@@ -1,4 +1,4 @@
-import { getAllTahfidzExcludeService } from "~~/server/modules/absensi-tahfidz";
+import { getAllTahfidzExcludeService } from "~~/server/modules/generus-tahfidz";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { tahfidz: ["view"] });

@@ -1,4 +1,4 @@
-import { getAllKeputrianExcludeService } from "~~/server/modules/absensi-keputrian";
+import { getAllKeputrianExcludeService } from "~~/server/modules/generus-keputrian";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { keputrian: ["view"] });

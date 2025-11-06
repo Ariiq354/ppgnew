@@ -1,4 +1,4 @@
-import { getAllJamaahAbsensiService, getCountJamaahService } from "../jamaah";
+import { getCountJamaahService } from "../jamaah";
 import {
   getAllPengajianOptionsService,
   getCountPengajianService,
@@ -9,9 +9,17 @@ import {
   createAbsensiJamaah,
   deleteAbsensiJamaah,
   getAbsensiJamaahByPengajianId,
+  getAllJamaahAbsensi,
   getCountAbsensiJamaah,
   updateAbsensiJamaah,
 } from "./absensi-jamaah.repo";
+
+export async function getAllJamaahAbsensiService(
+  kelompokId: number,
+  query: TSearchPagination
+) {
+  return await getAllJamaahAbsensi(kelompokId, query);
+}
 
 export async function getAbsensiJamaahMonitoringService(
   kelompokId: number,

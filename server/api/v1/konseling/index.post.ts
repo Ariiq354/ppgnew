@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 
   const body = await readValidatedBody(event, (b) => OKonselingCreate.parse(b));
 
-  await createKonselingService(user.daerahId, user.kelompokId!, body);
+  await createKonselingService(user.kelompokId!, body);
 
   return HttpResponse();
 });

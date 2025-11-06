@@ -3,7 +3,9 @@ import {
   getAllGenerusExportMudamudi,
   getAllGenerusMudamudi,
   getAllMudamudiChart,
-  getCountMudamudi,
+  getAllMudamudiExclude,
+  getCountMudamudiByKelasPengajian,
+  getGenerusMudamudiKelasPengajianExclude,
 } from "./generus-mudamudi.repo";
 
 export async function getAllGenerusMudamudiService(
@@ -41,10 +43,38 @@ export async function getAllGenerusExportMudamudiService(daerahId: number) {
   return newData;
 }
 
-export async function getCountMudamudiService(daerahId: number) {
-  return await getCountMudamudi(daerahId);
-}
-
 export async function getAllMudamudiChartService(daerahId: number) {
   return await getAllMudamudiChart(daerahId);
+}
+
+export async function getGenerusMudamudiKelasPengajianExcludeService(
+  daerahId: number
+) {
+  return await getGenerusMudamudiKelasPengajianExclude(daerahId);
+}
+
+export async function getAllMudamudiExcludeService(
+  daerahId: number,
+  query: TGenerusAbsensiList
+) {
+  const data = await getAllMudamudiExclude(daerahId, query);
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: data.data,
+    metadata,
+  };
+}
+
+export async function getCountMudamudiByKelasPengajianService(
+  daerahId: number,
+  kelasPengajian: string
+) {
+  return getCountMudamudiByKelasPengajian(daerahId, kelasPengajian);
 }

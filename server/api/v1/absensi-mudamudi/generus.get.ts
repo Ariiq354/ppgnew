@@ -1,4 +1,4 @@
-import { getAllMudamudiExcludeService } from "~~/server/modules/absensi-mudamudi";
+import { getAllMudamudiExcludeService } from "~~/server/modules/generus-mudamudi";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { kegiatan_muda_mudi: ["view"] });

@@ -1,3 +1,4 @@
+import { getCountMudamudiByKelasPengajianService } from "../generus-mudamudi";
 import {
   getAllKelasMudamudiOptionsService,
   getCountKelasMudamudiService,
@@ -8,11 +9,8 @@ import {
   deleteAbsensiMudamudi,
   getAbsensiMudamudiByDaerahId,
   getAbsensiMudamudiByKelasId,
-  getAllMudamudiExclude,
   getAllMudamudiSummary,
   getCountAbsensiMudamudi,
-  getCountMudamudiAbsensi,
-  getGenerusMudamudiAbsensiExclude,
   updateAbsensiMudamudi,
 } from "./absensi-mudamudi.repo";
 
@@ -51,7 +49,7 @@ export async function getAbsensiMudamudiMonitoringSummaryService(
   daerahId: number,
   query: TAbsensiKelasPengajianList
 ) {
-  const countMudamudi = await getCountMudamudiAbsensi(
+  const countMudamudi = await getCountMudamudiByKelasPengajianService(
     daerahId,
     query.kelasPengajian
   );
@@ -97,33 +95,8 @@ export async function getAbsensiMudamudiByKelasIdService(
   return data;
 }
 
-export async function getGenerusMudamudiAbsensiExcludeService(
-  daerahId: number
-) {
-  return getGenerusMudamudiAbsensiExclude(daerahId);
-}
-
 export async function getAbsensiMudamudiByDaerahIdService(daerahId: number) {
   return getAbsensiMudamudiByDaerahId(daerahId);
-}
-
-export async function getAllMudamudiExcludeService(
-  daerahId: number,
-  query: TGenerusAbsensiList
-) {
-  const data = await getAllMudamudiExclude(daerahId, query);
-
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return {
-    data: data.data,
-    metadata,
-  };
 }
 
 export async function createAbsensiMudamudiService(

@@ -1,3 +1,4 @@
+import { getCountKeputrianByKelasPengajianService } from "../generus-keputrian";
 import {
   getAllKelasKeputrianOptionsService,
   getCountKelasKeputrianService,
@@ -8,10 +9,8 @@ import {
   deleteAbsensiKeputrian,
   getAbsensiKeputrianByDaerahId,
   getAbsensiKeputrianByKelasId,
-  getAllKeputrianExclude,
   getAllKeputrianSummary,
   getCountAbsensiKeputrian,
-  getCountKeputrianAbsensi,
   updateAbsensiKeputrian,
 } from "./absensi-keputrian.repo";
 
@@ -50,7 +49,7 @@ export async function getAbsensiKeputrianMonitoringSummaryService(
   daerahId: number,
   query: TAbsensiKelasPengajianList
 ) {
-  const countKeputrian = await getCountKeputrianAbsensi(
+  const countKeputrian = await getCountKeputrianByKelasPengajianService(
     daerahId,
     query.kelasPengajian
   );
@@ -94,25 +93,6 @@ export async function getAbsensiKeputrianByKelasIdService(
   );
 
   return data;
-}
-
-export async function getAllKeputrianExcludeService(
-  daerahId: number,
-  query: TGenerusAbsensiList
-) {
-  const data = await getAllKeputrianExclude(daerahId, query);
-
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return {
-    data: data.data,
-    metadata,
-  };
 }
 
 export async function createAbsensiKeputrianService(

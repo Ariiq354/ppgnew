@@ -3,7 +3,6 @@ import type { TJamaahCreate } from "./jamaah.dto";
 import {
   getAllJamaah,
   getAllJamaahExport,
-  getAllJamaahAbsensi,
   getCountJamaah,
   createJamaah,
   updateJamaah,
@@ -26,13 +25,6 @@ export async function getAllJamaahService(
 
 export async function getAllJamaahExportService(kelompokId: number) {
   return await getAllJamaahExport(kelompokId);
-}
-
-export async function getAllJamaahAbsensiService(
-  kelompokId: number,
-  query: TSearchPagination
-) {
-  return await getAllJamaahAbsensi(kelompokId, query);
 }
 
 export async function getCountJamaahService(kelompokId: number) {

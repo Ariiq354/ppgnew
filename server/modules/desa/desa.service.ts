@@ -39,6 +39,10 @@ export async function getDesaByDaerahIdService(daerahId: number) {
   return await getDesaByDaerahId(daerahId);
 }
 
+export async function getCountDesaService(daerahId: number) {
+  return await getCountDesa(daerahId);
+}
+
 export async function createDesaService(body: TDesaCreate) {
   body.name = body.name
     .split(" ")
@@ -83,8 +87,4 @@ export async function updateDesaService(id: number, body: TDesaCreate) {
 
 export async function deleteDesaService(id: number[]) {
   await deleteDesa(id);
-}
-
-export async function getCountDesaService(daerahId: number) {
-  return await getCountDesa(daerahId);
 }

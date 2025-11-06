@@ -1,19 +1,21 @@
+import { getDesaByDaerahIdService } from "../desa";
+import { getCountGenerusExclude } from "../generus/generus.repo";
 import {
-  getAllKelasDesaOptionsService,
   getCountKelasDesaService,
   getKelasDesaByIdService,
 } from "../kelas-desa";
-import type { TGenerusDesaAbsensiList } from "./absensi-desa.dto";
+import type {
+  TAbsensiKelasDesaPengajianForDaerahList,
+  TGenerusDesaAbsensiList,
+  TGenerusDesaAbsensiListForDaerah,
+} from "./absensi-desa.dto";
 import {
   createAbsensiGenerusDesa,
   deleteAbsensiGenerusDesa,
   getAbsensiGenerusByDesaId,
   getAbsensiGenerusDesaByKelasId,
-  getAllGenerusDesaExclude,
   getAllGenerusDesaSummary,
   getCountAbsensiGenerusDesa,
-  getCountGenerusDesaAbsensi,
-  getGenerusDesaAbsensiExclude,
   updateAbsensiGenerusDesa,
 } from "./absensi-desa.repo";
 
@@ -21,17 +23,17 @@ export async function getAbsensiDesaMonitoringService(
   desaId: number,
   query: TGenerusDesaAbsensiList
 ) {
-  const data = await getAllGenerusDesaSummary(desaId, query);
-  const kelas = await getAllKelasDesaOptionsService(desaId, {
-    nama: query.kelasPengajian,
-  });
+  const data = await getAllGenerusDesaSummary({ desaId }, query);
+  const kelas = await getCountKelasDesaService(
+    { desaId },
+    query.kelasPengajian
+  );
 
   data.data = data.data.map((i) => {
-    const total = kelas.data.length;
     return {
       ...i,
-      tanpaKeterangan: total - i.hadir - i.izin,
-      kehadiran: total > 0 ? ((i.hadir + i.izin) * 100) / total : 0,
+      tanpaKeterangan: kelas - i.hadir - i.izin,
+      kehadiran: kelas > 0 ? ((i.hadir + i.izin) * 100) / kelas : 0,
     };
   });
 
@@ -48,24 +50,103 @@ export async function getAbsensiDesaMonitoringService(
   };
 }
 
-export async function getGenerusDesaAbsensiExcludeService(desaId: number) {
-  return getGenerusDesaAbsensiExclude(desaId);
-}
-
 export async function getAbsensiDesaMonitoringSummaryService(
   desaId: number,
   query: TAbsensiKelasPengajianList
 ) {
-  const countGenerus = await getCountGenerusDesaAbsensi(
-    desaId,
+  const countGenerus = await getCountGenerusExclude(
+    { desaId },
     query.kelasPengajian
   );
   const countKelas = await getCountKelasDesaService(
-    desaId,
+    { desaId },
     query.kelasPengajian
   );
   const countAbsensi = await getCountAbsensiGenerusDesa(
-    desaId,
+    { desaId },
+    query.kelasPengajian
+  );
+
+  const denominator = countGenerus * countKelas;
+  const kehadiran =
+    denominator > 0 ? Math.round((countAbsensi * 100) / denominator) : 0;
+
+  const data = {
+    countGenerus,
+    kehadiran,
+  };
+
+  return data;
+}
+
+export async function getAbsensiDesaMonitoringForDaerahService(
+  daerahId: number,
+  query: TGenerusDesaAbsensiListForDaerah
+) {
+  if (query.desaId) {
+    const desa = await getDesaByDaerahIdService(daerahId);
+    if (!desa.find((i) => i.id === query.desaId)) {
+      throw createError({
+        statusCode: 403,
+        message: "There is no desa in your daerah",
+      });
+    }
+  }
+
+  const data = await getAllGenerusDesaSummary(
+    { daerahId, desaId: query.desaId },
+    query
+  );
+  const kelas = await getCountKelasDesaService(
+    { daerahId, desaId: query.desaId },
+    query.kelasPengajian
+  );
+
+  data.data = data.data.map((i) => {
+    return {
+      ...i,
+      tanpaKeterangan: kelas - i.hadir - i.izin,
+      kehadiran: kelas > 0 ? ((i.hadir + i.izin) * 100) / kelas : 0,
+    };
+  });
+
+  const metadata = {
+    page: query.page,
+    itemPerPage: query.limit,
+    total: data.total,
+    totalPage: Math.ceil(data.total / query.limit),
+  };
+
+  return {
+    data: data.data,
+    metadata,
+  };
+}
+
+export async function getAbsensiDesaMonitoringSummaryForDaerahService(
+  daerahId: number,
+  query: TAbsensiKelasDesaPengajianForDaerahList
+) {
+  if (query.desaId) {
+    const desa = await getDesaByDaerahIdService(daerahId);
+    if (!desa.find((i) => i.id === query.desaId)) {
+      throw createError({
+        statusCode: 403,
+        message: "There is no desa in your daerah",
+      });
+    }
+  }
+
+  const countGenerus = await getCountGenerusExclude(
+    { daerahId, desaId: query.desaId },
+    query.kelasPengajian
+  );
+  const countKelas = await getCountKelasDesaService(
+    { daerahId, desaId: query.desaId },
+    query.kelasPengajian
+  );
+  const countAbsensi = await getCountAbsensiGenerusDesa(
+    { daerahId, desaId: query.desaId },
     query.kelasPengajian
   );
 
@@ -100,25 +181,6 @@ export async function getAbsensiGenerusDesaByKelasIdService(
   );
 }
 
-export async function getAllGenerusDesaExcludeService(
-  desaId: number,
-  query: TGenerusDesaAbsensiList
-) {
-  const { data, total } = await getAllGenerusDesaExclude(desaId, query);
-
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: total,
-    totalPage: Math.ceil(total / query.limit),
-  };
-
-  return {
-    data,
-    metadata,
-  };
-}
-
 export async function createAbsensiDesaService(
   desaId: number,
   kelasId: number,
@@ -149,27 +211,6 @@ export async function createAbsensiDesaService(
       await createAbsensiGenerusDesa(kelasId, desaId, check.data!.nama, item);
     }
   }
-}
-
-export async function getAllGenerusDesaSummaryService(
-  desaId: number,
-  query: TGenerusDesaAbsensiList
-) {
-  return getAllGenerusDesaSummary(desaId, query);
-}
-
-export async function getCountGenerusDesaAbsensiService(
-  desaId: number,
-  kelasPengajian: string
-) {
-  return getCountGenerusDesaAbsensi(desaId, kelasPengajian);
-}
-
-export async function getCountAbsensiGenerusDesaService(
-  desaId: number,
-  kelasPengajian: string
-) {
-  return getCountAbsensiGenerusDesa(desaId, kelasPengajian);
 }
 
 export async function getAbsensiGenerusByDesaIdService(desaId: number) {

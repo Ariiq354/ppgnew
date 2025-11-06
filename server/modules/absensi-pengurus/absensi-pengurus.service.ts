@@ -3,12 +3,13 @@ import {
   getCountMusyawarahService,
   getMusyawarahByIdService,
 } from "../musyawarah";
-import { getAllPengurusAbsensiService } from "../pengurus";
+import { getCountPengurusService } from "../pengurus";
 import type { TAbsensiPengurusCreate } from "./absensi-pengurus.dto";
 import {
   createAbsensiPengurus,
   deleteAbsensiPengurus,
   getAbsensiPengurusByMusyawarahId,
+  getAllPengurusAbsensi,
   getCountAbsensiPengurus,
   updateAbsensiPengurus,
 } from "./absensi-pengurus.repo";
@@ -17,7 +18,7 @@ export async function getAbsensiPengurusMonitoringService(
   daerahId: number,
   query: TSearchPagination
 ) {
-  const data = await getAllPengurusAbsensiService(daerahId, query);
+  const data = await getAllPengurusAbsensi(daerahId, query);
   const musyawarah = await getAllMusyawarahOptionsService(daerahId);
 
   data.data = data.data.map((i) => {

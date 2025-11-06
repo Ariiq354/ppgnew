@@ -89,22 +89,56 @@ export async function getAllGenerusExportTahfidz(daerahId: number) {
   );
 }
 
-export async function getGenerusTahfidzAbsensiExclude(daerahId: number) {
+export async function getAllTahfidzExclude(
+  daerahId: number,
+  { limit, page, search }: TSearchPagination
+) {
+  const offset = (page - 1) * limit;
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(generusTable.daerahId, daerahId),
+    sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
+    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+  ];
+
+  if (search) {
+    const searchCondition = `%${search}%`;
+    conditions.push(or(like(generusTable.nama, searchCondition)));
+  }
+
+  const query = db
+    .select({
+      id: generusTable.id,
+      nama: generusTable.nama,
+    })
+    .from(generusTable)
+    .where(and(...conditions));
+
+  const total = await tryCatch(
+    "Failed to get total count of TAHFIDZ Absensi",
+    db.$count(query)
+  );
+  const data = await tryCatch(
+    "Failed to get list of TAHFIDZ Absensi",
+    query.limit(limit).offset(offset)
+  );
+
+  return {
+    data,
+    total,
+  };
+}
+
+export async function getCountGenerusTahfidzExclude(daerahId: number) {
   return await tryCatch(
     "Failed to get Generus Absensi Exclude",
-    db
-      .select({
-        id: generusTable.id,
-        kelasPengajian: generusTable.kelasPengajian,
-      })
-      .from(generusTable)
-      .where(
-        and(
-          eq(generusTable.daerahId, daerahId),
-          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
-          sql`(${generusTable.status} ?| ${new Param("Tahfidz")})`
-        )
+    db.$count(
+      generusTable,
+      and(
+        eq(generusTable.daerahId, daerahId),
+        sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+        sql`(${generusTable.status} ?| ${new Param("Tahfidz")})`
       )
+    )
   );
 }
 

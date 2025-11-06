@@ -1,3 +1,4 @@
+import { getCountGenerusTahfidzExcludeService } from "../generus-tahfidz";
 import {
   getAllKelasTahfidzOptionsService,
   getCountKelasTahfidzService,
@@ -6,13 +7,9 @@ import {
 import {
   createAbsensiTahfidz,
   deleteAbsensiTahfidz,
-  getAbsensiTahfidzByDaerahId,
   getAbsensiTahfidzByKelasId,
-  getAllTahfidzExclude,
   getAllTahfidzSummary,
   getCountAbsensiTahfidz,
-  getCountTahfidzAbsensi,
-  getGenerusTahfidzAbsensiExclude,
   updateAbsensiTahfidz,
 } from "./absensi-tahfidz.repo";
 
@@ -48,7 +45,7 @@ export async function getAbsensiTahfidzMonitoringService(
 export async function getAbsensiTahfidzMonitoringSummaryService(
   daerahId: number
 ) {
-  const countGenerus = await getCountTahfidzAbsensi(daerahId);
+  const countGenerus = await getCountGenerusTahfidzExcludeService(daerahId);
   const countKelas = await getCountKelasTahfidzService(daerahId);
   const countAbsensi = await getCountAbsensiTahfidz(daerahId);
 
@@ -81,23 +78,8 @@ export async function getAbsensiTahfidzByKelasIdService(
   return data;
 }
 
-export async function getAllTahfidzExcludeService(
-  daerahId: number,
-  query: TSearchPagination
-) {
-  const data = await getAllTahfidzExclude(daerahId, query);
-
-  const metadata = {
-    page: query.page,
-    itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
-  };
-
-  return {
-    data: data.data,
-    metadata,
-  };
+export async function getCountAbsensiTahfidzService(daerahId: number) {
+  return getCountAbsensiTahfidz(daerahId);
 }
 
 export async function createAbsensiTahfidzService(
@@ -124,12 +106,4 @@ export async function createAbsensiTahfidzService(
       await createAbsensiTahfidz(kelasId, daerahId!, item);
     }
   }
-}
-
-export async function getAbsensiTahfidzByDaerahIdService(daerahId: number) {
-  return getAbsensiTahfidzByDaerahId(daerahId);
-}
-
-export async function getGenerusTahfidzAbsensiExcludeService(daerahId: number) {
-  return getGenerusTahfidzAbsensiExclude(daerahId);
 }
