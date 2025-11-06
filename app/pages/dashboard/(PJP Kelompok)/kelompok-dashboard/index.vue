@@ -11,7 +11,7 @@
 <template>
   <Title>PJP Kelompok | Dashbaord</Title>
 
-  <main class="grid grid-cols-1 gap-4 sm:grid-cols-4 sm:gap-8">
+  <main class="grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-8">
     <PercentCard
       :percent="data!.data.percentPaud"
       title="Absensi"
@@ -32,14 +32,14 @@
       title="Absensi"
       subtitle="Muda-mudi"
     />
-    <NuxtLink class="sm:col-span-2" to="/dashboard/kelompok-generus">
+    <NuxtLink class="md:col-span-2" to="/dashboard/kelompok-generus">
       <CountCard
         title="Generus"
         :count="data!.data.countGenerus"
         icon="i-lucide-user"
       />
     </NuxtLink>
-    <NuxtLink class="sm:col-span-2" to="/dashboard/kelompok-pengajar">
+    <NuxtLink class="md:col-span-2" to="/dashboard/kelompok-pengajar">
       <CountCard
         title="Pengajar"
         :count="data!.data.countPengajar"

@@ -3,6 +3,7 @@ import { db } from "~~/server/database";
 import { generusTable } from "~~/server/database/schema/generus";
 import { kelompokTable } from "~~/server/database/schema/wilayah";
 import type { TGenerusBaseList } from "~~/server/utils/dto";
+import { exclude } from "~~/shared/contants";
 
 export async function getAllGenerusTahfidz(
   daerahId: number,
@@ -88,15 +89,22 @@ export async function getAllGenerusExportTahfidz(daerahId: number) {
   );
 }
 
-export async function getCountTahfidz(daerahId: number) {
-  const conditions: (SQL<unknown> | undefined)[] = [
-    eq(generusTable.daerahId, daerahId),
-    sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
-  ];
-
+export async function getGenerusTahfidzAbsensiExclude(daerahId: number) {
   return await tryCatch(
-    "Failed to get count of Tahfidz",
-    db.$count(generusTable, and(...conditions))
+    "Failed to get Generus Absensi Exclude",
+    db
+      .select({
+        id: generusTable.id,
+        kelasPengajian: generusTable.kelasPengajian,
+      })
+      .from(generusTable)
+      .where(
+        and(
+          eq(generusTable.daerahId, daerahId),
+          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+          sql`(${generusTable.status} ?| ${new Param("Tahfidz")})`
+        )
+      )
   );
 }
 

@@ -21,7 +21,7 @@ import {
 import { getAllMudamudiChartService } from "../generus-mudamudi";
 import {
   getAllTahfidzChartService,
-  getCountTahfidzService,
+  getGenerusTahfidzAbsensiExcludeService,
 } from "../generus-tahfidz";
 import { getKelasByDesaIdService } from "../kelas-desa";
 import { getKelasByKelompokIdService } from "../kelas-kelompok";
@@ -367,18 +367,20 @@ export async function getDashboardDesa(daerahId: number, desaId: number) {
 }
 
 export async function getDashboardTahfidz(daerahId: number) {
-  const countGenerus = await getCountTahfidzService(daerahId);
-
   const dataGenerus = await getAllTahfidzChartService(daerahId);
+
+  const countGenerus = dataGenerus.length;
+
+  const dataExclude = await getGenerusTahfidzAbsensiExcludeService(daerahId);
 
   const absensi = await getAbsensiTahfidzByDaerahIdService(daerahId);
   const kelas = await getAllKelasTahfidzOptionsService(daerahId);
 
   const percentAbsensi =
-    countGenerus && kelas.data.length > 0
+    dataExclude && kelas.data.length > 0
       ? (
           (absensi.length * 100) /
-          (dataGenerus.length * kelas.data.length)
+          (dataExclude.length * kelas.data.length)
         ).toFixed(2)
       : "0";
 
