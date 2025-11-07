@@ -12,13 +12,12 @@
   const kelompokId = ref<number>();
   const filterModal = ref(false);
   const { data: summary, refresh: rSummary } = await useFetch(
-    `${APIBASE}/absensi-desa/kelompok/summary`,
+    `${APIBASE}/absensi-generus/desa/summary`,
     {
       query: {
         kelasPengajian: namaKelas,
         kelompokId: kelompokId,
       },
-      immediate: false,
     }
   );
 
@@ -38,10 +37,9 @@
     query.search = v;
   }, 300);
   const { data, status, refresh } = await useFetch(
-    `${APIBASE}/absensi-desa/kelompok`,
+    `${APIBASE}/absensi-generus/desa`,
     {
       query,
-      immediate: false,
     }
   );
 
