@@ -1,16 +1,16 @@
 import {
-  getAbsensiGenerusForDesaSummaryService,
-  OAbsensiKelasPengajianForDesaList,
+  getAbsensiGenerusForDaerahSummaryService,
+  OAbsensiKelasPengajianForDaerahList,
 } from "~~/server/modules/absensi-generus";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { kurikulum: ["view"] });
 
   const query = await getValidatedQuery(event, (q) =>
-    OAbsensiKelasPengajianForDesaList.parse(q)
+    OAbsensiKelasPengajianForDaerahList.parse(q)
   );
 
-  const data = await getAbsensiGenerusForDesaSummaryService(
+  const data = await getAbsensiGenerusForDaerahSummaryService(
     user.daerahId,
     query
   );

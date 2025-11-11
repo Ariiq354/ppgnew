@@ -15,6 +15,13 @@ export const OGenerusDesaAbsensiListForDaerah = z.object({
   desaId: z.optional(z.coerce.number()),
 });
 
+export const OGenerusDesaAbsensiListForMudamudi = z.object({
+  ...OPagination.def.shape,
+  search: z.string(),
+  kelompokId: z.optional(z.coerce.number()),
+  desaId: z.optional(z.coerce.number()),
+});
+
 export type TGenerusDesaAbsensiListForDaerah = z.infer<
   typeof OGenerusDesaAbsensiListForDaerah
 >;
@@ -22,6 +29,10 @@ export type TGenerusDesaAbsensiListForDaerah = z.infer<
 export const OAbsensiKelasDesaPengajianForDaerahList = z.object({
   desaId: z.optional(z.coerce.number()),
   kelasPengajian: z.string(),
+});
+
+export const OAbsensiKelasDesaPengajianForMudamudiList = z.object({
+  desaId: z.optional(z.coerce.number()),
 });
 
 export type TAbsensiKelasDesaPengajianForDaerahList = z.infer<

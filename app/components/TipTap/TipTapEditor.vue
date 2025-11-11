@@ -2,12 +2,14 @@
   import type { DropdownMenuItem } from "@nuxt/ui";
   import TextAlign from "@tiptap/extension-text-align";
   import StarterKit from "@tiptap/starter-kit";
+  import { TableKit } from "@tiptap/extension-table";
   import { EditorContent, useEditor } from "@tiptap/vue-3";
 
   const editorData = defineModel<string>();
   const editor = useEditor({
     extensions: [
       StarterKit,
+      TableKit,
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
@@ -127,12 +129,6 @@
       },
     ],
   ]);
-
-  const listIcon = computed(() => {
-    if (editor.value?.isActive("orderedlist")) return "i-lucide-list-ordered";
-    if (editor.value?.isActive("tasklist")) return "i-lucide-list-todo";
-    return "i-lucide-list";
-  });
 </script>
 
 <template>
@@ -148,8 +144,8 @@
             size="sm"
             icon="i-lucide-undo"
             class="flex aspect-square items-center justify-center rounded-lg transition-all duration-300"
-            @click="editor?.chain().focus().undo().run()"
             :disabled="!editor?.can().chain().focus().undo().run()"
+            @click="editor?.chain().focus().undo().run()"
           />
         </UTooltip>
         <UTooltip text="Redo">
@@ -159,8 +155,8 @@
             size="sm"
             icon="i-lucide-redo"
             class="flex aspect-square items-center justify-center rounded-lg transition-all duration-300"
-            @click="editor?.chain().focus().redo().run()"
             :disabled="!editor?.can().chain().focus().redo().run()"
+            @click="editor?.chain().focus().redo().run()"
           />
         </UTooltip>
       </div>
