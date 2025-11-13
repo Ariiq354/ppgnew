@@ -9,7 +9,11 @@
   const editor = useEditor({
     extensions: [
       StarterKit,
-      TableKit,
+      TableKit.configure({
+        table: {
+          resizable: true,
+        },
+      }),
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
@@ -134,7 +138,7 @@
 <template>
   <ClientOnly>
     <div
-      class="border-accented divide-muted flex justify-center divide-x rounded-t-md border border-b-0 p-2"
+      class="border-accented divide-muted flex flex-wrap justify-center gap-y-2 divide-x rounded-t-md border border-b-0 p-2"
     >
       <div class="flex gap-1 px-2">
         <UTooltip text="Undo">
@@ -320,6 +324,84 @@
           />
         </UTooltip>
       </div>
+      <div class="flex gap-1 px-2">
+        <UTooltip text="Insert table">
+          <UButton
+            variant="ghost"
+            color="neutral"
+            size="sm"
+            icon="i-lucide-table"
+            class="flex aspect-square items-center justify-center rounded-lg transition-all duration-300"
+            @click="
+              editor
+                ?.chain()
+                .focus()
+                .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+                .run()
+            "
+          />
+        </UTooltip>
+        <UTooltip text="Add Row">
+          <UButton
+            variant="ghost"
+            color="neutral"
+            size="sm"
+            icon="i-lucide-list-plus"
+            class="flex aspect-square items-center justify-center rounded-lg transition-all duration-300"
+            @click="editor?.chain().focus().addRowAfter().run()"
+          />
+        </UTooltip>
+        <UTooltip text="Delete Row">
+          <UButton
+            variant="ghost"
+            color="neutral"
+            size="sm"
+            icon="i-lucide-list-minus"
+            class="flex aspect-square items-center justify-center rounded-lg transition-all duration-300"
+            @click="editor?.chain().focus().deleteRow().run()"
+          />
+        </UTooltip>
+        <UTooltip text="Add Column">
+          <UButton
+            variant="ghost"
+            color="neutral"
+            size="sm"
+            icon="i-lucide-bookmark-plus"
+            class="flex aspect-square items-center justify-center rounded-lg transition-all duration-300"
+            @click="editor?.chain().focus().addColumnAfter().run()"
+          />
+        </UTooltip>
+        <UTooltip text="Delete Column">
+          <UButton
+            variant="ghost"
+            color="neutral"
+            size="sm"
+            icon="i-lucide-bookmark-minus"
+            class="flex aspect-square items-center justify-center rounded-lg transition-all duration-300"
+            @click="editor?.chain().focus().deleteColumn().run()"
+          />
+        </UTooltip>
+        <UTooltip text="Merge / Split">
+          <UButton
+            variant="ghost"
+            color="neutral"
+            size="sm"
+            icon="i-lucide-table-cells-merge"
+            class="flex aspect-square items-center justify-center rounded-lg transition-all duration-300"
+            @click="editor?.chain().focus().mergeOrSplit().run()"
+          />
+        </UTooltip>
+        <UTooltip text="Toggle Header">
+          <UButton
+            variant="ghost"
+            color="neutral"
+            size="sm"
+            icon="i-lucide-table-2"
+            class="flex aspect-square items-center justify-center rounded-lg transition-all duration-300"
+            @click="editor?.chain().focus().toggleHeaderRow().run()"
+          />
+        </UTooltip>
+      </div>
     </div>
     <editor-content :editor="editor" />
     <template #fallback>
@@ -329,8 +411,30 @@
 </template>
 
 <style>
-  .tiptap li p {
-    display: inline;
+  .tiptap table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .tiptap td,
+  .tiptap th {
+    border: 1px solid var(--border-color-muted);
+    padding: 6px 8px;
+    font-size: 0.95rem;
+    vertical-align: middle;
+  }
+
+  .tiptap th {
+    background-color: var(--background-color-muted);
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .tiptap .selectedCell {
+    background-color: var(--background-color-accented);
+  }
+
+  .tiptap p {
     margin: 0;
   }
 </style>

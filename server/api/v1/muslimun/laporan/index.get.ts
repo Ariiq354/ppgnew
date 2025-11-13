@@ -10,7 +10,9 @@ export default defineEventHandler(async (event) => {
     OLaporanMuslimunList.parse(q)
   );
 
-  const data = await getLaporanMuslimunService(user.kelompokId!, query);
+  query.kelompokId = user.kelompokId!;
+
+  const data = await getLaporanMuslimunService(user.desaId!, query);
 
   return HttpResponse(data);
 });

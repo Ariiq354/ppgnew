@@ -15,6 +15,7 @@ import {
   generusTable,
   kelasTable,
 } from "~~/server/database/schema/generus";
+import { desaTable, kelompokTable } from "~~/server/database/schema/wilayah";
 import type {
   TAbsensiGenerusCreate,
   TGenerusAbsensiList,
@@ -86,6 +87,35 @@ export async function getAbsensiGenerusByKelompokId(kelompokId: number) {
       .where(
         and(
           eq(kelasTable.kelompokId, kelompokId),
+          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
+        )
+      )
+  );
+}
+
+export async function getAbsensiGenerusByDaerahId(daerahId: number) {
+  return await tryCatch(
+    "Failed to get Absensi Generus By Kelompok Id",
+    db
+      .select({
+        id: absensiGenerusTable.id,
+        generusId: absensiGenerusTable.generusId,
+        kelasPengajian: kelasTable.nama,
+        kelasPengajianGenerus: generusTable.kelasPengajian,
+        detail: absensiGenerusTable.detail,
+        keterangan: absensiGenerusTable.keterangan,
+      })
+      .from(absensiGenerusTable)
+      .leftJoin(kelasTable, eq(absensiGenerusTable.kelasId, kelasTable.id))
+      .leftJoin(
+        generusTable,
+        eq(generusTable.id, absensiGenerusTable.generusId)
+      )
+      .leftJoin(kelompokTable, eq(kelasTable.kelompokId, kelompokTable.id))
+      .leftJoin(desaTable, eq(kelompokTable.desaId, desaTable.id))
+      .where(
+        and(
+          eq(desaTable.daerahId, daerahId),
           sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
         )
       )

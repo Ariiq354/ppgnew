@@ -124,6 +124,21 @@ export async function getKelasByKelompokId(kelompokId: number) {
   );
 }
 
+export async function getKelasByDaerahId(daerahId: number) {
+  return await tryCatch(
+    "Failed to get Kelas by Daerah ID",
+    db
+      .select({
+        id: kelasTable.id,
+        nama: kelasTable.nama,
+      })
+      .from(kelasTable)
+      .leftJoin(kelompokTable, eq(kelasTable.kelompokId, kelompokTable.id))
+      .leftJoin(desaTable, eq(kelompokTable.desaId, desaTable.id))
+      .where(eq(desaTable.daerahId, daerahId))
+  );
+}
+
 export async function getCountKelas(
   params: {
     kelompokId?: number;

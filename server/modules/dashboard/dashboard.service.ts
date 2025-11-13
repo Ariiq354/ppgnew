@@ -1,5 +1,8 @@
 import { getAbsensiGenerusByDesaIdService } from "../absensi-desa";
-import { getAbsensiGenerusByKelompokIdService } from "../absensi-generus";
+import {
+  getAbsensiGenerusByDaerahIdService,
+  getAbsensiGenerusByKelompokIdService,
+} from "../absensi-generus";
 import { getAbsensiKeputrianByDaerahIdService } from "../absensi-keputrian";
 import { getAbsensiMudamudiByDaerahIdService } from "../absensi-mudamudi";
 import { getCountAbsensiTahfidzService } from "../absensi-tahfidz";
@@ -19,7 +22,10 @@ import {
 } from "../generus-tahfidz";
 import { getGenerusKelasPengajianExclude } from "../generus/generus.repo";
 import { getKelasByDesaIdService } from "../kelas-desa";
-import { getKelasByKelompokIdService } from "../kelas-kelompok";
+import {
+  getKelasByDaerahIdService,
+  getKelasByKelompokIdService,
+} from "../kelas-kelompok";
 import { getKelasKeputrianByDaerahIdService } from "../kelas-keputrian";
 import { getKelasMudamudiByDaerahIdService } from "../kelas-mudamudi";
 import { getAllKelasTahfidzOptionsService } from "../kelas-tahfidz";
@@ -165,7 +171,7 @@ function getPercentCombined(
 
   return generusCount && kelasCount
     ? ((absensiCount * 100) / (generusCount * kelasCount)).toFixed(2)
-    : "0";
+    : "0.00";
 }
 
 export async function getDashboard(daerahId: number) {
@@ -177,6 +183,43 @@ export async function getDashboard(daerahId: number) {
 
   const countGenerus = dataGenerus.length;
   const countPengajar = dataPengajar.length;
+
+  const dataGenerusExclude = await getGenerusKelasPengajianExclude({
+    daerahId,
+  });
+
+  const absensi = await getAbsensiGenerusByDaerahIdService(daerahId);
+  const kelas = await getKelasByDaerahIdService(daerahId);
+
+  const percentPaud = getPercentCombined(
+    "PAUD",
+    absensi,
+    dataGenerusExclude,
+    kelas,
+    MudaMudiKelas
+  );
+  const percentCabeRawit = getPercentCombined(
+    "Cabe Rawit",
+    absensi,
+    dataGenerusExclude,
+    kelas,
+    MudaMudiKelas
+  );
+  const percentPraremaja = getPercentCombined(
+    "Praremaja",
+    absensi,
+    dataGenerusExclude,
+    kelas,
+    MudaMudiKelas
+  );
+  const percentMudamudi = getPercentCombined(
+    "Muda-mudi",
+    absensi,
+    dataGenerusExclude,
+    kelas,
+    MudaMudiKelas,
+    true
+  );
 
   const generusDatasets = groupByField(
     dataGenerus,
@@ -195,6 +238,10 @@ export async function getDashboard(daerahId: number) {
   }));
 
   const data = {
+    percentPaud,
+    percentCabeRawit,
+    percentPraremaja,
+    percentMudamudi,
     countKelompok,
     countDesa,
     countGenerus,
@@ -557,4 +604,67 @@ export async function getKelas69(daerahId: number) {
   };
 
   return data;
+}
+
+export async function getAbsensiSummaryService(kelompokId: number) {
+  const dataGenerusExclude = await getGenerusKelasPengajianExclude({
+    kelompokId,
+  });
+
+  const absensi = await getAbsensiGenerusByKelompokIdService(kelompokId);
+  const kelas = await getKelasByKelompokIdService(kelompokId);
+
+  const countPaud = dataGenerusExclude.filter(
+    (i) => i.kelasPengajian === "PAUD"
+  ).length;
+  const countCabeRawit = dataGenerusExclude.filter(
+    (i) => i.kelasPengajian === "Cabe Rawit"
+  ).length;
+  const countPraremaja = dataGenerusExclude.filter(
+    (i) => i.kelasPengajian === "Praremaja"
+  ).length;
+  const countMudamudi = dataGenerusExclude.filter((i) =>
+    MudaMudiKelas.includes(i.kelasPengajian)
+  ).length;
+
+  const percentPaud = getPercentCombined(
+    "PAUD",
+    absensi,
+    dataGenerusExclude,
+    kelas,
+    MudaMudiKelas
+  );
+  const percentCabeRawit = getPercentCombined(
+    "Cabe Rawit",
+    absensi,
+    dataGenerusExclude,
+    kelas,
+    MudaMudiKelas
+  );
+  const percentPraremaja = getPercentCombined(
+    "Praremaja",
+    absensi,
+    dataGenerusExclude,
+    kelas,
+    MudaMudiKelas
+  );
+  const percentMudamudi = getPercentCombined(
+    "Muda-mudi",
+    absensi,
+    dataGenerusExclude,
+    kelas,
+    MudaMudiKelas,
+    true
+  );
+
+  return {
+    percentPaud,
+    percentCabeRawit,
+    percentPraremaja,
+    percentMudamudi,
+    countPaud,
+    countCabeRawit,
+    countPraremaja,
+    countMudamudi,
+  };
 }

@@ -14,6 +14,7 @@ import type {
 import {
   createAbsensiGenerus,
   deleteAbsensiGenerus,
+  getAbsensiGenerusByDaerahId,
   getAbsensiGenerusByKelasId,
   getAbsensiGenerusByKelompokId,
   getAllGenerusSummary,
@@ -288,6 +289,9 @@ export async function getAbsensiGenerusByKelasIdService(
 
 export async function getAbsensiGenerusByKelompokIdService(kelompokId: number) {
   return await getAbsensiGenerusByKelompokId(kelompokId);
+}
+export async function getAbsensiGenerusByDaerahIdService(daerahId: number) {
+  return await getAbsensiGenerusByDaerahId(daerahId);
 }
 
 export async function createAbsensiGenerusService(

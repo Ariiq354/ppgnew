@@ -11,7 +11,18 @@ export default defineEventHandler(async (event) => {
     OLaporanMuslimunCreate.parse(b)
   );
 
-  body.keterangan = sanitizeHtml(body.keterangan);
+  body.keterangan = sanitizeHtml(body.keterangan, {
+    allowedTags: sanitizeHtml.defaults.allowedTags,
+    allowedAttributes: {
+      ...sanitizeHtml.defaults.allowedAttributes,
+      "*": ["style"], // allow style attributes on all tags
+    },
+    allowedStyles: {
+      "*": {
+        "text-align": [/^left$/, /^right$/, /^center$/, /^justify$/],
+      },
+    },
+  });
 
   await createLaporanMuslimunService(user.kelompokId!, body);
 

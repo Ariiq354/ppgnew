@@ -13,7 +13,6 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@pinia/nuxt",
     "@vueuse/nuxt",
-    "nuxt-security",
   ],
 
   css: ["~/assets/css/main.css"],

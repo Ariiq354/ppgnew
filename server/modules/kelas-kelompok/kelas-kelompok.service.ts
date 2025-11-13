@@ -10,6 +10,7 @@ import {
   getAllKelasExport,
   getAllKelasOptions,
   getCountKelas,
+  getKelasByDaerahId,
   getKelasById,
   getKelasByKelompokId,
   updateKelas,
@@ -57,6 +58,10 @@ export async function getCountKelasService(
 
 export async function getKelasByKelompokIdService(kelompokId: number) {
   return await getKelasByKelompokId(kelompokId);
+}
+
+export async function getKelasByDaerahIdService(daerahId: number) {
+  return await getKelasByDaerahId(daerahId);
 }
 
 export async function createKelasService(

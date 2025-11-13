@@ -40,6 +40,26 @@
         icon="i-lucide-graduation-cap"
       />
     </NuxtLink>
+    <PercentCard
+      :percent="data!.data.percentPaud"
+      title="Absensi"
+      subtitle="PAUD"
+    />
+    <PercentCard
+      :percent="data!.data.percentCabeRawit"
+      title="Absensi"
+      subtitle="Cabe Rawit"
+    />
+    <PercentCard
+      :percent="data!.data.percentPraremaja"
+      title="Absensi"
+      subtitle="Praremaja"
+    />
+    <PercentCard
+      :percent="data!.data.percentMudamudi"
+      title="Absensi"
+      subtitle="Muda-mudi"
+    />
     <UCard class="md:col-span-3">
       <UnoChartBar
         title="Daftar Generus"

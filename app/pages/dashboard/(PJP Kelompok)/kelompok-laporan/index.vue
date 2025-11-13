@@ -32,7 +32,11 @@
   );
   watchOnce(musyId, () => refresh());
 
-  const state = ref(getInitialFormData());
+  const { data: keteranganSummary } = await useFetch(
+    `${APIBASE}/muslimun/laporan/summary`
+  );
+
+  const state = ref(getInitialFormData(keteranganSummary.value?.data));
 
   const { isLoading, execute } = useSubmit();
   async function onSubmit() {
@@ -46,7 +50,7 @@
       },
       onSuccess() {
         state.value.laporan = laporanTemplate;
-        state.value.keterangan = templateString;
+        state.value.keterangan = templateString(keteranganSummary.value?.data);
         state.value.id = undefined;
         modalOpen.value = false;
         refresh();
@@ -66,7 +70,7 @@
   }
 
   const modalOpen = ref(false);
-  const stateView = ref(getInitialFormData());
+  const stateView = ref(getInitialFormData(keteranganSummary.value?.data));
   function clickView(itemData: ExtractObjectType<typeof data.value>) {
     modalOpen.value = true;
     stateView.value = {
@@ -87,7 +91,7 @@
       <div class="flex flex-col gap-4">
         <h1 class="text-xl font-bold">{{ stateView.laporan }}</h1>
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <p class="prose prose-base" v-html="stateView.keterangan" />
+        <p class="prose prose-base tiptap" v-html="stateView.keterangan" />
       </div>
     </template>
   </LazyUModal>

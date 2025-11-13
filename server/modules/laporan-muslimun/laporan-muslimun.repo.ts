@@ -1,11 +1,11 @@
-import { and, eq, inArray, type SQL } from "drizzle-orm";
+import { and, eq, inArray, like, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
   laporanMusyawarahMuslimunTable,
   musyawarahMuslimunTable,
 } from "~~/server/database/schema/kelompok";
-import type { TLaporanMuslimunCreate } from "./laporan-muslimun.dto";
 import { kelompokTable } from "~~/server/database/schema/wilayah";
+import type { TLaporanMuslimunCreate } from "./laporan-muslimun.dto";
 
 export async function getMuslimunByKelompokId(
   musyawarahId: number,
@@ -37,6 +37,44 @@ export async function getLaporanMuslimun(
   if (query.kelompokId) {
     conditions.push(eq(musyawarahMuslimunTable.kelompokId, query.kelompokId));
   }
+
+  const data = await tryCatch(
+    "Failed to get Laporan Muslimun",
+    db
+      .select({
+        id: laporanMusyawarahMuslimunTable.id,
+        musyawarahId: laporanMusyawarahMuslimunTable.musyawarahId,
+        kelompokName: kelompokTable.name,
+        laporan: laporanMusyawarahMuslimunTable.laporan,
+        keterangan: laporanMusyawarahMuslimunTable.keterangan,
+      })
+      .from(laporanMusyawarahMuslimunTable)
+      .leftJoin(
+        musyawarahMuslimunTable,
+        eq(
+          laporanMusyawarahMuslimunTable.musyawarahId,
+          musyawarahMuslimunTable.id
+        )
+      )
+      .leftJoin(
+        kelompokTable,
+        eq(musyawarahMuslimunTable.kelompokId, kelompokTable.id)
+      )
+      .where(and(...conditions))
+  );
+
+  return data;
+}
+
+export async function getLaporanMuslimunSummary(
+  desaId: number,
+  tahun: number,
+  bulan: string
+) {
+  const conditions: (SQL<unknown> | undefined)[] = [
+    eq(kelompokTable.desaId, desaId),
+    like(musyawarahMuslimunTable.tanggal, `${tahun}-${bulan}%`),
+  ];
 
   const data = await tryCatch(
     "Failed to get Laporan Muslimun",

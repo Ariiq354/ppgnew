@@ -1,4 +1,3 @@
-import type { TLaporanMusyawarahSummaryList } from "../laporan-musyawarah";
 import type {
   TLaporanMuslimunCreate,
   TLaporanMuslimunDelete,
@@ -8,6 +7,7 @@ import {
   createLaporanMuslimun,
   deleteLaporanMuslimun,
   getLaporanMuslimun,
+  getLaporanMuslimunSummary,
   getMuslimunByKelompokId,
 } from "./laporan-muslimun.repo";
 
@@ -20,9 +20,10 @@ export async function getLaporanMuslimunService(
 
 export async function getLaporanMuslimunSummaryService(
   desaId: number,
-  query: TLaporanMusyawarahSummaryList
+  tahun: number,
+  bulan: string
 ) {
-  const data = await getLaporanMuslimun(desaId, query);
+  const data = await getLaporanMuslimunSummary(desaId, tahun, bulan);
 
   const grouped = data.reduce(
     (acc, item) => {
