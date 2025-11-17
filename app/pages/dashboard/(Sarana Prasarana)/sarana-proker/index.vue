@@ -8,7 +8,7 @@
   import { useSubmit } from "~/composables/function";
   import { useToastError } from "~/composables/toast";
   import { openConfirmModal } from "~/composables/modal";
-  import { bulanOptions, statusOptions } from "~~/shared/contants";
+  import { bulanEnum, statusProkerEnum } from "~~/shared/enum";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -104,7 +104,7 @@
             <USelectMenu
               v-model="state.bulan"
               placeholder="Pilih bulan"
-              :items="[...bulanOptions]"
+              :items="[...bulanEnum]"
               :disabled="isLoading || !prokerEdit || viewStatus"
             />
           </UFormField>
@@ -144,7 +144,7 @@
             <USelectMenu
               v-model="state.status"
               placeholder="Pilih status"
-              :items="statusOptions"
+              :items="[...statusProkerEnum]"
               :disabled="isLoading || !prokerEdit || viewStatus"
             />
           </UFormField>

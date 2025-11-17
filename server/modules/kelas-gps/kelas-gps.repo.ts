@@ -1,11 +1,11 @@
 import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { kelasGpsTable } from "~~/server/database/schema/desa";
-import type { TKelasBaseList, TNamaTanggal } from "~~/server/utils/dto";
+import type { TKelas, TNamaTanggal } from "~~/server/utils/dto/kelas.dto";
 
 export async function getAllKelasGps(
   desaId: number,
-  { limit, page, search, bulan, tahun }: TKelasBaseList
+  { limit, page, search, bulan, tahun }: TKelas
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [

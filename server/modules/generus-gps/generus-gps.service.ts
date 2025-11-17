@@ -1,4 +1,4 @@
-import type { TGenerusBaseList } from "~~/server/utils/dto";
+import type { TGenerusBaseList } from "~~/server/utils/dto/generus.dto";
 import {
   getAllGenerusExportGps,
   getAllGenerusGPS,

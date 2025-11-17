@@ -8,12 +8,12 @@ import {
   laporanMusyawarahBidangTable,
   musyawarahBidangTable,
 } from "~~/server/database/schema/bidang";
-import type { roles } from "~~/shared/permission";
+import type { bidangEnum } from "~~/shared/enum";
 
 export async function getMusyawarahBidangByid(
   musyawarahId: number,
   daerahId: number,
-  bidang: (typeof roles)[number]
+  bidang: (typeof bidangEnum)[number]
 ) {
   return await tryCatch(
     "Failed to find musyawarah bidang by daerah",

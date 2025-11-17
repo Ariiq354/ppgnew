@@ -1,5 +1,4 @@
 import { createAbsensiTahfidzService } from "~~/server/modules/absensi-tahfidz";
-import { OAbsensiGenerusCreate } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { tahfidz: ["manage"] });

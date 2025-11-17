@@ -1,8 +1,8 @@
 import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { pengajarTable } from "~~/server/database/schema/pengajar";
-import { kelompokTable } from "~~/server/database/schema/wilayah";
-import type { TWilayah } from "~~/server/utils/dto";
+import { desaTable, kelompokTable } from "~~/server/database/schema/wilayah";
+import type { TWilayah } from "~~/server/utils/dto/common.dto";
 import type { TPengajarCreate, TPengajarList } from "./pengajar.dto";
 
 export async function getAllPengajar(
@@ -11,7 +11,7 @@ export async function getAllPengajar(
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
-    eq(pengajarTable.daerahId, daerahId),
+    eq(desaTable.daerahId, daerahId),
   ];
 
   if (search) {
@@ -29,7 +29,7 @@ export async function getAllPengajar(
   }
 
   if (desaId) {
-    conditions.push(eq(pengajarTable.desaId, desaId));
+    conditions.push(eq(kelompokTable.desaId, desaId));
   }
   if (kelompokId) {
     conditions.push(eq(pengajarTable.kelompokId, kelompokId));
@@ -51,7 +51,8 @@ export async function getAllPengajar(
     })
     .from(pengajarTable)
     .where(and(...conditions))
-    .leftJoin(kelompokTable, eq(kelompokTable.id, pengajarTable.kelompokId));
+    .innerJoin(kelompokTable, eq(kelompokTable.id, pengajarTable.kelompokId))
+    .innerJoin(desaTable, eq(kelompokTable.desaId, kelompokTable.desaId));
 
   const total = await tryCatch(
     "Failed to get total count of Pengajar",
@@ -85,12 +86,12 @@ export async function getAllPengajarExport(params: {
       namaKelompok: kelompokTable.name,
     })
     .from(pengajarTable)
-    .leftJoin(kelompokTable, eq(kelompokTable.id, pengajarTable.kelompokId));
+    .innerJoin(kelompokTable, eq(kelompokTable.id, pengajarTable.kelompokId));
 
   if (params.kelompokId)
     baseQuery.where(eq(pengajarTable.kelompokId, params.kelompokId));
   else if (params.desaId)
-    baseQuery.where(eq(pengajarTable.desaId, params.desaId));
+    baseQuery.where(eq(kelompokTable.desaId, params.desaId));
 
   return await tryCatch("Failed to get all Pengajar for export", baseQuery);
 }
@@ -104,8 +105,8 @@ export async function getAllPengajarChart(params: {
 
   const conditions: (SQL<unknown> | undefined)[] = [];
 
-  if (daerahId) conditions.push(eq(pengajarTable.daerahId, daerahId));
-  if (desaId) conditions.push(eq(pengajarTable.desaId, desaId));
+  if (daerahId) conditions.push(eq(desaTable.daerahId, daerahId));
+  if (desaId) conditions.push(eq(kelompokTable.desaId, desaId));
   if (kelompokId) conditions.push(eq(pengajarTable.kelompokId, kelompokId));
 
   return await tryCatch(
@@ -117,6 +118,8 @@ export async function getAllPengajarChart(params: {
       })
       .from(pengajarTable)
       .where(and(...conditions))
+      .innerJoin(kelompokTable, eq(pengajarTable.kelompokId, kelompokTable.id))
+      .innerJoin(desaTable, eq(kelompokTable.desaId, desaTable.id))
   );
 }
 

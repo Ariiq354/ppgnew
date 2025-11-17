@@ -1,6 +1,7 @@
 import { UAvatar } from "#components";
 import type { TableColumn } from "@nuxt/ui";
 import { z } from "zod/mini";
+import { genderEnum, pengajianEnum } from "~~/shared/enum";
 
 export const columns: TableColumn<any>[] = [
   {
@@ -61,11 +62,11 @@ export const schema = z.object({
   noTelepon: z.string().check(z.minLength(1, "Required")),
   noTeleponOrtu: z.string().check(z.minLength(1, "Required")),
   tempatLahir: z.string().check(z.minLength(1, "Required")),
-  tanggalLahir: z.string().check(z.minLength(1, "Required")),
-  gender: z.string().check(z.minLength(1, "Required")),
+  tanggalLahir: z.nullable(z.string().check(z.minLength(1, "Required"))),
+  gender: z.enum(genderEnum),
   namaOrtu: z.string().check(z.minLength(1, "Required")),
   kelasSekolah: z.string().check(z.minLength(1, "Required")),
-  kelasPengajian: z.string().check(z.minLength(1, "Required")),
+  kelasPengajian: z.enum(pengajianEnum),
   status: z.array(z.string()),
   foto: z.string(),
   file: z.optional(
@@ -85,10 +86,10 @@ export const getInitialFormData = (): Schema => ({
   noTeleponOrtu: "",
   tempatLahir: "",
   tanggalLahir: "",
-  gender: "",
+  gender: "Laki-laki",
   namaOrtu: "",
   kelasSekolah: "",
-  kelasPengajian: "",
+  kelasPengajian: "PAUD",
   status: [],
   foto: "",
   file: undefined,

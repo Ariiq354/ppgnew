@@ -8,7 +8,7 @@
   import { useSubmit } from "~/composables/function";
   import { useToastError } from "~/composables/toast";
   import { openConfirmModal } from "~/composables/modal";
-  import { genderOptions, statusPengajarOptions } from "~~/shared/contants";
+  import { genderEnum, statusPengajarEnum } from "~~/shared/enum";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -118,7 +118,7 @@
             <USelectMenu
               v-model="state.gender"
               :disabled="isLoading || !pengajarEdit || viewStatus"
-              :items="genderOptions"
+              :items="[...genderEnum]"
             />
           </UFormField>
           <UFormField label="No. Telepon" name="noTelepon">
@@ -137,7 +137,7 @@
             <USelectMenu
               v-model="state.status"
               :disabled="isLoading || !pengajarEdit || viewStatus"
-              :items="statusPengajarOptions"
+              :items="[...statusPengajarEnum]"
             />
           </UFormField>
           <UFormField label="Tempat Lahir" name="tempatLahir">
@@ -188,7 +188,7 @@
           <ClearableSelectMenu
             v-model="query.status"
             placeholder="Status"
-            :items="statusPengajarOptions"
+            :items="[...statusPengajarEnum]"
           />
         </div>
       </template>
@@ -206,7 +206,7 @@
           v-model="query.status"
           placeholder="Status"
           class="hidden flex-1 md:flex"
-          :items="statusPengajarOptions"
+          :items="[...statusPengajarEnum]"
         />
         <UButton
           variant="subtle"

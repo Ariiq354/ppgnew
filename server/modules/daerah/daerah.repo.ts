@@ -5,7 +5,7 @@ import {
   desaTable,
   kelompokTable,
 } from "~~/server/database/schema/wilayah";
-import type { TPagination } from "~~/server/utils/dto";
+import type { TPagination } from "~~/server/utils/dto/common.dto";
 import type { TDaerahCreate } from "./daerah.dto";
 
 export async function getAllDaerah({ limit, page }: TPagination) {
@@ -86,4 +86,15 @@ export async function checkWilayahNameExist(name: string) {
       .where(eq(kelompokTable.name, name))
   );
   return [...daerah, ...desa, ...kelompok].length > 0;
+}
+
+export async function checkSingkatanExist(singkatan: string) {
+  const daerah = await tryCatch(
+    "Failed to check daerah name",
+    db
+      .select({ name: daerahTable.name })
+      .from(daerahTable)
+      .where(eq(daerahTable.singkatan, singkatan))
+  );
+  return daerah.length > 0;
 }

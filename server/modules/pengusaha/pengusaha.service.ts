@@ -1,4 +1,4 @@
-import type { TSearchPagination } from "~~/server/utils/dto";
+import type { TSearchPagination } from "~~/server/utils/dto/common.dto";
 import type { TPengusahaCreate } from "./pengusaha.dto";
 import {
   createPengusaha,

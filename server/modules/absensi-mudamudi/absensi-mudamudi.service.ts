@@ -1,3 +1,7 @@
+import type {
+  TAbsensiKelasPengajianMudamudiList,
+  TMudamudiAbsensiList,
+} from "~~/server/utils/dto/absensi.dto";
 import { getCountMudamudiByKelasPengajianService } from "../generus-mudamudi";
 import {
   getAllKelasMudamudiOptionsService,
@@ -16,7 +20,7 @@ import {
 
 export async function getAbsensiMudamudiMonitoringService(
   daerahId: number,
-  query: TGenerusAbsensiList
+  query: TMudamudiAbsensiList
 ) {
   const data = await getAllMudamudiSummary(daerahId, query);
   const kelas = await getAllKelasMudamudiOptionsService(daerahId, {
@@ -47,7 +51,7 @@ export async function getAbsensiMudamudiMonitoringService(
 
 export async function getAbsensiMudamudiMonitoringSummaryService(
   daerahId: number,
-  query: TAbsensiKelasPengajianList
+  query: TAbsensiKelasPengajianMudamudiList
 ) {
   const countMudamudi = await getCountMudamudiByKelasPengajianService(
     daerahId,

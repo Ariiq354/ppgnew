@@ -15,7 +15,7 @@ import {
 
 export async function getAllMusyawarahBidangOptionsService(
   user: UserWithId,
-  query: TBidangSchema
+  query: TBidang
 ) {
   if (!viewWhitelist.has(user.role!) && user.role !== query.bidang) {
     throw createError({
@@ -51,7 +51,7 @@ export async function getAllMusyawarahBidangService(
 export async function exportMusyawarahBidangService(
   event: H3Event,
   user: UserWithId,
-  query: TBidangSchema
+  query: TBidang
 ) {
   if (!viewWhitelist.has(user.role!) && user.role !== query.bidang) {
     throw createError({

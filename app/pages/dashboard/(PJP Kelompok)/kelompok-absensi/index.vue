@@ -5,7 +5,7 @@
   import { APIBASE, type ExtractObjectType } from "~/utils";
   import { useSubmit } from "~/composables/function";
   import { useToastError, useToastSuccess } from "~/composables/toast";
-  import { pengajianKelasOptions } from "~~/shared/contants";
+  import { absensiEnum, kelasGenerusEnum } from "~~/shared/enum";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -15,7 +15,7 @@
   constantStore.setTitle("PJP Kelompok / Absensi Generus");
 
   const kelasId = ref<number>();
-  const namaKelas = ref<string>("PAUD");
+  const namaKelas = ref<(typeof kelasGenerusEnum)[number]>("PAUD");
   watch(namaKelas, () => {
     kelasId.value = undefined;
   });
@@ -96,7 +96,10 @@
   }
 
   const isChange = ref(false);
-  function handleStatusChange(generusId: number, keterangan: string) {
+  function handleStatusChange(
+    generusId: number,
+    keterangan: (typeof absensiEnum)[number]
+  ) {
     isChange.value = true;
     const item = state.value.find((item) => item.generusId === generusId);
 
@@ -148,7 +151,7 @@
         <UFormField label="Pengajian" size="xl">
           <USelectMenu
             v-model="namaKelas"
-            :items="pengajianKelasOptions"
+            :items="[...kelasGenerusEnum]"
             :disabled="statusKelas === 'pending'"
             placeholder="Pilih Pengajian"
           />
@@ -222,7 +225,7 @@
               "
               class="w-full"
               size="xl"
-              :items="['Hadir', 'Izin', 'Tanpa Keterangan']"
+              :items="[...absensiEnum]"
               default-value="Tanpa Keterangan"
               :disabled="!absensiManage || statusAbsensi === 'pending'"
               @update:model-value="

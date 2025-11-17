@@ -1,3 +1,8 @@
+import type {
+  TKelasGenerus,
+  TKelasGenerusList,
+  TNamaGenerusTanggal,
+} from "~~/server/utils/dto/kelas.dto";
 import {
   createKelasDesa,
   deleteKelasDesa,
@@ -9,10 +14,11 @@ import {
   getKelasDesaById,
   updateKelasDesa,
 } from "./kelas-desa.repo";
+import type { kelasGenerusEnum } from "~~/shared/enum";
 
 export async function getAllKelasDesaService(
   desaId: number,
-  params: TKelasList
+  params: TKelasGenerus
 ) {
   const { data, total } = await getAllKelasDesa(desaId, params);
   const metadata = {
@@ -38,7 +44,7 @@ export async function getKelasDesaByIdService(id: number) {
 
 export async function getAllKelasDesaOptionsService(
   desaId: number,
-  query: TKelasOptionsList
+  query: TKelasGenerusList
 ) {
   return await getAllKelasDesaOptions(desaId, query);
 }
@@ -48,14 +54,14 @@ export async function getCountKelasDesaService(
     desaId?: number;
     daerahId?: number;
   },
-  kelasDesaPengajian: string
+  kelasDesaPengajian: (typeof kelasGenerusEnum)[number]
 ) {
   return await getCountKelasDesa(params, kelasDesaPengajian);
 }
 
 export async function createKelasDesaService(
   desaId: number,
-  data: TNamaTanggal
+  data: TNamaGenerusTanggal
 ) {
   return await createKelasDesa(desaId, data);
 }
@@ -63,7 +69,7 @@ export async function createKelasDesaService(
 export async function updateKelasDesaService(
   id: number,
   desaId: number,
-  data: TNamaTanggal
+  data: TNamaGenerusTanggal
 ) {
   return await updateKelasDesa(id, desaId, data);
 }

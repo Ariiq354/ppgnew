@@ -2,14 +2,15 @@ import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { kelasMudaMudiTable } from "~~/server/database/schema/mudamudi";
 import type {
-  TKelasList,
-  TKelasOptionsList,
-  TNamaTanggal,
-} from "~~/server/utils/dto";
+  TKelasMudamudi,
+  TKelasMudamudiList,
+  TNamaMudamudiTanggal,
+} from "~~/server/utils/dto/kelas.dto";
+import type { kelasMudamudiEnum } from "~~/shared/enum";
 
 export async function getAllKelasMudamudi(
   daerahId: number,
-  { limit, page, search, bulan, tahun, nama }: TKelasList
+  { limit, page, search, bulan, tahun, nama }: TKelasMudamudi
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -99,7 +100,7 @@ export async function getKelasMudamudiById(id: number) {
 
 export async function getAllKelasMudamudiOptions(
   daerahId: number,
-  query: TKelasOptionsList
+  query: TKelasMudamudiList
 ) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(kelasMudaMudiTable.daerahId, daerahId),
@@ -126,7 +127,7 @@ export async function getAllKelasMudamudiOptions(
 
 export async function getCountKelasMudamudi(
   daerahId: number,
-  kelasPengajian: string
+  kelasPengajian: (typeof kelasMudamudiEnum)[number]
 ) {
   return await tryCatch(
     "Failed to get count of Kelas Mudamudi",
@@ -142,7 +143,7 @@ export async function getCountKelasMudamudi(
 
 export async function createKelasMudamudi(
   daerahId: number,
-  data: TNamaTanggal
+  data: TNamaMudamudiTanggal
 ) {
   return await tryCatch(
     "Failed to create Kelas Mudamudi",
@@ -156,7 +157,7 @@ export async function createKelasMudamudi(
 export async function updateKelasMudamudi(
   id: number,
   daerahId: number,
-  data: TNamaTanggal
+  data: TNamaMudamudiTanggal
 ) {
   return await tryCatch(
     "Failed to update Kelas Mudamudi",

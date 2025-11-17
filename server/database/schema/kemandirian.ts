@@ -1,9 +1,9 @@
-import { daerahTable } from "./wilayah";
+import { integer, pgTable, text } from "drizzle-orm/pg-core";
 import { createdUpdated } from "./common";
-import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
+import { daerahTable } from "./wilayah";
 
 export const pengusahaTable = pgTable("pengusaha", {
-  id: serial().primaryKey(),
+  id: integer().primaryKey().generatedByDefaultAsIdentity(),
   nama: text().notNull(),
   bidangPekerjaan: text().notNull(),
   namaUsaha: text().notNull(),

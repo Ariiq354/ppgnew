@@ -8,11 +8,8 @@
   import { useSubmit } from "~/composables/function";
   import { useToastError } from "~/composables/toast";
   import { openConfirmModal } from "~/composables/modal";
-  import {
-    pengajianKelasOptions,
-    tahunOptions,
-    bulanFilterOptions,
-  } from "~~/shared/contants";
+  import { tahunOptions, bulanFilterOptions } from "~~/shared/contants";
+  import { kelasGenerusEnum } from "~~/shared/enum";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -105,7 +102,7 @@
             <USelectMenu
               v-model="state.nama"
               :disabled="isLoading || !kelompokEdit || viewStatus"
-              :items="pengajianKelasOptions"
+              :items="[...kelasGenerusEnum]"
             />
           </UFormField>
           <UFormField label="Tanggal" name="tanggal">
@@ -143,7 +140,7 @@
           <ClearableSelectMenu
             v-model="query.nama"
             placeholder="Kelas Pengajian"
-            :items="pengajianKelasOptions"
+            :items="[...kelasGenerusEnum]"
           />
           <ClearableSelectMenu
             v-model="query.tahun"
@@ -173,7 +170,7 @@
           v-model="query.nama"
           placeholder="Kelas Pengajian"
           class="hidden flex-1 md:flex"
-          :items="pengajianKelasOptions"
+          :items="[...kelasGenerusEnum]"
         />
         <ClearableSelectMenu
           v-model="query.tahun"

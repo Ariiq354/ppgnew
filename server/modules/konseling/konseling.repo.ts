@@ -2,7 +2,7 @@ import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { generusTable } from "~~/server/database/schema/generus";
 import { generusKonselingTable } from "~~/server/database/schema/kelompok";
-import type { TSearchPagination } from "~~/server/utils/dto";
+import type { TSearchPagination } from "~~/server/utils/dto/common.dto";
 import type { TKonselingCreate, TKonselingUpdate } from "./konseling.dto";
 import { desaTable, kelompokTable } from "~~/server/database/schema/wilayah";
 
@@ -21,8 +21,8 @@ export async function getAllKonseling(
     conditions.push(or(like(generusTable.nama, searchCondition)));
   }
 
-  if (daerahId) conditions.push(eq(generusTable.daerahId, daerahId));
-  if (desaId) conditions.push(eq(generusTable.desaId, desaId));
+  if (daerahId) conditions.push(eq(desaTable.daerahId, daerahId));
+  if (desaId) conditions.push(eq(kelompokTable.desaId, desaId));
   if (kelompokId) conditions.push(eq(generusTable.kelompokId, kelompokId));
 
   const query = db
@@ -43,10 +43,12 @@ export async function getAllKonseling(
       status: generusKonselingTable.status,
     })
     .from(generusKonselingTable)
-    .leftJoin(
+    .innerJoin(
       generusTable,
       eq(generusKonselingTable.generusId, generusTable.id)
     )
+    .innerJoin(kelompokTable, eq(generusTable.kelompokId, kelompokTable.id))
+    .innerJoin(desaTable, eq(kelompokTable.desaId, desaTable.id))
     .where(and(...conditions));
 
   const total = await tryCatch(

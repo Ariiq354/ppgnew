@@ -14,11 +14,11 @@ import {
 } from "./absensi-tahfidz.repo";
 
 export async function getAbsensiTahfidzMonitoringService(
-  daerahId: number,
+  desaId: number,
   query: TSearchPagination
 ) {
-  const data = await getAllTahfidzSummary(daerahId, query);
-  const kelas = await getAllKelasTahfidzOptionsService(daerahId);
+  const data = await getAllTahfidzSummary(desaId, query);
+  const kelas = await getAllKelasTahfidzOptionsService(desaId);
 
   data.data = data.data.map((i) => {
     const total = kelas.data.length;
@@ -43,11 +43,11 @@ export async function getAbsensiTahfidzMonitoringService(
 }
 
 export async function getAbsensiTahfidzMonitoringSummaryService(
-  daerahId: number
+  desaId: number
 ) {
-  const countGenerus = await getCountGenerusTahfidzExcludeService(daerahId);
-  const countKelas = await getCountKelasTahfidzService(daerahId);
-  const countAbsensi = await getCountAbsensiTahfidz(daerahId);
+  const countGenerus = await getCountGenerusTahfidzExcludeService(desaId);
+  const countKelas = await getCountKelasTahfidzService(desaId);
+  const countAbsensi = await getCountAbsensiTahfidz(desaId);
 
   const denominator = countGenerus * countKelas;
   const kehadiran =
@@ -62,33 +62,33 @@ export async function getAbsensiTahfidzMonitoringSummaryService(
 }
 
 export async function getAbsensiTahfidzByKelasIdService(
-  daerahId: number,
+  desaId: number,
   kelasId: number
 ) {
   const check = await getKelasTahfidzByIdService(kelasId);
-  if (check.data?.daerahId !== daerahId) {
+  if (check.data?.desaId !== desaId) {
     throw createError({
       statusCode: 403,
       message: "Anda tidak punya akses ke desa ini",
     });
   }
 
-  const data = await getAbsensiTahfidzByKelasId(daerahId, kelasId);
+  const data = await getAbsensiTahfidzByKelasId(desaId, kelasId);
 
   return data;
 }
 
-export async function getCountAbsensiTahfidzService(daerahId: number) {
-  return getCountAbsensiTahfidz(daerahId);
+export async function getCountAbsensiTahfidzService(desaId: number) {
+  return getCountAbsensiTahfidz(desaId);
 }
 
 export async function createAbsensiTahfidzService(
-  daerahId: number,
+  desaId: number,
   kelasId: number,
   query: TAbsensiGenerusCreate[]
 ) {
   const check = await getKelasTahfidzByIdService(kelasId);
-  if (check.data?.daerahId !== daerahId) {
+  if (check.data?.desaId !== desaId) {
     throw createError({
       statusCode: 403,
       message: "Anda tidak punya akses ke desa ini",
@@ -100,10 +100,10 @@ export async function createAbsensiTahfidzService(
       if (item.keterangan === "Tanpa Keterangan") {
         await deleteAbsensiTahfidz([item.id], kelasId);
       } else {
-        updateAbsensiTahfidz(item.id, kelasId, daerahId!, item);
+        updateAbsensiTahfidz(item.id, kelasId, desaId!, item);
       }
     } else {
-      await createAbsensiTahfidz(kelasId, daerahId!, item);
+      await createAbsensiTahfidz(kelasId, desaId!, item);
     }
   }
 }

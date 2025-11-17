@@ -1,8 +1,8 @@
 import type {
-  TKelasList,
-  TKelasOptionsList,
-  TNamaTanggal,
-} from "~~/server/utils/dto";
+  TKelasGenerusList,
+  TNamaGenerusTanggal,
+} from "~~/server/utils/dto/kelas.dto";
+import type { kelasGenerusEnum } from "~~/shared/enum";
 import {
   createKelas,
   deleteKelas,
@@ -18,7 +18,7 @@ import {
 
 export async function getAllKelasService(
   kelompokId: number,
-  params: TKelasList
+  params: TKelasGenerus
 ) {
   const { data, total } = await getAllKelas(kelompokId, params);
   const metadata = {
@@ -40,7 +40,7 @@ export async function getKelasByIdService(id: number) {
 
 export async function getAllKelasOptionsService(
   kelompokId: number,
-  query: TKelasOptionsList
+  query: TKelasGenerusList
 ) {
   return await getAllKelasOptions(kelompokId, query);
 }
@@ -51,7 +51,7 @@ export async function getCountKelasService(
     desaId?: number;
     daerahId?: number;
   },
-  kelasPengajian: string
+  kelasPengajian: (typeof kelasGenerusEnum)[number]
 ) {
   return await getCountKelas(params, kelasPengajian);
 }
@@ -66,7 +66,7 @@ export async function getKelasByDaerahIdService(daerahId: number) {
 
 export async function createKelasService(
   kelompokId: number,
-  data: TNamaTanggal
+  data: TNamaGenerusTanggal
 ) {
   return await createKelas(kelompokId, data);
 }
@@ -74,7 +74,7 @@ export async function createKelasService(
 export async function updateKelasService(
   id: number,
   kelompokId: number,
-  data: TNamaTanggal
+  data: TNamaGenerusTanggal
 ) {
   return await updateKelas(id, kelompokId, data);
 }

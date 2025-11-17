@@ -1,4 +1,4 @@
-import type { TGenerusBaseList } from "~~/server/utils/dto";
+import type { TGenerusBaseList } from "~~/server/utils/dto/generus.dto";
 import {
   getAllGenerusExportTahfidz,
   getAllGenerusTahfidz,
@@ -8,10 +8,10 @@ import {
 } from "./generus-tahfidz.repo";
 
 export async function getAllGenerusTahfidzService(
-  daerahId: number,
+  desaId: number,
   query: TGenerusBaseList
 ) {
-  const data = await getAllGenerusTahfidz(daerahId, query);
+  const data = await getAllGenerusTahfidz(desaId, query);
 
   const newData = data.data.map(({ tanggalMasukKelas, ...rest }) => ({
     ...rest,
@@ -31,8 +31,8 @@ export async function getAllGenerusTahfidzService(
   };
 }
 
-export async function getAllGenerusExportTahfidzService(daerahId: number) {
-  const data = await getAllGenerusExportTahfidz(daerahId);
+export async function getAllGenerusExportTahfidzService(desaId: number) {
+  const data = await getAllGenerusExportTahfidz(desaId);
 
   const newData = data.map(({ tanggalMasukKelas, ...rest }) => ({
     ...rest,
@@ -42,19 +42,19 @@ export async function getAllGenerusExportTahfidzService(daerahId: number) {
   return newData;
 }
 
-export async function getAllTahfidzChartService(daerahId: number) {
-  return await getAllTahfidzChart(daerahId);
+export async function getAllTahfidzChartService(desaId: number) {
+  return await getAllTahfidzChart(desaId);
 }
 
-export async function getCountGenerusTahfidzExcludeService(daerahId: number) {
-  return getCountGenerusTahfidzExclude(daerahId);
+export async function getCountGenerusTahfidzExcludeService(desaId: number) {
+  return getCountGenerusTahfidzExclude(desaId);
 }
 
 export async function getAllTahfidzExcludeService(
-  daerahId: number,
+  desaId: number,
   query: TSearchPagination
 ) {
-  const data = await getAllTahfidzExclude(daerahId, query);
+  const data = await getAllTahfidzExclude(desaId, query);
 
   const metadata = {
     page: query.page,

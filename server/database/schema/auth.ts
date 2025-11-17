@@ -1,31 +1,34 @@
-import { createdUpdated } from "./common";
-import { daerahTable, desaTable, kelompokTable } from "./wilayah";
 import {
   boolean,
   index,
   integer,
   pgTable,
-  serial,
   text,
   timestamp,
   uniqueIndex,
 } from "drizzle-orm/pg-core";
+import { createdUpdated } from "./common";
+import { daerahTable, desaTable, kelompokTable } from "./wilayah";
 
 export const userTable = pgTable(
   "user",
   {
-    id: serial().primaryKey(),
+    id: integer().primaryKey().generatedByDefaultAsIdentity(),
     name: text().notNull(),
-    username: text().notNull(),
+    username: text().notNull().unique(),
     displayUsername: text().notNull(),
     email: text().notNull().unique(),
     emailVerified: boolean().notNull(),
     image: text(),
     role: text(),
     daerahId: integer()
-      .notNull()
-      .references(() => daerahTable.id, { onDelete: "cascade" }),
-    desaId: integer().references(() => desaTable.id, { onDelete: "cascade" }),
+      .references(() => daerahTable.id, {
+        onDelete: "cascade",
+      })
+      .notNull(),
+    desaId: integer().references(() => desaTable.id, {
+      onDelete: "cascade",
+    }),
     kelompokId: integer().references(() => kelompokTable.id, {
       onDelete: "cascade",
     }),
@@ -40,7 +43,7 @@ export const userTable = pgTable(
 export const session = pgTable(
   "session",
   {
-    id: serial().primaryKey(),
+    id: integer().primaryKey().generatedByDefaultAsIdentity(),
     expiresAt: timestamp({ withTimezone: true }).notNull(),
     token: text().notNull().unique(),
     ipAddress: text(),
@@ -60,7 +63,7 @@ export const session = pgTable(
 export const account = pgTable(
   "account",
   {
-    id: serial().primaryKey(),
+    id: integer().primaryKey().generatedByDefaultAsIdentity(),
     accountId: text().notNull(),
     providerId: text().notNull(),
     userId: integer()
@@ -81,7 +84,7 @@ export const account = pgTable(
 export const verification = pgTable(
   "verification",
   {
-    id: serial().primaryKey(),
+    id: integer().primaryKey().generatedByDefaultAsIdentity(),
     identifier: text().notNull(),
     value: text().notNull(),
     expiresAt: timestamp({ withTimezone: true }).notNull(),

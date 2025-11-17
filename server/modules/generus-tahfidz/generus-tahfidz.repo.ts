@@ -1,9 +1,13 @@
-import { and, eq, like, or, Param, sql, type SQL } from "drizzle-orm";
+import { and, eq, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
-import { generusTable } from "~~/server/database/schema/generus";
+import {
+  generusStatusTable,
+  generusTable,
+} from "~~/server/database/schema/generus";
 import { kelompokTable } from "~~/server/database/schema/wilayah";
-import type { TGenerusBaseList } from "~~/server/utils/dto";
-import { exclude } from "~~/shared/contants";
+import { getGenerusByStatusSQL } from "~~/server/utils/common";
+import type { TGenerusBaseList } from "~~/server/utils/dto/generus.dto";
+import { exclude } from "~~/shared/enum";
 
 export async function getAllGenerusTahfidz(
   daerahId: number,
@@ -12,7 +16,7 @@ export async function getAllGenerusTahfidz(
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(generusTable.daerahId, daerahId),
-    sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
+    eq(generusStatusTable.status, "Tahfidz"),
   ];
 
   if (search) {
@@ -36,7 +40,9 @@ export async function getAllGenerusTahfidz(
       kelasSekolah: generusTable.kelasSekolah,
       gender: generusTable.gender,
       noTelepon: generusTable.noTelepon,
-      status: generusTable.status,
+      status: sql<
+        string[]
+      >`COALESCE(ARRAY_AGG(${generusStatusTable.status}), '{}')`,
       kelasPengajian: generusTable.kelasPengajian,
       namaOrtu: generusTable.namaOrtu,
       noTeleponOrtu: generusTable.noTeleponOrtu,
@@ -44,60 +50,32 @@ export async function getAllGenerusTahfidz(
       foto: generusTable.foto,
     })
     .from(generusTable)
+    .leftJoin(
+      generusStatusTable,
+      eq(generusStatusTable.generusId, generusTable.id)
+    )
     .where(and(...conditions));
 
   const total = await tryCatch(
-    "Failed to get total count of Generus Tahfidz",
+    "Failed to get total count of Generus TAHFIDZ",
     db.$count(query)
   );
   const data = await tryCatch(
-    "Failed to get list of Generus Tahfidz",
+    "Failed to get list of Generus TAHFIDZ",
     query.limit(limit).offset(offset)
   );
 
   return { data, total };
 }
 
-export async function getAllGenerusExportTahfidz(daerahId: number) {
-  return await tryCatch(
-    "Failed to export Generus GPS data by Desa",
-    db
-      .select({
-        id: generusTable.id,
-        nama: generusTable.nama,
-        tempatLahir: generusTable.tempatLahir,
-        tanggalLahir: generusTable.tanggalLahir,
-        kelasSekolah: generusTable.kelasSekolah,
-        gender: generusTable.gender,
-        noTelepon: generusTable.noTelepon,
-        status: generusTable.status,
-        kelasPengajian: generusTable.kelasPengajian,
-        namaOrtu: generusTable.namaOrtu,
-        noTeleponOrtu: generusTable.noTeleponOrtu,
-        tanggalMasukKelas: generusTable.tanggalMasukKelas,
-        foto: generusTable.foto,
-        namaKelompok: kelompokTable.name,
-      })
-      .from(generusTable)
-      .where(
-        and(
-          eq(generusTable.daerahId, daerahId),
-          sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`
-        )
-      )
-      .leftJoin(kelompokTable, eq(generusTable.kelompokId, kelompokTable.id))
-  );
-}
-
 export async function getAllTahfidzExclude(
-  daerahId: number,
+  desaId: number,
   { limit, page, search }: TSearchPagination
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
-    eq(generusTable.daerahId, daerahId),
-    sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    eq(generusTable.desaId, desaId),
+    ...getGenerusByStatusSQL({ include: ["Tahfidz"], exclude: [...exclude] }),
   ];
 
   if (search) {
@@ -128,15 +106,50 @@ export async function getAllTahfidzExclude(
   };
 }
 
-export async function getCountGenerusTahfidzExclude(daerahId: number) {
+export async function getAllGenerusExportTahfidz(desaId: number) {
   return await tryCatch(
-    "Failed to get Generus Absensi Exclude",
+    "Failed to export Generus TAHFIDZ data by Desa",
+    db
+      .select({
+        id: generusTable.id,
+        nama: generusTable.nama,
+        tempatLahir: generusTable.tempatLahir,
+        tanggalLahir: generusTable.tanggalLahir,
+        kelasSekolah: generusTable.kelasSekolah,
+        gender: generusTable.gender,
+        noTelepon: generusTable.noTelepon,
+        kelasPengajian: generusTable.kelasPengajian,
+        namaOrtu: generusTable.namaOrtu,
+        noTeleponOrtu: generusTable.noTeleponOrtu,
+        tanggalMasukKelas: generusTable.tanggalMasukKelas,
+        foto: generusTable.foto,
+        namaKelompok: kelompokTable.name,
+      })
+      .from(generusTable)
+      .where(
+        and(
+          eq(generusTable.desaId, desaId),
+          ...getGenerusByStatusSQL({
+            include: ["Tahfidz"],
+            exclude: [...exclude],
+          })
+        )
+      )
+      .leftJoin(kelompokTable, eq(generusTable.kelompokId, kelompokTable.id))
+  );
+}
+
+export async function getCountGenerusTahfidzExclude(desaId: number) {
+  return await tryCatch(
+    "Failed to get Count Generus",
     db.$count(
       generusTable,
       and(
-        eq(generusTable.daerahId, daerahId),
-        sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
-        sql`(${generusTable.status} ?| ${new Param("Tahfidz")})`
+        eq(generusTable.desaId, desaId),
+        ...getGenerusByStatusSQL({
+          include: ["Tahfidz"],
+          exclude: [...exclude],
+        })
       )
     )
   );
@@ -145,7 +158,7 @@ export async function getCountGenerusTahfidzExclude(daerahId: number) {
 export async function getAllTahfidzChart(daerahId: number) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(generusTable.daerahId, daerahId),
-    sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
+    eq(generusStatusTable.status, "Tahfidz"),
   ];
 
   return await tryCatch(
@@ -156,6 +169,10 @@ export async function getAllTahfidzChart(daerahId: number) {
         kelasPengajian: generusTable.kelasPengajian,
       })
       .from(generusTable)
+      .leftJoin(
+        generusStatusTable,
+        eq(generusTable.id, generusStatusTable.generusId)
+      )
       .where(and(...conditions))
   );
 }

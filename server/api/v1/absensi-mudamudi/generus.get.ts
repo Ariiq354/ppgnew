@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { kegiatan_muda_mudi: ["view"] });
 
   const query = await getValidatedQuery(event, (q) =>
-    OGenerusAbsensiList.parse(q)
+    OMudamudiAbsensiList.parse(q)
   );
 
   const data = await getAllMudamudiExcludeService(user.daerahId, query);

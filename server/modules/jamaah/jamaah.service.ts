@@ -1,4 +1,7 @@
-import type { TSearchPagination, TWilayah } from "~~/server/utils/dto";
+import type {
+  TSearchPagination,
+  TWilayah,
+} from "~~/server/utils/dto/common.dto";
 import type { TJamaahCreate } from "./jamaah.dto";
 import {
   getAllJamaah,

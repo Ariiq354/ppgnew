@@ -4,7 +4,7 @@ import {
   laporanMusyawarahTable,
   musyawarahTable,
 } from "~~/server/database/schema/pengurus";
-import type { roles } from "~~/shared/permission";
+import type { bidangEnum } from "~~/shared/enum";
 import type { TLaporanMusyawarahCreate } from "./laporan-musyawarah.dto";
 
 export async function getMusyawarahByDaerahId(
@@ -26,7 +26,7 @@ export async function getLaporanMusyawarah(
   daerahId: number,
   query: {
     musyawarahId: number;
-    bidang?: (typeof roles)[number];
+    bidang?: (typeof bidangEnum)[number];
   }
 ) {
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -69,7 +69,7 @@ export async function createLaporanMusyawarah(data: TLaporanMusyawarahCreate) {
 export async function deleteLaporanMusyawarah(
   id: number[],
   musyawarahId: number,
-  bidang: (typeof roles)[number]
+  bidang: (typeof bidangEnum)[number]
 ) {
   return await tryCatch(
     "Failed to delete Laporan Musyawarah",

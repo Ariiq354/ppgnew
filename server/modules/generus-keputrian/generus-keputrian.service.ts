@@ -1,4 +1,4 @@
-import type { TGenerusList } from "~~/server/utils/dto";
+import type { TMudamudiList } from "~~/server/utils/dto/generus.dto";
 import {
   getAllGenerusExportKeputrian,
   getAllGenerusKeputrian,
@@ -10,7 +10,7 @@ import {
 
 export async function getAllGenerusKeputrianService(
   daerahId: number,
-  query: TGenerusList
+  query: TMudamudiList
 ) {
   const data = await getAllGenerusKeputrian(daerahId, query);
 
@@ -62,7 +62,7 @@ export async function getCountKeputrianByKelasPengajianService(
 
 export async function getAllKeputrianExcludeService(
   daerahId: number,
-  query: TGenerusAbsensiList
+  query: TMudamudiAbsensiList
 ) {
   const data = await getAllKeputrianExclude(daerahId, query);
 

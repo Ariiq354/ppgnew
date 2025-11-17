@@ -1,5 +1,4 @@
 import { getAllGenerusTahfidzService } from "~~/server/modules/generus-tahfidz";
-import { OGenerusBaseList } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { tahfidz: ["view"] });
@@ -8,7 +7,7 @@ export default defineEventHandler(async (event) => {
     OGenerusBaseList.parse(q)
   );
 
-  const data = await getAllGenerusTahfidzService(user.daerahId, query);
+  const data = await getAllGenerusTahfidzService(user.desaId!, query);
 
   return HttpResponse(data.data, data.metadata);
 });

@@ -1,5 +1,4 @@
 import { createAbsensiDesaService } from "~~/server/modules/absensi-desa";
-import { OAbsensiGenerusCreate } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["manage"] });

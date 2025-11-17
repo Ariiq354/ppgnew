@@ -1,4 +1,5 @@
 import { z } from "zod/mini";
+import { kelasMudamudiEnum } from "~~/shared/enum";
 
 export const columns = [
   {
@@ -13,13 +14,13 @@ export const columns = [
 
 export const schema = z.object({
   id: z.optional(z.number()),
-  nama: z.string().check(z.minLength(1, "Required")),
+  nama: z.enum(kelasMudamudiEnum),
   tanggal: z.string().check(z.minLength(1, "Required")),
 });
 
 export const getInitialFormData = (): Schema => ({
   id: undefined,
-  nama: "",
+  nama: "Muda-mudi",
   tanggal: "",
 });
 

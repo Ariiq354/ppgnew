@@ -5,7 +5,7 @@
   import { useConstantStore } from "~/stores/constant";
   import { APIBASE, type ExtractObjectType } from "~/utils";
   import { columns } from "./_constants";
-  import { daerahKelas } from "~~/shared/contants";
+  import { kelasMudamudiEnum, absensiEnum } from "~~/shared/enum";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -14,7 +14,7 @@
   });
   constantStore.setTitle("Kegiatan & Muda-mudi / Absensi Generus");
 
-  const namaKelas = ref("Muda-mudi");
+  const namaKelas = ref<(typeof kelasMudamudiEnum)[number]>("Muda-mudi");
   watch(namaKelas, () => {
     kelasId.value = undefined;
   });
@@ -96,7 +96,10 @@
   }
 
   const isChange = ref(false);
-  function handleStatusChange(generusId: number, keterangan: string) {
+  function handleStatusChange(
+    generusId: number,
+    keterangan: (typeof absensiEnum)[number]
+  ) {
     isChange.value = true;
     const item = state.value.find((item) => item.generusId === generusId);
 
@@ -148,7 +151,7 @@
         <UFormField label="Pengajian" size="xl">
           <USelectMenu
             v-model="namaKelas"
-            :items="daerahKelas"
+            :items="[...kelasMudamudiEnum]"
             :disabled="statusKelas === 'pending'"
             placeholder="Pilih Pengajian"
           />
@@ -222,7 +225,7 @@
               "
               class="w-full"
               size="xl"
-              :items="['Hadir', 'Izin', 'Tanpa Keterangan']"
+              :items="[...absensiEnum]"
               default-value="Tanpa Keterangan"
               :disabled="!absensiManage || statusAbsensi === 'pending'"
               @update:model-value="

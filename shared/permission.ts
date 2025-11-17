@@ -133,32 +133,18 @@ export const rolesDeclaration = {
   }),
 };
 
-export const roles = [
-  "sekretariat",
-  "kurikulum",
-  "tenaga_pendidik",
-  "penggalang_dana",
-  "sarana_prasarana",
-  "kemandirian",
-  "keputrian",
-  "bimbingan_konseling",
-  "olahraga_seni",
-  "kegiatan_muda_mudi",
-  "tahfidz",
-] as const;
-
 export const viewWhitelist = new Set(["admin", "daerah"]);
 
-export enum BidangDisplay {
-  sekretariat = "Sekretariat",
-  kurikulum = "Kurikulum",
-  tenaga_pendidik = "Tenaga Pendidik",
-  penggalang_dana = "Penggalang Dana",
-  sarana_prasarana = "Sarana Prasarana",
-  kemandirian = "Kemandirian",
-  keputrian = "Keputrian",
-  bimbingan_konseling = "Bimbingan Konseling",
-  olahraga_seni = "Olahraga & Seni",
-  kegiatan_muda_mudi = "Kegiatan Muda Mudi",
-  tahfidz = "Tahfidz",
-}
+export const BidangDisplay = {
+  sekretariat: "Sekretariat",
+  kurikulum: "Kurikulum",
+  tenaga_pendidik: "Tenaga Pendidik",
+  penggalang_dana: "Penggalang Dana",
+  sarana_prasarana: "Sarana Prasarana",
+  kemandirian: "Kemandirian",
+  keputrian: "Keputrian",
+  bimbingan_konseling: "Bimbingan Konseling",
+  olahraga_seni: "Olahraga & Seni",
+  kegiatan_muda_mudi: "Kegiatan Muda Mudi",
+  tahfidz: "Tahfidz",
+};

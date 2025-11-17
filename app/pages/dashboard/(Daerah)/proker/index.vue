@@ -7,7 +7,7 @@
     bidangOptions,
   } from "./_constants";
   import { APIBASE } from "~/utils";
-  import { bulanOptions } from "~~/shared/contants";
+  import { bulanEnum } from "~~/shared/enum";
 
   const constantStore = useConstantStore();
   constantStore.setTitle("Dashboard / Program Kerja");
@@ -62,7 +62,7 @@
         <ClearableSelectMenu
           v-model="query.bulan"
           placeholder="Bulan"
-          :items="[...bulanOptions]"
+          :items="[...bulanEnum]"
         />
         <ClearableSelectMenu
           v-model="query.mingguKe"
@@ -99,7 +99,7 @@
           v-model="query.bulan"
           placeholder="Bulan"
           class="hidden flex-1 md:flex"
-          :items="[...bulanOptions]"
+          :items="[...bulanEnum]"
         />
         <ClearableSelectMenu
           v-model="query.mingguKe"

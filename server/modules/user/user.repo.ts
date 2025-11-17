@@ -1,7 +1,10 @@
 import { and, eq, like, ne, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { userTable } from "~~/server/database/schema/auth";
-import type { TSearchPagination, TWilayah } from "~~/server/utils/dto";
+import type {
+  TSearchPagination,
+  TWilayah,
+} from "~~/server/utils/dto/common.dto";
 
 export async function getAllUser(
   daerahId: number,

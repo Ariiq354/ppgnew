@@ -1,3 +1,4 @@
+import type { kelasMudamudiEnum } from "~~/shared/enum";
 import {
   createKelasMudamudi,
   deleteKelasMudamudi,
@@ -9,10 +10,15 @@ import {
   getKelasMudamudiById,
   updateKelasMudamudi,
 } from "./kelas-mudamudi.repo";
+import type {
+  TKelasMudamudi,
+  TKelasMudamudiList,
+  TNamaMudamudiTanggal,
+} from "~~/server/utils/dto/kelas.dto";
 
 export async function getAllKelasMudamudiService(
   daerahId: number,
-  params: TKelasList
+  params: TKelasMudamudi
 ) {
   const { data, total } = await getAllKelasMudamudi(daerahId, params);
   const metadata = {
@@ -34,21 +40,21 @@ export async function getKelasMudamudiByIdService(id: number) {
 
 export async function getAllKelasMudamudiOptionsService(
   daerahId: number,
-  query: TKelasOptionsList
+  query: TKelasMudamudiList
 ) {
   return await getAllKelasMudamudiOptions(daerahId, query);
 }
 
 export async function getCountKelasMudamudiService(
   daerahId: number,
-  kelasDesaPengajian: string
+  kelasPengajian: (typeof kelasMudamudiEnum)[number]
 ) {
-  return await getCountKelasMudamudi(daerahId, kelasDesaPengajian);
+  return await getCountKelasMudamudi(daerahId, kelasPengajian);
 }
 
 export async function createKelasMudamudiService(
   daerahId: number,
-  data: TNamaTanggal
+  data: TNamaMudamudiTanggal
 ) {
   return await createKelasMudamudi(daerahId, data);
 }
@@ -56,7 +62,7 @@ export async function createKelasMudamudiService(
 export async function updateKelasMudamudiService(
   id: number,
   daerahId: number,
-  data: TNamaTanggal
+  data: TNamaMudamudiTanggal
 ) {
   return await updateKelasMudamudi(id, daerahId, data);
 }

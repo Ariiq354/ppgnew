@@ -1,8 +1,8 @@
 import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { prokerTable } from "~~/server/database/schema/bidang";
-import type { roles } from "~~/shared/permission";
 import type { TProkerCreate, TProkerList } from "./proker.dto";
+import type { bidangEnum } from "~~/shared/enum";
 
 export async function getAllProker(
   daerahId: number,
@@ -65,7 +65,7 @@ export async function getAllProker(
 
 export async function getAllProkerExport(
   daerahId: number,
-  bidang: (typeof roles)[number]
+  bidang: (typeof bidangEnum)[number]
 ) {
   return await tryCatch(
     "Failed to export Proker",
@@ -114,7 +114,7 @@ export async function updateProker(
 
 export async function deleteProker(
   daerahId: number,
-  bidang: (typeof roles)[number],
+  bidang: (typeof bidangEnum)[number],
   id: number[]
 ) {
   return await tryCatch(

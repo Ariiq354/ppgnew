@@ -1,13 +1,16 @@
-import { and, eq, inArray, like, or, Param, sql, type SQL } from "drizzle-orm";
+import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
-import { generusTable } from "~~/server/database/schema/generus";
+import {
+  generusStatusTable,
+  generusTable,
+} from "~~/server/database/schema/generus";
 import { kelompokTable } from "~~/server/database/schema/wilayah";
-import type { TGenerusList } from "~~/server/utils/dto";
-import { exclude } from "~~/shared/contants";
+import { getGenerusByStatusSQL } from "~~/server/utils/common";
+import { exclude } from "~~/shared/enum";
 
 export async function getAllGenerusMudamudi(
   daerahId: number,
-  { limit, page, search, kelasPengajian, desaId, kelompokId }: TGenerusList
+  { limit, page, search, kelasPengajian, desaId, kelompokId }: TMudamudiList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -24,9 +27,14 @@ export async function getAllGenerusMudamudi(
     conditions.push(or(like(generusTable.nama, searchCondition)));
   }
 
-  if (kelasPengajian) {
-    conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
+  if (kelasPengajian === "Usia Mandiri") {
+    conditions.push(eq(generusTable.kelasPengajian, "Usia Mandiri"));
+  } else {
+    conditions.push(
+      inArray(generusTable.kelasPengajian, ["Remaja", "Pranikah"])
+    );
   }
+
   if (desaId) {
     conditions.push(eq(generusTable.desaId, desaId));
   }
@@ -43,7 +51,9 @@ export async function getAllGenerusMudamudi(
       kelasSekolah: generusTable.kelasSekolah,
       gender: generusTable.gender,
       noTelepon: generusTable.noTelepon,
-      status: generusTable.status,
+      status: sql<
+        string[]
+      >`COALESCE(ARRAY_AGG(${generusStatusTable.status}), '{}')`,
       kelasPengajian: generusTable.kelasPengajian,
       namaOrtu: generusTable.namaOrtu,
       noTeleponOrtu: generusTable.noTeleponOrtu,
@@ -51,6 +61,10 @@ export async function getAllGenerusMudamudi(
       foto: generusTable.foto,
     })
     .from(generusTable)
+    .leftJoin(
+      generusStatusTable,
+      eq(generusTable.id, generusStatusTable.generusId)
+    )
     .where(and(...conditions));
 
   const total = await tryCatch(
@@ -67,12 +81,12 @@ export async function getAllGenerusMudamudi(
 
 export async function getAllMudamudiExclude(
   daerahId: number,
-  { limit, page, search, kelasPengajian }: TGenerusAbsensiList
+  { limit, page, search, kelasPengajian }: TMudamudiAbsensiList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(generusTable.daerahId, daerahId),
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    ...getGenerusByStatusSQL({ exclude: [...exclude] }),
   ];
 
   if (search) {
@@ -123,7 +137,6 @@ export async function getAllGenerusExportMudamudi(daerahId: number) {
         kelasSekolah: generusTable.kelasSekolah,
         gender: generusTable.gender,
         noTelepon: generusTable.noTelepon,
-        status: generusTable.status,
         kelasPengajian: generusTable.kelasPengajian,
         namaOrtu: generusTable.namaOrtu,
         noTeleponOrtu: generusTable.noTeleponOrtu,
@@ -165,7 +178,7 @@ export async function getGenerusMudamudiKelasPengajianExclude(
             "Pranikah",
             "Usia Mandiri",
           ]),
-          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
+          ...getGenerusByStatusSQL({ exclude: [...exclude] })
         )
       )
   );
@@ -199,7 +212,7 @@ export async function getCountMudamudiByKelasPengajian(
 ) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(generusTable.daerahId, daerahId),
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    ...getGenerusByStatusSQL({ exclude: [...exclude] }),
   ];
 
   if (kelasPengajian === "Usia Mandiri") {

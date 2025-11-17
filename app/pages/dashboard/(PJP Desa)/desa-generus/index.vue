@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { useConstantStore } from "~/stores/constant";
   import { APIBASE, type ExtractObjectType } from "~/utils";
-  import { pengajianOptions } from "~~/shared/contants";
   import { columns } from "./_constants";
+  import { pengajianEnum } from "~~/shared/enum";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -103,7 +103,7 @@
           <ClearableSelectMenu
             v-model="query.kelasPengajian"
             placeholder="Kelas Pengajian"
-            :items="pengajianOptions"
+            :items="[...pengajianEnum]"
           />
           <ClearableSelectMenu
             v-model="query.kelompokId"
@@ -128,7 +128,7 @@
           v-model="query.kelasPengajian"
           placeholder="Kelas Pengajian"
           class="hidden flex-1 md:flex"
-          :items="pengajianOptions"
+          :items="[...pengajianEnum]"
         />
         <ClearableSelectMenu
           v-model="query.kelompokId"

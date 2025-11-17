@@ -1,7 +1,7 @@
 import { UAvatar } from "#components";
 import type { TableColumn } from "@nuxt/ui";
 import { z } from "zod/mini";
-import { roles } from "~~/shared/permission";
+import { bidangEnum } from "~~/shared/enum";
 
 export const columns: TableColumn<any>[] = [
   {
@@ -27,7 +27,7 @@ export const columns: TableColumn<any>[] = [
   },
 ];
 
-export const bidangOptions = roles.map((value) => ({
+export const bidangOptions = bidangEnum.map((value) => ({
   value,
   name: value
     .split("_")
@@ -46,7 +46,7 @@ export const schema = z.object({
         z.mime(["image/png", "image/jpeg", "image/webp"])
       )
   ),
-  bidang: z.enum(roles),
+  bidang: z.enum(bidangEnum),
   nama: z.string().check(z.minLength(1, "Required")),
   pendidikan: z.string().check(z.minLength(1, "Required")),
   tanggalLahir: z.string().check(z.minLength(1, "Required")),

@@ -1,5 +1,5 @@
 import { z } from "zod/mini";
-import { ODelete } from "~~/server/utils/dto";
+import { ODelete } from "~~/server/utils/dto/common.dto";
 
 export const OLaporanMuslimunCreate = z.object({
   musyawarahId: z.number(),

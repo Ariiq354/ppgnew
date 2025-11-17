@@ -1,33 +1,23 @@
-import {
-  and,
-  count,
-  eq,
-  inArray,
-  like,
-  or,
-  Param,
-  type SQL,
-  sql,
-} from "drizzle-orm";
+import { and, count, eq, inArray, like, or, type SQL, sql } from "drizzle-orm";
 import { db } from "~~/server/database";
-import { generusTable } from "~~/server/database/schema/generus";
 import {
   absensiGenerusDesaTable,
   kelasDesaTable,
 } from "~~/server/database/schema/desa";
-import type { TAbsensiGenerusCreate } from "~~/server/utils/dto";
-import { exclude } from "~~/shared/contants";
+import { generusTable } from "~~/server/database/schema/generus";
+import type { TAbsensiGenerusCreate } from "~~/server/utils/dto/absensi.dto";
+import { exclude, type kelasGenerusEnum } from "~~/shared/enum";
 import type { TGenerusDesaAbsensiList } from "./absensi-desa.dto";
 
 export async function getAbsensiGenerusDesaByKelasId(
   desaId: number,
   kelasId: number,
-  kelasPengajian: string
+  kelasPengajian: (typeof kelasGenerusEnum)[number]
 ) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(absensiGenerusDesaTable.kelasId, kelasId),
     eq(kelasDesaTable.desaId, desaId),
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    ...getGenerusByStatusSQL({ exclude: [...exclude] }),
   ];
 
   if (kelasPengajian === "Muda-mudi") {
@@ -90,7 +80,7 @@ export async function getAbsensiGenerusByDesaId(desaId: number) {
       .where(
         and(
           eq(kelasDesaTable.desaId, desaId),
-          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
+          ...getGenerusByStatusSQL({ exclude: [...exclude] })
         )
       )
   );
@@ -101,12 +91,12 @@ export async function getCountAbsensiGenerusDesa(
     desaId?: number;
     daerahId?: number;
   },
-  kelasPengajian: string
+  kelasPengajian: (typeof kelasGenerusEnum)[number]
 ) {
   const { daerahId, desaId } = params;
 
   const conditions: (SQL<unknown> | undefined)[] = [
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    ...getGenerusByStatusSQL({ exclude: [...exclude] }),
     eq(kelasDesaTable.nama, kelasPengajian),
   ];
 
@@ -158,7 +148,7 @@ export async function getAllGenerusDesaSummary(
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    ...getGenerusByStatusSQL({ exclude: [...exclude] }),
   ];
 
   if (search) {

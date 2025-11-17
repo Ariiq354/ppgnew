@@ -5,6 +5,7 @@
   import { useConstantStore } from "~/stores/constant";
   import { APIBASE, type ExtractObjectType } from "~/utils";
   import { columns } from "./_constants";
+  import { absensiEnum } from "~~/shared/enum";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -85,7 +86,10 @@
   }
 
   const isChange = ref(false);
-  function handleStatusChange(generusId: number, keterangan: string) {
+  function handleStatusChange(
+    generusId: number,
+    keterangan: (typeof absensiEnum)[number]
+  ) {
     isChange.value = true;
     const item = state.value.find((item) => item.generusId === generusId);
 
@@ -203,7 +207,7 @@
               "
               class="w-full"
               size="xl"
-              :items="['Hadir', 'Izin', 'Tanpa Keterangan']"
+              :items="[...absensiEnum]"
               default-value="Tanpa Keterangan"
               :disabled="!absensiManage || statusAbsensi === 'pending'"
               @update:model-value="

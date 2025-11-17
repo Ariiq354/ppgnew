@@ -1,14 +1,14 @@
 <script setup lang="ts">
   import { useConstantStore } from "~/stores/constant";
   import { APIBASE } from "~/utils";
-  import { pengajianOptions } from "~~/shared/contants";
+  import { kelasGenerusEnum } from "~~/shared/enum";
   import { columns } from "./_constants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
   constantStore.setTitle("PJP Desa / Monitoring Kehadiran Kelompok");
 
-  const namaKelas = ref("PAUD");
+  const namaKelas = ref<(typeof kelasGenerusEnum)[number]>("PAUD");
   const kelompokId = ref<number>();
   const filterModal = ref(false);
   const { data: summary, refresh: rSummary } = await useFetch(
@@ -107,7 +107,7 @@
         <USelectMenu
           v-model="namaKelas"
           class="flex-1"
-          :items="pengajianOptions"
+          :items="[...kelasGenerusEnum]"
           :disabled="status === 'pending'"
           placeholder="Pilih Pengajian"
         />

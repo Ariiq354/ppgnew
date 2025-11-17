@@ -1,9 +1,11 @@
 <script setup lang="ts">
+  import type { SelectMenuItem } from "@nuxt/ui";
+
   defineProps<{
-    items: any[] | undefined;
+    items: SelectMenuItem[] | SelectMenuItem[][] | undefined;
     placeholder?: string;
-    labelKey?: string;
-    valueKey?: string;
+    labelKey?: string | number;
+    valueKey?: string | number;
     loading?: boolean;
   }>();
 

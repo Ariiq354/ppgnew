@@ -2,12 +2,12 @@
   import { useConstantStore } from "~/stores/constant";
   import { columns } from "./_constants";
   import { APIBASE } from "~/utils";
-  import { daerahKelas } from "~~/shared/contants";
+  import { kelasMudamudiEnum } from "~~/shared/enum";
 
   const constantStore = useConstantStore();
   constantStore.setTitle("Keputrian / Monitoring Kehadiran");
 
-  const namaKelas = ref("Muda-mudi");
+  const namaKelas = ref<(typeof kelasMudamudiEnum)[number]>("Muda-mudi");
   const { data: summary } = await useFetch(
     `${APIBASE}/absensi-keputrian/monitoring/summary`,
     {
@@ -64,7 +64,7 @@
         <USelectMenu
           v-model="namaKelas"
           class="flex-1"
-          :items="daerahKelas"
+          :items="[...kelasMudamudiEnum]"
           :disabled="status === 'pending'"
           placeholder="Pilih Pengajian"
         />

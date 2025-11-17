@@ -1,7 +1,7 @@
 import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { musyawarahMuslimunTable } from "~~/server/database/schema/kelompok";
-import type { TNamaTanggal, TSearchPagination } from "~~/server/utils/dto";
+import type { TSearchPagination } from "~~/server/utils/dto/common.dto";
 
 export async function getAllMuslimun(
   kelompokId: number,

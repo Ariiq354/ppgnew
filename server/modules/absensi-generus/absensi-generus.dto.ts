@@ -1,11 +1,12 @@
 import { z } from "zod/mini";
-import { OPagination } from "~~/server/utils/dto";
+import { OPagination } from "~~/server/utils/dto/common.dto";
+import { kelasGenerusEnum } from "~~/shared/enum";
 
 export const OGenerusAbsensiForDesaList = z.object({
   ...OPagination.def.shape,
   search: z.string(),
   kelompokId: z.optional(z.coerce.number()),
-  kelasPengajian: z.string(),
+  kelasPengajian: z.enum(kelasGenerusEnum),
 });
 
 export type TGenerusAbsensiForDesaList = z.infer<
@@ -14,7 +15,7 @@ export type TGenerusAbsensiForDesaList = z.infer<
 
 export const OAbsensiKelasPengajianForDesaList = z.object({
   kelompokId: z.optional(z.coerce.number()),
-  kelasPengajian: z.string(),
+  kelasPengajian: z.enum(kelasGenerusEnum),
 });
 
 export type TAbsensiKelasPengajianForDesaList = z.infer<

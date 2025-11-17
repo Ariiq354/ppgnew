@@ -1,11 +1,11 @@
 import { z } from "zod/mini";
-import { OPagination } from "~~/server/utils/dto";
-import { roles } from "~~/shared/permission";
+import { OPagination } from "~~/server/utils/dto/common.dto";
+import { bidangEnum } from "~~/shared/enum";
 
 export const OMusyawarahBidangCreate = z.object({
   nama: z.string(),
   tanggal: z.string(),
-  bidang: z.enum(roles),
+  bidang: z.enum(bidangEnum),
 });
 
 export type TMusyawarahBidangCreate = z.infer<typeof OMusyawarahBidangCreate>;
@@ -13,7 +13,7 @@ export type TMusyawarahBidangCreate = z.infer<typeof OMusyawarahBidangCreate>;
 export const OMusyawarahBidangList = z.object({
   ...OPagination.def.shape,
   search: z.string(),
-  bidang: z.enum(roles),
+  bidang: z.enum(bidangEnum),
 });
 
 export type TMusyawarahBidangList = z.infer<typeof OMusyawarahBidangList>;

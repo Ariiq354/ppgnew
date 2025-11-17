@@ -1,5 +1,4 @@
 import { ODaerahCreate, updateDaerahService } from "~~/server/modules/daerah";
-import { OParam } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);

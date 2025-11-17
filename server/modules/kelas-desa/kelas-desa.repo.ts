@@ -3,14 +3,15 @@ import { db } from "~~/server/database";
 import { kelasDesaTable } from "~~/server/database/schema/desa";
 import { desaTable } from "~~/server/database/schema/wilayah";
 import type {
-  TKelasList,
-  TKelasOptionsList,
-  TNamaTanggal,
-} from "~~/server/utils/dto";
+  TKelasGenerus,
+  TKelasGenerusList,
+  TNamaGenerusTanggal,
+} from "~~/server/utils/dto/kelas.dto";
+import type { kelasGenerusEnum } from "~~/shared/enum";
 
 export async function getAllKelasDesa(
   desaId: number,
-  { limit, page, search, bulan, tahun, nama }: TKelasList
+  { limit, page, search, bulan, tahun, nama }: TKelasGenerus
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
@@ -99,7 +100,7 @@ export async function getKelasByDesaId(desaId: number) {
 
 export async function getAllKelasDesaOptions(
   desaId: number,
-  query: TKelasOptionsList
+  query: TKelasGenerusList
 ) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(kelasDesaTable.desaId, desaId),
@@ -129,7 +130,7 @@ export async function getCountKelasDesa(
     desaId?: number;
     daerahId?: number;
   },
-  kelasPengajian: string
+  kelasPengajian: (typeof kelasGenerusEnum)[number]
 ) {
   const { daerahId, desaId } = params;
 
@@ -153,7 +154,10 @@ export async function getCountKelasDesa(
   return data!.count;
 }
 
-export async function createKelasDesa(desaId: number, data: TNamaTanggal) {
+export async function createKelasDesa(
+  desaId: number,
+  data: TNamaGenerusTanggal
+) {
   return await tryCatch(
     "Failed to create Kelas Desa",
     db.insert(kelasDesaTable).values({
@@ -166,7 +170,7 @@ export async function createKelasDesa(desaId: number, data: TNamaTanggal) {
 export async function updateKelasDesa(
   id: number,
   desaId: number,
-  data: TNamaTanggal
+  data: TNamaGenerusTanggal
 ) {
   return await tryCatch(
     "Failed to update Kelas Desa",

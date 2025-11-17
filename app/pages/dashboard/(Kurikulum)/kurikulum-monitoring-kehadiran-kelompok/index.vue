@@ -2,13 +2,13 @@
   import { useConstantStore } from "~/stores/constant";
   import { columns } from "./_constants";
   import { APIBASE } from "~/utils";
-  import { daerahKelas } from "~~/shared/contants";
+  import { kelasGenerusEnum } from "~~/shared/enum";
 
   const constantStore = useConstantStore();
   constantStore.setTitle("Kurikulum / Monitoring Kehadiran Desa");
   const authStore = useAuthStore();
 
-  const namaKelas = ref("Muda-mudi");
+  const namaKelas = ref<(typeof kelasGenerusEnum)[number]>("Muda-mudi");
   const { data: summary } = await useFetch(
     `${APIBASE}/absensi-desa/daerah/summary`,
     {
@@ -123,7 +123,7 @@
         <USelectMenu
           v-model="namaKelas"
           class="flex-1"
-          :items="daerahKelas"
+          :items="[...kelasGenerusEnum]"
           :disabled="status === 'pending'"
           placeholder="Pilih Pengajian"
         />

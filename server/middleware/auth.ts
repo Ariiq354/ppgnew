@@ -1,4 +1,4 @@
-import type { roles } from "~~/shared/permission";
+import type { bidangEnum } from "~~/shared/enum";
 import type { UserWithId } from "../utils/auth";
 
 export default defineEventHandler(async (event) => {
@@ -56,7 +56,7 @@ export default defineEventHandler(async (event) => {
   if (session?.user) {
     const routePermissions: {
       route: string;
-      bidang: (typeof roles)[number];
+      bidang: (typeof bidangEnum)[number];
     }[] = [
       { route: "/dashboard/bimbingan", bidang: "bimbingan_konseling" },
       { route: "/dashboard/kegiatan", bidang: "kegiatan_muda_mudi" },

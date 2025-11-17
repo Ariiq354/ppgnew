@@ -1,25 +1,12 @@
-import {
-  and,
-  count,
-  eq,
-  inArray,
-  like,
-  or,
-  Param,
-  type SQL,
-  sql,
-} from "drizzle-orm";
+import { and, count, eq, inArray, like, or, type SQL, sql } from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
   absensiGenerusGpsTable,
   kelasGpsTable,
 } from "~~/server/database/schema/desa";
 import { generusTable } from "~~/server/database/schema/generus";
-import type {
-  TAbsensiGenerusCreate,
-  TSearchPagination,
-} from "~~/server/utils/dto";
-import { exclude } from "~~/shared/contants";
+import { getGenerusByStatusSQL } from "~~/server/utils/common";
+import { exclude } from "~~/shared/enum";
 
 export async function getAbsensiGpsByKelasId(desaId: number, kelasId: number) {
   const data = await tryCatch(
@@ -44,8 +31,7 @@ export async function getAbsensiGpsByKelasId(desaId: number, kelasId: number) {
         and(
           eq(absensiGenerusGpsTable.kelasId, kelasId),
           eq(kelasGpsTable.desaId, desaId),
-          sql`(${generusTable.status} ?| ${new Param(["GPS"])})`,
-          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
+          ...getGenerusByStatusSQL({ include: ["GPS"], exclude: [...exclude] })
         )
       )
   );
@@ -72,8 +58,7 @@ export async function getCountAbsensiGps(desaId: number) {
       .where(
         and(
           eq(kelasGpsTable.desaId, desaId),
-          sql`(${generusTable.status} ?| ${new Param(["GPS"])})`,
-          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
+          ...getGenerusByStatusSQL({ include: ["GPS"], exclude: [...exclude] })
         )
       )
   );
@@ -88,8 +73,7 @@ export async function getAllGpsSummary(
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(generusTable.desaId, desaId),
-    sql`(${generusTable.status} ?| ${new Param(["GPS"])})`,
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    ...getGenerusByStatusSQL({ include: ["GPS"], exclude: [...exclude] }),
   ];
 
   if (search) {

@@ -1,6 +1,7 @@
-import { roles } from "~~/shared/permission";
+import { bidangEnum } from "~~/shared/enum";
 import type { TDaerahCreate } from "./daerah.dto";
 import {
+  checkSingkatanExist,
   checkWilayahNameExist,
   createDaerah,
   deleteDaerah,
@@ -30,24 +31,21 @@ export async function getOptionsDaerahService() {
 }
 
 export async function createDaerahService(body: TDaerahCreate) {
-  body.name = body.name
+  const { name, singkatan } = body;
+
+  const formatted = name
     .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ");
 
-  const nama = convertToNameFormat(body.name);
+  const exist = await checkWilayahNameExistService(formatted);
+  const singkatanExist = await checkSingkatanExistService(singkatan);
+  if (exist) throw createError({ statusCode: 400, message: "Nama sudah ada" });
+  if (singkatanExist)
+    throw createError({ statusCode: 400, message: "Singkatan sudah ada" });
 
-  const exist = await checkWilayahNameExist(body.name);
-  if (exist) {
-    throw createError({
-      statusCode: 400,
-      message: "Nama sudah ada",
-    });
-  }
-
-  const [result] = await createDaerah({
-    name: body.name,
-  });
+  const [result] = await createDaerah({ name: formatted, singkatan });
+  const nama = `admin.${singkatan}`;
 
   await auth.api.signUpEmail({
     body: {
@@ -60,8 +58,8 @@ export async function createDaerahService(body: TDaerahCreate) {
     },
   });
 
-  for (const [index, item] of roles.entries()) {
-    const namaPengurus = convertToNameFormat(body.name) + (index + 1);
+  for (const role of bidangEnum) {
+    const namaPengurus = `${role}.${singkatan}`;
     const { user } = await auth.api.signUpEmail({
       body: {
         email: `${namaPengurus}@gmail.com`,
@@ -72,9 +70,7 @@ export async function createDaerahService(body: TDaerahCreate) {
         displayUsername: namaPengurus,
       },
     });
-    (await auth.$context).internalAdapter.updateUser(user.id, {
-      role: item,
-    });
+    (await auth.$context).internalAdapter.updateUser(user.id, { role });
   }
 }
 
@@ -88,4 +84,8 @@ export async function deleteDaerahService(id: number[]) {
 
 export async function checkWilayahNameExistService(name: string) {
   return await checkWilayahNameExist(name);
+}
+
+export async function checkSingkatanExistService(singkatan: string) {
+  return await checkSingkatanExist(singkatan);
 }

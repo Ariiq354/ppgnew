@@ -6,5 +6,5 @@ import {
 export default eventHandler(async (event) => {
   const formData = await readValidatedBody(event, (b) => ORegister.parse(b));
 
-  return createDaerahWithUsersService(formData.daerah);
+  return createDaerahWithUsersService(formData.daerah, formData.singakatan);
 });

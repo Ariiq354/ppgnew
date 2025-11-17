@@ -1,6 +1,5 @@
 import { getAllDaerahService } from "~~/server/modules/daerah";
-import { OPagination } from "~~/server/utils/dto";
-
+import { OPagination } from "~~/server/utils/dto/common.dto";
 export default defineEventHandler(async (event) => {
   authGuard(event);
 

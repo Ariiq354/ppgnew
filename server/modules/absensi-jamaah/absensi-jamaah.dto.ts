@@ -1,4 +1,5 @@
 import { z } from "zod/mini";
+import { absensiEnum } from "~~/shared/enum";
 
 export const OAbsensiJamaahCreate = z.object({
   pengajianId: z.number(),
@@ -6,7 +7,7 @@ export const OAbsensiJamaahCreate = z.object({
     z.object({
       id: z.optional(z.number()),
       jamaahId: z.number(),
-      keterangan: z.string(),
+      keterangan: z.enum(absensiEnum),
       detail: z.string(),
     })
   ),

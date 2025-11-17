@@ -81,7 +81,7 @@ export async function deleteProkerService(
 export async function exportProkerService(
   event: H3Event,
   user: UserWithId,
-  query: TBidangSchema
+  query: TBidang
 ) {
   if (!viewWhitelist.has(user.role!) && user.role !== query.bidang) {
     throw ForbiddenError;

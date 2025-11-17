@@ -3,7 +3,7 @@
   import { columns } from "./_constants";
   import { useAuthStore } from "~/stores/auth";
   import { APIBASE } from "~/utils";
-  import { pengajianOptions } from "~~/shared/contants";
+  import { pengajianEnum } from "~~/shared/enum";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -143,7 +143,7 @@
         <ClearableSelectMenu
           v-model="query.kelasPengajian"
           placeholder="Kelas Pengajian"
-          :items="pengajianOptions"
+          :items="[...pengajianEnum]"
         />
       </div>
     </template>
@@ -179,7 +179,7 @@
           v-model="query.kelasPengajian"
           placeholder="Kelas Pengajian"
           class="hidden flex-1 md:flex"
-          :items="pengajianOptions"
+          :items="[...pengajianEnum]"
         />
         <UButton
           variant="subtle"

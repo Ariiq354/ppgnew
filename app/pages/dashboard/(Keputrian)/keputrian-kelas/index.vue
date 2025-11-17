@@ -6,13 +6,10 @@
   import { useAuthStore } from "~/stores/auth";
   import { useConstantStore } from "~/stores/constant";
   import { APIBASE, type ExtractObjectType } from "~/utils";
-  import {
-    bulanFilterOptions,
-    daerahKelas,
-    tahunOptions,
-  } from "~~/shared/contants";
+  import { bulanFilterOptions, tahunOptions } from "~~/shared/contants";
   import type { Schema } from "./_constants";
   import { columns, getInitialFormData, schema } from "./_constants";
+  import { kelasMudamudiEnum } from "~~/shared/enum";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -105,7 +102,7 @@
             <USelectMenu
               v-model="state.nama"
               :disabled="isLoading || !keputrianEdit || viewStatus"
-              :items="daerahKelas"
+              :items="[...kelasMudamudiEnum]"
             />
           </UFormField>
           <UFormField label="Tanggal" name="tanggal">
@@ -143,7 +140,7 @@
           <ClearableSelectMenu
             v-model="query.nama"
             placeholder="Bulan"
-            :items="daerahKelas"
+            :items="[...kelasMudamudiEnum]"
             label-key="name"
             value-key="value"
           />

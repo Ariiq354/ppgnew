@@ -1,14 +1,4 @@
-import {
-  and,
-  count,
-  eq,
-  inArray,
-  like,
-  or,
-  Param,
-  type SQL,
-  sql,
-} from "drizzle-orm";
+import { and, count, eq, inArray, like, or, type SQL, sql } from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
   absensiGenerusTable,
@@ -16,21 +6,18 @@ import {
   kelasTable,
 } from "~~/server/database/schema/generus";
 import { desaTable, kelompokTable } from "~~/server/database/schema/wilayah";
-import type {
-  TAbsensiGenerusCreate,
-  TGenerusAbsensiList,
-} from "~~/server/utils/dto";
-import { exclude } from "~~/shared/contants";
+import { getGenerusByStatusSQL } from "~~/server/utils/common";
+import { exclude, type kelasGenerusEnum } from "~~/shared/enum";
 
 export async function getAbsensiGenerusByKelasId(
   kelompokId: number,
   kelasId: number,
-  kelasPengajian: string
+  kelasPengajian: (typeof kelasGenerusEnum)[number]
 ) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(absensiGenerusTable.kelasId, kelasId),
     eq(kelasTable.kelompokId, kelompokId),
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    ...getGenerusByStatusSQL({ exclude: [...exclude] }),
   ];
 
   if (kelasPengajian === "Muda-mudi") {
@@ -87,7 +74,7 @@ export async function getAbsensiGenerusByKelompokId(kelompokId: number) {
       .where(
         and(
           eq(kelasTable.kelompokId, kelompokId),
-          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
+          ...getGenerusByStatusSQL({ exclude: [...exclude] })
         )
       )
   );
@@ -116,7 +103,7 @@ export async function getAbsensiGenerusByDaerahId(daerahId: number) {
       .where(
         and(
           eq(desaTable.daerahId, daerahId),
-          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
+          ...getGenerusByStatusSQL({ exclude: [...exclude] })
         )
       )
   );
@@ -128,12 +115,12 @@ export async function getCountAbsensiGenerus(
     desaId?: number;
     daerahId?: number;
   },
-  kelasPengajian: string
+  kelasPengajian: (typeof kelasGenerusEnum)[number]
 ) {
   const { daerahId, desaId, kelompokId } = params;
 
   const conditions: (SQL<unknown> | undefined)[] = [
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    ...getGenerusByStatusSQL({ exclude: [...exclude] }),
     eq(kelasTable.nama, kelasPengajian),
   ];
 
@@ -183,7 +170,7 @@ export async function getAllGenerusSummary(
 
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    ...getGenerusByStatusSQL({ exclude: [...exclude] }),
   ];
 
   if (search) {

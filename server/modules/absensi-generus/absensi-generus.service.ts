@@ -1,3 +1,4 @@
+import type { TAbsensiKelasPengajianGenerusList } from "~~/server/utils/dto/absensi.dto";
 import { getDesaByDaerahIdService } from "../desa";
 import { getCountGenerusExcludeService } from "../generus";
 import { getCountKelasService, getKelasByIdService } from "../kelas-kelompok";
@@ -55,7 +56,7 @@ export async function getAbsensiGenerusMonitoringService(
 
 export async function getAbsensiGenerusSummaryService(
   kelompokId: number,
-  query: TAbsensiKelasPengajianList
+  query: TAbsensiKelasPengajianGenerusList
 ) {
   const countGenerus = await getCountGenerusExcludeService(
     { kelompokId },

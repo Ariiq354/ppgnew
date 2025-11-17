@@ -11,7 +11,7 @@ import {
 
 export async function getAllKelasTahfidzService(
   daerahId: number,
-  params: TKelasBaseList
+  params: TKelas
 ) {
   const { data, total } = await getAllKelasTahfidz(daerahId, params);
   const metadata = {

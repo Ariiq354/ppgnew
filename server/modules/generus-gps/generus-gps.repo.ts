@@ -1,9 +1,13 @@
-import { and, eq, like, or, Param, sql, type SQL } from "drizzle-orm";
+import { and, eq, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
-import { generusTable } from "~~/server/database/schema/generus";
+import {
+  generusStatusTable,
+  generusTable,
+} from "~~/server/database/schema/generus";
 import { kelompokTable } from "~~/server/database/schema/wilayah";
-import type { TGenerusBaseList } from "~~/server/utils/dto";
-import { exclude } from "~~/shared/contants";
+import { getGenerusByStatusSQL } from "~~/server/utils/common";
+import type { TGenerusBaseList } from "~~/server/utils/dto/generus.dto";
+import { exclude } from "~~/shared/enum";
 
 export async function getAllGenerusGPS(
   daerahId: number,
@@ -12,7 +16,7 @@ export async function getAllGenerusGPS(
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(generusTable.daerahId, daerahId),
-    sql`(${generusTable.status} ?| ${new Param(["GPS"])})`,
+    eq(generusStatusTable.status, "GPS"),
   ];
 
   if (search) {
@@ -36,7 +40,9 @@ export async function getAllGenerusGPS(
       kelasSekolah: generusTable.kelasSekolah,
       gender: generusTable.gender,
       noTelepon: generusTable.noTelepon,
-      status: generusTable.status,
+      status: sql<
+        string[]
+      >`COALESCE(ARRAY_AGG(${generusStatusTable.status}), '{}')`,
       kelasPengajian: generusTable.kelasPengajian,
       namaOrtu: generusTable.namaOrtu,
       noTeleponOrtu: generusTable.noTeleponOrtu,
@@ -44,6 +50,10 @@ export async function getAllGenerusGPS(
       foto: generusTable.foto,
     })
     .from(generusTable)
+    .leftJoin(
+      generusStatusTable,
+      eq(generusStatusTable.generusId, generusTable.id)
+    )
     .where(and(...conditions));
 
   const total = await tryCatch(
@@ -65,8 +75,7 @@ export async function getAllGpsExclude(
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(generusTable.desaId, desaId),
-    sql`(${generusTable.status} ?| ${new Param(["GPS"])})`,
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    ...getGenerusByStatusSQL({ include: ["GPS"], exclude: [...exclude] }),
   ];
 
   if (search) {
@@ -109,7 +118,6 @@ export async function getAllGenerusExportGps(desaId: number) {
         kelasSekolah: generusTable.kelasSekolah,
         gender: generusTable.gender,
         noTelepon: generusTable.noTelepon,
-        status: generusTable.status,
         kelasPengajian: generusTable.kelasPengajian,
         namaOrtu: generusTable.namaOrtu,
         noTeleponOrtu: generusTable.noTeleponOrtu,
@@ -121,7 +129,7 @@ export async function getAllGenerusExportGps(desaId: number) {
       .where(
         and(
           eq(generusTable.desaId, desaId),
-          sql`(${generusTable.status} ?| ${new Param(["GPS"])})`
+          ...getGenerusByStatusSQL({ include: ["GPS"], exclude: [...exclude] })
         )
       )
       .leftJoin(kelompokTable, eq(generusTable.kelompokId, kelompokTable.id))
@@ -135,8 +143,7 @@ export async function getCountGpsExclude(desaId: number) {
       generusTable,
       and(
         eq(generusTable.desaId, desaId),
-        sql`(${generusTable.status} ?| ${new Param(["GPS"])})`,
-        sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
+        ...getGenerusByStatusSQL({ include: ["GPS"], exclude: [...exclude] })
       )
     )
   );

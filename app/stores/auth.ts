@@ -7,8 +7,9 @@ import { createAuthClient } from "better-auth/vue";
 import { useToastError, useToastSuccess } from "~/composables/toast";
 import { APIBASE } from "~/utils";
 import type { auth } from "~~/server/utils/auth";
+import type { bidangEnum } from "~~/shared/enum";
 import { ac, rolesDeclaration } from "~~/shared/permission";
-import type { roles, TStatement } from "~~/shared/permission";
+import type { TStatement } from "~~/shared/permission";
 
 const authClient = createAuthClient({
   plugins: [
@@ -104,7 +105,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   function hasPermission(body: TStatement) {
     const result = authClient.admin.checkRolePermission({
       permission: body,
-      role: user.value?.role as (typeof roles)[number],
+      role: user.value?.role as (typeof bidangEnum)[number],
     });
 
     return result;

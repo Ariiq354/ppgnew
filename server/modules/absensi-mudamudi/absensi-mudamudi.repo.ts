@@ -1,25 +1,13 @@
-import {
-  and,
-  count,
-  eq,
-  inArray,
-  like,
-  or,
-  Param,
-  type SQL,
-  sql,
-} from "drizzle-orm";
+import { and, count, eq, inArray, like, or, type SQL, sql } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { generusTable } from "~~/server/database/schema/generus";
 import {
   absensiGenerusMudaMudiTable,
   kelasMudaMudiTable,
 } from "~~/server/database/schema/mudamudi";
-import type {
-  TAbsensiGenerusCreate,
-  TGenerusAbsensiList,
-} from "~~/server/utils/dto";
-import { exclude } from "~~/shared/contants";
+import { getGenerusByStatusSQL } from "~~/server/utils/common";
+import type { TMudamudiAbsensiList } from "~~/server/utils/dto/absensi.dto";
+import { exclude, type kelasMudamudiEnum } from "~~/shared/enum";
 
 export async function getAbsensiMudamudiByKelasId(
   daerahId: number,
@@ -29,7 +17,7 @@ export async function getAbsensiMudamudiByKelasId(
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(absensiGenerusMudaMudiTable.kelasId, kelasId),
     eq(kelasMudaMudiTable.daerahId, daerahId),
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    ...getGenerusByStatusSQL({ exclude: [...exclude] }),
   ];
 
   if (kelasPengajian === "Usia Mandiri") {
@@ -85,7 +73,7 @@ export async function getAbsensiMudamudiByDaerahId(daerahId: number) {
       .where(
         and(
           eq(kelasMudaMudiTable.daerahId, daerahId),
-          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+          ...getGenerusByStatusSQL({ exclude: [...exclude] }),
           inArray(generusTable.kelasPengajian, [
             "Remaja",
             "Pranikah",
@@ -98,11 +86,11 @@ export async function getAbsensiMudamudiByDaerahId(daerahId: number) {
 
 export async function getCountAbsensiMudamudi(
   daerahId: number,
-  kelasPengajian: string
+  kelasPengajian: (typeof kelasMudamudiEnum)[number]
 ) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(kelasMudaMudiTable.daerahId, daerahId),
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    ...getGenerusByStatusSQL({ exclude: [...exclude] }),
     eq(kelasMudaMudiTable.nama, kelasPengajian),
   ];
 
@@ -137,12 +125,12 @@ export async function getCountAbsensiMudamudi(
 
 export async function getAllMudamudiSummary(
   daerahId: number,
-  { limit, page, search, kelasPengajian }: TGenerusAbsensiList
+  { limit, page, search, kelasPengajian }: TMudamudiAbsensiList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(generusTable.daerahId, daerahId),
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    ...getGenerusByStatusSQL({ exclude: [...exclude] }),
   ];
 
   if (search) {

@@ -1,35 +1,32 @@
-import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
-import { roles } from "../../../shared/permission";
+import { date, integer, pgTable, smallint, text } from "drizzle-orm/pg-core";
+import { bidangEnum, bulanEnum, statusProkerEnum } from "../../../shared/enum";
 import { createdUpdated } from "./common";
 import { daerahTable } from "./wilayah";
-import { bulanOptions } from "../../../shared/contants";
 
 export const prokerTable = pgTable("proker", {
-  id: serial().primaryKey(),
+  id: integer().primaryKey().generatedByDefaultAsIdentity(),
   kegiatan: text().notNull(),
   peserta: text().notNull(),
-  bulan: text({ enum: bulanOptions }).notNull(),
+  bulan: text({ enum: bulanEnum }).notNull(),
   tahun: integer().notNull(),
   biaya: integer().notNull(),
   keterangan: text().notNull(),
-  mingguKe: integer().notNull(),
+  mingguKe: smallint().notNull(),
   bidang: text({
-    enum: roles,
+    enum: bidangEnum,
   }).notNull(),
   daerahId: integer()
     .notNull()
     .references(() => daerahTable.id, { onDelete: "cascade" }),
-  status: text({ enum: ["Aktif", "Pending", "Terlaksana"] })
-    .notNull()
-    .default("Aktif"),
+  status: text({ enum: statusProkerEnum }).notNull(),
   ...createdUpdated,
 });
 
 export const musyawarahBidangTable = pgTable("musyawarah_bidang", {
-  id: serial().primaryKey(),
+  id: integer().primaryKey().generatedByDefaultAsIdentity(),
   nama: text().notNull(),
-  tanggal: text().notNull(),
-  bidang: text({ enum: roles }).notNull(),
+  tanggal: date({ mode: "string" }).notNull(),
+  bidang: text({ enum: bidangEnum }).notNull(),
   daerahId: integer()
     .notNull()
     .references(() => daerahTable.id, { onDelete: "cascade" }),
@@ -39,7 +36,7 @@ export const musyawarahBidangTable = pgTable("musyawarah_bidang", {
 export const laporanMusyawarahBidangTable = pgTable(
   "laporan_musyawarah_bidang",
   {
-    id: serial().primaryKey(),
+    id: integer().primaryKey().generatedByDefaultAsIdentity(),
     musyawarahId: integer()
       .notNull()
       .references(() => musyawarahBidangTable.id, { onDelete: "cascade" }),

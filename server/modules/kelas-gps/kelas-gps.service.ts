@@ -9,10 +9,7 @@ import {
   updateKelasGps,
 } from "./kelas-gps.repo";
 
-export async function getAllKelasGpsService(
-  desaId: number,
-  params: TKelasBaseList
-) {
+export async function getAllKelasGpsService(desaId: number, params: TKelas) {
   const { data, total } = await getAllKelasGps(desaId, params);
   const metadata = {
     page: params.page,

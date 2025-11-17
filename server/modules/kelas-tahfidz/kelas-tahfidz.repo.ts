@@ -1,15 +1,15 @@
 import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { kelasTahfidzTable } from "~~/server/database/schema/tahfidz";
-import type { TNamaTanggal } from "~~/server/utils/dto";
+import type { TNamaTanggal } from "~~/server/utils/dto/kelas.dto";
 
 export async function getAllKelasTahfidz(
-  daerahId: number,
-  { limit, page, search, bulan, tahun }: TKelasBaseList
+  desaId: number,
+  { limit, page, search, bulan, tahun }: TKelas
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
-    eq(kelasTahfidzTable.daerahId, daerahId),
+    eq(kelasTahfidzTable.desaId, desaId),
   ];
 
   if (search) {
@@ -51,7 +51,7 @@ export async function getAllKelasTahfidz(
   return { data, total };
 }
 
-export async function getAllKelasTahfidzExport(daerahId: number) {
+export async function getAllKelasTahfidzExport(desaId: number) {
   return await tryCatch(
     "Failed to export Kelas Tahfidz data",
     db
@@ -60,7 +60,7 @@ export async function getAllKelasTahfidzExport(daerahId: number) {
         tanggal: kelasTahfidzTable.tanggal,
       })
       .from(kelasTahfidzTable)
-      .where(eq(kelasTahfidzTable.daerahId, daerahId))
+      .where(eq(kelasTahfidzTable.desaId, desaId))
   );
 }
 
@@ -75,9 +75,9 @@ export async function getKelasTahfidzById(id: number) {
   return { data };
 }
 
-export async function getAllKelasTahfidzOptions(daerahId: number) {
+export async function getAllKelasTahfidzOptions(desaId: number) {
   const conditions: (SQL<unknown> | undefined)[] = [
-    eq(kelasTahfidzTable.daerahId, daerahId),
+    eq(kelasTahfidzTable.desaId, desaId),
   ];
 
   const data = await tryCatch(
@@ -95,26 +95,26 @@ export async function getAllKelasTahfidzOptions(daerahId: number) {
   return { data };
 }
 
-export async function getCountKelasTahfidz(daerahId: number) {
+export async function getCountKelasTahfidz(desaId: number) {
   return await tryCatch(
     "Failed to get count of Kelas Tahfidz",
-    db.$count(kelasTahfidzTable, and(eq(kelasTahfidzTable.daerahId, daerahId)))
+    db.$count(kelasTahfidzTable, and(eq(kelasTahfidzTable.desaId, desaId)))
   );
 }
 
-export async function createKelasTahfidz(daerahId: number, data: TNamaTanggal) {
+export async function createKelasTahfidz(desaId: number, data: TNamaTanggal) {
   return await tryCatch(
     "Failed to create Kelas Tahfidz",
     db.insert(kelasTahfidzTable).values({
       ...data,
-      daerahId,
+      desaId,
     })
   );
 }
 
 export async function updateKelasTahfidz(
   id: number,
-  daerahId: number,
+  desaId: number,
   data: TNamaTanggal
 ) {
   return await tryCatch(
@@ -123,15 +123,12 @@ export async function updateKelasTahfidz(
       .update(kelasTahfidzTable)
       .set(data)
       .where(
-        and(
-          eq(kelasTahfidzTable.id, id),
-          eq(kelasTahfidzTable.daerahId, daerahId)
-        )
+        and(eq(kelasTahfidzTable.id, id), eq(kelasTahfidzTable.desaId, desaId))
       )
   );
 }
 
-export async function deleteKelasTahfidz(daerahId: number, id: number[]) {
+export async function deleteKelasTahfidz(desaId: number, id: number[]) {
   return await tryCatch(
     "Failed to delete Kelas Tahfidz",
     db
@@ -139,7 +136,7 @@ export async function deleteKelasTahfidz(daerahId: number, id: number[]) {
       .where(
         and(
           inArray(kelasTahfidzTable.id, id),
-          eq(kelasTahfidzTable.daerahId, daerahId)
+          eq(kelasTahfidzTable.desaId, desaId)
         )
       )
   );

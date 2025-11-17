@@ -1,6 +1,5 @@
 import { z } from "zod/mini";
-import { OPagination } from "~~/server/utils/dto";
-
+import { OPagination } from "~~/server/utils/dto/common.dto";
 export const OKelompokCreate = z.object({
   name: z.string(),
   desaId: z.number(),

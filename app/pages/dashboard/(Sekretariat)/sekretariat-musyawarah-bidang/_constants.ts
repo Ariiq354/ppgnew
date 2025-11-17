@@ -1,5 +1,5 @@
 import { z } from "zod/mini";
-import { roles } from "~~/shared/permission";
+import { bidangEnum } from "~~/shared/enum";
 
 export const columns = [
   {
@@ -16,7 +16,7 @@ export const schema = z.object({
   id: z.optional(z.number()),
   nama: z.string().check(z.minLength(1, "Required")),
   tanggal: z.string().check(z.minLength(1, "Required")),
-  bidang: z.enum(roles),
+  bidang: z.enum(bidangEnum),
 });
 
 export const getInitialFormData = (): Schema => ({

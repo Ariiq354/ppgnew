@@ -1,5 +1,4 @@
 import { createAbsensiGpsService } from "~~/server/modules/absensi-gps";
-import { OAbsensiGenerusCreate } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["manage"] });

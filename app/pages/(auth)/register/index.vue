@@ -70,6 +70,22 @@
             <UInput v-model="state.daerah" placeholder="Masukkan nama daerah" />
           </UFormField>
 
+          <UFormField
+            label="Singkatan Nama Daerah (akan dijadikan username login)"
+            name="daerah"
+          >
+            <UInput
+              v-model="state.daerah"
+              placeholder="Masukkan singkatan Daerah (huruf kecil)"
+            />
+          </UFormField>
+          <p class="text-muted text-sm">
+            Contoh: <br />
+            Nama Daerah: Bogor Selatan 2 <br />
+            Singkatan Nama Daerah: bs2 <br />
+            Username Bidang Sekretariat: sekretariat.bs2
+          </p>
+
           <UButton
             class="flex w-full justify-center"
             type="submit"

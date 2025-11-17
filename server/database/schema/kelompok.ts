@@ -1,12 +1,13 @@
-import { daerahTable, desaTable, kelompokTable } from "./wilayah";
+import { date, integer, pgTable, text, uniqueIndex } from "drizzle-orm/pg-core";
 import { createdUpdated } from "./common";
 import { generusTable } from "./generus";
-import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
+import { kelompokTable } from "./wilayah";
+import { absensiEnum, statusKonselingEnum } from "../../../shared/enum";
 
 export const musyawarahMuslimunTable = pgTable("musyawarah_muslimun", {
-  id: serial().primaryKey(),
+  id: integer().primaryKey().generatedByDefaultAsIdentity(),
   nama: text().notNull(),
-  tanggal: text().notNull(),
+  tanggal: date({ mode: "string" }).notNull(),
   kelompokId: integer()
     .notNull()
     .references(() => kelompokTable.id, { onDelete: "cascade" }),
@@ -16,7 +17,7 @@ export const musyawarahMuslimunTable = pgTable("musyawarah_muslimun", {
 export const laporanMusyawarahMuslimunTable = pgTable(
   "laporan_musyawarah_muslimun",
   {
-    id: serial().primaryKey(),
+    id: integer().primaryKey().generatedByDefaultAsIdentity(),
     musyawarahId: integer()
       .notNull()
       .references(() => musyawarahMuslimunTable.id, { onDelete: "cascade" }),
@@ -27,14 +28,8 @@ export const laporanMusyawarahMuslimunTable = pgTable(
 );
 
 export const jamaahTable = pgTable("jamaah", {
-  id: serial().primaryKey(),
+  id: integer().primaryKey().generatedByDefaultAsIdentity(),
   nama: text().notNull(),
-  daerahId: integer()
-    .notNull()
-    .references(() => daerahTable.id, { onDelete: "cascade" }),
-  desaId: integer()
-    .notNull()
-    .references(() => desaTable.id, { onDelete: "cascade" }),
   kelompokId: integer()
     .notNull()
     .references(() => kelompokTable.id, {
@@ -44,35 +39,44 @@ export const jamaahTable = pgTable("jamaah", {
 });
 
 export const pengajianTable = pgTable("pengajian", {
-  id: serial().primaryKey(),
+  id: integer().primaryKey().generatedByDefaultAsIdentity(),
   nama: text().notNull(),
-  tanggal: text().notNull(),
+  tanggal: date({ mode: "string" }).notNull(),
   kelompokId: integer()
     .notNull()
     .references(() => kelompokTable.id, { onDelete: "cascade" }),
   ...createdUpdated,
 });
 
-export const absensiJamaahKelompokTable = pgTable("absensi_jamaah_kelompok", {
-  id: serial().primaryKey(),
-  pengajianId: integer()
-    .notNull()
-    .references(() => pengajianTable.id, { onDelete: "cascade" }),
-  jamaahId: integer()
-    .notNull()
-    .references(() => jamaahTable.id, { onDelete: "cascade" }),
-  keterangan: text().notNull(),
-  detail: text().notNull().default(""),
-  ...createdUpdated,
-});
+export const absensiJamaahKelompokTable = pgTable(
+  "absensi_jamaah_kelompok",
+  {
+    id: integer().primaryKey().generatedByDefaultAsIdentity(),
+    pengajianId: integer()
+      .notNull()
+      .references(() => pengajianTable.id, { onDelete: "cascade" }),
+    jamaahId: integer()
+      .notNull()
+      .references(() => jamaahTable.id, { onDelete: "cascade" }),
+    keterangan: text({ enum: absensiEnum }).notNull(),
+    detail: text().notNull().default(""),
+    ...createdUpdated,
+  },
+  (table) => [
+    uniqueIndex("unique_absen_per_jamaah_per_pengajian").on(
+      table.jamaahId,
+      table.pengajianId
+    ),
+  ]
+);
 
 export const generusKonselingTable = pgTable("generus_konseling", {
-  id: serial().primaryKey(),
+  id: integer().primaryKey().generatedByDefaultAsIdentity(),
   generusId: integer()
     .notNull()
     .references(() => generusTable.id, { onDelete: "cascade" }),
   keterangan: text().notNull(),
-  status: text({ enum: ["Baru", "Diproses", "Selesai"] }).notNull(),
+  status: text({ enum: statusKonselingEnum }).notNull(),
   kelompokId: integer()
     .notNull()
     .references(() => kelompokTable.id, { onDelete: "cascade" }),

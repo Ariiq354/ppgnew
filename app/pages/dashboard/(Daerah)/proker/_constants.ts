@@ -1,6 +1,6 @@
 import { UBadge } from "#components";
 import type { TableColumn } from "@nuxt/ui";
-import { roles } from "~~/shared/permission";
+import { bidangEnum } from "~~/shared/enum";
 
 const statusMap = {
   Pending: { label: "pending", color: "warning" as const },
@@ -74,7 +74,7 @@ export const columns: TableColumn<any>[] = [
   },
 ];
 
-export const bidangOptions = roles.map((value) => ({
+export const bidangOptions = bidangEnum.map((value) => ({
   value,
   name: value
     .split("_")

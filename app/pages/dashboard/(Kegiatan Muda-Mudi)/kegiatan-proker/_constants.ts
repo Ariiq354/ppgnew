@@ -1,8 +1,7 @@
 import { z } from "zod/mini";
-import { roles } from "~~/shared/permission";
+import { bidangEnum, bulanEnum } from "~~/shared/enum";
 import { UBadge } from "#components";
 import type { TableColumn } from "@nuxt/ui";
-import { bulanOptions } from "~~/shared/contants";
 
 const statusMap = {
   Pending: { label: "pending", color: "warning" as const },
@@ -58,13 +57,13 @@ export const schema = z.object({
   kegiatan: z.string().check(z.minLength(1, "Required")),
   peserta: z.string().check(z.minLength(1, "Required")),
   tahun: z.number().check(z.minimum(1, "Required")),
-  bulan: z.enum(bulanOptions),
+  bulan: z.enum(bulanEnum),
   mingguKe: z
     .number()
     .check(z.minimum(1, "Minngu minimal 1"), z.maximum(5, "Minggu maximal 5")),
   biaya: z.number(),
   keterangan: z.string().check(z.minLength(1, "Required")),
-  bidang: z.enum(roles),
+  bidang: z.enum(bidangEnum),
   status: z.enum(["Pending", "Aktif", "Terlaksana"]),
 });
 

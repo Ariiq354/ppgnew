@@ -1,6 +1,6 @@
 // dokumen.service.ts
 
-import type { TPagination } from "~~/server/utils/dto";
+import type { TPagination } from "~~/server/utils/dto/common.dto";
 import {
   createDokumen,
   deleteDokumen,

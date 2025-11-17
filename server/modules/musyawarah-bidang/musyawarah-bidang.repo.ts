@@ -1,11 +1,11 @@
 import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { musyawarahBidangTable } from "~~/server/database/schema/bidang";
-import type { roles } from "~~/shared/permission";
 import type {
   TMusyawarahBidangCreate,
   TMusyawarahBidangList,
 } from "./musyawarah-bidang.dto";
+import type { bidangEnum } from "~~/shared/enum";
 
 export async function getAllMusyawarahBidang(
   daerahId: number,
@@ -47,7 +47,7 @@ export async function getAllMusyawarahBidang(
 
 export async function getAllMusyawarahBidangExport(
   daerahId: number,
-  bidang: (typeof roles)[number]
+  bidang: (typeof bidangEnum)[number]
 ) {
   return await tryCatch(
     "Failed to export MusyawarahBidang data",
@@ -68,7 +68,7 @@ export async function getAllMusyawarahBidangExport(
 
 export async function getAllMusyawarahBidangOptions(
   daerahId: number,
-  bidang: (typeof roles)[number]
+  bidang: (typeof bidangEnum)[number]
 ) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(musyawarahBidangTable.daerahId, daerahId),
@@ -124,7 +124,7 @@ export async function updateMusyawarahBidang(
 
 export async function deleteMusyawarahBidang(
   daerahId: number,
-  bidang: (typeof roles)[number],
+  bidang: (typeof bidangEnum)[number],
   id: number[]
 ) {
   return await tryCatch(

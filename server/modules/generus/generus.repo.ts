@@ -1,9 +1,14 @@
-import { and, eq, inArray, like, or, Param, sql, type SQL } from "drizzle-orm";
+import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
-import { generusTable } from "~~/server/database/schema/generus";
+import {
+  generusStatusTable,
+  generusTable,
+} from "~~/server/database/schema/generus";
 import { kelompokTable } from "~~/server/database/schema/wilayah";
-import type { TWilayah } from "~~/server/utils/dto";
-import { exclude } from "~~/shared/contants";
+import { getGenerusByStatusSQL } from "~~/server/utils/common";
+import type { TWilayah } from "~~/server/utils/dto/common.dto";
+import type { TGenerusGenericList } from "~~/server/utils/dto/generus.dto";
+import { exclude, type kelasGenerusEnum } from "~~/shared/enum";
 import type { TGenerusCreate } from "./generus.dto";
 
 export async function getAllGenerus(
@@ -16,7 +21,7 @@ export async function getAllGenerus(
     kelompokId?: number;
     desaId?: number;
   },
-  { limit, page, search, kelasPengajian }: TGenerusAbsensiList
+  { limit, page, search, kelasPengajian }: TGenerusGenericList
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [];
@@ -43,9 +48,11 @@ export async function getAllGenerus(
       kelasSekolah: generusTable.kelasSekolah,
       gender: generusTable.gender,
       noTelepon: generusTable.noTelepon,
-      status: generusTable.status,
       kelasPengajian: generusTable.kelasPengajian,
       namaOrtu: generusTable.namaOrtu,
+      status: sql<
+        string[]
+      >`COALESCE(ARRAY_AGG(${generusStatusTable.status}), '{}')`,
       noTeleponOrtu: generusTable.noTeleponOrtu,
       tanggalMasukKelas: generusTable.tanggalMasukKelas,
       foto: generusTable.foto,
@@ -53,7 +60,11 @@ export async function getAllGenerus(
     })
     .from(generusTable)
     .where(and(...conditions))
-    .leftJoin(kelompokTable, eq(generusTable.kelompokId, kelompokTable.id));
+    .innerJoin(kelompokTable, eq(generusTable.kelompokId, kelompokTable.id))
+    .leftJoin(
+      generusStatusTable,
+      eq(generusTable.id, generusStatusTable.generusId)
+    );
 
   const total = await tryCatch(
     "Failed to get total count of Generus",
@@ -81,7 +92,7 @@ export async function getAllGenerusExclude(
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    ...getGenerusByStatusSQL({ exclude: [...exclude] }),
   ];
 
   if (search) {
@@ -154,7 +165,6 @@ export async function getAllGenerusExport({
         kelasSekolah: generusTable.kelasSekolah,
         gender: generusTable.gender,
         noTelepon: generusTable.noTelepon,
-        status: generusTable.status,
         kelasPengajian: generusTable.kelasPengajian,
         namaOrtu: generusTable.namaOrtu,
         noTeleponOrtu: generusTable.noTeleponOrtu,
@@ -196,7 +206,6 @@ export async function getGenerusOptionsKelompok(kelompokId: number) {
         kelasSekolah: generusTable.kelasSekolah,
         gender: generusTable.gender,
         noTelepon: generusTable.noTelepon,
-        status: generusTable.status,
         kelasPengajian: generusTable.kelasPengajian,
         namaOrtu: generusTable.namaOrtu,
         noTeleponOrtu: generusTable.noTeleponOrtu,
@@ -257,7 +266,7 @@ export async function getGenerusKelasPengajianExclude(params: {
   const { daerahId, desaId, kelompokId } = params;
 
   const conditions: (SQL<unknown> | undefined)[] = [
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    ...getGenerusByStatusSQL({ include: ["GPS"], exclude: [...exclude] }),
   ];
 
   if (daerahId) conditions.push(eq(generusTable.daerahId, daerahId));
@@ -282,12 +291,12 @@ export async function getCountGenerusExclude(
     desaId?: number;
     daerahId?: number;
   },
-  kelasPengajian: string
+  kelasPengajian: (typeof kelasGenerusEnum)[number]
 ) {
   const { daerahId, desaId, kelompokId } = params;
 
   const conditions: (SQL<unknown> | undefined)[] = [
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    ...getGenerusByStatusSQL({ include: ["GPS"], exclude: [...exclude] }),
   ];
 
   if (kelasPengajian === "Muda-mudi") {

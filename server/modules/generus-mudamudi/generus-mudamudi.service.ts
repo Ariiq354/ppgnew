@@ -1,4 +1,4 @@
-import type { TGenerusList } from "~~/server/utils/dto";
+import type { TMudamudiList } from "~~/server/utils/dto/generus.dto";
 import {
   getAllGenerusExportMudamudi,
   getAllGenerusMudamudi,
@@ -10,7 +10,7 @@ import {
 
 export async function getAllGenerusMudamudiService(
   daerahId: number,
-  query: TGenerusList
+  query: TMudamudiList
 ) {
   const data = await getAllGenerusMudamudi(daerahId, query);
 
@@ -55,7 +55,7 @@ export async function getGenerusMudamudiKelasPengajianExcludeService(
 
 export async function getAllMudamudiExcludeService(
   daerahId: number,
-  query: TGenerusAbsensiList
+  query: TMudamudiAbsensiList
 ) {
   const data = await getAllMudamudiExclude(daerahId, query);
 

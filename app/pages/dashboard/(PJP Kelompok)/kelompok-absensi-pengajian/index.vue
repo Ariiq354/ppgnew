@@ -5,6 +5,7 @@
   import { APIBASE, type ExtractObjectType } from "~/utils";
   import { useSubmit } from "~/composables/function";
   import { useToastError, useToastSuccess } from "~/composables/toast";
+  import { absensiEnum } from "~~/shared/enum";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -77,7 +78,10 @@
   }
 
   const isChange = ref(false);
-  function handleStatusChange(jamaahId: number, keterangan: string) {
+  function handleStatusChange(
+    jamaahId: number,
+    keterangan: (typeof absensiEnum)[number]
+  ) {
     isChange.value = true;
     const item = state.value.find((item) => item.jamaahId === jamaahId);
 
@@ -193,7 +197,7 @@
               "
               class="w-full"
               size="xl"
-              :items="['Hadir', 'Izin', 'Tanpa Keterangan']"
+              :items="[...absensiEnum]"
               default-value="Tanpa Keterangan"
               :disabled="!absensiManage || statusAbsensi === 'pending'"
               @update:model-value="

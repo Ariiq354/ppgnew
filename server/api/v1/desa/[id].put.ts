@@ -1,5 +1,4 @@
 import { ODesaCreate, updateDesaService } from "~~/server/modules/desa";
-import { OParam } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {
   adminGuard(event);

@@ -2,6 +2,7 @@ import { UAvatar } from "#components";
 import type { TableColumn } from "@nuxt/ui";
 import { z } from "zod/mini";
 import { formatDate } from "~/utils/format";
+import { genderEnum, statusPengajarEnum } from "~~/shared/enum";
 
 export const columns: TableColumn<any>[] = [
   {
@@ -47,23 +48,23 @@ export const schema = z.object({
         z.mime(["image/png", "image/jpeg", "image/webp"])
       )
   ),
-  gender: z.string().check(z.minLength(1, "Required")),
+  gender: z.enum(genderEnum),
   nama: z.string().check(z.minLength(1, "Required")),
   noTelepon: z.string().check(z.minLength(1, "Required")),
   pendidikan: z.string().check(z.minLength(1, "Required")),
-  status: z.string().check(z.minLength(1, "Required")),
-  tanggalLahir: z.string().check(z.minLength(1, "Required")),
+  status: z.enum(statusPengajarEnum),
+  tanggalLahir: z.nullable(z.string().check(z.minLength(1, "Required"))),
   tempatLahir: z.string().check(z.minLength(1, "Required")),
-  tanggalTugas: z.string().check(z.minLength(1, "Required")),
+  tanggalTugas: z.nullable(z.string().check(z.minLength(1, "Required"))),
 });
 
 export const getInitialFormData = (): Schema => ({
   id: undefined,
   nama: "",
-  gender: "",
+  gender: "Laki-laki",
   noTelepon: "",
   pendidikan: "",
-  status: "",
+  status: "Asisten Pengajar",
   tanggalLahir: "",
   tempatLahir: "",
   tanggalTugas: "",

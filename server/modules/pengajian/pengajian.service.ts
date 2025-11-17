@@ -1,4 +1,4 @@
-import type { TNamaTanggal, TSearchPagination } from "~~/server/utils/dto";
+import type { TSearchPagination } from "~~/server/utils/dto/common.dto";
 import {
   createPengajian,
   deletePengajian,

@@ -3,7 +3,7 @@
   import { columns } from "./_constants";
   import { useAuthStore } from "~/stores/auth";
   import { APIBASE } from "~/utils";
-  import { statusPengajarOptions } from "~~/shared/contants";
+  import { statusPengajarEnum } from "~~/shared/enum";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -139,7 +139,7 @@
         <ClearableSelectMenu
           v-model="query.status"
           placeholder="Status"
-          :items="statusPengajarOptions"
+          :items="[...statusPengajarEnum]"
         />
       </div>
     </template>
@@ -175,7 +175,7 @@
           v-model="query.status"
           placeholder="Status"
           class="hidden flex-1 md:flex"
-          :items="statusPengajarOptions"
+          :items="[...statusPengajarEnum]"
         />
         <UButton
           variant="subtle"

@@ -1,44 +1,3 @@
-export const bulanOptions = [
-  "Januari",
-  "Februari",
-  "Maret",
-  "April",
-  "Mei",
-  "Juni",
-  "Juli",
-  "Agustus",
-  "September",
-  "Oktober",
-  "November",
-  "Desember",
-] as const;
-
-export const statusOptions = ["Pending", "Aktif", "Terlaksana"];
-
-export const statusPengajarOptions = [
-  "Mubalig Tugasan",
-  "Mubalig Setempat",
-  "Asisten Pengajar",
-];
-
-export const genderOptions = ["Laki-laki", "Perempuan"];
-
-export const pengajianOptions = [
-  "PAUD",
-  "Cabe Rawit",
-  "Praremaja",
-  "Remaja",
-  "Pranikah",
-  "Usia Mandiri",
-];
-
-export const pengajianKelasOptions = [
-  "PAUD",
-  "Cabe Rawit",
-  "Praremaja",
-  "Muda-mudi",
-];
-
 export const bulanFilterOptions = [
   { name: "Januari", value: 1 },
   { name: "Februari", value: 2 },
@@ -60,7 +19,3 @@ export const tahunOptions = [
   String(currentYear),
   String(currentYear + 1),
 ];
-
-export const exclude = ["Pindah", "Mondok", "Tugas"];
-
-export const daerahKelas = ["Muda-mudi", "Usia Mandiri"];

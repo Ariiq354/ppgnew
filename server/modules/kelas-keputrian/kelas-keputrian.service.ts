@@ -1,3 +1,4 @@
+import type { kelasMudamudiEnum } from "~~/shared/enum";
 import {
   createKelasKeputrian,
   deleteKelasKeputrian,
@@ -9,10 +10,15 @@ import {
   getKelasKeputrianById,
   updateKelasKeputrian,
 } from "./kelas-keputrian.repo";
+import type {
+  TKelasMudamudi,
+  TKelasMudamudiList,
+  TNamaMudamudiTanggal,
+} from "~~/server/utils/dto/kelas.dto";
 
 export async function getAllKelasKeputrianService(
   daerahId: number,
-  params: TKelasList
+  params: TKelasMudamudi
 ) {
   const { data, total } = await getAllKelasKeputrian(daerahId, params);
   const metadata = {
@@ -34,7 +40,7 @@ export async function getKelasKeputrianByIdService(id: number) {
 
 export async function getAllKelasKeputrianOptionsService(
   daerahId: number,
-  query: TKelasOptionsList
+  query: TKelasMudamudiList
 ) {
   return await getAllKelasKeputrianOptions(daerahId, query);
 }
@@ -45,14 +51,14 @@ export async function getKelasKeputrianByDaerahIdService(daerahId: number) {
 
 export async function getCountKelasKeputrianService(
   daerahId: number,
-  kelasDesaPengajian: string
+  kelasPengajian: (typeof kelasMudamudiEnum)[number]
 ) {
-  return await getCountKelasKeputrian(daerahId, kelasDesaPengajian);
+  return await getCountKelasKeputrian(daerahId, kelasPengajian);
 }
 
 export async function createKelasKeputrianService(
   daerahId: number,
-  data: TNamaTanggal
+  data: TNamaMudamudiTanggal
 ) {
   return await createKelasKeputrian(daerahId, data);
 }
@@ -60,7 +66,7 @@ export async function createKelasKeputrianService(
 export async function updateKelasKeputrianService(
   id: number,
   daerahId: number,
-  data: TNamaTanggal
+  data: TNamaMudamudiTanggal
 ) {
   return await updateKelasKeputrian(id, daerahId, data);
 }

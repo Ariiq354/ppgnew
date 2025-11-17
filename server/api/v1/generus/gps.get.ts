@@ -1,5 +1,4 @@
 import { getAllGenerusGpsService } from "~~/server/modules/generus-gps";
-import { OGenerusBaseList } from "~~/server/utils/dto";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["view"] });

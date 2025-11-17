@@ -1,7 +1,10 @@
 import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { jamaahTable } from "~~/server/database/schema/kelompok";
-import type { TSearchPagination, TWilayah } from "~~/server/utils/dto";
+import type {
+  TSearchPagination,
+  TWilayah,
+} from "~~/server/utils/dto/common.dto";
 import type { TJamaahCreate } from "./jamaah.dto";
 
 export async function getAllJamaah(

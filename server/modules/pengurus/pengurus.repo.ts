@@ -1,7 +1,7 @@
 import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { pengurusTable } from "~~/server/database/schema/pengurus";
-import type { TSearchPagination } from "~~/server/utils/dto";
+import type { TSearchPagination } from "~~/server/utils/dto/common.dto";
 import type { TPengurusCreate } from "./pengurus.dto";
 
 export async function getAllPengurus(

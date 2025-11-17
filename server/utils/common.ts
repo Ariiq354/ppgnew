@@ -1,3 +1,8 @@
+import { and, eq, exists, inArray, notExists, type SQL } from "drizzle-orm";
+import { sekolahEnum, type statusGenerusEnum } from "~~/shared/enum";
+import { db } from "../database";
+import { generusStatusTable, generusTable } from "../database/schema/generus";
+
 export function convertToNameFormat(input: string) {
   const numberWords = [
     "nol",
@@ -25,24 +30,6 @@ export function titleCase(str: string) {
     .join(" ");
 }
 
-const kelasOptions = [
-  "PAUD/TK",
-  "SD 1",
-  "SD 2",
-  "SD 3",
-  "SD 4",
-  "SD 5",
-  "SD 6",
-  "SMP 7",
-  "SMP 8",
-  "SMP 9",
-  "SMA 10",
-  "SMA 11",
-  "SMA 12",
-  "Kuliah",
-  "Bekerja / Tidak Bekerja",
-];
-
 const fixedKelas = new Set([
   "PAUD/TK",
   "SMA 12",
@@ -50,12 +37,15 @@ const fixedKelas = new Set([
   "Bekerja / Tidak Bekerja",
 ]);
 
-export function getCurrentKelas(kelas: string, tanggalMasuk: Date): string {
+export function getCurrentKelas(
+  kelas: (typeof sekolahEnum)[number],
+  tanggalMasuk: Date
+): (typeof sekolahEnum)[number] {
   if (fixedKelas.has(kelas)) {
     return kelas;
   }
 
-  const startIndex = kelasOptions.indexOf(kelas);
+  const startIndex = sekolahEnum.indexOf(kelas);
   if (startIndex === -1) throw new Error("Kelas tidak valid");
 
   const today = new Date();
@@ -74,14 +64,62 @@ export function getCurrentKelas(kelas: string, tanggalMasuk: Date): string {
   const currentIndex = startIndex + Math.max(0, yearsPassed);
 
   for (let i = startIndex; i <= currentIndex; i++) {
-    if (fixedKelas.has(kelasOptions[i]!)) {
-      return kelasOptions[i]!;
+    if (fixedKelas.has(sekolahEnum[i]!)) {
+      return sekolahEnum[i]!;
     }
   }
 
-  if (currentIndex >= kelasOptions.length - 1) {
-    return kelasOptions[kelasOptions.length - 1]!;
+  if (currentIndex >= sekolahEnum.length - 1) {
+    return sekolahEnum[sekolahEnum.length - 1]!;
   }
 
-  return kelasOptions[currentIndex]!;
+  return sekolahEnum[currentIndex]!;
+}
+
+type StatusFilter = {
+  include?: (typeof statusGenerusEnum)[number][];
+  exclude?: (typeof statusGenerusEnum)[number][];
+};
+
+export function getGenerusByStatusSQL({
+  include = [],
+  exclude = [],
+}: StatusFilter): SQL<unknown>[] {
+  const conditions: SQL<unknown>[] = [];
+
+  // Must have each included status
+  for (const status of include) {
+    conditions.push(
+      exists(
+        db
+          .select()
+          .from(generusStatusTable)
+          .where(
+            and(
+              eq(generusStatusTable.generusId, generusTable.id),
+              eq(generusStatusTable.status, status)
+            )
+          )
+      )
+    );
+  }
+
+  // Must NOT have any excluded status
+  if (exclude.length > 0) {
+    conditions.push(
+      notExists(
+        db
+          .select()
+          .from(generusStatusTable)
+          .where(
+            and(
+              eq(generusStatusTable.generusId, generusTable.id),
+              inArray(generusStatusTable.status, exclude)
+            )
+          )
+      )
+    );
+  }
+
+  return conditions;
 }

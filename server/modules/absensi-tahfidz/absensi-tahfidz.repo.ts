@@ -1,28 +1,15 @@
-import {
-  and,
-  count,
-  eq,
-  inArray,
-  like,
-  or,
-  Param,
-  type SQL,
-  sql,
-} from "drizzle-orm";
+import { and, count, eq, inArray, like, or, type SQL, sql } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { generusTable } from "~~/server/database/schema/generus";
 import {
   absensiGenerusTahfidzTable,
   kelasTahfidzTable,
 } from "~~/server/database/schema/tahfidz";
-import type {
-  TAbsensiGenerusCreate,
-  TSearchPagination,
-} from "~~/server/utils/dto";
-import { exclude } from "~~/shared/contants";
+import { getGenerusByStatusSQL } from "~~/server/utils/common";
+import { exclude } from "~~/shared/enum";
 
 export async function getAbsensiTahfidzByKelasId(
-  daerahId: number,
+  desaId: number,
   kelasId: number
 ) {
   const data = await tryCatch(
@@ -46,9 +33,11 @@ export async function getAbsensiTahfidzByKelasId(
       .where(
         and(
           eq(absensiGenerusTahfidzTable.kelasId, kelasId),
-          eq(kelasTahfidzTable.daerahId, daerahId),
-          sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
-          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
+          eq(kelasTahfidzTable.desaId, desaId),
+          ...getGenerusByStatusSQL({
+            include: ["Tahfidz"],
+            exclude: [...exclude],
+          })
         )
       )
   );
@@ -56,7 +45,7 @@ export async function getAbsensiTahfidzByKelasId(
   return data;
 }
 
-export async function getCountAbsensiTahfidz(daerahId: number) {
+export async function getCountAbsensiTahfidz(desaId: number) {
   const [data] = await tryCatch(
     "Failed to get Count Absensi",
     db
@@ -74,9 +63,11 @@ export async function getCountAbsensiTahfidz(daerahId: number) {
       )
       .where(
         and(
-          eq(kelasTahfidzTable.daerahId, daerahId),
-          sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
-          sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`
+          eq(kelasTahfidzTable.desaId, desaId),
+          ...getGenerusByStatusSQL({
+            include: ["Tahfidz"],
+            exclude: [...exclude],
+          })
         )
       )
   );
@@ -85,14 +76,16 @@ export async function getCountAbsensiTahfidz(daerahId: number) {
 }
 
 export async function getAllTahfidzSummary(
-  daerahId: number,
+  desaId: number,
   { limit, page, search }: TSearchPagination
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
-    eq(generusTable.daerahId, daerahId),
-    sql`(${generusTable.status} ?| ${new Param(["Tahfidz"])})`,
-    sql`NOT (${generusTable.status} ?| ${new Param(exclude)})`,
+    eq(generusTable.desaId, desaId),
+    ...getGenerusByStatusSQL({
+      include: ["Tahfidz"],
+      exclude: [...exclude],
+    }),
   ];
 
   if (search) {
@@ -133,7 +126,7 @@ export async function getAllTahfidzSummary(
 
 export async function createAbsensiTahfidz(
   kelasId: number,
-  daerahId: number,
+  desaId: number,
   data: TAbsensiGenerusCreate
 ) {
   const generus = await tryCatch(
@@ -143,7 +136,7 @@ export async function createAbsensiTahfidz(
     })
   );
 
-  if (generus?.daerahId !== daerahId) {
+  if (generus?.desaId !== desaId) {
     throw createError({
       statusCode: 403,
       message: "Tidak ada generus di daerah ini",
@@ -162,7 +155,7 @@ export async function createAbsensiTahfidz(
 export async function updateAbsensiTahfidz(
   id: number,
   kelasId: number,
-  daerahId: number,
+  desaId: number,
   data: TAbsensiGenerusCreate
 ) {
   const generus = await tryCatch(
@@ -172,7 +165,7 @@ export async function updateAbsensiTahfidz(
     })
   );
 
-  if (generus?.daerahId !== daerahId) {
+  if (generus?.desaId !== desaId) {
     throw createError({
       statusCode: 403,
       message: "Tidak ada generus di kelompok ini",

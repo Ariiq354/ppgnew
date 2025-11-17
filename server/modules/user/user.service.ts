@@ -1,5 +1,8 @@
-import { roles } from "~~/shared/permission";
-import { checkWilayahNameExistService } from "../daerah";
+import { bidangEnum } from "~~/shared/enum";
+import {
+  checkSingkatanExistService,
+  checkWilayahNameExistService,
+} from "../daerah";
 import { createDaerah } from "../daerah/daerah.repo";
 import { getAllUser, updateUserWilayah } from "./user.repo";
 
@@ -26,17 +29,23 @@ export async function updateUserWilayahService(id: number, body: TWilayah) {
   await updateUserWilayah(id, body);
 }
 
-export async function createDaerahWithUsersService(daerah: string) {
+export async function createDaerahWithUsersService(
+  daerah: string,
+  singkatan: string
+) {
   const formatted = daerah
     .split(" ")
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ");
-  const nama = convertToNameFormat(formatted);
 
   const exist = await checkWilayahNameExistService(formatted);
+  const singkatanExist = await checkSingkatanExistService(singkatan);
   if (exist) throw createError({ statusCode: 400, message: "Nama sudah ada" });
+  if (singkatanExist)
+    throw createError({ statusCode: 400, message: "Singkatan sudah ada" });
 
-  const [result] = await createDaerah({ name: formatted });
+  const [result] = await createDaerah({ name: formatted, singkatan });
+  const nama = `admin.${singkatan}`;
 
   await auth.api.signUpEmail({
     body: {
@@ -49,8 +58,8 @@ export async function createDaerahWithUsersService(daerah: string) {
     },
   });
 
-  for (const [index, role] of roles.entries()) {
-    const namaPengurus = nama + (index + 1);
+  for (const role of bidangEnum) {
+    const namaPengurus = `${role}.${singkatan}`;
     const { user } = await auth.api.signUpEmail({
       body: {
         email: `${namaPengurus}@gmail.com`,

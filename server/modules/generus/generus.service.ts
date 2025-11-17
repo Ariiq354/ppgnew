@@ -1,8 +1,16 @@
 import type { MultiPartData } from "h3";
-import type { TGenerusAbsensiList } from "~~/server/utils/dto";
+import type { TGenerusAbsensiList } from "~~/server/utils/dto/absensi.dto";
+import type { TGenerusGenericList } from "~~/server/utils/dto/generus.dto";
+import type { kelasGenerusEnum } from "~~/shared/enum";
 import ENV from "~~/shared/env";
+import { getDesaByDaerahIdService } from "../desa";
+import {
+  getKelompokByDaerahIdService,
+  getKelompokByDesaIdService,
+} from "../kelompok";
 import {
   OGenerusCreate,
+  type TGenerusAbsensiForDesa,
   type TGenerusListForDaerah,
   type TGenerusListForDesa,
 } from "./generus.dto";
@@ -19,18 +27,13 @@ import {
   getGenerusOptionsKelompok,
   updateGenerus,
 } from "./generus.repo";
-import {
-  getKelompokByDaerahIdService,
-  getKelompokByDesaIdService,
-} from "../kelompok";
-import { getDesaByDaerahIdService } from "../desa";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 export async function getAllGenerusService(
   kelompokId: number,
-  query: TGenerusAbsensiList
+  query: TGenerusGenericList
 ) {
   const data = await getAllGenerus({ kelompokId }, query);
 
@@ -329,7 +332,7 @@ export async function getCountGenerusExcludeService(
     desaId?: number;
     daerahId?: number;
   },
-  kelasPengajian: string
+  kelasPengajian: (typeof kelasGenerusEnum)[number]
 ) {
   return getCountGenerusExclude(params, kelasPengajian);
 }
@@ -355,7 +358,7 @@ export async function getAllGenerusExcludeService(
 
 export async function getAllGenerusExcludeForDesaService(
   desaId: number,
-  query: TGenerusListForDesa
+  query: TGenerusAbsensiForDesa
 ) {
   const desa = await getKelompokByDesaIdService(desaId);
   if (query.kelompokId && !desa.find((i) => i.id === query.kelompokId)) {
