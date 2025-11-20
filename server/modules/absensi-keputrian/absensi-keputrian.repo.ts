@@ -99,13 +99,14 @@ export async function getAbsensiKeputrianByDaerahId(daerahId: number) {
         id: absensiGenerusKeputrianTable.id,
         kelasPengajian: kelasKeputrianTable.nama,
         kelasPengajianGenerus: generusTable.kelasPengajian,
+        kelompokTable: generusTable,
       })
       .from(absensiGenerusKeputrianTable)
-      .leftJoin(
+      .innerJoin(
         kelasKeputrianTable,
         eq(absensiGenerusKeputrianTable.kelasId, kelasKeputrianTable.id)
       )
-      .leftJoin(
+      .innerJoin(
         generusTable,
         eq(generusTable.id, absensiGenerusKeputrianTable.generusId)
       )

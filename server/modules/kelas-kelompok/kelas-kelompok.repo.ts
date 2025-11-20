@@ -119,6 +119,7 @@ export async function getKelasByKelompokId(kelompokId: number) {
       .select({
         id: kelasTable.id,
         nama: kelasTable.nama,
+        kelompokId: kelasTable.kelompokId,
       })
       .from(kelasTable)
       .where(eq(kelasTable.kelompokId, kelompokId))
@@ -132,10 +133,11 @@ export async function getKelasByDaerahId(daerahId: number) {
       .select({
         id: kelasTable.id,
         nama: kelasTable.nama,
+        kelompokId: kelasTable.kelompokId,
       })
       .from(kelasTable)
-      .leftJoin(kelompokTable, eq(kelasTable.kelompokId, kelompokTable.id))
-      .leftJoin(desaTable, eq(kelompokTable.desaId, desaTable.id))
+      .innerJoin(kelompokTable, eq(kelasTable.kelompokId, kelompokTable.id))
+      .innerJoin(desaTable, eq(kelompokTable.desaId, desaTable.id))
       .where(eq(desaTable.daerahId, daerahId))
   );
 }

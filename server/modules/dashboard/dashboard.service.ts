@@ -147,26 +147,98 @@ function groupByField(
 function getPercentCombined(
   kelasName: string,
   absensi: {
-    kelasPengajianGenerus: string | null;
-    kelasPengajian: string | null;
+    kelasPengajianGenerus: string;
+    kelasPengajian: string;
+    kelompokId: number;
+  }[],
+  dataGenerus: { kelasPengajian: string; kelompokId: number }[],
+  kelas: { nama: string; kelompokId: number }[],
+  groupKelas: string[],
+  isGroup = false
+): string {
+  // Step 1: take all kelompokId that have this kelasName
+  const kelompokIds = Array.from(
+    new Set(kelas.filter((k) => k.nama === kelasName).map((k) => k.kelompokId))
+  );
+
+  const percentages: number[] = [];
+
+  for (const kid of kelompokIds) {
+    // Step 2: Absensi for this kelompok + same kelas + student still in that kelas
+    const abs = absensi.filter(
+      (i) =>
+        i.kelompokId === kid &&
+        i.kelasPengajian === kelasName && // only absensi for this class
+        (isGroup
+          ? groupKelas.includes(i.kelasPengajianGenerus) // group classes
+          : i.kelasPengajianGenerus === kelasName) // student still in same kelas
+    );
+
+    // Step 3: Generus currently in this kelas (ignore moved-up)
+    const gens = isGroup
+      ? dataGenerus.filter(
+          (i) => i.kelompokId === kid && groupKelas.includes(i.kelasPengajian)
+        )
+      : dataGenerus.filter(
+          (i) => i.kelompokId === kid && i.kelasPengajian === kelasName
+        );
+
+    if (gens.length === 0) continue;
+
+    // Step 4: Count kelas meetings for this kelompok
+    const kls = kelas.filter(
+      (i) => i.kelompokId === kid && i.nama === kelasName
+    );
+
+    const absensiCount = abs.length;
+    const generusCount = gens.length;
+    const kelasCount = kls.length;
+
+    if (generusCount > 0 && kelasCount > 0) {
+      const percent = (absensiCount * 100) / (generusCount * kelasCount);
+      percentages.push(percent);
+    }
+  }
+
+  // Step 5: No data → 0%
+  if (percentages.length === 0) return "0.00";
+
+  // Step 6: Average across kelompok
+  const avg = percentages.reduce((sum, p) => sum + p, 0) / percentages.length;
+
+  return avg.toFixed(2);
+}
+
+function getPercentCombinedNoKelompok(
+  kelasName: string,
+  absensi: {
+    kelasPengajianGenerus: string;
+    kelasPengajian: string;
   }[],
   dataGenerus: { kelasPengajian: string }[],
   kelas: { nama: string }[],
   groupKelas: string[],
   isGroup = false
 ): string {
-  const absensiCount = absensi.filter(
-    (i) =>
-      i.kelasPengajian === kelasName &&
-      (isGroup
-        ? groupKelas.includes(i.kelasPengajianGenerus ?? "")
-        : i.kelasPengajianGenerus === kelasName)
+  // Ignore moved-up generus
+  const absensiValid = absensi.filter(
+    (i) => i.kelasPengajian === i.kelasPengajianGenerus
+  );
+
+  const classMatch = (kelasName: string, target: string) =>
+    isGroup ? groupKelas.includes(kelasName) : kelasName === target;
+
+  // Absensi count
+  const absensiCount = absensiValid.filter((i) =>
+    classMatch(i.kelasPengajian, kelasName)
   ).length;
 
-  const generusCount = isGroup
-    ? dataGenerus.filter((i) => groupKelas.includes(i.kelasPengajian)).length
-    : dataGenerus.filter((i) => i.kelasPengajian === kelasName).length;
+  // Generus count
+  const generusCount = dataGenerus.filter((i) =>
+    classMatch(i.kelasPengajian, kelasName)
+  ).length;
 
+  // Kelas sessions count
   const kelasCount = kelas.filter((i) => i.nama === kelasName).length;
 
   return generusCount && kelasCount
@@ -269,28 +341,28 @@ export async function getDashboardKelompok(kelompokId: number) {
   const absensi = await getAbsensiGenerusByKelompokIdService(kelompokId);
   const kelas = await getKelasByKelompokIdService(kelompokId);
 
-  const percentPaud = getPercentCombined(
+  const percentPaud = getPercentCombinedNoKelompok(
     "PAUD",
     absensi,
     dataGenerusExclude,
     kelas,
     MudaMudiKelas
   );
-  const percentCabeRawit = getPercentCombined(
+  const percentCabeRawit = getPercentCombinedNoKelompok(
     "Cabe Rawit",
     absensi,
     dataGenerusExclude,
     kelas,
     MudaMudiKelas
   );
-  const percentPraremaja = getPercentCombined(
+  const percentPraremaja = getPercentCombinedNoKelompok(
     "Praremaja",
     absensi,
     dataGenerusExclude,
     kelas,
     MudaMudiKelas
   );
-  const percentMudamudi = getPercentCombined(
+  const percentMudamudi = getPercentCombinedNoKelompok(
     "Muda-mudi",
     absensi,
     dataGenerusExclude,
@@ -345,28 +417,28 @@ export async function getDashboardDesa(desaId: number) {
   const absensi = await getAbsensiGenerusByDesaIdService(desaId);
   const kelas = await getKelasByDesaIdService(desaId);
 
-  const percentPaud = getPercentCombined(
+  const percentPaud = getPercentCombinedNoKelompok(
     "PAUD",
     absensi,
     dataExclude,
     kelas,
     MudaMudiKelas
   );
-  const percentCabeRawit = getPercentCombined(
+  const percentCabeRawit = getPercentCombinedNoKelompok(
     "Cabe Rawit",
     absensi,
     dataExclude,
     kelas,
     MudaMudiKelas
   );
-  const percentPraremaja = getPercentCombined(
+  const percentPraremaja = getPercentCombinedNoKelompok(
     "Praremaja",
     absensi,
     dataExclude,
     kelas,
     MudaMudiKelas
   );
-  const percentMudamudi = getPercentCombined(
+  const percentMudamudi = getPercentCombinedNoKelompok(
     "Muda-mudi",
     absensi,
     dataExclude,
@@ -454,7 +526,7 @@ export async function getDashboardKeputrian(daerahId: number) {
   const absensi = await getAbsensiKeputrianByDaerahIdService(daerahId);
   const kelas = await getKelasKeputrianByDaerahIdService(daerahId);
 
-  const percentMudamudi = getPercentCombined(
+  const percentMudamudi = getPercentCombinedNoKelompok(
     "Muda-mudi",
     absensi,
     dataExclude,
@@ -462,7 +534,7 @@ export async function getDashboardKeputrian(daerahId: number) {
     RemajaKelas,
     true
   );
-  const percentUsiaMandiri = getPercentCombined(
+  const percentUsiaMandiri = getPercentCombinedNoKelompok(
     "Usia Mandiri",
     absensi,
     dataExclude,
@@ -503,7 +575,7 @@ export async function getDashboardMudamudi(daerahId: number) {
   const absensi = await getAbsensiMudamudiByDaerahIdService(daerahId);
   const kelas = await getKelasMudamudiByDaerahIdService(daerahId);
 
-  const percentMudamudi = getPercentCombined(
+  const percentMudamudi = getPercentCombinedNoKelompok(
     "Muda-mudi",
     absensi,
     dataExclude,
@@ -511,7 +583,7 @@ export async function getDashboardMudamudi(daerahId: number) {
     RemajaKelas,
     true
   );
-  const percentUsiaMandiri = getPercentCombined(
+  const percentUsiaMandiri = getPercentCombinedNoKelompok(
     "Usia Mandiri",
     absensi,
     dataExclude,

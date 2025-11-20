@@ -69,11 +69,11 @@ export async function getAbsensiGenerusByDesaId(desaId: number) {
         keterangan: absensiGenerusDesaTable.keterangan,
       })
       .from(absensiGenerusDesaTable)
-      .leftJoin(
+      .innerJoin(
         kelasDesaTable,
         eq(absensiGenerusDesaTable.kelasId, kelasDesaTable.id)
       )
-      .leftJoin(
+      .innerJoin(
         generusTable,
         eq(generusTable.id, absensiGenerusDesaTable.generusId)
       )
