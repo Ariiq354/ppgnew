@@ -11,7 +11,7 @@ import type { bidangEnum } from "~~/shared/enum";
 import { ac, rolesDeclaration } from "~~/shared/permission";
 import type { TStatement } from "~~/shared/permission";
 
-const authClient = createAuthClient({
+export const authClient = createAuthClient({
   plugins: [
     inferAdditionalFields<typeof auth>(),
     usernameClient(),
@@ -39,33 +39,20 @@ type TSignUp = {
 };
 
 export const useAuthStore = defineStore("useAuthStore", () => {
-  const session = ref<Awaited<ReturnType<typeof authClient.useSession>> | null>(
-    null
-  );
-
-  const user = computed(() => session.value?.data?.user);
+  const user = ref();
   const loading = ref(false);
-
-  async function init() {
-    loading.value = true;
-    const data = await authClient.useSession(useFetch);
-    session.value = data;
-    loading.value = false;
-  }
 
   async function signIn(body: TSignIn) {
     loading.value = true;
-    await authClient.signIn.username({
+    const { error } = await authClient.signIn.username({
       ...body,
-      fetchOptions: {
-        onError: (body) => {
-          useToastError("Login Failed", body.error.message);
-        },
-        onSuccess: async () => {
-          await navigateTo("/dashboard");
-        },
-      },
     });
+
+    if (error) {
+      useToastError("Login Failed", error.message);
+    } else {
+      await navigateTo("/dashboard");
+    }
     loading.value = false;
   }
 
@@ -150,7 +137,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   }
 
   return {
-    init,
     loading,
     signIn,
     signUp,
@@ -158,7 +144,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     signOut,
     hasPermission,
     updatePassword,
-    session,
     updateWilayah,
   };
 });
