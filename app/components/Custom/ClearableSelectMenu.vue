@@ -27,7 +27,7 @@
         name="i-lucide-x"
         size="16"
         class="cursor-pointer text-gray-400 hover:text-red-500"
-        @click.stop="model = ''"
+        @click.stop="model = undefined"
       />
     </template>
   </USelectMenu>

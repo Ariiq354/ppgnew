@@ -11,7 +11,7 @@ export async function getAllPengajar(
 ) {
   const offset = (page - 1) * limit;
   const conditions: (SQL<unknown> | undefined)[] = [
-    eq(desaTable.daerahId, daerahId),
+    eq(pengajarTable.daerahId, daerahId),
   ];
 
   if (search) {
@@ -29,7 +29,7 @@ export async function getAllPengajar(
   }
 
   if (desaId) {
-    conditions.push(eq(kelompokTable.desaId, desaId));
+    conditions.push(eq(pengajarTable.desaId, desaId));
   }
   if (kelompokId) {
     conditions.push(eq(pengajarTable.kelompokId, kelompokId));
@@ -51,8 +51,7 @@ export async function getAllPengajar(
     })
     .from(pengajarTable)
     .where(and(...conditions))
-    .innerJoin(kelompokTable, eq(kelompokTable.id, pengajarTable.kelompokId))
-    .innerJoin(desaTable, eq(kelompokTable.desaId, kelompokTable.desaId));
+    .innerJoin(kelompokTable, eq(pengajarTable.kelompokId, kelompokTable.id));
 
   const total = await tryCatch(
     "Failed to get total count of Pengajar",

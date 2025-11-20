@@ -18,8 +18,8 @@ export type TPengajarCreate = z.infer<typeof OPengajarCreate>;
 
 export const OPengajarList = z.object({
   ...OPagination.def.shape,
-  search: z.string(),
-  status: z.enum(statusPengajarEnum),
+  search: z.optional(z.string()),
+  status: z.optional(z.enum(statusPengajarEnum)),
   desaId: z.optional(z.coerce.number()),
   kelompokId: z.optional(z.coerce.number()),
 });

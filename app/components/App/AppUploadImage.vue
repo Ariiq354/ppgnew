@@ -1,10 +1,24 @@
 <script setup lang="ts">
-  defineProps<{
+  const props = defineProps<{
     disabled: boolean;
+    foto: string | undefined;
+    file?: File | undefined;
   }>();
 
-  const foto = defineModel<string>("foto");
-  const file = defineModel<File | undefined>("file");
+  const emit = defineEmits<{
+    "update:foto": [string | undefined];
+    "update:file": [File | undefined];
+  }>();
+
+  const foto = computed({
+    get: () => props.foto,
+    set: (value) => emit("update:foto", value),
+  });
+
+  const file = computed({
+    get: () => props.file,
+    set: (value) => emit("update:file", value),
+  });
 </script>
 
 <template>
