@@ -12,14 +12,11 @@ export const columns: TableColumn<any>[] = [
   {
     accessorKey: "bidang",
     header: "Bidang",
-  },
-  {
-    accessorKey: "kegiatan",
-    header: "Kegiatan",
-  },
-  {
-    accessorKey: "peserta",
-    header: "Peserta",
+    cell: ({ row }) =>
+      row.original.bidang
+        .split("_")
+        .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" "),
   },
   {
     accessorKey: "mingguKe",

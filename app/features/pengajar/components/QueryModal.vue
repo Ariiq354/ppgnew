@@ -1,15 +1,12 @@
 <script setup lang="ts">
   import { statusPengajarEnum } from "~~/shared/enum";
+  import type { QueryType } from "../types";
 
   const authStore = useAuthStore();
 
   const openModel = defineModel<boolean>("open");
 
-  const filterModel = defineModel<{
-    desaId?: number | undefined;
-    kelompokId?: number | undefined;
-    status?: string | undefined;
-  }>("query");
+  const filterModel = defineModel<Omit<QueryType, "page" | "search">>("query");
 </script>
 
 <template>
