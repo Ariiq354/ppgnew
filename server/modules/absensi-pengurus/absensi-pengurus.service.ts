@@ -26,7 +26,8 @@ export async function getAbsensiPengurusMonitoringService(
     return {
       ...i,
       tanpaKeterangan: total - i.hadir - i.izin,
-      kehadiran: total > 0 ? ((i.hadir + i.izin) * 100) / total : 0,
+      kehadiran:
+        total > 0 ? (((i.hadir + i.izin) * 100) / total).toFixed(2) : 0,
     };
   });
 

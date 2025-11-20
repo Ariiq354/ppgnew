@@ -27,7 +27,7 @@
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
   }, 300);
-  const { data, status, refresh } = await useFetch(`${APIBASE}/pengajar`, {
+  const { data, status, refresh } = await useLazyFetch(`${APIBASE}/pengajar`, {
     query,
   });
 

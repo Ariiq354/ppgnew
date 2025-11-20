@@ -8,7 +8,6 @@
 
   async function onSubmit(event: FormSubmitEvent<LoginSchema>) {
     await authStore.signIn(event.data);
-    await authStore.init();
   }
 </script>
 
