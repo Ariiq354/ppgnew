@@ -23,8 +23,8 @@ export type TAbsensiGenerusCreate = z.infer<
 
 export const OGenerusAbsensiList = z.object({
   ...OPagination.def.shape,
-  search: z.string(),
-  kelasPengajian: z.enum(kelasGenerusEnum),
+  search: z.optional(z.string()),
+  kelasPengajian: z.optional(z.enum(kelasGenerusEnum)),
 });
 export type TGenerusAbsensiList = z.infer<typeof OGenerusAbsensiList>;
 

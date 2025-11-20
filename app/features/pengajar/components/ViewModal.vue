@@ -13,7 +13,7 @@
     <template #body>
       <div class="space-y-4">
         <UFormField label="Foto Diri">
-          <AppUploadImage :model-value:foto="data?.foto" disabled />
+          <AppUploadImage :foto="data?.foto" disabled />
         </UFormField>
         <UFormField label="Nama">
           <UInput :model-value="data?.nama" disabled />

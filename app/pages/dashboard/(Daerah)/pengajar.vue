@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import PengajarContainer from "~/features/daerah/pengajar/PengajarContainer.vue";
+  import PengajarContainer from "~/features/pengajar/PengajarContainer.vue";
   import { useConstantStore } from "~/stores/constant";
 
   const constantStore = useConstantStore();

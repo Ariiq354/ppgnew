@@ -64,6 +64,21 @@ export async function getAllGenerus(
     .leftJoin(
       generusStatusTable,
       eq(generusTable.id, generusStatusTable.generusId)
+    )
+    .groupBy(
+      generusTable.id,
+      generusTable.nama,
+      generusTable.tempatLahir,
+      generusTable.tanggalLahir,
+      generusTable.kelasSekolah,
+      generusTable.gender,
+      generusTable.noTelepon,
+      generusTable.kelasPengajian,
+      generusTable.namaOrtu,
+      generusTable.noTeleponOrtu,
+      generusTable.tanggalMasukKelas,
+      generusTable.foto,
+      kelompokTable.name
     );
 
   const total = await tryCatch(
@@ -100,16 +115,18 @@ export async function getAllGenerusExclude(
     conditions.push(or(like(generusTable.nama, searchCondition)));
   }
 
-  if (kelasPengajian === "Muda-mudi") {
-    conditions.push(
-      inArray(generusTable.kelasPengajian, [
-        "Remaja",
-        "Pranikah",
-        "Usia Mandiri",
-      ])
-    );
-  } else {
-    conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
+  if (kelasPengajian) {
+    if (kelasPengajian === "Muda-mudi") {
+      conditions.push(
+        inArray(generusTable.kelasPengajian, [
+          "Remaja",
+          "Pranikah",
+          "Usia Mandiri",
+        ])
+      );
+    } else {
+      conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
+    }
   }
 
   if (daerahId) conditions.push(eq(generusTable.daerahId, daerahId));

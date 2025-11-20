@@ -8,8 +8,8 @@ import { OPagination } from "./common.dto";
 
 export const OGenerusGenericList = z.object({
   ...OPagination.def.shape,
-  search: z.string(),
-  kelasPengajian: z.enum(pengajianEnum),
+  search: z.optional(z.string()),
+  kelasPengajian: z.optional(z.enum(pengajianEnum)),
 });
 export type TGenerusGenericList = z.infer<typeof OGenerusGenericList>;
 

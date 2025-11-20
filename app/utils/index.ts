@@ -3,8 +3,6 @@ export const APIBASE = "/api/v1";
 export type ExtractObjectType<T> =
   NonNullable<T> extends { data: (infer U)[] } ? U : never;
 
-export type QueryType = Record<string, string | number | undefined>;
-
 export function json2Csv(data: { [key: string]: any }[]) {
   const headers = Object.keys(data[0]!).toString();
 
