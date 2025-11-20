@@ -168,21 +168,19 @@ function getPercentCombined(
     const abs = absensi.filter(
       (i) =>
         i.kelompokId === kid &&
-        i.kelasPengajian === kelasName && // only absensi for this class
+        i.kelasPengajian === kelasName &&
         (isGroup
-          ? groupKelas.includes(i.kelasPengajianGenerus) // group classes
-          : i.kelasPengajianGenerus === kelasName) // student still in same kelas
+          ? groupKelas.includes(i.kelasPengajianGenerus)
+          : i.kelasPengajianGenerus === kelasName)
     );
 
-    // Step 3: Generus currently in this kelas (ignore moved-up)
-    const gens = isGroup
-      ? dataGenerus.filter(
-          (i) => i.kelompokId === kid && groupKelas.includes(i.kelasPengajian)
-        )
-      : dataGenerus.filter(
-          (i) => i.kelompokId === kid && i.kelasPengajian === kelasName
-        );
-
+    const gens = dataGenerus.filter(
+      (i) =>
+        i.kelompokId === kid &&
+        (isGroup
+          ? groupKelas.includes(i.kelasPengajian)
+          : i.kelasPengajian === kelasName)
+    );
     if (gens.length === 0) continue;
 
     // Step 4: Count kelas meetings for this kelompok
@@ -220,26 +218,25 @@ function getPercentCombinedNoKelompok(
   groupKelas: string[],
   isGroup = false
 ): string {
-  // Ignore moved-up generus
-  const absensiValid = absensi.filter(
-    (i) => i.kelasPengajian === i.kelasPengajianGenerus
+  const abs = absensi.filter(
+    (i) =>
+      i.kelasPengajian === kelasName &&
+      (isGroup
+        ? groupKelas.includes(i.kelasPengajianGenerus)
+        : i.kelasPengajianGenerus === kelasName)
   );
 
-  const classMatch = (kelasName: string, target: string) =>
-    isGroup ? groupKelas.includes(kelasName) : kelasName === target;
+  const gens = dataGenerus.filter((i) =>
+    isGroup
+      ? groupKelas.includes(i.kelasPengajian)
+      : i.kelasPengajian === kelasName
+  );
 
-  // Absensi count
-  const absensiCount = absensiValid.filter((i) =>
-    classMatch(i.kelasPengajian, kelasName)
-  ).length;
+  const kls = kelas.filter((i) => i.nama === kelasName);
 
-  // Generus count
-  const generusCount = dataGenerus.filter((i) =>
-    classMatch(i.kelasPengajian, kelasName)
-  ).length;
-
-  // Kelas sessions count
-  const kelasCount = kelas.filter((i) => i.nama === kelasName).length;
+  const absensiCount = abs.length;
+  const generusCount = gens.length;
+  const kelasCount = kls.length;
 
   return generusCount && kelasCount
     ? ((absensiCount * 100) / (generusCount * kelasCount)).toFixed(2)
@@ -355,6 +352,7 @@ export async function getDashboardKelompok(kelompokId: number) {
     kelas,
     MudaMudiKelas
   );
+
   const percentPraremaja = getPercentCombinedNoKelompok(
     "Praremaja",
     absensi,

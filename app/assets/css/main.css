@@ -9,6 +9,10 @@
   img {
     display: initial;
   }
+
+  :root {
+    --vis-axis-grid-color: var(--ui-border-muted) !important;
+  }
 }
 
 html {

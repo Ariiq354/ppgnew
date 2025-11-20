@@ -1,4 +1,6 @@
-export const columns = [
+import type { TableColumn } from "@nuxt/ui";
+
+export const columns: TableColumn<any>[] = [
   {
     accessorKey: "nama",
     header: "Nama Pengurus",
@@ -10,6 +12,7 @@ export const columns = [
   {
     accessorKey: "kehadiran",
     header: "Kehadiran",
+    cell: ({ row }) => String(row.original.kehadiran) + "%",
   },
   {
     accessorKey: "hadir",
