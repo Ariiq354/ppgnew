@@ -59,15 +59,13 @@ export async function getAbsensiGenerusByKelompokId(kelompokId: number) {
     db
       .select({
         id: absensiGenerusTable.id,
-        generusId: absensiGenerusTable.generusId,
         kelasPengajian: kelasTable.nama,
         kelasPengajianGenerus: generusTable.kelasPengajian,
-        detail: absensiGenerusTable.detail,
-        keterangan: absensiGenerusTable.keterangan,
+        kelompokId: generusTable.kelompokId,
       })
       .from(absensiGenerusTable)
-      .leftJoin(kelasTable, eq(absensiGenerusTable.kelasId, kelasTable.id))
-      .leftJoin(
+      .innerJoin(kelasTable, eq(absensiGenerusTable.kelasId, kelasTable.id))
+      .innerJoin(
         generusTable,
         eq(generusTable.id, absensiGenerusTable.generusId)
       )
@@ -86,20 +84,18 @@ export async function getAbsensiGenerusByDaerahId(daerahId: number) {
     db
       .select({
         id: absensiGenerusTable.id,
-        generusId: absensiGenerusTable.generusId,
         kelasPengajian: kelasTable.nama,
         kelasPengajianGenerus: generusTable.kelasPengajian,
-        detail: absensiGenerusTable.detail,
-        keterangan: absensiGenerusTable.keterangan,
+        kelompokId: generusTable.kelompokId,
       })
       .from(absensiGenerusTable)
-      .leftJoin(kelasTable, eq(absensiGenerusTable.kelasId, kelasTable.id))
-      .leftJoin(
+      .innerJoin(kelasTable, eq(absensiGenerusTable.kelasId, kelasTable.id))
+      .innerJoin(
         generusTable,
         eq(generusTable.id, absensiGenerusTable.generusId)
       )
-      .leftJoin(kelompokTable, eq(kelasTable.kelompokId, kelompokTable.id))
-      .leftJoin(desaTable, eq(kelompokTable.desaId, desaTable.id))
+      .innerJoin(kelompokTable, eq(kelasTable.kelompokId, kelompokTable.id))
+      .innerJoin(desaTable, eq(kelompokTable.desaId, desaTable.id))
       .where(
         and(
           eq(desaTable.daerahId, daerahId),
@@ -183,16 +179,18 @@ export async function getAllGenerusSummary(
   if (desaId) conditions.push(eq(generusTable.desaId, desaId));
   if (daerahId) conditions.push(eq(generusTable.daerahId, daerahId));
 
-  if (kelasPengajian === "Muda-mudi") {
-    conditions.push(
-      inArray(generusTable.kelasPengajian, [
-        "Remaja",
-        "Pranikah",
-        "Usia Mandiri",
-      ])
-    );
-  } else {
-    conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
+  if (kelasPengajian) {
+    if (kelasPengajian === "Muda-mudi") {
+      conditions.push(
+        inArray(generusTable.kelasPengajian, [
+          "Remaja",
+          "Pranikah",
+          "Usia Mandiri",
+        ])
+      );
+    } else {
+      conditions.push(eq(generusTable.kelasPengajian, kelasPengajian));
+    }
   }
 
   const query = db

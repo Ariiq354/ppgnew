@@ -39,8 +39,8 @@ export async function getKelompokByDesaIdService(desaId: number) {
   return await getKelompok({ desaId });
 }
 
-export async function getCountKelompokService(desaId: number) {
-  return await getCountKelompok(desaId);
+export async function getCountKelompokService(daerahId: number) {
+  return await getCountKelompok(daerahId);
 }
 
 export async function createKelompokService(body: TKelompokCreate) {

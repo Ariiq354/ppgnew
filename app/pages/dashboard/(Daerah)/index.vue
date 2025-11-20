@@ -61,34 +61,30 @@
       subtitle="Muda-mudi"
     />
     <UCard class="md:col-span-3">
-      <UnoChartBar
+      <AppChartBar
         title="Daftar Generus"
         :data="data!.data.generusDatasets"
-        index="name"
         :categories="['Laki-laki', 'Perempuan']"
       />
     </UCard>
     <UCard>
-      <UnoChartPie
+      <AppChartPie
         title="Daftar Generus By Grup"
         :data="data!.data.generusGroupDatasets"
-        index="name"
-        category="value"
+        subtitle="generus"
       />
     </UCard>
     <UCard>
-      <UnoChartPie
+      <AppChartPie
         title="Daftar Pengajar By Grup"
+        subtitle="Pengajar"
         :data="data!.data.pengajarGroupDatasets"
-        index="name"
-        category="value"
       />
     </UCard>
     <UCard class="md:col-span-3">
-      <UnoChartBar
+      <AppChartBar
         title="Daftar Pengajar"
         :data="data!.data.pengajarDatasets"
-        index="name"
         :categories="['Laki-laki', 'Perempuan']"
       />
     </UCard>

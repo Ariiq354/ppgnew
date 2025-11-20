@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@pinia/nuxt",
     "@vueuse/nuxt",
+    "nuxt-charts",
   ],
 
   css: ["~/assets/css/main.css"],

@@ -64,11 +64,13 @@ export async function getKelompok(params: {
   );
 }
 
-export async function getCountKelompok(desaId: number) {
-  return await tryCatch(
-    "Failed get count kelompok",
-    db.$count(kelompokTable, eq(kelompokTable.desaId, desaId))
-  );
+export async function getCountKelompok(daerahId: number) {
+  const query = db
+    .select({ id: kelompokTable.id })
+    .from(kelompokTable)
+    .innerJoin(desaTable, eq(kelompokTable.desaId, desaTable.id))
+    .where(eq(desaTable.daerahId, daerahId));
+  return await tryCatch("Failed get count kelompok", db.$count(query));
 }
 
 export async function createKelompok(data: TKelompokCreate) {

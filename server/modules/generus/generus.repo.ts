@@ -283,7 +283,7 @@ export async function getGenerusKelasPengajianExclude(params: {
   const { daerahId, desaId, kelompokId } = params;
 
   const conditions: (SQL<unknown> | undefined)[] = [
-    ...getGenerusByStatusSQL({ include: ["GPS"], exclude: [...exclude] }),
+    ...getGenerusByStatusSQL({ exclude: [...exclude] }),
   ];
 
   if (daerahId) conditions.push(eq(generusTable.daerahId, daerahId));
@@ -296,6 +296,7 @@ export async function getGenerusKelasPengajianExclude(params: {
       .select({
         id: generusTable.id,
         kelasPengajian: generusTable.kelasPengajian,
+        kelompokId: generusTable.kelompokId,
       })
       .from(generusTable)
       .where(and(...conditions))

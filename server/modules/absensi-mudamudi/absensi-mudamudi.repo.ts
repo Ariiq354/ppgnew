@@ -62,11 +62,11 @@ export async function getAbsensiMudamudiByDaerahId(daerahId: number) {
         kelasPengajianGenerus: generusTable.kelasPengajian,
       })
       .from(absensiGenerusMudaMudiTable)
-      .leftJoin(
+      .innerJoin(
         kelasMudaMudiTable,
         eq(absensiGenerusMudaMudiTable.kelasId, kelasMudaMudiTable.id)
       )
-      .leftJoin(
+      .innerJoin(
         generusTable,
         eq(generusTable.id, absensiGenerusMudaMudiTable.generusId)
       )
