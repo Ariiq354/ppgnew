@@ -8,7 +8,7 @@
     schema,
     statusOptions,
   } from "./_constants";
-  import type { Schema } from "./_constants";
+  import type { QueryType, Schema } from "./_constants";
   import { useConstantStore } from "~/stores/constant";
   import { useAuthStore } from "~/stores/auth";
   import { useSubmit } from "~/composables/function";
@@ -25,9 +25,7 @@
 
   const filterModal = ref(false);
   const state = ref(getInitialFormData());
-  const query = reactive({
-    search: "",
-    kelasPengajian: "",
+  const query = reactive<QueryType>({
     page: 1,
   });
   const searchDebounced = useDebounceFn((v) => {

@@ -7,7 +7,7 @@
   import { useConstantStore } from "~/stores/constant";
   import { APIBASE, type ExtractObjectType } from "~/utils";
   import { bulanFilterOptions, tahunOptions } from "~~/shared/contants";
-  import type { Schema } from "./_constants";
+  import type { Schema, QueryType } from "./_constants";
   import { columns, getInitialFormData, schema } from "./_constants";
 
   const constantStore = useConstantStore();
@@ -18,11 +18,8 @@
   constantStore.setTitle("Tahfidz / Daftar Kelas");
 
   const state = ref(getInitialFormData());
-  const query = reactive({
-    search: "",
+  const query = reactive<QueryType>({
     page: 1,
-    tahun: "",
-    bulan: "",
   });
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;

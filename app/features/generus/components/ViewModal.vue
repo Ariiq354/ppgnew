@@ -10,7 +10,7 @@
 </script>
 
 <template>
-  <UModal v-model:open="openModel" title="Detail Pengajar" class="max-w-4xl">
+  <UModal v-model:open="openModel" title="Detail Generus" class="max-w-4xl">
     <template #body>
       <div class="space-y-4">
         <UFormField label="Foto Diri">

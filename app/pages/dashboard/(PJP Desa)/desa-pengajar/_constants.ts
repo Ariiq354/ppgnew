@@ -44,3 +44,10 @@ export const statusOptions = [
   "Mubalig Setempat",
   "Asisten Pengajar",
 ];
+
+export type QueryType = Partial<{
+  page: number;
+  search: string;
+  kelompokId: number;
+  status: string;
+}>;

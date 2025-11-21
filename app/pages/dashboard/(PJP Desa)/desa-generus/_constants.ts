@@ -37,3 +37,10 @@ export const columns: TableColumn<any>[] = [
     header: "Kelompok",
   },
 ];
+
+export type QueryType = Partial<{
+  page: number;
+  search: string;
+  kelasPengajian: string;
+  kelompokId: number;
+}>;

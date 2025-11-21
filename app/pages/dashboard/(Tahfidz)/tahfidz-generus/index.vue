@@ -2,18 +2,15 @@
   import { useAuthStore } from "~/stores/auth";
   import { useConstantStore } from "~/stores/constant";
   import { APIBASE } from "~/utils";
-  import { columns } from "./_constants";
+  import { columns, type QueryType } from "./_constants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
   constantStore.setTitle("Tahfidz / Daftar Generus");
 
   const filterModal = ref(false);
-  const query = reactive({
-    search: "",
+  const query = reactive<QueryType>({
     page: 1,
-    desaId: "",
-    kelompokId: "",
   });
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
@@ -29,7 +26,7 @@
         daerahId: computed(() => authStore.user?.daerahId),
       },
       onResponse() {
-        query.kelompokId = "";
+        query.kelompokId = undefined;
       },
     }
   );
@@ -52,7 +49,7 @@
   watch(
     () => query.desaId,
     () => {
-      query.kelompokId = "";
+      query.kelompokId = undefined;
     }
   );
 

@@ -33,3 +33,9 @@ export const columns: TableColumn<any>[] = [
     cell: ({ row }) => getAge(row.original.tanggalLahir),
   },
 ];
+
+export type QueryType = Partial<{
+  page: number;
+  search: string;
+  kelompokId: number;
+}>;

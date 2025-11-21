@@ -2,7 +2,7 @@
   import { useAuthStore } from "~/stores/auth";
   import { useConstantStore } from "~/stores/constant";
   import { APIBASE, type ExtractObjectType } from "~/utils";
-  import { columns, statusOptions } from "./_constants";
+  import { columns, statusOptions, type QueryType } from "./_constants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -10,10 +10,7 @@
 
   const filterModal = ref(false);
   const state = ref();
-  const query = reactive({
-    search: "",
-    status: "",
-    kelompokId: "",
+  const query = reactive<QueryType>({
     page: 1,
   });
   const searchDebounced = useDebounceFn((v) => {

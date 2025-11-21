@@ -43,6 +43,7 @@ export async function getAllKelas(
     .select({
       id: kelasTable.id,
       nama: kelasTable.nama,
+      keterangan: kelasTable.keterangan,
       tanggal: kelasTable.tanggal,
     })
     .from(kelasTable)
