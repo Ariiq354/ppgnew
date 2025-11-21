@@ -12,7 +12,7 @@ export type TMusyawarahBidangCreate = z.infer<typeof OMusyawarahBidangCreate>;
 
 export const OMusyawarahBidangList = z.object({
   ...OPagination.def.shape,
-  search: z.string(),
+  search: z.optional(z.string()),
   bidang: z.enum(bidangEnum),
 });
 

@@ -19,11 +19,13 @@ export const schema = z.object({
   bidang: z.enum(bidangEnum),
 });
 
-export const getInitialFormData = (): Schema => ({
+export const getInitialFormData = (
+  bidang: (typeof bidangEnum)[number]
+): Schema => ({
   id: undefined,
   nama: "",
   tanggal: "",
-  bidang: "keputrian",
+  bidang,
 });
 
 export type Schema = z.infer<typeof schema>;
