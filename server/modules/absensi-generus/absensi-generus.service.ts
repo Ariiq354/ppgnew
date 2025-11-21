@@ -37,7 +37,8 @@ export async function getAbsensiGenerusMonitoringService(
     return {
       ...i,
       tanpaKeterangan: kelas - i.hadir - i.izin,
-      kehadiran: kelas > 0 ? ((i.hadir + i.izin) * 100) / kelas : 0,
+      kehadiran:
+        kelas > 0 ? (((i.hadir + i.izin) * 100) / kelas).toFixed(2) : 0,
     };
   });
 
@@ -203,7 +204,8 @@ export async function getAbsensiGenerusMonitoringForDaerahService(
     return {
       ...i,
       tanpaKeterangan: kelas - i.hadir - i.izin,
-      kehadiran: kelas > 0 ? ((i.hadir + i.izin) * 100) / kelas : 0,
+      kehadiran:
+        kelas > 0 ? (((i.hadir + i.izin) * 100) / kelas).toFixed(2) : 0,
     };
   });
 

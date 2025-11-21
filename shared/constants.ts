@@ -1,3 +1,5 @@
+import { bidangEnum } from "./enum";
+
 export const bulanFilterOptions = [
   { name: "Januari", value: 1 },
   { name: "Februari", value: 2 },
@@ -19,3 +21,13 @@ export const tahunOptions = [
   String(currentYear),
   String(currentYear + 1),
 ];
+
+export const mingguOptions = [1, 2, 3, 4, 5];
+
+export const bidangOptions = bidangEnum.map((value) => ({
+  value,
+  name: value
+    .split("_")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" "),
+}));

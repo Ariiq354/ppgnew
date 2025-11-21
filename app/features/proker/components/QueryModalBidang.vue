@@ -1,10 +1,6 @@
 <script setup lang="ts">
   import { bulanEnum } from "~~/shared/enum";
-  import {
-    tahunOptions,
-    mingguOptions,
-    bidangOptions,
-  } from "~~/shared/constants";
+  import { mingguOptions, tahunOptions } from "../constants";
   import type { QueryType } from "../types";
 
   const openModel = defineModel<boolean>("open");
@@ -16,13 +12,6 @@
   <UModal v-model:open="openModel" title="Filter">
     <template #body>
       <div class="flex flex-col gap-4">
-        <ClearableSelectMenu
-          v-model="filterModel!.bidang"
-          placeholder="Bidang"
-          :items="bidangOptions"
-          value-key="value"
-          label-key="name"
-        />
         <ClearableSelectMenu
           v-model="filterModel!.tahun"
           placeholder="Tahun"

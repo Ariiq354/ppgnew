@@ -29,16 +29,22 @@ export async function getAllProkerService(
     throw ForbiddenError;
   }
 
-  const data = await getAllProker(user.daerahId, query);
+  const { data, total, totalBiaya } = await getAllProker(user.daerahId, query);
+
+  const newData = data.map((i) => ({
+    ...i,
+    totalBiaya,
+  }));
+
   const metadata = {
     page: query.page,
     itemPerPage: query.limit,
-    total: data.total,
-    totalPage: Math.ceil(data.total / query.limit),
+    total: total,
+    totalPage: Math.ceil(total / query.limit),
   };
 
   return {
-    data: data.data,
+    data: newData,
     metadata,
   };
 }

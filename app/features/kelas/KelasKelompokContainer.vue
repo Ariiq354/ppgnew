@@ -4,7 +4,7 @@
   import type { DataReturn, QueryType } from "./types";
   import QueryModal from "./components/QueryModal.vue";
   import ViewModal from "./components/ViewModal.vue";
-  import { bulanFilterOptions, tahunOptions } from "~~/shared/contants";
+  import { bulanFilterOptions, tahunOptions } from "~~/shared/constants";
 
   const authStore = useAuthStore();
   const managePermission = authStore.hasPermission({
