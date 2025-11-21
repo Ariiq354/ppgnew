@@ -42,6 +42,10 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   const user = ref();
   const loading = ref(false);
 
+  function setUser(item: any) {
+    user.value = item;
+  }
+
   async function signIn(body: TSignIn) {
     loading.value = true;
     const { error } = await authClient.signIn.username({
@@ -51,6 +55,9 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     if (error) {
       useToastError("Login Failed", error.message);
     } else {
+      const { data } = await authClient.getSession();
+      setUser(data?.user);
+
       await navigateTo("/dashboard");
     }
     loading.value = false;
@@ -141,6 +148,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     signIn,
     signUp,
     user,
+    setUser,
     signOut,
     hasPermission,
     updatePassword,

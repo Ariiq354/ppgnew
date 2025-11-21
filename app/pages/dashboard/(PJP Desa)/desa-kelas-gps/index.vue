@@ -2,7 +2,7 @@
   import type { FormSubmitEvent } from "#ui/types";
   import { APIBASE, type ExtractObjectType } from "~/utils";
   import { columns, getInitialFormData, schema } from "./_constants";
-  import type { Schema } from "./_constants";
+  import type { Schema, QueryType } from "./_constants";
   import { useConstantStore } from "~/stores/constant";
   import { useAuthStore } from "~/stores/auth";
   import { useSubmit } from "~/composables/function";
@@ -18,11 +18,8 @@
   constantStore.setTitle("PJP Desa / Daftar Kelas GPS");
 
   const state = ref(getInitialFormData());
-  const query = reactive({
-    search: "",
+  const query = reactive<QueryType>({
     page: 1,
-    tahun: "",
-    bulan: "",
   });
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;

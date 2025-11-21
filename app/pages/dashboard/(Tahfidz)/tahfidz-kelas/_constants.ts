@@ -24,3 +24,10 @@ export const getInitialFormData = (): Schema => ({
 });
 
 export type Schema = z.infer<typeof schema>;
+
+export type QueryType = Partial<{
+  page: number;
+  search: string;
+  tahun: number;
+  bulan: string;
+}>;

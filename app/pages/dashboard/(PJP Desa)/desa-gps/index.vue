@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { useConstantStore } from "~/stores/constant";
   import { APIBASE, type ExtractObjectType } from "~/utils";
-  import { columns } from "./_constants";
+  import { columns, type QueryType } from "./_constants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -9,9 +9,7 @@
 
   const filterModal = ref(false);
   const state = ref();
-  const query = reactive({
-    search: "",
-    kelompokId: "",
+  const query = reactive<QueryType>({
     page: 1,
   });
   const searchDebounced = useDebounceFn((v) => {

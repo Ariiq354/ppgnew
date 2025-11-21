@@ -24,27 +24,27 @@ export type TNamaGenerusTanggal = z.infer<typeof ONamaGenerusTanggal>;
 
 export const OKelas = z.object({
   ...OPagination.def.shape,
-  search: z.string(),
-  tahun: z.coerce.number(),
-  bulan: z.coerce.number(),
+  search: z.optional(z.string()),
+  tahun: z.optional(z.coerce.number()),
+  bulan: z.optional(z.coerce.number()),
 });
 export type TKelas = z.infer<typeof OKelas>;
 
 export const OKelasGenerus = z.object({
   ...OKelas.def.shape,
-  nama: z.enum(kelasGenerusEnum),
+  nama: z.optional(z.enum(kelasGenerusEnum)),
 });
 export type TKelasGenerus = z.infer<typeof OKelasGenerus>;
 
 export const OKelasMudamudi = z.object({
   ...OKelas.def.shape,
-  nama: z.enum(kelasMudamudiEnum),
+  nama: z.optional(z.enum(kelasMudamudiEnum)),
 });
 export type TKelasMudamudi = z.infer<typeof OKelasMudamudi>;
 
 export const OKelasGeneric = z.object({
   ...OKelas.def.shape,
-  nama: z.string(),
+  nama: z.optional(z.string()),
 });
 export type TKelasGeneric = z.infer<typeof OKelasGeneric>;
 
