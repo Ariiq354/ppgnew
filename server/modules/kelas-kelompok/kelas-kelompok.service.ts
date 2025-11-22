@@ -9,7 +9,7 @@ import {
   getAllKelas,
   getAllKelasExport,
   getAllKelasOptions,
-  getCountKelas,
+  getCountKelasPerKelompok,
   getKelasByDaerahId,
   getKelasById,
   getKelasByKelompokId,
@@ -45,15 +45,15 @@ export async function getAllKelasOptionsService(
   return await getAllKelasOptions(kelompokId, query);
 }
 
-export async function getCountKelasService(
-  params: {
-    kelompokId?: number;
-    desaId?: number;
-    daerahId?: number;
-  },
-  kelasPengajian: (typeof kelasGenerusEnum)[number]
-) {
-  return await getCountKelas(params, kelasPengajian);
+export async function getCountKelasService(params: {
+  kelompokId?: number;
+  desaId?: number;
+  daerahId?: number;
+  kelasPengajian: (typeof kelasGenerusEnum)[number];
+  tahun?: number;
+  bulan?: number;
+}) {
+  return await getCountKelasPerKelompok(params);
 }
 
 export async function getKelasByKelompokIdService(kelompokId: number) {

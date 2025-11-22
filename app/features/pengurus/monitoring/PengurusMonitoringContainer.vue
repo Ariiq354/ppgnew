@@ -1,22 +1,14 @@
 <script setup lang="ts">
-  import { useConstantStore } from "~/stores/constant";
-  import { columns } from "./_constants";
-  import { APIBASE } from "~/utils";
-
-  const constantStore = useConstantStore();
-  constantStore.setTitle("Sekretariat / Monitoring Kehadiran");
+  import { columns } from "./constants";
+  import type { QueryType } from "./types";
 
   const { data: summary } = await useFetch(
     `${APIBASE}/absensi-pengurus/monitoring/summary`
   );
 
-  const query = reactive({
-    search: "",
+  const query = reactive<QueryType>({
     page: 1,
   });
-  const searchDebounced = useDebounceFn((v) => {
-    query.search = v;
-  }, 300);
   const { data, status } = await useFetch(
     `${APIBASE}/absensi-pengurus/monitoring`,
     {
@@ -26,7 +18,6 @@
 </script>
 
 <template>
-  <Title>Sekretariat | Monitoring Kehadiran</Title>
   <main class="flex flex-col gap-4">
     <div class="grid grid-cols-2 gap-4">
       <UCard>
@@ -46,13 +37,7 @@
     </div>
     <UCard>
       <div class="mb-4 flex gap-2 md:mb-6 md:gap-4">
-        <UInput
-          size="xl"
-          class="flex-5"
-          leading-icon="i-lucide-search"
-          placeholder="Search..."
-          @update:model-value="searchDebounced"
-        />
+        <InputSearch v-model="query.search" />
       </div>
       <AppTable
         v-model:page="query.page"

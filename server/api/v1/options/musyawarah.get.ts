@@ -5,5 +5,5 @@ export default defineEventHandler(async (event) => {
 
   const data = await getAllMusyawarahOptionsService(user.daerahId);
 
-  return HttpResponse(data.data);
+  return HttpResponse(data);
 });

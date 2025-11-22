@@ -1,6 +1,5 @@
 import type { TAbsensiKelasPengajianGenerusList } from "~~/server/utils/dto/absensi.dto";
 import { getDesaByDaerahIdService } from "../desa";
-import { getCountGenerusExclude } from "../generus/generus.repo";
 import {
   getCountKelasDesaService,
   getKelasDesaByIdService,

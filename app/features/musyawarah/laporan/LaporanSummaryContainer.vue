@@ -1,10 +1,6 @@
 <script setup lang="ts">
-  import { useConstantStore } from "~/stores/constant";
-  import { APIBASE } from "~/utils";
   import { BidangDisplay } from "~~/shared/permission";
-
-  const constantStore = useConstantStore();
-  constantStore.setTitle("Sekretariat / Summary");
+  import ViewLaporanModal from "./components/ViewLaporanModal.vue";
 
   const musyId = ref<number>();
   const { data: musyOption, status: statusMusy } = await useFetch(
@@ -38,20 +34,7 @@
 </script>
 
 <template>
-  <Title>Sekretariat | Summary</Title>
-  <LazyUModal
-    v-model:open="modalOpen"
-    title="Detail Laporan Musyawarah"
-    class="max-w-4xl"
-  >
-    <template #body>
-      <div class="flex flex-col gap-4">
-        <h1 class="text-xl font-bold">{{ stateView.laporan }}</h1>
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <p class="prose prose-base" v-html="stateView.keterangan" />
-      </div>
-    </template>
-  </LazyUModal>
+  <ViewLaporanModal v-model:open="modalOpen" :data="stateView" />
   <main class="flex flex-col gap-4">
     <UCard>
       <h1 class="text-2xl font-bold sm:text-3xl">Pilih Musyawarah</h1>

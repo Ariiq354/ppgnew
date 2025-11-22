@@ -27,14 +27,6 @@ export const columns: TableColumn<any>[] = [
   },
 ];
 
-export const bidangOptions = bidangEnum.map((value) => ({
-  value,
-  name: value
-    .split("_")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" "),
-}));
-
 export const schema = z.object({
   id: z.optional(z.number()),
   foto: z.string(),

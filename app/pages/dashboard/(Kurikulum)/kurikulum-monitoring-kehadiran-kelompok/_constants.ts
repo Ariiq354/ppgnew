@@ -23,3 +23,11 @@ export const columns: TableColumn<any>[] = [
     header: "Tanpa Keterangan",
   },
 ];
+
+export type QueryType = Partial<{
+  page: number;
+  search: string;
+  kelasPengajian: string;
+  desaId: number;
+  kelompokId: number;
+}>;

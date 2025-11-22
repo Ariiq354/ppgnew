@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { useConstantStore } from "~/stores/constant";
-  import { columns } from "./_constants";
+  import { columns, type QueryType } from "./_constants";
   import { APIBASE } from "~/utils";
   import { kelasGenerusEnum } from "~~/shared/enum";
 
@@ -18,12 +18,9 @@
     }
   );
 
-  const query = reactive({
-    search: "",
+  const query = reactive<QueryType>({
     page: 1,
-    desaId: "",
-    kelompokId: "",
-    kelasPengajian: namaKelas,
+    kelasPengajian: namaKelas.value,
   });
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;

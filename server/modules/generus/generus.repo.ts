@@ -1,4 +1,4 @@
-import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
+import { and, count, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
   generusStatusTable,
@@ -303,15 +303,13 @@ export async function getGenerusKelasPengajianExclude(params: {
   );
 }
 
-export async function getCountGenerusExclude(
-  params: {
-    kelompokId?: number;
-    desaId?: number;
-    daerahId?: number;
-  },
-  kelasPengajian: (typeof kelasGenerusEnum)[number]
-) {
-  const { daerahId, desaId, kelompokId } = params;
+export async function getCountGenerusPerKelompok(params: {
+  kelasPengajian: (typeof kelasGenerusEnum)[number];
+  kelompokId?: number;
+  desaId?: number;
+  daerahId?: number;
+}) {
+  const { daerahId, desaId, kelompokId, kelasPengajian } = params;
 
   const conditions: (SQL<unknown> | undefined)[] = [
     ...getGenerusByStatusSQL({ include: ["GPS"], exclude: [...exclude] }),
@@ -333,10 +331,18 @@ export async function getCountGenerusExclude(
   if (desaId) conditions.push(eq(generusTable.desaId, desaId));
   if (kelompokId) conditions.push(eq(generusTable.kelompokId, kelompokId));
 
-  return await tryCatch(
-    "Failed to get Count Generus",
-    db.$count(generusTable, and(...conditions))
-  );
+  const query = db
+    .select({
+      kelompokId: generusTable.kelompokId,
+      count: count(),
+    })
+    .from(generusTable)
+    .groupBy(generusTable.kelompokId)
+    .where(and(...conditions));
+
+  const data = await tryCatch("Failed to get count generus", query);
+
+  return data;
 }
 
 export async function createGenerus(wilayah: TWilayah, data: TGenerusCreate) {

@@ -81,7 +81,7 @@ export async function getAllMusyawarahOptions(daerahId: number) {
       .where(and(...conditions))
   );
 
-  return { data };
+  return data;
 }
 
 // Untuk Absensi

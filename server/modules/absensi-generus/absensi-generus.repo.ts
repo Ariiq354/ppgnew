@@ -5,7 +5,6 @@ import {
   generusTable,
   kelasTable,
 } from "~~/server/database/schema/generus";
-import { desaTable, kelompokTable } from "~~/server/database/schema/wilayah";
 import { getGenerusByStatusSQL } from "~~/server/utils/common";
 import { exclude, type kelasGenerusEnum } from "~~/shared/enum";
 
@@ -53,67 +52,15 @@ export async function getAbsensiGenerusByKelasId(
   return data;
 }
 
-export async function getAbsensiGenerusByKelompokId(kelompokId: number) {
-  return await tryCatch(
-    "Failed to get Absensi Generus By Kelompok Id",
-    db
-      .select({
-        id: absensiGenerusTable.id,
-        kelasPengajian: kelasTable.nama,
-        kelasPengajianGenerus: generusTable.kelasPengajian,
-        kelompokId: generusTable.kelompokId,
-      })
-      .from(absensiGenerusTable)
-      .innerJoin(kelasTable, eq(absensiGenerusTable.kelasId, kelasTable.id))
-      .innerJoin(
-        generusTable,
-        eq(generusTable.id, absensiGenerusTable.generusId)
-      )
-      .where(
-        and(
-          eq(kelasTable.kelompokId, kelompokId),
-          ...getGenerusByStatusSQL({ exclude: [...exclude] })
-        )
-      )
-  );
-}
-
-export async function getAbsensiGenerusByDaerahId(daerahId: number) {
-  return await tryCatch(
-    "Failed to get Absensi Generus By Kelompok Id",
-    db
-      .select({
-        id: absensiGenerusTable.id,
-        kelasPengajian: kelasTable.nama,
-        kelasPengajianGenerus: generusTable.kelasPengajian,
-        kelompokId: generusTable.kelompokId,
-      })
-      .from(absensiGenerusTable)
-      .innerJoin(kelasTable, eq(absensiGenerusTable.kelasId, kelasTable.id))
-      .innerJoin(
-        generusTable,
-        eq(generusTable.id, absensiGenerusTable.generusId)
-      )
-      .innerJoin(kelompokTable, eq(kelasTable.kelompokId, kelompokTable.id))
-      .innerJoin(desaTable, eq(kelompokTable.desaId, desaTable.id))
-      .where(
-        and(
-          eq(desaTable.daerahId, daerahId),
-          ...getGenerusByStatusSQL({ exclude: [...exclude] })
-        )
-      )
-  );
-}
-
-export async function getCountAbsensiGenerus(
-  params: {
-    kelompokId?: number;
-    desaId?: number;
-    daerahId?: number;
-  },
-  kelasPengajian: (typeof kelasGenerusEnum)[number]
-) {
-  const { daerahId, desaId, kelompokId } = params;
+export async function getCountAbsensiGenerusPerKelompok(params: {
+  kelasPengajian: (typeof kelasGenerusEnum)[number];
+  daerahId?: number;
+  tahun?: number;
+  bulan?: number;
+  desaId?: number;
+  kelompokId?: number;
+}) {
+  const { daerahId, desaId, kelompokId, kelasPengajian, bulan, tahun } = params;
 
   const conditions: (SQL<unknown> | undefined)[] = [
     ...getGenerusByStatusSQL({ exclude: [...exclude] }),
@@ -135,23 +82,28 @@ export async function getCountAbsensiGenerus(
   if (daerahId) conditions.push(eq(generusTable.daerahId, daerahId));
   if (desaId) conditions.push(eq(generusTable.desaId, desaId));
   if (kelompokId) conditions.push(eq(generusTable.kelompokId, kelompokId));
+  if (tahun)
+    conditions.push(sql`EXTRACT(YEAR FROM ${kelasTable.tanggal}) = ${tahun}`);
+  if (bulan)
+    conditions.push(sql`EXTRACT(MONTH FROM ${kelasTable.tanggal}) = ${bulan}`);
 
-  const [data] = await tryCatch(
+  const data = await tryCatch(
     "Failed to get Count Absensi",
     db
       .select({
+        kelompokId: kelasTable.kelompokId,
         count: count(),
       })
       .from(absensiGenerusTable)
-      .leftJoin(kelasTable, eq(absensiGenerusTable.kelasId, kelasTable.id))
-      .leftJoin(
+      .innerJoin(kelasTable, eq(absensiGenerusTable.kelasId, kelasTable.id))
+      .innerJoin(
         generusTable,
         eq(generusTable.id, absensiGenerusTable.generusId)
       )
       .where(and(...conditions))
   );
 
-  return data!.count;
+  return data;
 }
 
 export async function getAllGenerusSummary(
@@ -160,7 +112,7 @@ export async function getAllGenerusSummary(
     desaId?: number;
     kelompokId?: number;
   },
-  { limit, page, search, kelasPengajian }: TGenerusAbsensiList
+  { limit, page, search, kelasPengajian, tahun, bulan }: TGenerusAbsensiList
 ) {
   const { daerahId, desaId, kelompokId } = params;
 
@@ -178,6 +130,22 @@ export async function getAllGenerusSummary(
   if (kelompokId) conditions.push(eq(generusTable.kelompokId, kelompokId));
   if (desaId) conditions.push(eq(generusTable.desaId, desaId));
   if (daerahId) conditions.push(eq(generusTable.daerahId, daerahId));
+
+  let dateFilterSql = sql`1=1`;
+  if (tahun && bulan) {
+    dateFilterSql = sql`
+    EXTRACT(YEAR FROM ${kelasTable.tanggal}) = ${tahun}
+    AND EXTRACT(MONTH FROM ${kelasTable.tanggal}) = ${bulan}
+  `;
+  } else if (tahun) {
+    dateFilterSql = sql`
+    EXTRACT(YEAR FROM ${kelasTable.tanggal}) = ${tahun}
+  `;
+  } else if (bulan) {
+    dateFilterSql = sql`
+    EXTRACT(MONTH FROM ${kelasTable.tanggal}) = ${bulan}
+  `;
+  }
 
   if (kelasPengajian) {
     if (kelasPengajian === "Muda-mudi") {
@@ -197,16 +165,17 @@ export async function getAllGenerusSummary(
     .select({
       id: generusTable.id,
       nama: generusTable.nama,
-      hadir: sql<number>`CAST(SUM(CASE WHEN ${absensiGenerusTable.keterangan} = 'Hadir' AND ${kelasTable.nama} = ${kelasPengajian} THEN 1 ELSE 0 END) AS INT)`,
-      izin: sql<number>`CAST(SUM(CASE WHEN ${absensiGenerusTable.keterangan} = 'Izin' AND ${kelasTable.nama} = ${kelasPengajian} THEN 1 ELSE 0 END) AS INT)`,
+      kelompokId: generusTable.kelompokId,
+      hadir: sql<number>`CAST(SUM(CASE WHEN ${absensiGenerusTable.keterangan} = 'Hadir' AND ${kelasTable.nama} = ${kelasPengajian} AND (${dateFilterSql}) THEN 1 ELSE 0 END) AS INT)`,
+      izin: sql<number>`CAST(SUM(CASE WHEN ${absensiGenerusTable.keterangan} = 'Izin' AND ${kelasTable.nama} = ${kelasPengajian} AND (${dateFilterSql}) THEN 1 ELSE 0 END) AS INT)`,
     })
     .from(generusTable)
     .where(and(...conditions))
-    .leftJoin(
+    .innerJoin(
       absensiGenerusTable,
       eq(generusTable.id, absensiGenerusTable.generusId)
     )
-    .leftJoin(kelasTable, eq(absensiGenerusTable.kelasId, kelasTable.id))
+    .innerJoin(kelasTable, eq(absensiGenerusTable.kelasId, kelasTable.id))
     .groupBy(generusTable.id, generusTable.nama);
 
   const total = await tryCatch(
