@@ -275,34 +275,6 @@ export async function getGenerusById(kelompokId: number, id: number) {
   );
 }
 
-export async function getGenerusKelasPengajianExclude(params: {
-  kelompokId?: number;
-  desaId?: number;
-  daerahId?: number;
-}) {
-  const { daerahId, desaId, kelompokId } = params;
-
-  const conditions: (SQL<unknown> | undefined)[] = [
-    ...getGenerusByStatusSQL({ exclude: [...exclude] }),
-  ];
-
-  if (daerahId) conditions.push(eq(generusTable.daerahId, daerahId));
-  if (desaId) conditions.push(eq(generusTable.desaId, desaId));
-  if (kelompokId) conditions.push(eq(generusTable.kelompokId, kelompokId));
-
-  return await tryCatch(
-    "Failed to get Generus Absensi Exclude",
-    db
-      .select({
-        id: generusTable.id,
-        kelasPengajian: generusTable.kelasPengajian,
-        kelompokId: generusTable.kelompokId,
-      })
-      .from(generusTable)
-      .where(and(...conditions))
-  );
-}
-
 export async function getCountGenerusPerKelompok(params: {
   kelasPengajian: (typeof kelasGenerusEnum)[number];
   kelompokId?: number;
@@ -312,7 +284,7 @@ export async function getCountGenerusPerKelompok(params: {
   const { daerahId, desaId, kelompokId, kelasPengajian } = params;
 
   const conditions: (SQL<unknown> | undefined)[] = [
-    ...getGenerusByStatusSQL({ include: ["GPS"], exclude: [...exclude] }),
+    ...getGenerusByStatusSQL({ exclude: [...exclude] }),
   ];
 
   if (kelasPengajian === "Muda-mudi") {

@@ -63,6 +63,7 @@ export async function getAbsensiGenerusSummaryService(
     params,
     query.kelasPengajian
   );
+
   const countKelas = await getCountKelasService({ ...params, ...query });
   const countAbsensi = await getCountAbsensiGenerusPerKelompok({
     ...params,
@@ -80,12 +81,16 @@ export async function getAbsensiGenerusSummaryService(
     const denominator = countg * item.count;
     const kehadiran =
       denominator > 0 ? Math.round((counta * 100) / denominator) : 0;
-    percentage.push(kehadiran);
+
+    if (kehadiran !== 0) percentage.push(kehadiran);
   }
 
   const data = {
-    countGenerus,
-    kehadiran: percentage.reduce((sum, p) => sum + p, 0) / percentage.length,
+    countGenerus: countGenerus.reduce((a, i) => (a += i.count), 0),
+    kehadiran:
+      percentage.length > 0
+        ? percentage.reduce((sum, p) => sum + p, 0) / percentage.length
+        : 0,
   };
 
   return data;

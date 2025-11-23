@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import PengajianContainer from "~/features/pengajian/PengajianContainer.vue";
+  import PengajianContainer from "~/features/pengajian/pengajian/PengajianContainer.vue";
   import { useConstantStore } from "~/stores/constant";
 
   const constantStore = useConstantStore();

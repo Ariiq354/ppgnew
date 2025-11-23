@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { statusPengajarEnum } from "~~/shared/enum";
-  import { columns } from "./constants";
-  import type { DataReturn, QueryType } from "./types";
-  import QueryModal from "./components/QueryModal.vue";
+  import QueryDesa from "./components/QueryDesa.vue";
   import ViewModal from "./components/ViewModal.vue";
+  import { columns } from "./constants";
+  import type { DataReturn, QueryTypeDesa } from "./types";
 
   const authStore = useAuthStore();
 
@@ -12,17 +12,17 @@
 
   const state = ref();
 
-  const query = reactive<QueryType>({
+  const query = reactive<QueryTypeDesa>({
     page: 1,
   });
   watch(
-    () => [query.search, query.status, query.kelompokId, query.desaId],
+    () => [query.search, query.status, query.kelompokId],
     () => {
       if (query.page !== 1) query.page = 1;
     }
   );
 
-  const { data, status } = await useFetch(`${APIBASE}/home/pengajar`, {
+  const { data, status } = await useFetch(`${APIBASE}/pengajar/desa`, {
     query,
   });
 
@@ -34,17 +34,12 @@
 
 <template>
   <ViewModal v-model:open="modalOpen" :data="state" />
-  <QueryModal v-model:open="filterModal" v-model:query="query" />
+  <QueryDesa v-model:open="filterModal" v-model:query="query" />
   <div class="mb-4 flex gap-2 md:mb-6 md:gap-4">
     <InputSearch v-model="query.search" />
-    <InputDesa
-      v-model="query.desaId"
-      :daerah-id="authStore.user?.daerahId"
-      class="hidden flex-1 md:flex"
-    />
     <InputKelompok
       v-model="query.kelompokId"
-      :desa-id="query.desaId"
+      :desa-id="authStore.user.desaId!"
       class="hidden flex-1 md:flex"
     />
     <ClearableSelectMenu

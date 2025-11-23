@@ -6,9 +6,13 @@ export const columns: TableColumn<any>[] = [
     header: "Nama Jamaah",
   },
   {
+    accessorKey: "bidang",
+    header: "Bidang",
+  },
+  {
     accessorKey: "kehadiran",
     header: "Kehadiran",
-    cell: ({ row }) => `${row.original.kehadiran}%`,
+    cell: ({ row }) => String(row.original.kehadiran) + "%",
   },
   {
     accessorKey: "hadir",

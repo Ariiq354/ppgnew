@@ -101,6 +101,7 @@ export async function getCountAbsensiGenerusPerKelompok(params: {
         eq(generusTable.id, absensiGenerusTable.generusId)
       )
       .where(and(...conditions))
+      .groupBy(kelasTable.kelompokId)
   );
 
   return data;

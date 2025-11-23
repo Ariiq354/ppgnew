@@ -15,22 +15,19 @@
 <template>
   <LazyUModal
     v-model:open="openModel"
-    :title="(state!.id ? 'Edit' : 'Tambah') + ' Musyawarah'"
+    :title="(state!.id ? 'Edit' : 'Tambah') + ' Jamaah'"
     class="max-w-4xl"
   >
     <template #body>
       <UForm
-        id="musyawarah-form"
+        id="jamaah-form"
         :schema="schema"
         :state="state!"
         class="space-y-4"
         @submit="onSubmit"
       >
-        <UFormField label="Nama Musyawarah" name="nama">
+        <UFormField label="Nama Jamaah" name="nama">
           <UInput v-model="state!.nama" :disabled="isLoading" />
-        </UFormField>
-        <UFormField label="Tanggal" name="tanggal">
-          <UInput v-model="state!.tanggal" :disabled="isLoading" type="date" />
         </UFormField>
       </UForm>
     </template>
@@ -47,7 +44,7 @@
         type="submit"
         icon="i-lucide-check"
         :loading="isLoading"
-        form="musyawarah-form"
+        form="jamaah-form"
       >
         Simpan
       </UButton>
