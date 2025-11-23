@@ -1,16 +1,16 @@
 <script setup lang="ts">
   import { useConstantStore } from "~/stores/constant";
-  import { columns } from "./_constants";
+  import { columns, type QueryType } from "./_constants";
   import { APIBASE } from "~/utils";
   import { kelasGenerusEnum } from "~~/shared/enum";
 
   const constantStore = useConstantStore();
-  constantStore.setTitle("Kurikulum / Monitoring Kehadiran Desa");
+  constantStore.setTitle("Kurikulum / Monitoring Kehadiran Kelompok");
   const authStore = useAuthStore();
 
   const namaKelas = ref<(typeof kelasGenerusEnum)[number]>("Muda-mudi");
   const { data: summary } = await useFetch(
-    `${APIBASE}/absensi-desa/daerah/summary`,
+    `${APIBASE}/absensi-generus/daerah/summary`,
     {
       query: {
         kelasPengajian: namaKelas,
@@ -18,17 +18,14 @@
     }
   );
 
-  const query = reactive({
-    search: "",
+  const query = reactive<QueryType>({
     page: 1,
-    desaId: "",
-    kelompokId: "",
-    kelasPengajian: namaKelas,
+    kelasPengajian: namaKelas.value,
   });
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
   }, 300);
-  const { data, status } = await useFetch(`${APIBASE}/absensi-desa/daerah`, {
+  const { data, status } = await useFetch(`${APIBASE}/absensi-generus/daerah`, {
     query,
   });
 

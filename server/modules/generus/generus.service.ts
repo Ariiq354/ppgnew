@@ -22,7 +22,7 @@ import {
   getAllGenerusChart,
   getAllGenerusExclude,
   getAllGenerusExport,
-  getCountGenerusExclude,
+  getCountGenerusPerKelompok,
   getGenerusById,
   getGenerusOptionsKelompok,
   updateGenerus,
@@ -334,7 +334,7 @@ export async function getCountGenerusExcludeService(
   },
   kelasPengajian: (typeof kelasGenerusEnum)[number]
 ) {
-  return getCountGenerusExclude(params, kelasPengajian);
+  return getCountGenerusPerKelompok({ ...params, kelasPengajian });
 }
 
 export async function getAllGenerusExcludeService(

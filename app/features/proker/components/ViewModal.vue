@@ -1,16 +1,16 @@
 <script setup lang="ts">
   import { bulanEnum, statusProkerEnum } from "~~/shared/enum";
-  import type { DataReturn } from "../types";
+  import type { Schema } from "../constants";
 
   const openModel = defineModel<boolean>("open");
 
   defineProps<{
-    data: DataReturn | undefined;
+    data: Schema;
   }>();
 </script>
 
 <template>
-  <UModal v-model:open="openModel" title="Detail Pengajar" class="max-w-4xl">
+  <UModal v-model:open="openModel" title="Detail Proker" class="max-w-4xl">
     <template #body>
       <div class="space-y-4">
         <UFormField label="Minggu Ke">

@@ -143,15 +143,15 @@ export async function getKelasByDaerahId(daerahId: number) {
   );
 }
 
-export async function getCountKelas(
-  params: {
-    kelompokId?: number;
-    desaId?: number;
-    daerahId?: number;
-  },
-  kelasPengajian: (typeof kelasGenerusEnum)[number]
-) {
-  const { daerahId, desaId, kelompokId } = params;
+export async function getCountKelasPerKelompok(params: {
+  kelasPengajian: (typeof kelasGenerusEnum)[number];
+  tahun?: number;
+  bulan?: number;
+  kelompokId?: number;
+  desaId?: number;
+  daerahId?: number;
+}) {
+  const { daerahId, desaId, kelompokId, kelasPengajian, bulan, tahun } = params;
 
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(kelasTable.nama, kelasPengajian),
@@ -160,19 +160,25 @@ export async function getCountKelas(
   if (daerahId) conditions.push(eq(desaTable.daerahId, daerahId));
   if (desaId) conditions.push(eq(kelompokTable.desaId, desaId));
   if (kelompokId) conditions.push(eq(kelasTable.kelompokId, kelompokId));
+  if (tahun)
+    conditions.push(sql`EXTRACT(YEAR FROM ${kelasTable.tanggal}) = ${tahun}`);
+  if (bulan)
+    conditions.push(sql`EXTRACT(MONTH FROM ${kelasTable.tanggal}) = ${bulan}`);
 
-  const [data] = await tryCatch(
-    "Failed to get count of Kelas",
-    db
-      .select({
-        count: count(),
-      })
-      .from(kelasTable)
-      .leftJoin(kelompokTable, eq(kelasTable.kelompokId, kelasTable.id))
-      .leftJoin(desaTable, eq(desaTable.id, kelompokTable.desaId))
-  );
+  const query = db
+    .select({
+      kelompokId: kelasTable.kelompokId,
+      count: count(),
+    })
+    .from(kelasTable)
+    .groupBy(kelasTable.kelompokId)
+    .where(and(...conditions))
+    .innerJoin(kelompokTable, eq(kelasTable.kelompokId, kelompokTable.id))
+    .innerJoin(desaTable, eq(desaTable.id, kelompokTable.desaId));
 
-  return data!.count;
+  const data = await tryCatch("Failed to get count of Kelas", query);
+
+  return data;
 }
 
 export async function createKelas(

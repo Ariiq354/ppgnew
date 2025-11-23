@@ -8,7 +8,7 @@
   import { useSubmit } from "~/composables/function";
   import { useToastError } from "~/composables/toast";
   import { openConfirmModal } from "~/composables/modal";
-  import { tahunOptions, bulanFilterOptions } from "~~/shared/contants";
+  import { tahunOptions, bulanFilterOptions } from "~~/shared/constants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();

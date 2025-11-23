@@ -6,6 +6,19 @@ export type QueryType = Partial<{
   kelompokId: number;
 }>;
 
+export type QueryTypeKelompok = Partial<{
+  page: number;
+  search: string;
+  status: string;
+}>;
+
+export type QueryTypeDesa = Partial<{
+  page: number;
+  search: string;
+  status: string;
+  kelompokId: number;
+}>;
+
 export type DataReturn = {
   id: number;
   nama: string;

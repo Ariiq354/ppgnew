@@ -78,7 +78,7 @@
                 ...(viewable
                   ? [
                       {
-                        label: "View Details",
+                        label: "Lihat Detail",
                         icon: "i-lucide-eye",
                         onSelect() {
                           emit("view", row.original);
@@ -103,7 +103,7 @@
                 ...(deletable
                   ? [
                       {
-                        label: "Delete",
+                        label: "Hapus",
                         icon: "i-lucide-trash-2",
                         color: "error",
                         onSelect() {

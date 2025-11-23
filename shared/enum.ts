@@ -86,4 +86,4 @@ export const bidangEnum = [
 
 export const statusProkerEnum = ["Pending", "Aktif", "Terlaksana"] as const;
 
-export const exclude = ["Pindah", "Mondok", "Tugas"] as const;
+export const exclude = ["Pindah", "Mondok", "Tugas", "Sudah Menikah"] as const;

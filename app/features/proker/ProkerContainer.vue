@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import { bulanEnum } from "~~/shared/enum";
   import {
-    columns,
     tahunOptions,
     mingguOptions,
     bidangOptions,
-  } from "./constants";
+  } from "~~/shared/constants";
+  import { columns } from "./constants";
   import type { DataReturn, QueryType } from "./types";
   import QueryModal from "./components/QueryModal.vue";
   import ViewModal from "./components/ViewModal.vue";

@@ -22,7 +22,7 @@ export async function getAbsensiPengurusMonitoringService(
   const musyawarah = await getAllMusyawarahOptionsService(daerahId);
 
   data.data = data.data.map((i) => {
-    const total = musyawarah.data.length;
+    const total = musyawarah.length;
     return {
       ...i,
       tanpaKeterangan: total - i.hadir - i.izin,

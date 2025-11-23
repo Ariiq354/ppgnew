@@ -1,6 +1,7 @@
 import { UBadge } from "#components";
 import type { TableColumn } from "@nuxt/ui";
-import { bidangEnum } from "~~/shared/enum";
+import { z } from "zod/mini";
+import { bidangEnum, bulanEnum } from "~~/shared/enum";
 
 const statusMap = {
   Pending: { label: "pending", color: "warning" as const },
@@ -71,19 +72,34 @@ export const columns: TableColumn<any>[] = [
   },
 ];
 
-export const bidangOptions = bidangEnum.map((value) => ({
-  value,
-  name: value
-    .split("_")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" "),
-}));
+export const schema = z.object({
+  id: z.optional(z.number()),
+  kegiatan: z.string().check(z.minLength(1, "Required")),
+  peserta: z.string().check(z.minLength(1, "Required")),
+  tahun: z.number().check(z.minimum(1, "Required")),
+  bulan: z.enum(bulanEnum),
+  mingguKe: z
+    .number()
+    .check(z.minimum(1, "Minngu minimal 1"), z.maximum(5, "Minggu maximal 5")),
+  biaya: z.number(),
+  keterangan: z.string().check(z.minLength(1, "Required")),
+  bidang: z.enum(bidangEnum),
+  status: z.enum(["Pending", "Aktif", "Terlaksana"]),
+});
 
-const currentYear = new Date().getFullYear();
-export const tahunOptions = [
-  String(currentYear - 1),
-  String(currentYear),
-  String(currentYear + 1),
-];
+export const getInitialFormData = (
+  bidang: (typeof bidangEnum)[number]
+): Schema => ({
+  id: undefined,
+  biaya: 0,
+  bidang,
+  bulan: "Januari",
+  kegiatan: "",
+  keterangan: "",
+  peserta: "",
+  tahun: 0,
+  mingguKe: 0,
+  status: "Pending",
+});
 
-export const mingguOptions = [1, 2, 3, 4, 5];
+export type Schema = z.infer<typeof schema>;

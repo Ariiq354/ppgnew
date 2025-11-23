@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { useConstantStore } from "~/stores/constant";
   import { APIBASE } from "~/utils";
-  import { bulanFilterOptions } from "~~/shared/contants";
+  import { bulanFilterOptions } from "~~/shared/constants";
   import { bulanOptions, tahunOptions } from "./_constants";
 
   const constantStore = useConstantStore();

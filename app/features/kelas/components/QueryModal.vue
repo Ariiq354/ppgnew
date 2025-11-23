@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { bulanFilterOptions, tahunOptions } from "~~/shared/contants";
+  import { bulanFilterOptions, tahunOptions } from "~~/shared/constants";
   import { kelasGenerusEnum } from "~~/shared/enum";
   import type { QueryType } from "../types";
 

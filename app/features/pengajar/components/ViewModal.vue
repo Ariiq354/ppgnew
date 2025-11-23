@@ -4,7 +4,7 @@
   const openModel = defineModel<boolean>("open");
 
   defineProps<{
-    data: DataReturn | undefined;
+    data: Partial<DataReturn> | undefined;
   }>();
 </script>
 

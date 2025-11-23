@@ -16,7 +16,7 @@
     page: 1,
   });
   watch(
-    () => [query.search, query.status, query.kelompokId],
+    () => [query.search, query.status, query.kelompokId, query.desaId],
     () => {
       if (query.page !== 1) query.page = 1;
     }

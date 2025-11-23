@@ -4,8 +4,10 @@ import { kelasGenerusEnum } from "~~/shared/enum";
 
 export const OGenerusAbsensiForDesaList = z.object({
   ...OPagination.def.shape,
-  search: z.string(),
-  kelompokId: z.optional(z.coerce.number()),
+  search: z.optional(z.string()),
+  tahun: z.optional(z.number()),
+  bulan: z.optional(z.number()),
+  kelompokId: z.optional(z.optional(z.coerce.number())),
   kelasPengajian: z.enum(kelasGenerusEnum),
 });
 
@@ -15,6 +17,8 @@ export type TGenerusAbsensiForDesaList = z.infer<
 
 export const OAbsensiKelasPengajianForDesaList = z.object({
   kelompokId: z.optional(z.coerce.number()),
+  tahun: z.optional(z.coerce.number()),
+  bulan: z.optional(z.coerce.number()),
   kelasPengajian: z.enum(kelasGenerusEnum),
 });
 
@@ -29,7 +33,7 @@ export const OGenerusAbsensiForDaerahList = z.object({
 
 export const OGenerusAbsensiForMudamudiList = z.object({
   ...OPagination.def.shape,
-  search: z.string(),
+  search: z.optional(z.string()),
   kelompokId: z.optional(z.coerce.number()),
   desaId: z.optional(z.coerce.number()),
 });

@@ -6,7 +6,7 @@
   import { useAuthStore } from "~/stores/auth";
   import { useConstantStore } from "~/stores/constant";
   import { APIBASE, type ExtractObjectType } from "~/utils";
-  import { bulanFilterOptions, tahunOptions } from "~~/shared/contants";
+  import { bulanFilterOptions, tahunOptions } from "~~/shared/constants";
   import type { Schema, QueryType } from "./_constants";
   import { columns, getInitialFormData, schema } from "./_constants";
 

@@ -1,5 +1,5 @@
 import {
-  getAbsensiGenerusForDaerahSummaryService,
+  getAbsensiGenerusSummaryService,
   OAbsensiKelasPengajianForMudamudiList,
 } from "~~/server/modules/absensi-generus";
 
@@ -10,10 +10,13 @@ export default defineEventHandler(async (event) => {
     OAbsensiKelasPengajianForMudamudiList.parse(q)
   );
 
-  const data = await getAbsensiGenerusForDaerahSummaryService(user.daerahId, {
-    ...query,
-    kelasPengajian: "Muda-mudi",
-  });
+  const data = await getAbsensiGenerusSummaryService(
+    { daerahId: user.daerahId },
+    {
+      ...query,
+      kelasPengajian: "Muda-mudi",
+    }
+  );
 
   return HttpResponse(data);
 });

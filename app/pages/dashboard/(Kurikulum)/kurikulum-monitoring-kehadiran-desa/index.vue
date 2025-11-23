@@ -5,12 +5,12 @@
   import { kelasGenerusEnum } from "~~/shared/enum";
 
   const constantStore = useConstantStore();
-  constantStore.setTitle("Kurikulum / Monitoring Kehadiran Kelompok");
+  constantStore.setTitle("Kurikulum / Monitoring Kehadiran Desa");
   const authStore = useAuthStore();
 
   const namaKelas = ref<(typeof kelasGenerusEnum)[number]>("Muda-mudi");
   const { data: summary } = await useFetch(
-    `${APIBASE}/absensi-generus/daerah/summary`,
+    `${APIBASE}/absensi-desa/daerah/summary`,
     {
       query: {
         kelasPengajian: namaKelas,
@@ -28,7 +28,7 @@
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
   }, 300);
-  const { data, status } = await useFetch(`${APIBASE}/absensi-generus/daerah`, {
+  const { data, status } = await useFetch(`${APIBASE}/absensi-desa/daerah`, {
     query,
   });
 

@@ -1,7 +1,4 @@
-import {
-  getAbsensiGenerusMonitoringForDaerahService,
-  OGenerusAbsensiForDaerahList,
-} from "~~/server/modules/absensi-generus";
+import { OGenerusAbsensiForDaerahList } from "~~/server/modules/absensi-generus";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { kurikulum: ["view"] });
