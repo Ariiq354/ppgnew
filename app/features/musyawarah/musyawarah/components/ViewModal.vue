@@ -9,7 +9,7 @@
 </script>
 
 <template>
-  <UModal v-model:open="openModel" title="Detail Proker" class="max-w-4xl">
+  <UModal v-model:open="openModel" title="Detail Musyawarah" class="max-w-4xl">
     <template #body>
       <div class="space-y-4">
         <UFormField label="Nama Musyawarah" name="nama">
