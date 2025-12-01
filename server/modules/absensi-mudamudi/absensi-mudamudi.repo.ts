@@ -1,4 +1,14 @@
-import { and, count, eq, inArray, like, or, type SQL, sql } from "drizzle-orm";
+import {
+  and,
+  count,
+  desc,
+  eq,
+  inArray,
+  like,
+  or,
+  type SQL,
+  sql,
+} from "drizzle-orm";
 import { db } from "~~/server/database";
 import { generusTable } from "~~/server/database/schema/generus";
 import {
@@ -160,7 +170,8 @@ export async function getAllMudamudiSummary(
       absensiGenerusMudaMudiTable,
       eq(generusTable.id, absensiGenerusMudaMudiTable.generusId)
     )
-    .groupBy(generusTable.id, generusTable.nama);
+    .groupBy(generusTable.id, generusTable.nama)
+    .orderBy(desc(generusTable.id));
 
   const total = await tryCatch(
     "Failed to get total count of Mudamudi Summary",

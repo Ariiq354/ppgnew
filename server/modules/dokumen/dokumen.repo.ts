@@ -1,4 +1,4 @@
-import { and, eq, inArray } from "drizzle-orm";
+import { and, desc, eq, inArray } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { dokumenTable } from "~~/server/database/schema/dokumen";
 import type { TPagination } from "~~/server/utils/dto/common.dto";
@@ -19,7 +19,8 @@ export async function getAllDokumen(
       createdAt: dokumenTable.createdAt,
     })
     .from(dokumenTable)
-    .where(eq(dokumenTable.daerahId, daerahId));
+    .where(eq(dokumenTable.daerahId, daerahId))
+    .orderBy(desc(dokumenTable.id));
 
   const total = await tryCatch("Failed to get total dokumen", db.$count(query));
   const data = await tryCatch(

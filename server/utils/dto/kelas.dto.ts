@@ -10,14 +10,14 @@ export type TNamaTanggal = z.infer<typeof ONamaTanggal>;
 
 export const ONamaMudamudiTanggal = z.object({
   nama: z.enum(kelasMudamudiEnum),
-  keterangan: z.string(),
+  keterangan: z._default(z.string(), ""),
   tanggal: z.string(),
 });
 export type TNamaMudamudiTanggal = z.infer<typeof ONamaMudamudiTanggal>;
 
 export const ONamaGenerusTanggal = z.object({
   nama: z.enum(kelasGenerusEnum),
-  keterangan: z.string(),
+  keterangan: z._default(z.string(), ""),
   tanggal: z.string(),
 });
 export type TNamaGenerusTanggal = z.infer<typeof ONamaGenerusTanggal>;

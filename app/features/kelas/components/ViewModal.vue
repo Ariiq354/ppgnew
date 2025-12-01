@@ -1,10 +1,11 @@
 <script setup lang="ts">
+  import type { Schema } from "../constants";
   import type { DataReturn } from "../types";
 
   const openModel = defineModel<boolean>("open");
 
   defineProps<{
-    data: DataReturn | undefined;
+    data: Schema;
   }>();
 </script>
 
