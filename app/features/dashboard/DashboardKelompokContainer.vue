@@ -1,16 +1,10 @@
 <script setup lang="ts">
-  import { useConstantStore } from "~/stores/constant";
   import { APIBASE } from "~/utils";
-
-  const constantStore = useConstantStore();
-  constantStore.setTitle("PJP Kelompok / Dashboard");
 
   const { data } = await useFetch(`${APIBASE}/dashboard/kelompok`);
 </script>
 
 <template>
-  <Title>PJP Kelompok | Dashbaord</Title>
-
   <main class="grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-8">
     <PercentCard
       :percent="data!.data.percentPaud"
