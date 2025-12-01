@@ -1,4 +1,4 @@
-import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
+import { and, desc, eq, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { pengajarTable } from "~~/server/database/schema/pengajar";
 import { desaTable, kelompokTable } from "~~/server/database/schema/wilayah";
@@ -51,7 +51,8 @@ export async function getAllPengajar(
     })
     .from(pengajarTable)
     .where(and(...conditions))
-    .innerJoin(kelompokTable, eq(pengajarTable.kelompokId, kelompokTable.id));
+    .innerJoin(kelompokTable, eq(pengajarTable.kelompokId, kelompokTable.id))
+    .orderBy(desc(pengajarTable.id));
 
   const total = await tryCatch(
     "Failed to get total count of Pengajar",

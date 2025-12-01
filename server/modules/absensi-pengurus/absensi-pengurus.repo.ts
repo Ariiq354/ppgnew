@@ -1,4 +1,14 @@
-import { and, count, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
+import {
+  and,
+  count,
+  desc,
+  eq,
+  inArray,
+  like,
+  or,
+  sql,
+  type SQL,
+} from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
   absensiPengurusTable,
@@ -70,7 +80,8 @@ export async function getAllPengurusAbsensi(
       absensiPengurusTable,
       eq(pengurusTable.id, absensiPengurusTable.pengurusId)
     )
-    .groupBy(pengurusTable.id, pengurusTable.nama, pengurusTable.bidang);
+    .groupBy(pengurusTable.id, pengurusTable.nama, pengurusTable.bidang)
+    .orderBy(desc(pengurusTable.id));
 
   const total = await tryCatch(
     "Failed to get total Pengurus",

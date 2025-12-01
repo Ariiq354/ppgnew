@@ -1,4 +1,4 @@
-import { eq, inArray } from "drizzle-orm";
+import { desc, eq, inArray } from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
   daerahTable,
@@ -15,7 +15,8 @@ export async function getAllDaerah({ limit, page }: TPagination) {
       id: daerahTable.id,
       name: daerahTable.name,
     })
-    .from(daerahTable);
+    .from(daerahTable)
+    .orderBy(desc(daerahTable.id));
 
   const total = await tryCatch("Failed to get total daerah", db.$count(query));
 

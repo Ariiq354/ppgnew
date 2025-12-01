@@ -1,4 +1,4 @@
-import { eq, inArray } from "drizzle-orm";
+import { desc, eq, inArray } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { desaTable } from "~~/server/database/schema/wilayah";
 import type { TDesaCreate, TDesaList } from "./desa.dto";
@@ -12,7 +12,8 @@ export async function getAllDesa({ limit, page, daerahId }: TDesaList) {
       daerahId: desaTable.daerahId,
     })
     .from(desaTable)
-    .where(eq(desaTable.daerahId, daerahId));
+    .where(eq(desaTable.daerahId, daerahId))
+    .orderBy(desc(desaTable.id));
 
   const total = await tryCatch("Failed to get total desa", db.$count(query));
   const data = await tryCatch(

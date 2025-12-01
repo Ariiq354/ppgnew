@@ -1,4 +1,14 @@
-import { and, count, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
+import {
+  and,
+  count,
+  desc,
+  eq,
+  inArray,
+  like,
+  or,
+  sql,
+  type SQL,
+} from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
   absensiJamaahKelompokTable,
@@ -65,7 +75,8 @@ export async function getAllJamaahAbsensi(
       absensiJamaahKelompokTable,
       eq(jamaahTable.id, absensiJamaahKelompokTable.jamaahId)
     )
-    .groupBy(jamaahTable.id, jamaahTable.nama);
+    .groupBy(jamaahTable.id, jamaahTable.nama)
+    .orderBy(desc(jamaahTable.id));
 
   const total = await tryCatch(
     "Failed to get total count of Jamaah Absensi",
