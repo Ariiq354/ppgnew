@@ -3,8 +3,8 @@ import {
   count,
   desc,
   eq,
+  ilike,
   inArray,
-  like,
   or,
   type SQL,
   sql,
@@ -164,7 +164,7 @@ export async function getAllGenerusDesaSummary(
   if (search) {
     const searchCondition = `%${search}%`;
 
-    conditions.push(or(like(generusTable.nama, searchCondition)));
+    conditions.push(or(ilike(generusTable.nama, searchCondition)));
   }
 
   if (daerahId) conditions.push(eq(generusTable.daerahId, daerahId));

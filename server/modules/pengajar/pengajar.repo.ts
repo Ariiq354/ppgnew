@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, like, or, type SQL } from "drizzle-orm";
+import { and, desc, eq, ilike, inArray, like, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { pengajarTable } from "~~/server/database/schema/pengajar";
 import { desaTable, kelompokTable } from "~~/server/database/schema/wilayah";
@@ -18,8 +18,8 @@ export async function getAllPengajar(
     const searchCondition = `%${search}%`;
     conditions.push(
       or(
-        like(pengajarTable.nama, searchCondition),
-        like(pengajarTable.pendidikan, searchCondition)
+        ilike(pengajarTable.nama, searchCondition),
+        ilike(pengajarTable.pendidikan, searchCondition)
       )
     );
   }

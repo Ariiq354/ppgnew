@@ -1,4 +1,4 @@
-import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
+import { and, eq, inArray, ilike, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { pengajianTable } from "~~/server/database/schema/kelompok";
 import type { TSearchPagination } from "~~/server/utils/dto/common.dto";
@@ -14,7 +14,7 @@ export async function getAllPengajian(
 
   if (search) {
     const searchCondition = `%${search}%`;
-    conditions.push(or(like(pengajianTable.nama, searchCondition)));
+    conditions.push(or(ilike(pengajianTable.nama, searchCondition)));
   }
 
   const query = db

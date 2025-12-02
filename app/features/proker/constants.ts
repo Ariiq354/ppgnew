@@ -11,6 +11,10 @@ const statusMap = {
 
 export const columns: TableColumn<any>[] = [
   {
+    accessorKey: "kegiatan",
+    header: "Kegiatan",
+  },
+  {
     accessorKey: "bidang",
     header: "Bidang",
     cell: ({ row }) =>
@@ -21,15 +25,19 @@ export const columns: TableColumn<any>[] = [
   },
   {
     accessorKey: "mingguKe",
-    header: "Minggu",
+    header: () => h("div", { class: "text-center" }, "Minggu"),
+    cell: ({ row }) =>
+      h("div", { class: "text-center" }, row.original.mingguKe),
   },
   {
     accessorKey: "bulan",
-    header: "Bulan",
+    header: () => h("div", { class: "text-center" }, "Bulan"),
+    cell: ({ row }) => h("div", { class: "text-center" }, row.original.bulan),
   },
   {
     accessorKey: "tahun",
-    header: "Tahun",
+    header: () => h("div", { class: "text-center" }, "Tahun"),
+    cell: ({ row }) => h("div", { class: "text-center" }, row.original.tahun),
   },
   {
     accessorKey: "status",
@@ -49,14 +57,14 @@ export const columns: TableColumn<any>[] = [
   },
   {
     accessorKey: "biaya",
-    header: "Biaya",
+    header: () => h("div", { class: "text-right" }, "Biaya"),
     cell: ({ row }) => {
       const formatted = new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
       }).format(row.getValue("biaya"));
 
-      return formatted;
+      return h("div", { class: "text-right" }, formatted);
     },
     footer: ({ table }) => {
       const rows = table.getRowModel().rows;
@@ -67,7 +75,7 @@ export const columns: TableColumn<any>[] = [
         currency: "IDR",
       }).format(totalBiaya);
 
-      return `Total: ${formatted}`;
+      return h("div", { class: "text-right" }, `Total: ${formatted}`);
     },
   },
 ];

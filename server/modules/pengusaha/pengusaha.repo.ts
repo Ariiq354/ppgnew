@@ -1,4 +1,4 @@
-import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
+import { and, eq, inArray, ilike, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { pengusahaTable } from "~~/server/database/schema/kemandirian";
 import type { TSearchPagination } from "~~/server/utils/dto/common.dto";
@@ -17,10 +17,10 @@ export async function getAllPengusaha(
     const searchCondition = `%${search}%`;
     conditions.push(
       or(
-        like(pengusahaTable.nama, searchCondition),
-        like(pengusahaTable.bidangPekerjaan, searchCondition),
-        like(pengusahaTable.namaUsaha, searchCondition),
-        like(pengusahaTable.noTelepon, searchCondition)
+        ilike(pengusahaTable.nama, searchCondition),
+        ilike(pengusahaTable.bidangPekerjaan, searchCondition),
+        ilike(pengusahaTable.namaUsaha, searchCondition),
+        ilike(pengusahaTable.noTelepon, searchCondition)
       )
     );
   }

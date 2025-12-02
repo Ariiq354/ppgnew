@@ -1,4 +1,4 @@
-import { and, eq, inArray, like, type SQL } from "drizzle-orm";
+import { and, eq, inArray, ilike, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
   laporanMusyawarahMuslimunTable,
@@ -73,7 +73,7 @@ export async function getLaporanMuslimunSummary(
 ) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(kelompokTable.desaId, desaId),
-    like(musyawarahMuslimunTable.tanggal, `${tahun}-${bulan}%`),
+    ilike(musyawarahMuslimunTable.tanggal, `${tahun}-${bulan}%`),
   ];
 
   const data = await tryCatch(

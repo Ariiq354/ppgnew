@@ -3,8 +3,8 @@ import {
   count,
   desc,
   eq,
+  ilike,
   inArray,
-  like,
   or,
   sql,
   type SQL,
@@ -60,8 +60,8 @@ export async function getAllPengurusAbsensi(
 
     conditions.push(
       or(
-        like(pengurusTable.nama, searchCondition),
-        like(pengurusTable.pendidikan, searchCondition)
+        ilike(pengurusTable.nama, searchCondition),
+        ilike(pengurusTable.pendidikan, searchCondition)
       )
     );
   }

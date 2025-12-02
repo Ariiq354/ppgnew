@@ -1,4 +1,4 @@
-import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
+import { and, eq, inArray, ilike, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { prokerTable } from "~~/server/database/schema/bidang";
 import type { TProkerCreate, TProkerList } from "./proker.dto";
@@ -17,9 +17,9 @@ export async function getAllProker(
     const searchCondition = `%${search}%`;
     conditions.push(
       or(
-        like(prokerTable.kegiatan, searchCondition),
-        like(prokerTable.keterangan, searchCondition),
-        like(prokerTable.peserta, searchCondition)
+        ilike(prokerTable.kegiatan, searchCondition),
+        ilike(prokerTable.keterangan, searchCondition),
+        ilike(prokerTable.peserta, searchCondition)
       )
     );
   }

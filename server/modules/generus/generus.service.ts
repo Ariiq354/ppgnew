@@ -1,7 +1,7 @@
 import type { MultiPartData } from "h3";
 import type { TGenerusAbsensiList } from "~~/server/utils/dto/absensi.dto";
 import type { TGenerusGenericList } from "~~/server/utils/dto/generus.dto";
-import type { kelasGenerusEnum } from "~~/shared/enum";
+import type { kelasGenerusEnum, statusGenerusEnum } from "~~/shared/enum";
 import ENV from "~~/shared/env";
 import { getDesaByDaerahIdService } from "../desa";
 import {
@@ -16,7 +16,9 @@ import {
 } from "./generus.dto";
 import {
   createGenerus,
+  createGenerusStatus,
   deleteGenerus,
+  deleteGenerusStatusByGenerusId,
   getAllGenerus,
   getAllGenerus69,
   getAllGenerusChart,
@@ -225,7 +227,7 @@ export async function createGenerusService(
 
   const parsed = OGenerusCreate.parse(fields);
 
-  await createGenerus(
+  const returning = await createGenerus(
     {
       daerahId: user.daerahId,
       desaId: user.desaId!,
@@ -233,6 +235,15 @@ export async function createGenerusService(
     },
     parsed
   );
+
+  if (parsed.status.length > 0) {
+    const data = parsed.status.map((i) => ({
+      generusId: returning[0]!.insertedId,
+      status: i as (typeof statusGenerusEnum)[number],
+    }));
+
+    await createGenerusStatus(data);
+  }
 }
 
 export async function deleteGenerusService(user: UserWithId, body: TDelete) {
@@ -316,6 +327,17 @@ export async function updateGenerusService(
   }
 
   await updateGenerus(id, user.kelompokId!, parsed);
+
+  await deleteGenerusStatusByGenerusId(id);
+
+  if (parsed.status.length > 0) {
+    const data = parsed.status.map((i) => ({
+      generusId: id,
+      status: i as (typeof statusGenerusEnum)[number],
+    }));
+
+    await createGenerusStatus(data);
+  }
 }
 
 export async function getGenerusOptionsKelompokService(kelompokId: number) {

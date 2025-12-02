@@ -19,20 +19,25 @@ export const columns: TableColumn<any>[] = [
   },
   {
     accessorKey: "gender",
-    header: "Jenis Kelamin",
+    header: () => h("div", { class: "text-center" }, "Jenis Kelamin"),
+    cell: ({ row }) => h("div", { class: "text-center" }, row.original.gender),
   },
   {
-    accessorKey: "tanggalTugas",
-    header: "Tanggal Tugas",
-    cell: ({ row }) => formatDate(row.getValue("tanggalTugas")),
+    accessorKey: "namaKelompok",
+    header: () => h("div", { class: "text-center" }, "Nama Kelompok"),
+    cell: ({ row }) =>
+      h("div", { class: "text-center" }, row.original.namaKelompok),
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: () => h("div", { class: "text-center" }, "Status"),
+    cell: ({ row }) => h("div", { class: "text-center" }, row.original.status),
   },
   {
     accessorKey: "noTelepon",
-    header: "No. Telepon",
+    header: () => h("div", { class: "text-center" }, "No Telepon"),
+    cell: ({ row }) =>
+      h("div", { class: "text-center" }, row.original.noTelepon),
   },
 ];
 
