@@ -1,4 +1,4 @@
-import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
+import { and, eq, inArray, ilike, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { musyawarahTable } from "~~/server/database/schema/pengurus";
 import type { TSearchPagination } from "~~/server/utils/dto/common.dto";
@@ -14,7 +14,7 @@ export async function getAllMusyawarah(
 
   if (search) {
     const searchCondition = `%${search}%`;
-    conditions.push(or(like(musyawarahTable.nama, searchCondition)));
+    conditions.push(or(ilike(musyawarahTable.nama, searchCondition)));
   }
 
   const query = db

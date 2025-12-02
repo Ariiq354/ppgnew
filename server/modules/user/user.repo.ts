@@ -1,4 +1,4 @@
-import { and, eq, like, ne, or, type SQL } from "drizzle-orm";
+import { and, eq, ilike, ne, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { userTable } from "~~/server/database/schema/auth";
 import type {
@@ -21,11 +21,11 @@ export async function getAllUser(
 
     conditions.push(
       or(
-        like(userTable.name, searchCondition),
-        like(userTable.email, searchCondition),
-        like(userTable.username, searchCondition),
-        like(userTable.displayUsername, searchCondition),
-        like(userTable.role, searchCondition)
+        ilike(userTable.name, searchCondition),
+        ilike(userTable.email, searchCondition),
+        ilike(userTable.username, searchCondition),
+        ilike(userTable.displayUsername, searchCondition),
+        ilike(userTable.role, searchCondition)
       )
     );
   }

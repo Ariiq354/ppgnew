@@ -1,4 +1,4 @@
-import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
+import { and, eq, inArray, ilike, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { pengurusTable } from "~~/server/database/schema/pengurus";
 import type { TSearchPagination } from "~~/server/utils/dto/common.dto";
@@ -18,8 +18,8 @@ export async function getAllPengurus(
 
     conditions.push(
       or(
-        like(pengurusTable.nama, searchCondition),
-        like(pengurusTable.pendidikan, searchCondition)
+        ilike(pengurusTable.nama, searchCondition),
+        ilike(pengurusTable.pendidikan, searchCondition)
       )
     );
   }

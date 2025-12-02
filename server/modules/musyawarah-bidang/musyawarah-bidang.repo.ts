@@ -1,4 +1,4 @@
-import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
+import { and, eq, inArray, ilike, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { musyawarahBidangTable } from "~~/server/database/schema/bidang";
 import type {
@@ -19,7 +19,7 @@ export async function getAllMusyawarahBidang(
 
   if (search) {
     const searchCondition = `%${search}%`;
-    conditions.push(or(like(musyawarahBidangTable.nama, searchCondition)));
+    conditions.push(or(ilike(musyawarahBidangTable.nama, searchCondition)));
   }
 
   const query = db

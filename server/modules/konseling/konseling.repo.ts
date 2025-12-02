@@ -1,4 +1,4 @@
-import { and, eq, inArray, like, or, type SQL } from "drizzle-orm";
+import { and, eq, inArray, ilike, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { generusTable } from "~~/server/database/schema/generus";
 import { generusKonselingTable } from "~~/server/database/schema/kelompok";
@@ -18,7 +18,7 @@ export async function getAllKonseling(
   if (search) {
     const searchCondition = `%${search}%`;
 
-    conditions.push(or(like(generusTable.nama, searchCondition)));
+    conditions.push(or(ilike(generusTable.nama, searchCondition)));
   }
 
   if (daerahId) conditions.push(eq(desaTable.daerahId, daerahId));

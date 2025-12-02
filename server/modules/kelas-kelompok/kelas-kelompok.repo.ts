@@ -1,4 +1,4 @@
-import { and, count, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
+import { and, count, eq, inArray, ilike, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { kelasTable } from "~~/server/database/schema/generus";
 import { desaTable, kelompokTable } from "~~/server/database/schema/wilayah";
@@ -20,7 +20,7 @@ export async function getAllKelas(
 
   if (search) {
     const searchCondition = `%${search}%`;
-    conditions.push(or(like(kelasTable.nama, searchCondition)));
+    conditions.push(or(ilike(kelasTable.nama, searchCondition)));
   }
 
   if (nama) {

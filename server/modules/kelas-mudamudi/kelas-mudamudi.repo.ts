@@ -1,4 +1,4 @@
-import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
+import { and, eq, inArray, ilike, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { kelasMudaMudiTable } from "~~/server/database/schema/mudamudi";
 import type {
@@ -19,7 +19,7 @@ export async function getAllKelasMudamudi(
 
   if (search) {
     const searchCondition = `%${search}%`;
-    conditions.push(or(like(kelasMudaMudiTable.nama, searchCondition)));
+    conditions.push(or(ilike(kelasMudaMudiTable.nama, searchCondition)));
   }
 
   if (nama) {

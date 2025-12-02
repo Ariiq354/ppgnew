@@ -1,4 +1,4 @@
-import { and, eq, like, or, sql, type SQL } from "drizzle-orm";
+import { and, eq, ilike, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
   generusStatusTable,
@@ -21,7 +21,7 @@ export async function getAllGenerusTahfidz(
 
   if (search) {
     const searchCondition = `%${search}%`;
-    conditions.push(or(like(generusTable.nama, searchCondition)));
+    conditions.push(or(ilike(generusTable.nama, searchCondition)));
   }
 
   if (desaId) {
@@ -80,7 +80,7 @@ export async function getAllTahfidzExclude(
 
   if (search) {
     const searchCondition = `%${search}%`;
-    conditions.push(or(like(generusTable.nama, searchCondition)));
+    conditions.push(or(ilike(generusTable.nama, searchCondition)));
   }
 
   const query = db

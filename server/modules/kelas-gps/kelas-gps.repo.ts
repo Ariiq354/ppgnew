@@ -1,4 +1,4 @@
-import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
+import { and, eq, inArray, ilike, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { kelasGpsTable } from "~~/server/database/schema/desa";
 import type { TKelas, TNamaTanggal } from "~~/server/utils/dto/kelas.dto";
@@ -14,7 +14,7 @@ export async function getAllKelasGps(
 
   if (search) {
     const searchCondition = `%${search}%`;
-    conditions.push(or(like(kelasGpsTable.nama, searchCondition)));
+    conditions.push(or(ilike(kelasGpsTable.nama, searchCondition)));
   }
 
   if (bulan) {

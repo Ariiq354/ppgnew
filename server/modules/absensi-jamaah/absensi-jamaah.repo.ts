@@ -3,8 +3,8 @@ import {
   count,
   desc,
   eq,
+  ilike,
   inArray,
-  like,
   or,
   sql,
   type SQL,
@@ -59,7 +59,7 @@ export async function getAllJamaahAbsensi(
 
   if (search) {
     const searchCondition = `%${search}%`;
-    conditions.push(or(like(jamaahTable.nama, searchCondition)));
+    conditions.push(or(ilike(jamaahTable.nama, searchCondition)));
   }
 
   const query = db

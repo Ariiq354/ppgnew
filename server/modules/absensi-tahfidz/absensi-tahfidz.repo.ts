@@ -3,8 +3,8 @@ import {
   count,
   desc,
   eq,
+  ilike,
   inArray,
-  like,
   or,
   type SQL,
   sql,
@@ -101,7 +101,7 @@ export async function getAllTahfidzSummary(
   if (search) {
     const searchCondition = `%${search}%`;
 
-    conditions.push(or(like(generusTable.nama, searchCondition)));
+    conditions.push(or(ilike(generusTable.nama, searchCondition)));
   }
 
   const query = db

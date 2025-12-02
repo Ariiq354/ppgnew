@@ -1,4 +1,4 @@
-import { and, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
+import { and, eq, inArray, ilike, or, sql, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
   generusStatusTable,
@@ -26,7 +26,7 @@ export async function getAllGenerusKeputrian(
 
   if (search) {
     const searchCondition = `%${search}%`;
-    conditions.push(or(like(generusTable.nama, searchCondition)));
+    conditions.push(or(ilike(generusTable.nama, searchCondition)));
   }
 
   if (kelasPengajian === "Usia Mandiri") {
@@ -94,7 +94,7 @@ export async function getAllKeputrianExclude(
 
   if (search) {
     const searchCondition = `%${search}%`;
-    conditions.push(or(like(generusTable.nama, searchCondition)));
+    conditions.push(or(ilike(generusTable.nama, searchCondition)));
   }
 
   if (kelasPengajian === "Usia Mandiri") {

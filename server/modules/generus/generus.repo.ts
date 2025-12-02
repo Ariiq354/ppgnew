@@ -4,7 +4,7 @@ import {
   desc,
   eq,
   inArray,
-  like,
+  ilike,
   or,
   sql,
   type SQL,
@@ -18,7 +18,11 @@ import { kelompokTable } from "~~/server/database/schema/wilayah";
 import { getGenerusByStatusSQL } from "~~/server/utils/common";
 import type { TWilayah } from "~~/server/utils/dto/common.dto";
 import type { TGenerusGenericList } from "~~/server/utils/dto/generus.dto";
-import { exclude, type kelasGenerusEnum } from "~~/shared/enum";
+import {
+  exclude,
+  type statusGenerusEnum,
+  type kelasGenerusEnum,
+} from "~~/shared/enum";
 import type { TGenerusCreate } from "./generus.dto";
 
 export async function getAllGenerus(
@@ -38,7 +42,7 @@ export async function getAllGenerus(
 
   if (search) {
     const searchCondition = `%${search}%`;
-    conditions.push(or(like(generusTable.nama, searchCondition)));
+    conditions.push(or(ilike(generusTable.nama, searchCondition)));
   }
 
   if (kelasPengajian) {
@@ -122,7 +126,7 @@ export async function getAllGenerusExclude(
 
   if (search) {
     const searchCondition = `%${search}%`;
-    conditions.push(or(like(generusTable.nama, searchCondition)));
+    conditions.push(or(ilike(generusTable.nama, searchCondition)));
   }
 
   if (kelasPengajian) {
@@ -331,11 +335,23 @@ export async function getCountGenerusPerKelompok(params: {
 export async function createGenerus(wilayah: TWilayah, data: TGenerusCreate) {
   return await tryCatch(
     "Failed to create Generus",
-    db.insert(generusTable).values({
-      ...data,
-      ...wilayah,
-      tanggalMasukKelas: new Date(),
-    })
+    db
+      .insert(generusTable)
+      .values({
+        ...data,
+        ...wilayah,
+        tanggalMasukKelas: new Date(),
+      })
+      .returning({ insertedId: generusTable.id })
+  );
+}
+
+export async function createGenerusStatus(
+  data: { generusId: number; status: (typeof statusGenerusEnum)[number] }[]
+) {
+  return await tryCatch(
+    "Failed to create Generus",
+    db.insert(generusStatusTable).values(data)
   );
 }
 
@@ -382,5 +398,12 @@ export async function deleteGenerus(kelompokId: number, id: number[]) {
           eq(generusTable.kelompokId, kelompokId)
         )
       )
+  );
+}
+
+export async function deleteGenerusStatusByGenerusId(id: number) {
+  return await tryCatch(
+    "Failed to delete Generus",
+    db.delete(generusStatusTable).where(eq(generusTable.id, id))
   );
 }
