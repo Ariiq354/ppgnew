@@ -1,14 +1,16 @@
+import type { TableColumn } from "@nuxt/ui";
 import { z } from "zod/mini";
 import { kelasGenerusEnum } from "~~/shared/enum";
 
-export const columns = [
+export const columns: TableColumn<any>[] = [
   {
     accessorKey: "nama",
     header: "Nama Pengajian",
   },
   {
     accessorKey: "tanggal",
-    header: "Tanggal Kegiatan",
+    header: () => h("div", { class: "text-center" }, "Tanggal Kegiatan"),
+    cell: ({ row }) => h("div", { class: "text-center" }, row.original.tanggal),
   },
   {
     accessorKey: "keterangan",

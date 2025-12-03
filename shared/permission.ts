@@ -56,6 +56,8 @@ export const rolesDeclaration = {
     olahraga_seni: ["view"],
     kegiatan_muda_mudi: ["view"],
     tahfidz: ["view"],
+    pjp_desa: ["view"],
+    pjp_kelompok: ["view"],
   }),
   desa: ac.newRole({
     pjp_desa: ["manage", "view"],

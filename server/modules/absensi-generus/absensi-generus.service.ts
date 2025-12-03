@@ -89,7 +89,9 @@ export async function getAbsensiGenerusSummaryService(
     countGenerus: countGenerus.reduce((a, i) => (a += i.count), 0),
     kehadiran:
       percentage.length > 0
-        ? percentage.reduce((sum, p) => sum + p, 0) / percentage.length
+        ? Math.round(
+            percentage.reduce((sum, p) => sum + p, 0) / percentage.length
+          )
         : 0,
   };
 

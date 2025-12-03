@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   );
 
   const data = await getAbsensiGenerusMonitoringService(
-    user.kelompokId!,
+    { kelompokId: user.kelompokId! },
     query
   );
 

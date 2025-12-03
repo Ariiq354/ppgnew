@@ -7,7 +7,10 @@ export default defineEventHandler(async (event) => {
     OAbsensiKelasPengajianGenerusList.parse(q)
   );
 
-  const data = await getAbsensiGenerusSummaryService(user.kelompokId!, query);
+  const data = await getAbsensiGenerusSummaryService(
+    { kelompokId: user.kelompokId! },
+    query
+  );
 
   return HttpResponse(data);
 });
