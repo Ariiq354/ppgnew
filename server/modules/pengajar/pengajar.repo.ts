@@ -1,4 +1,4 @@
-import { and, desc, eq, ilike, inArray, like, or, type SQL } from "drizzle-orm";
+import { and, desc, eq, ilike, inArray, or, type SQL } from "drizzle-orm";
 import { db } from "~~/server/database";
 import { pengajarTable } from "~~/server/database/schema/pengajar";
 import { desaTable, kelompokTable } from "~~/server/database/schema/wilayah";

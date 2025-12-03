@@ -7,19 +7,24 @@ export const columns: TableColumn<any>[] = [
   },
   {
     accessorKey: "kehadiran",
-    header: "Kehadiran",
-    cell: ({ row }) => `${row.original.kehadiran}%`,
+    header: () => h("div", { class: "text-center" }, "Kehadiran"),
+    cell: ({ row }) =>
+      h("div", { class: "text-center" }, `${row.original.kehadiran}%`),
   },
   {
     accessorKey: "hadir",
-    header: "Hadir",
+    header: () => h("div", { class: "text-center" }, "Hadir"),
+    cell: ({ row }) => h("div", { class: "text-center" }, row.original.hadir),
   },
   {
     accessorKey: "izin",
-    header: "Izin",
+    header: () => h("div", { class: "text-center" }, "Izin"),
+    cell: ({ row }) => h("div", { class: "text-center" }, row.original.izin),
   },
   {
     accessorKey: "tanpaKeterangan",
-    header: "Tanpa Keterangan",
+    header: () => h("div", { class: "text-center" }, "Tanpa Keterangan"),
+    cell: ({ row }) =>
+      h("div", { class: "text-center" }, row.original.tanpaKeterangan),
   },
 ];

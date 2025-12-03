@@ -19,20 +19,26 @@ export const columns: TableColumn<any>[] = [
   },
   {
     accessorKey: "gender",
-    header: "Jenis Kelamin",
+    header: () => h("div", { class: "text-center" }, "Jenis Kelamin"),
+    cell: ({ row }) => h("div", { class: "text-center" }, row.original.gender),
   },
   {
     accessorKey: "kelasSekolah",
-    header: "Kelas Sekolah",
+    header: () => h("div", { class: "text-center" }, "Kelas Sekolah"),
+    cell: ({ row }) =>
+      h("div", { class: "text-center" }, row.original.kelasSekolah),
   },
   {
     accessorKey: "kelasPengajian",
-    header: "Kelas Pengajian",
+    header: () => h("div", { class: "text-center" }, "Kelas Pengajian"),
+    cell: ({ row }) =>
+      h("div", { class: "text-center" }, row.original.kelasPengajian),
   },
   {
     accessorKey: "umur",
-    header: "Umur",
-    cell: ({ row }) => getAge(row.original.tanggalLahir),
+    header: () => h("div", { class: "text-center" }, "Umur"),
+    cell: ({ row }) =>
+      h("div", { class: "text-center" }, getAge(row.original.tanggalLahir)),
   },
 ];
 
