@@ -36,20 +36,70 @@
 <template>
   <Title>PJP Kelompok | Monitoring Kehadiran</Title>
   <main class="flex flex-col gap-4">
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <div class="sm: grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <UCard>
-        <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
-          <UIcon name="i-lucide-users" />
-          {{ summary?.data.countGenerus }}
-        </p>
-        <p class="text-muted">Total Generus</p>
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+              <UIcon name="i-lucide-users" />
+              {{ summary?.data.dataPaud.countGenerus }}
+            </p>
+            <p class="text-muted">Total Paud</p>
+          </div>
+          <div>
+            <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+              {{ summary?.data.dataPaud.kehadiran }}%
+            </p>
+          </div>
+        </div>
       </UCard>
       <UCard>
-        <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
-          <UIcon name="i-lucide-trending-up" />
-          {{ summary?.data.kehadiran }}%
-        </p>
-        <p class="text-muted">Kehadiran</p>
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+              <UIcon name="i-lucide-users" />
+              {{ summary?.data.dataCabeRawit.countGenerus }}
+            </p>
+            <p class="text-muted">Total Cabe Rawit</p>
+          </div>
+          <div>
+            <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+              {{ summary?.data.dataCabeRawit.kehadiran }}%
+            </p>
+          </div>
+        </div>
+      </UCard>
+      <UCard>
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+              <UIcon name="i-lucide-users" />
+              {{ summary?.data.dataPraremaja.countGenerus }}
+            </p>
+            <p class="text-muted">Total Praremaja</p>
+          </div>
+          <div>
+            <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+              {{ summary?.data.dataPraremaja.kehadiran }}%
+            </p>
+          </div>
+        </div>
+      </UCard>
+      <UCard>
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+              <UIcon name="i-lucide-users" />
+              {{ summary?.data.dataMudamudi.countGenerus }}
+            </p>
+            <p class="text-muted">Total Muda-mudi</p>
+          </div>
+          <div>
+            <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+              {{ summary?.data.dataMudamudi.kehadiran }}%
+            </p>
+          </div>
+        </div>
       </UCard>
     </div>
     <UCard>
