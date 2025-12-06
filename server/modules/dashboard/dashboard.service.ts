@@ -1,3 +1,4 @@
+import type { kelasGenerusEnum } from "~~/shared/enum";
 import { getAbsensiGenerusSummaryService } from "../absensi-generus";
 import { getAbsensiKeputrianByDaerahIdService } from "../absensi-keputrian";
 import { getAbsensiMudamudiByDaerahIdService } from "../absensi-mudamudi";
@@ -22,6 +23,7 @@ import { getAllKelasTahfidzOptionsService } from "../kelas-tahfidz";
 import {
   getCountKelompokService,
   getKelompokByDaerahIdService,
+  getKelompokByDesaIdService,
 } from "../kelompok";
 import {
   getAllPengajarChartDaerahService,
@@ -169,6 +171,71 @@ function getPercentCombinedNoKelompok(
     : "0.00";
 }
 
+async function getPercentDetail(
+  daerahId: number,
+  title: (typeof kelasGenerusEnum)[number]
+) {
+  interface KelompokDetail {
+    namaKelompok: string;
+    totalPercent: number;
+  }
+
+  interface DesaDetail {
+    namaDesa: string;
+    totalPercentDesa: number;
+    kelompok: KelompokDetail[];
+  }
+
+  interface PercentDetailResult {
+    nama: (typeof kelasGenerusEnum)[number];
+    totalPercentAll: number;
+    desa: DesaDetail[];
+  }
+
+  const result: PercentDetailResult = {
+    nama: title,
+    totalPercentAll: 0,
+    desa: [],
+  };
+
+  let sumAllDesaPercent = 0;
+
+  const desas = await getDesaByDaerahIdService(daerahId);
+
+  for (const desa of desas) {
+    const kelompoks = await getKelompokByDesaIdService(desa.id);
+
+    const desaObj: DesaDetail = {
+      namaDesa: desa.name, // Assuming 'nama' exists on desa object
+      totalPercentDesa: 0,
+      kelompok: [],
+    };
+
+    let sumKelompokPercent = 0;
+
+    for (const kelompok of kelompoks) {
+      const { kehadiran } = await getAbsensiGenerusSummaryService(
+        { kelompokId: kelompok.id },
+        { kelasPengajian: title }
+      );
+
+      desaObj.kelompok.push({
+        namaKelompok: kelompok.name,
+        totalPercent: kehadiran,
+      });
+
+      sumKelompokPercent += kehadiran;
+    }
+
+    desaObj.totalPercentDesa = sumKelompokPercent / kelompoks.length;
+    result.desa.push(desaObj);
+    sumAllDesaPercent += desaObj.totalPercentDesa;
+  }
+  result.totalPercentAll = sumAllDesaPercent / desas.length;
+
+  return result;
+}
+
 export async function getDashboard(daerahId: number) {
   const countKelompok = await getCountKelompokService(daerahId);
   const countDesa = await getCountDesaService(daerahId);
@@ -179,25 +246,13 @@ export async function getDashboard(daerahId: number) {
   const countGenerus = dataGenerus.length;
   const countPengajar = dataPengajar.length;
 
-  const percentPaud = await getAbsensiGenerusSummaryService(
-    { daerahId },
-    { kelasPengajian: "PAUD" }
-  );
+  const percentPaud = await getPercentDetail(daerahId, "PAUD");
 
-  const percentCabeRawit = await getAbsensiGenerusSummaryService(
-    { daerahId },
-    { kelasPengajian: "Cabe Rawit" }
-  );
+  const percentCabeRawit = await getPercentDetail(daerahId, "Cabe Rawit");
 
-  const percentPraremaja = await getAbsensiGenerusSummaryService(
-    { daerahId },
-    { kelasPengajian: "Praremaja" }
-  );
+  const percentPraremaja = await getPercentDetail(daerahId, "Praremaja");
 
-  const percentMudamudi = await getAbsensiGenerusSummaryService(
-    { daerahId },
-    { kelasPengajian: "Muda-mudi" }
-  );
+  const percentMudamudi = await getPercentDetail(daerahId, "Muda-mudi");
 
   const generusDatasets = groupByField(
     dataGenerus,
@@ -216,10 +271,10 @@ export async function getDashboard(daerahId: number) {
   }));
 
   const data = {
-    percentPaud: percentPaud.kehadiran.toFixed(2),
-    percentCabeRawit: percentCabeRawit.kehadiran.toFixed(2),
-    percentPraremaja: percentPraremaja.kehadiran.toFixed(2),
-    percentMudamudi: percentMudamudi.kehadiran.toFixed(2),
+    percentPaud,
+    percentCabeRawit,
+    percentPraremaja,
+    percentMudamudi,
     countKelompok,
     countDesa,
     countGenerus,
