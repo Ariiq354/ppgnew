@@ -6,6 +6,7 @@
   import { useSubmit } from "~/composables/function";
   import { useToastError, useToastSuccess } from "~/composables/toast";
   import { absensiEnum, kelasGenerusEnum } from "~~/shared/enum";
+  import { bulanFilterOptions, tahunOptions } from "~~/shared/constants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -27,6 +28,17 @@
       },
     }
   );
+  const tahun = ref(new Date().getFullYear());
+  const bulan = ref(new Date().getMonth() + 1);
+  const kelasOptionsFilter = computed(() => {
+    return kelasOption.value?.data.filter((i) => {
+      if (!i.tanggal) return false;
+
+      const [y, m] = i.tanggal.split("-").map(Number);
+
+      return y === tahun.value && m === bulan.value;
+    });
+  });
   const state = ref<ExtractObjectType<typeof absensi.value>[]>([]);
   const {
     data: absensi,
@@ -132,10 +144,28 @@
         Silahkan pilih Kelas untuk absensi
       </p>
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <UFormField label="Tahun" size="xl">
+          <USelectMenu
+            v-model="tahun"
+            :items="tahunOptions"
+            :disabled="statusKelas === 'pending'"
+            placeholder="Pilih Tahun"
+          />
+        </UFormField>
+        <UFormField label="Bulan" size="xl">
+          <USelectMenu
+            v-model="bulan"
+            :items="bulanFilterOptions"
+            :disabled="statusKelas === 'pending'"
+            value-key="value"
+            label-key="name"
+            placeholder="Pilih Bulan"
+          />
+        </UFormField>
         <UFormField label="Kelas" size="xl">
           <USelectMenu
             v-model="kelasId"
-            :items="kelasOption?.data"
+            :items="kelasOptionsFilter"
             :disabled="statusKelas === 'pending'"
             value-key="id"
             label-key="nama"
