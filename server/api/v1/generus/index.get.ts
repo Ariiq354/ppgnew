@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     OGenerusGenericList.parse(q)
   );
 
-  const data = await getAllGenerusService(user.daerahId, query);
+  const data = await getAllGenerusService(user.kelompokId!, query);
 
   return HttpResponse(data.data, data.metadata);
 });
