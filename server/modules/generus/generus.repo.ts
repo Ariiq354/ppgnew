@@ -64,9 +64,15 @@ export async function getAllGenerus(
       noTelepon: generusTable.noTelepon,
       kelasPengajian: generusTable.kelasPengajian,
       namaOrtu: generusTable.namaOrtu,
-      status: sql<
-        string[]
-      >`COALESCE(ARRAY_AGG(${generusStatusTable.status}), '{}')`,
+      status: sql<string[]>`
+  COALESCE(
+    ARRAY_REMOVE(
+      ARRAY_AGG(DISTINCT ${generusStatusTable.status}),
+      NULL
+    ),
+    '{}'::text[]
+  )
+`,
       noTeleponOrtu: generusTable.noTeleponOrtu,
       tanggalMasukKelas: generusTable.tanggalMasukKelas,
       foto: generusTable.foto,
@@ -404,6 +410,6 @@ export async function deleteGenerus(kelompokId: number, id: number[]) {
 export async function deleteGenerusStatusByGenerusId(id: number) {
   return await tryCatch(
     "Failed to delete Generus",
-    db.delete(generusStatusTable).where(eq(generusTable.id, id))
+    db.delete(generusStatusTable).where(eq(generusStatusTable.generusId, id))
   );
 }
