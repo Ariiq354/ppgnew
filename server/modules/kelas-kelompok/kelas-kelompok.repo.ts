@@ -1,4 +1,14 @@
-import { and, count, eq, inArray, ilike, or, sql, type SQL } from "drizzle-orm";
+import {
+  and,
+  count,
+  eq,
+  inArray,
+  ilike,
+  or,
+  sql,
+  type SQL,
+  desc,
+} from "drizzle-orm";
 import { db } from "~~/server/database";
 import { kelasTable } from "~~/server/database/schema/generus";
 import { desaTable, kelompokTable } from "~~/server/database/schema/wilayah";
@@ -47,7 +57,8 @@ export async function getAllKelas(
       tanggal: kelasTable.tanggal,
     })
     .from(kelasTable)
-    .where(and(...conditions));
+    .where(and(...conditions))
+    .orderBy(desc(kelasTable.tanggal));
 
   const total = await tryCatch(
     "Failed to get total count of Kelas",
