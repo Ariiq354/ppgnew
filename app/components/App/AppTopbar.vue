@@ -5,6 +5,8 @@
   const authStore = useAuthStore();
   const constantStore = useConstantStore();
 
+  const wilayah = authStore.hasPermission({ wilayah: ["edit"] });
+
   const modalOpen = ref(false);
   const modalWilayahOpen = ref(false);
   const items = [
@@ -16,7 +18,7 @@
           modalOpen.value = true;
         },
       },
-      ...(authStore.user?.role === "admin"
+      ...(wilayah
         ? [
             {
               label: "Wilayah",

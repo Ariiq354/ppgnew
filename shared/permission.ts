@@ -21,6 +21,7 @@ const statement = {
   sekretariat: ["view", "manage"],
   tahfidz: ["view", "manage"],
   tenaga_pendidik: ["view", "manage"],
+  wilayah: ["edit"],
 } as const;
 
 export type TStatement = {
@@ -58,6 +59,7 @@ export const rolesDeclaration = {
     tahfidz: ["view"],
     pjp_desa: ["view"],
     pjp_kelompok: ["view"],
+    wilayah: ["edit"],
   }),
   desa: ac.newRole({
     pjp_desa: ["manage", "view"],
