@@ -54,7 +54,7 @@
           <div class="flex items-center gap-3">
             <div class="text-left">
               <p class="text-base font-semibold text-gray-900 dark:text-white">
-                Desa {{ item.namaDesa }}
+                {{ item.namaDesa }}
               </p>
               <p class="text-xs font-normal text-gray-500">
                 {{ item.kelompok.length }} Kelompok
@@ -79,7 +79,7 @@
                 <span
                   class="text-sm font-medium text-gray-600 dark:text-gray-300"
                 >
-                  Kelompok {{ child.namaKelompok }}
+                  {{ child.namaKelompok }}
                 </span>
               </div>
               <span class="text-success text-sm font-bold">
