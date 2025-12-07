@@ -32,10 +32,32 @@
         icon="i-lucide-graduation-cap"
       />
     </NuxtLink>
-    <PercentDetailCard :data="data!.data.percentPaud" />
-    <PercentDetailCard :data="data!.data.percentCabeRawit" />
-    <PercentDetailCard :data="data!.data.percentPraremaja" />
-    <PercentDetailCard :data="data!.data.percentMudamudi" />
+    <PercentCard
+      :percent="Math.round(data!.data.percentPaud.totalPercentAll).toString()"
+      title="Absensi"
+      subtitle="PAUD"
+    />
+    <PercentCard
+      :percent="
+        Math.round(data!.data.percentCabeRawit.totalPercentAll).toString()
+      "
+      title="Absensi"
+      subtitle="Cabe Rawit"
+    />
+    <PercentCard
+      :percent="
+        Math.round(data!.data.percentPraremaja.totalPercentAll).toString()
+      "
+      title="Absensi"
+      subtitle="Praremaja"
+    />
+    <PercentCard
+      :percent="
+        Math.round(data!.data.percentMudamudi.totalPercentAll).toString()
+      "
+      title="Absensi"
+      subtitle="Muda-mudi"
+    />
     <UCard class="md:col-span-3">
       <AppChartBar
         title="Daftar Generus"

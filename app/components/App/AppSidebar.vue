@@ -48,6 +48,16 @@
         },
       },
       {
+        label: "Kehadiran",
+        to: "/dashboard/kehadiran",
+        icon: "i-lucide-home",
+        onSelect: () => {
+          if (!isDesktop.value) {
+            constantStore.toggleSidebar();
+          }
+        },
+      },
+      {
         label: "Tenaga Pengajar",
         icon: "i-lucide-presentation",
         to: "/dashboard/pengajar",
