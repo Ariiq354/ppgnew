@@ -48,7 +48,7 @@
           <div class="flex items-center gap-3">
             <div class="text-left">
               <p class="text-base font-semibold text-gray-900 dark:text-white">
-                Desa {{ item.namaKelompok }}
+                {{ item.namaKelompok }}
               </p>
             </div>
           </div>
