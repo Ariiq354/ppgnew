@@ -72,6 +72,12 @@
     () => state.value.desaId,
     () => rKelompok()
   );
+
+  watch(modalOpen, (isOpen) => {
+    if (isOpen) {
+      state.value.daerahId = authStore.user.daerahId;
+    }
+  });
 </script>
 
 <template>
@@ -89,7 +95,11 @@
         @submit="onSubmit"
       >
         <div class="flex flex-col gap-4">
-          <UFormField label="Daerah" name="daerahId">
+          <UFormField
+            v-if="authStore.user.role === 'admin'"
+            label="Daerah"
+            name="daerahId"
+          >
             <ClearableSelectMenu
               v-model="state.daerahId"
               placeholder="Daerah"
