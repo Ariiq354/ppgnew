@@ -12,26 +12,10 @@
   <Title>PJP Desa | Dashbaord</Title>
 
   <main class="grid grid-cols-1 gap-4 sm:grid-cols-4 md:gap-8">
-    <PercentCard
-      :percent="data!.data.percentPaud"
-      title="Absensi"
-      subtitle="PAUD"
-    />
-    <PercentCard
-      :percent="data!.data.percentCabeRawit"
-      title="Absensi"
-      subtitle="Cabe Rawit"
-    />
-    <PercentCard
-      :percent="data!.data.percentPraremaja"
-      title="Absensi"
-      subtitle="Praremaja"
-    />
-    <PercentCard
-      :percent="data!.data.percentMudamudi"
-      title="Absensi"
-      subtitle="Muda-mudi"
-    />
+    <PercentDetailDesaCard :data="data!.data.percentPaud" />
+    <PercentDetailDesaCard :data="data!.data.percentCabeRawit" />
+    <PercentDetailDesaCard :data="data!.data.percentPraremaja" />
+    <PercentDetailDesaCard :data="data!.data.percentMudamudi" />
     <NuxtLink class="md:col-span-2" to="/dashboard/desa-generus">
       <CountCard
         title="Generus"
