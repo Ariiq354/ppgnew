@@ -60,7 +60,14 @@ export const kelasOptions = [
   "Bekerja / Tidak Bekerja",
 ];
 
-export const statusOptions = ["GPS", "Tahfidz", "Pindah", "Mondok", "Tugas"];
+export const statusOptions = [
+  "GPS",
+  "Tahfidz",
+  "Pindah",
+  "Mondok",
+  "Tugas",
+  "Sudah Menikah",
+];
 
 export const schema = z.object({
   id: z.optional(z.number()),
