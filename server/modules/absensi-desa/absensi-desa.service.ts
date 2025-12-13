@@ -68,7 +68,7 @@ export async function getAbsensiDesaMonitoringSummaryService(
     query.kelasPengajian
   );
 
-  const denominator = countGenerus * countKelas;
+  const denominator = countGenerus.reduce((a, i) => a += i.count, 0) * countKelas;
   const kehadiran =
     denominator > 0 ? Math.round((countAbsensi * 100) / denominator) : 0;
 
@@ -138,7 +138,7 @@ export async function getAbsensiDesaMonitoringSummaryForDaerahService(
     }
   }
 
-  const countGenerus = await getCountGenerusExclude(
+  const countGenerus = await getCountGenerusExcludeService(
     { daerahId, desaId: query.desaId },
     query.kelasPengajian
   );
@@ -151,7 +151,7 @@ export async function getAbsensiDesaMonitoringSummaryForDaerahService(
     query.kelasPengajian
   );
 
-  const denominator = countGenerus * countKelas;
+  const denominator = countGenerus.reduce((a, i) => a += i.count, 0) * countKelas;
   const kehadiran =
     denominator > 0 ? Math.round((countAbsensi * 100) / denominator) : 0;
 
