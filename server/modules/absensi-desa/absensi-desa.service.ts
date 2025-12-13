@@ -18,6 +18,7 @@ import {
   getCountAbsensiGenerusDesa,
   updateAbsensiGenerusDesa,
 } from "./absensi-desa.repo";
+import { getCountGenerusExcludeService } from "../generus";
 
 export async function getAbsensiDesaMonitoringService(
   desaId: number,
@@ -54,7 +55,7 @@ export async function getAbsensiDesaMonitoringSummaryService(
   desaId: number,
   query: TAbsensiKelasPengajianGenerusList
 ) {
-  const countGenerus = await getCountGenerusExclude(
+  const countGenerus = await getCountGenerusExcludeService(
     { desaId },
     query.kelasPengajian
   );

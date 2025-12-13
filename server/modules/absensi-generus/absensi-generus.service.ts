@@ -57,17 +57,22 @@ export async function getAbsensiGenerusSummaryService(
     desaId?: number;
     kelompokId?: number;
   },
-  query: TAbsensiKelasPengajianGenerusList
+  query: TAbsensiKelasPengajianGenerusList,
+  tb?: {
+    tahun?: number,
+    bulan?: number,
+  }
 ) {
   const countGenerus = await getCountGenerusExcludeService(
     params,
     query.kelasPengajian
   );
 
-  const countKelas = await getCountKelasService({ ...params, ...query });
+  const countKelas = await getCountKelasService({ ...params, ...query, ...tb });
   const countAbsensi = await getCountAbsensiGenerusPerKelompok({
     ...params,
     ...query,
+    ...tb
   });
 
   const percentage: number[] = [];
