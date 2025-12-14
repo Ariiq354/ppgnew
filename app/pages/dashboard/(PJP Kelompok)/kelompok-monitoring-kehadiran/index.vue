@@ -3,7 +3,7 @@
   import { columns, type QueryType } from "./_constants";
   import { APIBASE } from "~/utils";
   import { kelasGenerusEnum } from "~~/shared/enum";
-import { bulanFilterOptions, tahunOptions } from "~~/shared/constants";
+  import { bulanFilterOptions, tahunOptions } from "~~/shared/constants";
 
   const constantStore = useConstantStore();
   constantStore.setTitle("PJP Kelompok / Monitoring Kehadiran");
@@ -11,9 +11,10 @@ import { bulanFilterOptions, tahunOptions } from "~~/shared/constants";
   const query = reactive<QueryType>({
     search: "",
     page: 1,
-    kelasPengajian: 'PAUD',
+    kelasPengajian: "PAUD",
   });
 
+  const filterModal = ref(false);
   const { data: summary } = await useFetch(
     `${APIBASE}/absensi-generus/monitoring/summary`,
     {
@@ -38,6 +39,24 @@ import { bulanFilterOptions, tahunOptions } from "~~/shared/constants";
 
 <template>
   <Title>PJP Kelompok | Monitoring Kehadiran</Title>
+  <LazyUModal v-model:open="filterModal" title="Filter">
+    <template #body>
+      <div class="flex flex-col gap-4">
+        <ClearableSelectMenu
+          v-model="query.tahun"
+          placeholder="Tahun"
+          :items="tahunOptions"
+        />
+        <ClearableSelectMenu
+          v-model="query.bulan"
+          placeholder="Bulan"
+          :items="bulanFilterOptions"
+          label-key="name"
+          value-key="value"
+        />
+      </div>
+    </template>
+  </LazyUModal>
   <main class="flex flex-col gap-4">
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <UCard>
@@ -127,6 +146,12 @@ import { bulanFilterOptions, tahunOptions } from "~~/shared/constants";
           :items="bulanFilterOptions"
           label-key="name"
           value-key="value"
+        />
+        <UButton
+          variant="subtle"
+          icon="i-lucide-filter"
+          class="md:hidden"
+          @click="filterModal = true"
         />
         <USelectMenu
           v-model="query.kelasPengajian"

@@ -1,7 +1,7 @@
 import {
+  getAbsensiDesaMonitoringService,
   OGenerusDesaAbsensiList,
 } from "~~/server/modules/absensi-desa";
-import { getAbsensiGenerusMonitoringService } from "~~/server/modules/absensi-generus";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { pjp_desa: ["view"] });
@@ -10,13 +10,7 @@ export default defineEventHandler(async (event) => {
     OGenerusDesaAbsensiList.parse(q)
   );
 
-  const data = await getAbsensiGenerusMonitoringService(
-    {
-      desaId: user.desaId!,
-      kelompokId: query.kelompokId
-    },
-    query
-  );
+  const data = await getAbsensiDesaMonitoringService(user.desaId!, query);
 
   return HttpResponse(data.data, data.metadata);
 });

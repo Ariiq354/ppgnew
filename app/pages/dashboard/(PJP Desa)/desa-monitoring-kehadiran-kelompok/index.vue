@@ -2,21 +2,28 @@
   import { useConstantStore } from "~/stores/constant";
   import { APIBASE } from "~/utils";
   import { kelasGenerusEnum } from "~~/shared/enum";
-  import { columns } from "./_constants";
+  import { columns, type QueryType } from "./_constants";
+  import { bulanFilterOptions, tahunOptions } from "~~/shared/constants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
   constantStore.setTitle("PJP Desa / Monitoring Kehadiran Kelompok");
 
-  const namaKelas = ref<(typeof kelasGenerusEnum)[number]>("PAUD");
-  const kelompokId = ref<number>();
+  const query = reactive<QueryType>({
+    search: "",
+    page: 1,
+    kelasPengajian: "PAUD",
+  });
+
   const filterModal = ref(false);
   const { data: summary, refresh: rSummary } = await useFetch(
     `${APIBASE}/absensi-generus/desa/summary`,
     {
       query: {
-        kelasPengajian: namaKelas,
-        kelompokId: kelompokId,
+        kelasPengajian: computed(() => query.kelasPengajian),
+        kelompokId: computed(() => query.kelompokId),
+        tahun: computed(() => query.tahun),
+        bulan: computed(() => query.bulan),
       },
     }
   );
@@ -27,12 +34,6 @@
     },
   });
 
-  const query = reactive({
-    search: "",
-    page: 1,
-    kelasPengajian: namaKelas,
-    kelompokId: kelompokId,
-  });
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
   }, 300);
@@ -43,10 +44,13 @@
     }
   );
 
-  watchOnce(kelompokId, () => {
-    rSummary();
-    refresh();
-  });
+  watchOnce(
+    () => query.kelompokId,
+    () => {
+      rSummary();
+      refresh();
+    }
+  );
 </script>
 
 <template>
@@ -54,8 +58,20 @@
   <LazyUModal v-model:open="filterModal" title="Filter">
     <template #body>
       <div class="flex flex-col gap-4">
-        <USelectMenu
-          v-model="kelompokId"
+        <ClearableSelectMenu
+          v-model="query.tahun"
+          placeholder="Tahun"
+          :items="tahunOptions"
+        />
+        <ClearableSelectMenu
+          v-model="query.bulan"
+          placeholder="Bulan"
+          :items="bulanFilterOptions"
+          label-key="name"
+          value-key="value"
+        />
+        <ClearableSelectMenu
+          v-model="query.kelompokId"
           placeholder="Kelompok"
           :items="datakelompok?.data"
           value-key="id"
@@ -65,20 +81,70 @@
     </template>
   </LazyUModal>
   <main class="flex flex-col gap-4">
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <UCard>
-        <p class="flex items-center gap-4 text-4xl font-bold">
-          <UIcon name="i-lucide-users" />
-          {{ summary?.data.countGenerus ?? 0 }}
-        </p>
-        <p class="text-muted">Total Generus</p>
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+              <UIcon name="i-lucide-users" />
+              {{ summary?.data.dataPaud.countGenerus }}
+            </p>
+            <p class="text-muted">Total Paud</p>
+          </div>
+          <div>
+            <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+              {{ summary?.data.dataPaud.kehadiran }}%
+            </p>
+          </div>
+        </div>
       </UCard>
       <UCard>
-        <p class="flex items-center gap-4 text-4xl font-bold">
-          <UIcon name="i-lucide-trending-up" />
-          {{ summary?.data.kehadiran ?? 0 }}%
-        </p>
-        <p class="text-muted">Kehadiran</p>
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+              <UIcon name="i-lucide-users" />
+              {{ summary?.data.dataCabeRawit.countGenerus }}
+            </p>
+            <p class="text-muted">Total Cabe Rawit</p>
+          </div>
+          <div>
+            <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+              {{ summary?.data.dataCabeRawit.kehadiran }}%
+            </p>
+          </div>
+        </div>
+      </UCard>
+      <UCard>
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+              <UIcon name="i-lucide-users" />
+              {{ summary?.data.dataPraremaja.countGenerus }}
+            </p>
+            <p class="text-muted">Total Praremaja</p>
+          </div>
+          <div>
+            <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+              {{ summary?.data.dataPraremaja.kehadiran }}%
+            </p>
+          </div>
+        </div>
+      </UCard>
+      <UCard>
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+              <UIcon name="i-lucide-users" />
+              {{ summary?.data.dataMudamudi.countGenerus }}
+            </p>
+            <p class="text-muted">Total Muda-mudi</p>
+          </div>
+          <div>
+            <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+              {{ summary?.data.dataMudamudi.kehadiran }}%
+            </p>
+          </div>
+        </div>
       </UCard>
     </div>
     <UCard>
@@ -90,8 +156,22 @@
           placeholder="Search..."
           @update:model-value="searchDebounced"
         />
-        <USelectMenu
-          v-model="kelompokId"
+        <ClearableSelectMenu
+          v-model="query.tahun"
+          placeholder="Tahun"
+          class="hidden flex-1 md:flex"
+          :items="tahunOptions"
+        />
+        <ClearableSelectMenu
+          v-model="query.bulan"
+          placeholder="Bulan"
+          class="hidden flex-1 md:flex"
+          :items="bulanFilterOptions"
+          label-key="name"
+          value-key="value"
+        />
+        <ClearableSelectMenu
+          v-model="query.kelompokId"
           placeholder="Kelompok"
           class="hidden flex-1 md:flex"
           :items="datakelompok?.data"
@@ -105,7 +185,7 @@
           @click="filterModal = true"
         />
         <USelectMenu
-          v-model="namaKelas"
+          v-model="query.kelasPengajian"
           class="flex-1"
           :items="[...kelasGenerusEnum]"
           :disabled="status === 'pending'"
