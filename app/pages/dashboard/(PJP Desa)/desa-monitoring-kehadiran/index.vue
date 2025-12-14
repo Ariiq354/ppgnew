@@ -3,7 +3,7 @@
   import { columns, type QueryType } from "./_constants";
   import { APIBASE } from "~/utils";
   import { kelasGenerusEnum } from "~~/shared/enum";
-import { bulanFilterOptions, tahunOptions } from "~~/shared/constants";
+  import { bulanFilterOptions, tahunOptions } from "~~/shared/constants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
@@ -62,71 +62,21 @@ import { bulanFilterOptions, tahunOptions } from "~~/shared/constants";
     </template>
   </LazyUModal>
   <main class="flex flex-col gap-4">
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <UCard>
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
-                <UIcon name="i-lucide-users" />
-                {{ summary?.data.dataPaud.countGenerus }}
-              </p>
-              <p class="text-muted">Total Paud</p>
-            </div>
-            <div>
-              <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
-                {{ summary?.data.dataPaud.kehadiran }}%
-              </p>
-            </div>
-          </div>
-        </UCard>
-        <UCard>
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
-                <UIcon name="i-lucide-users" />
-                {{ summary?.data.dataCabeRawit.countGenerus }}
-              </p>
-              <p class="text-muted">Total Cabe Rawit</p>
-            </div>
-            <div>
-              <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
-                {{ summary?.data.dataCabeRawit.kehadiran }}%
-              </p>
-            </div>
-          </div>
-        </UCard>
-        <UCard>
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
-                <UIcon name="i-lucide-users" />
-                {{ summary?.data.dataPraremaja.countGenerus }}
-              </p>
-              <p class="text-muted">Total Praremaja</p>
-            </div>
-            <div>
-              <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
-                {{ summary?.data.dataPraremaja.kehadiran }}%
-              </p>
-            </div>
-          </div>
-        </UCard>
-        <UCard>
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
-                <UIcon name="i-lucide-users" />
-                {{ summary?.data.dataMudamudi.countGenerus }}
-              </p>
-              <p class="text-muted">Total Muda-mudi</p>
-            </div>
-            <div>
-              <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
-                {{ summary?.data.dataMudamudi.kehadiran }}%
-              </p>
-            </div>
-          </div>
-        </UCard>
+    <div class="grid grid-cols-2 gap-4">
+      <UCard>
+        <p class="flex items-center gap-4 text-4xl font-bold">
+          <UIcon name="i-lucide-users" />
+          {{ summary?.data.countGenerus }}
+        </p>
+        <p class="text-muted">Total Generus</p>
+      </UCard>
+      <UCard>
+        <p class="flex items-center gap-4 text-4xl font-bold">
+          <UIcon name="i-lucide-trending-up" />
+          {{ summary?.data.kehadiran }}%
+        </p>
+        <p class="text-muted">Kehadiran</p>
+      </UCard>
     </div>
     <UCard>
       <div class="mb-4 flex gap-2 md:mb-6 md:gap-4">
