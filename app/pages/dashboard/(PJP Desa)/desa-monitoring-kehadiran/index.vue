@@ -1,19 +1,28 @@
 <script setup lang="ts">
   import { useConstantStore } from "~/stores/constant";
-  import { columns } from "./_constants";
+  import { columns, type QueryType } from "./_constants";
   import { APIBASE } from "~/utils";
   import { kelasGenerusEnum } from "~~/shared/enum";
+import { bulanFilterOptions, tahunOptions } from "~~/shared/constants";
 
   const constantStore = useConstantStore();
   const authStore = useAuthStore();
   constantStore.setTitle("PJP Desa / Monitoring Kehadiran");
 
-  const namaKelas = ref<(typeof kelasGenerusEnum)[number]>("PAUD");
+  const query = reactive<QueryType>({
+    search: "",
+    page: 1,
+    kelasPengajian: "PAUD",
+  });
+
   const { data: summary } = await useFetch(
     `${APIBASE}/absensi-desa/monitoring/summary`,
     {
       query: {
-        kelasPengajian: namaKelas,
+        kelasPengajian: computed(() => query.kelasPengajian),
+        kelompokId: computed(() => query.kelompokId),
+        tahun: computed(() => query.tahun),
+        bulan: computed(() => query.bulan),
       },
     }
   );
@@ -26,12 +35,6 @@
 
   const filterModal = ref(false);
 
-  const query = reactive({
-    search: "",
-    page: 1,
-    kelompokId: "",
-    kelasPengajian: namaKelas,
-  });
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
   }, 300);
@@ -59,21 +62,71 @@
     </template>
   </LazyUModal>
   <main class="flex flex-col gap-4">
-    <div class="grid grid-cols-2 gap-4">
-      <UCard>
-        <p class="flex items-center gap-4 text-4xl font-bold">
-          <UIcon name="i-lucide-users" />
-          {{ summary?.data.countGenerus }}
-        </p>
-        <p class="text-muted">Total Generus</p>
-      </UCard>
-      <UCard>
-        <p class="flex items-center gap-4 text-4xl font-bold">
-          <UIcon name="i-lucide-trending-up" />
-          {{ summary?.data.kehadiran }}%
-        </p>
-        <p class="text-muted">Kehadiran</p>
-      </UCard>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <UCard>
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+                <UIcon name="i-lucide-users" />
+                {{ summary?.data.dataPaud.countGenerus }}
+              </p>
+              <p class="text-muted">Total Paud</p>
+            </div>
+            <div>
+              <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+                {{ summary?.data.dataPaud.kehadiran }}%
+              </p>
+            </div>
+          </div>
+        </UCard>
+        <UCard>
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+                <UIcon name="i-lucide-users" />
+                {{ summary?.data.dataCabeRawit.countGenerus }}
+              </p>
+              <p class="text-muted">Total Cabe Rawit</p>
+            </div>
+            <div>
+              <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+                {{ summary?.data.dataCabeRawit.kehadiran }}%
+              </p>
+            </div>
+          </div>
+        </UCard>
+        <UCard>
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+                <UIcon name="i-lucide-users" />
+                {{ summary?.data.dataPraremaja.countGenerus }}
+              </p>
+              <p class="text-muted">Total Praremaja</p>
+            </div>
+            <div>
+              <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+                {{ summary?.data.dataPraremaja.kehadiran }}%
+              </p>
+            </div>
+          </div>
+        </UCard>
+        <UCard>
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+                <UIcon name="i-lucide-users" />
+                {{ summary?.data.dataMudamudi.countGenerus }}
+              </p>
+              <p class="text-muted">Total Muda-mudi</p>
+            </div>
+            <div>
+              <p class="flex items-center gap-4 text-3xl font-bold md:text-4xl">
+                {{ summary?.data.dataMudamudi.kehadiran }}%
+              </p>
+            </div>
+          </div>
+        </UCard>
     </div>
     <UCard>
       <div class="mb-4 flex gap-2 md:mb-6 md:gap-4">
@@ -83,6 +136,20 @@
           leading-icon="i-lucide-search"
           placeholder="Search..."
           @update:model-value="searchDebounced"
+        />
+        <ClearableSelectMenu
+          v-model="query.tahun"
+          placeholder="Tahun"
+          class="hidden flex-1 md:flex"
+          :items="tahunOptions"
+        />
+        <ClearableSelectMenu
+          v-model="query.bulan"
+          placeholder="Bulan"
+          class="hidden flex-1 md:flex"
+          :items="bulanFilterOptions"
+          label-key="name"
+          value-key="value"
         />
         <ClearableSelectMenu
           v-model="query.kelompokId"
@@ -99,7 +166,7 @@
           @click="filterModal = true"
         />
         <USelectMenu
-          v-model="namaKelas"
+          v-model="query.kelasPengajian"
           class="flex-1"
           :items="[...kelasGenerusEnum]"
           :disabled="status === 'pending'"

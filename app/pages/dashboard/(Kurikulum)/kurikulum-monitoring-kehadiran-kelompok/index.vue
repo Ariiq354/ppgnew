@@ -36,7 +36,7 @@
         daerahId: computed(() => authStore.user?.daerahId),
       },
       onResponse() {
-        query.kelompokId = "";
+        query.kelompokId = undefined;
       },
     }
   );
@@ -59,7 +59,7 @@
   watch(
     () => query.desaId,
     () => {
-      query.kelompokId = "";
+      query.kelompokId = undefined;
     }
   );
 
