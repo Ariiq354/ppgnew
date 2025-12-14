@@ -225,11 +225,22 @@ export async function createAbsensiGenerus(
     });
   }
 
-  if (generus?.kelasPengajian !== namaKelas) {
-    throw createError({
-      statusCode: 400,
-      message: "Generus beda tingkat kelas pengajian",
-    });
+  if (namaKelas === "Muda-mudi") {
+    if (
+      !["Remaja", "Pranikah", "Usia Mandiri"].includes(generus?.kelasPengajian)
+    ) {
+      throw createError({
+        statusCode: 400,
+        message: "Generus beda tingkat kelas pengajian",
+      });
+    }
+  } else {
+    if (generus?.kelasPengajian !== namaKelas) {
+      throw createError({
+        statusCode: 400,
+        message: "Generus beda tingkat kelas pengajian",
+      });
+    }
   }
 
   return await tryCatch(
@@ -262,11 +273,22 @@ export async function updateAbsensiGenerus(
     });
   }
 
-  if (generus?.kelasPengajian !== namaKelas) {
-    throw createError({
-      statusCode: 400,
-      message: "Generus beda tingkat kelas pengajian",
-    });
+  if (namaKelas === "Muda-mudi") {
+    if (
+      !["Remaja", "Pranikah", "Usia Mandiri"].includes(generus?.kelasPengajian)
+    ) {
+      throw createError({
+        statusCode: 400,
+        message: "Generus beda tingkat kelas pengajian",
+      });
+    }
+  } else {
+    if (generus?.kelasPengajian !== namaKelas) {
+      throw createError({
+        statusCode: 400,
+        message: "Generus beda tingkat kelas pengajian",
+      });
+    }
   }
 
   return await tryCatch(
