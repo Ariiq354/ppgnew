@@ -5,8 +5,8 @@ import { kelasGenerusEnum } from "~~/shared/enum";
 export const OGenerusAbsensiForDesaList = z.object({
   ...OPagination.def.shape,
   search: z.optional(z.string()),
-  tahun: z.optional(z.number()),
-  bulan: z.optional(z.number()),
+  tahun: z.optional(z.coerce.number()),
+  bulan: z.optional(z.coerce.number()),
   kelompokId: z.optional(z.optional(z.coerce.number())),
   kelasPengajian: z.enum(kelasGenerusEnum),
 });
