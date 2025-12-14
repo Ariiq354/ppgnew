@@ -1,13 +1,13 @@
 import {
   and,
   count,
-  desc,
   eq,
   inArray,
   ilike,
   or,
   sql,
   type SQL,
+  asc,
 } from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
@@ -160,7 +160,7 @@ export async function getAllGenerusExclude(
     })
     .from(generusTable)
     .where(and(...conditions))
-    .orderBy(desc(generusTable.id));
+    .orderBy(asc(generusTable.nama));
 
   const total = await tryCatch(
     "Failed to get total count of Generus Absensi",
