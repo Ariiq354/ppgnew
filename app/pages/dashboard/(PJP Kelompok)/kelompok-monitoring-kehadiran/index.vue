@@ -39,7 +39,7 @@ import { bulanFilterOptions, tahunOptions } from "~~/shared/constants";
 <template>
   <Title>PJP Kelompok | Monitoring Kehadiran</Title>
   <main class="flex flex-col gap-4">
-    <div class="sm: grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <UCard>
         <div class="flex items-center justify-between">
           <div>

@@ -1,10 +1,13 @@
 import { z } from "zod/mini";
 import { OPagination } from "~~/server/utils/dto/common.dto";
+import { OTahunBulan } from "~~/server/utils/dto/absensi.dto";
 import { kelasGenerusEnum } from "~~/shared/enum";
 
 export const OGenerusDesaAbsensiList = z.object({
   ...OPagination.def.shape,
   search: z.string(),
+  tahun: z.optional(z.number()),
+  bulan: z.optional(z.number()),
   kelasPengajian: z.enum(kelasGenerusEnum),
   kelompokId: z.optional(z.coerce.number()),
 });
@@ -39,3 +42,8 @@ export const OAbsensiKelasDesaPengajianForMudamudiList = z.object({
 export type TAbsensiKelasDesaPengajianForDaerahList = z.infer<
   typeof OAbsensiKelasDesaPengajianForDaerahList
 >;
+
+export const OTahunBulanDesa = z.object({
+  ...OTahunBulan.def.shape,
+  kelompokId: z.optional(z.coerce.number()),
+});
