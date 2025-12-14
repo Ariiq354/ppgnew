@@ -16,7 +16,13 @@ export const bulanFilterOptions = [
 ];
 
 const currentYear = new Date().getFullYear();
-export const tahunOptions = [currentYear - 1, currentYear, currentYear + 1];
+export const tahunOptions = [
+  currentYear - 2,
+  currentYear - 1,
+  currentYear,
+  currentYear + 1,
+  currentYear + 2,
+];
 
 export const mingguOptions = [1, 2, 3, 4, 5];
 
