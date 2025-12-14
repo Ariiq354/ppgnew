@@ -1,4 +1,5 @@
 import type { TableColumn } from "@nuxt/ui";
+import type { kelasGenerusEnum } from "~~/shared/enum";
 
 export const columns: TableColumn<any>[] = [
   {
@@ -28,3 +29,11 @@ export const columns: TableColumn<any>[] = [
       h("div", { class: "text-center" }, row.original.tanpaKeterangan),
   },
 ];
+
+export type QueryType = Partial<{
+  page: number;
+  search: string;
+  kelasPengajian: (typeof kelasGenerusEnum)[number];
+  tahun: number;
+  bulan: number;
+}>;

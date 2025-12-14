@@ -1,27 +1,30 @@
 <script setup lang="ts">
   import { useConstantStore } from "~/stores/constant";
-  import { columns } from "./_constants";
+  import { columns, type QueryType } from "./_constants";
   import { APIBASE } from "~/utils";
   import { kelasGenerusEnum } from "~~/shared/enum";
+import { bulanFilterOptions, tahunOptions } from "~~/shared/constants";
 
   const constantStore = useConstantStore();
   constantStore.setTitle("PJP Kelompok / Monitoring Kehadiran");
 
-  const namaKelas = ref<(typeof kelasGenerusEnum)[number]>("PAUD");
+  const query = reactive<QueryType>({
+    search: "",
+    page: 1,
+    kelasPengajian: 'PAUD',
+  });
+
   const { data: summary } = await useFetch(
     `${APIBASE}/absensi-generus/monitoring/summary`,
     {
       query: {
-        kelasPengajian: namaKelas,
+        kelasPengajian: computed(() => query.kelasPengajian),
+        tahun: computed(() => query.tahun),
+        bulan: computed(() => query.bulan),
       },
     }
   );
 
-  const query = reactive({
-    search: "",
-    page: 1,
-    kelasPengajian: namaKelas,
-  });
   const searchDebounced = useDebounceFn((v) => {
     query.search = v;
   }, 300);
@@ -111,8 +114,22 @@
           placeholder="Search..."
           @update:model-value="searchDebounced"
         />
+        <ClearableSelectMenu
+          v-model="query.tahun"
+          placeholder="Tahun"
+          class="hidden flex-1 md:flex"
+          :items="tahunOptions"
+        />
+        <ClearableSelectMenu
+          v-model="query.bulan"
+          placeholder="Bulan"
+          class="hidden flex-1 md:flex"
+          :items="bulanFilterOptions"
+          label-key="name"
+          value-key="value"
+        />
         <USelectMenu
-          v-model="namaKelas"
+          v-model="query.kelasPengajian"
           class="flex-1"
           :items="[...kelasGenerusEnum]"
           :disabled="status === 'pending'"

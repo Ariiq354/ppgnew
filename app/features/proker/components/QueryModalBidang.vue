@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { bulanEnum } from "~~/shared/enum";
-  import { mingguOptions, tahunOptions } from "../constants";
   import type { QueryType } from "../types";
+import { mingguOptions, tahunOptions } from "~~/shared/constants";
 
   const openModel = defineModel<boolean>("open");
 

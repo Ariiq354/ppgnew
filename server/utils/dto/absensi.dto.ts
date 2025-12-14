@@ -24,8 +24,8 @@ export type TAbsensiGenerusCreate = z.infer<
 export const OGenerusAbsensiList = z.object({
   ...OPagination.def.shape,
   search: z.optional(z.string()),
-  tahun: z.optional(z.number()),
-  bulan: z.optional(z.number()),
+  tahun: z.optional(z.coerce.number()),
+  bulan: z.optional(z.coerce.number()),
   kelasPengajian: z.enum(kelasGenerusEnum),
 });
 export type TGenerusAbsensiList = z.infer<typeof OGenerusAbsensiList>;
@@ -52,3 +52,9 @@ export const OAbsensiKelasPengajianMudamudiList = z.object({
 export type TAbsensiKelasPengajianMudamudiList = z.infer<
   typeof OAbsensiKelasPengajianMudamudiList
 >;
+
+export const OTahunBulan = z.object({
+  tahun: z.optional(z.coerce.number()),
+  bulan: z.optional(z.coerce.number())
+});
+export type TTahunBulan = z.infer<typeof OTahunBulan>;

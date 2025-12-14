@@ -1,4 +1,4 @@
-import { OGenerusAbsensiForDaerahList } from "~~/server/modules/absensi-generus";
+import { getAbsensiGenerusMonitoringService, OGenerusAbsensiForDaerahList } from "~~/server/modules/absensi-generus";
 
 export default defineEventHandler(async (event) => {
   const user = await permissionGuard(event, { kurikulum: ["view"] });
@@ -7,8 +7,8 @@ export default defineEventHandler(async (event) => {
     OGenerusAbsensiForDaerahList.parse(q)
   );
 
-  const data = await getAbsensiGenerusMonitoringForDaerahService(
-    user.daerahId,
+  const data = await getAbsensiGenerusMonitoringService(
+    {daerahId:user.daerahId},
     query
   );
 
