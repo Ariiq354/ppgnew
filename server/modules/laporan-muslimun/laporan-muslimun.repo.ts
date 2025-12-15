@@ -1,4 +1,4 @@
-import { and, eq, inArray, ilike, type SQL } from "drizzle-orm";
+import { and, eq, inArray, ilike, type SQL, sql } from "drizzle-orm";
 import { db } from "~~/server/database";
 import {
   laporanMusyawarahMuslimunTable,
@@ -73,7 +73,8 @@ export async function getLaporanMuslimunSummary(
 ) {
   const conditions: (SQL<unknown> | undefined)[] = [
     eq(kelompokTable.desaId, desaId),
-    ilike(musyawarahMuslimunTable.tanggal, `${tahun}-${bulan}%`),
+    sql`EXTRACT(YEAR FROM ${musyawarahMuslimunTable.tanggal}) = ${tahun}`,
+    sql`EXTRACT(MONTH FROM ${musyawarahMuslimunTable.tanggal}) = ${bulan}`
   ];
 
   const data = await tryCatch(
@@ -87,14 +88,14 @@ export async function getLaporanMuslimunSummary(
         keterangan: laporanMusyawarahMuslimunTable.keterangan,
       })
       .from(laporanMusyawarahMuslimunTable)
-      .leftJoin(
+      .innerJoin(
         musyawarahMuslimunTable,
         eq(
           laporanMusyawarahMuslimunTable.musyawarahId,
           musyawarahMuslimunTable.id
         )
       )
-      .leftJoin(
+      .innerJoin(
         kelompokTable,
         eq(musyawarahMuslimunTable.kelompokId, kelompokTable.id)
       )
