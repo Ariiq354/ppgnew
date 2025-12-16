@@ -210,17 +210,21 @@ export async function createGenerusService(
 
       fields["foto"] = uploadResult.secure_url;
     } else {
-      const key = part.name as string;
-      const value = part.data.toString();
+      const rawKey = part.name as string;
+      const rawValue = part.data.toString();
 
-      if (fields[key]) {
-        if (Array.isArray(fields[key])) {
-          (fields[key] as string[]).push(value);
-        } else {
-          fields[key] = [fields[key] as string, value];
+      const isArray = rawKey.endsWith('[]');
+      const key = isArray ? rawKey.slice(0, -2) : rawKey;
+
+      const parsedValue = isArray ? JSON.parse(rawValue) : rawValue;
+
+      if (isArray) {
+        if (!fields[key]) {
+          fields[key] = [];
         }
+          (fields[key] as string[]).push(...parsedValue);
       } else {
-        fields[key] = value;
+        fields[key] = parsedValue;
       }
     }
   }
@@ -303,16 +307,22 @@ export async function updateGenerusService(
 
       fields["file"] = uploadResult.secure_url;
     } else {
-      let key = part.name as string;
-      let value = part.data.toString();
+      const rawKey = part.name as string;
+      const rawValue = part.data.toString();
 
-      const isArrayKey = key.endsWith("[]");
-      if (isArrayKey) {
-        key = key.slice(0, -2);
-        value = JSON.parse(value);
+      const isArray = rawKey.endsWith('[]');
+      const key = isArray ? rawKey.slice(0, -2) : rawKey;
+
+      const parsedValue = isArray ? JSON.parse(rawValue) : rawValue;
+
+      if (isArray) {
+        if (!fields[key]) {
+          fields[key] = [];
+        }
+          (fields[key] as string[]).push(...parsedValue);
+      } else {
+        fields[key] = parsedValue;
       }
-
-      fields[key] = value;
     }
   }
 

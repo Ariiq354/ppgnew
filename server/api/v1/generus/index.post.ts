@@ -5,6 +5,7 @@ export default defineEventHandler(async (event) => {
 
   const result = await readMultipartFormData(event);
 
+
   await createGenerusService(user, result);
 
   return HttpResponse();
