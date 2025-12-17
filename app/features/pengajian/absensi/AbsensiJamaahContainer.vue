@@ -81,7 +81,7 @@
 <template>
   <main class="flex flex-col gap-4">
     <PengajianCard v-model="pengajianId" />
-    <EmptyCard v-if="!musyId || !absensi" />
+    <EmptyCard v-if="!pengajianId || !absensi" />
     <template v-else>
       <SummaryCard
         :member-count="data?.metadata.total"
