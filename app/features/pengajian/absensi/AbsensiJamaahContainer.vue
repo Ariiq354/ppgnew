@@ -5,7 +5,7 @@
   import { APIBASE } from "~/utils";
   import { absensiEnum } from "~~/shared/enum";
   import EmptyCard from "./components/EmptyCard.vue";
-  import MusyawarahCard from "./components/MusyawarahCard.vue";
+  import PengajianCard from "./components/PengajianCard.vue";
   import SummaryCard from "./components/SummaryCard.vue";
   import { columns } from "./constants";
   import type { DataReturn, QueryType } from "./types";
@@ -15,16 +15,16 @@
     pjp_kelompok: ["manage"],
   });
 
-  const musyId = ref<number>();
+  const pengajianId = ref<number>();
   const state = ref<DataReturn[]>([]);
   const {
     data: absensi,
     status: statusAbsensi,
     refresh,
-  } = await useFetch(() => `${APIBASE}/absensi-jamaah/${musyId.value}`, {
+  } = await useFetch(() => `${APIBASE}/absensi-jamaah/${pengajianId.value}`, {
     immediate: false,
   });
-  watchOnce(musyId, () => refresh());
+  watchOnce(pengajianId, () => refresh());
   watch(
     absensi,
     () => (state.value = structuredClone(absensi.value?.data) ?? [])
@@ -42,7 +42,7 @@
     await execute({
       path: `${APIBASE}/absensi-jamaah`,
       body: {
-        musyawarahId: musyId.value,
+        pengajianId: pengajianId.value,
         absen: state.value,
       },
       onSuccess() {
@@ -80,7 +80,7 @@
 
 <template>
   <main class="flex flex-col gap-4">
-    <MusyawarahCard v-model="musyId" />
+    <PengajianCard v-model="pengajianId" />
     <EmptyCard v-if="!musyId || !absensi" />
     <template v-else>
       <SummaryCard
