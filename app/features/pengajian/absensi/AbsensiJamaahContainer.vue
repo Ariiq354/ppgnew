@@ -12,7 +12,7 @@
 
   const authStore = useAuthStore();
   const absensiManage = authStore.hasPermission({
-    sekretariat: ["manage"],
+    pjp_kelompok: ["manage"],
   });
 
   const musyId = ref<number>();
